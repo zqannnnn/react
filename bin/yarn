@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+docker run --rm -i \
+  -v `pwd`:/home/node/bounty-management-platform \
+  dev.ak5.cc:4567/kingqi/bounty-management-platform yarn "$@"

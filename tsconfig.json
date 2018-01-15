@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowJs": true,
+    "jsx": "react",
+    "allowSyntheticDefaultImports":true
+  },
+  "include": [ "src/**/*","frontend/**/*" ],
+  "exclude": [ "node_modules" ]
+}

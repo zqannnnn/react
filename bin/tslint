@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+docker exec -u node -i bms-app \
+  /home/node/bounty-management-platform/node_modules/.bin/tslint "$@" src/**/*.ts
+
