@@ -5,6 +5,10 @@
   "repository": "git@dev.ak5.cc:kingqi/bmp.git",
   "author": "Louis Liu <liukangqi56@hotmail.com>",
   "license": "MIT",
+  "scripts": {
+    "watch": "nodemon -e js,ts,jsx -w src/ -w frontend/ -x ts-node --inspect src/index",
+    "fetchdeps": "yarn install "
+  },
   "dependencies": {
     "bcrypt": "^1.0.3",
     "body-parser": "^1.17.1",

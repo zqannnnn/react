@@ -1,10 +1,8 @@
 FROM node:carbon
 
-MAINTAINER Alexander Ververis <alexander.ververis@mail.com
-
 RUN yarn config set registry https://registry.npm.taobao.org 
-COPY . /home/node/bounty-management-platform
-RUN chown -R node:users /home/node/bounty-management-platform
+COPY . /home/node/bmp
+RUN chown -R node:users /home/node/bmp
 USER node
-WORKDIR /home/node/bounty-management-platform
+WORKDIR /home/node/bmp
 CMD ["/usr/local/bin/npm", "run-script", "watch"]

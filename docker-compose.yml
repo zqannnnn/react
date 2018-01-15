@@ -1,29 +1,29 @@
 version: '2'
 
 services:
-  bounty-management-platform:
+  bmp:
     build: .
-    image: dev.ak5.cc:4567/kingqi/bounty-management-platform
-    container_name: bms-app
+    image: dev.ak5.cc:4567/kingqi/bmp
+    container_name: bmp-app
     ports:
       - '3000:3000'
     env_file:
       - development.env
     volumes:
-      - .:/home/node/bounty-management-platform
+      - .:/home/node/bmp
     depends_on:
       - postgres
 
   postgres:
     image: postgres:alpine
-    container_name: bms-db
+    container_name: bmp-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
 
   adminer:
     image: adminer
-    container_name: bms-adminer
+    container_name: bmp-adminer
     restart: always
     ports:
       - 127.0.0.1:8011:8080
