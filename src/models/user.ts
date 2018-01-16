@@ -17,7 +17,8 @@ import {
   HasMany
 } from 'sequelize-typescript'
 import { consts } from '../config/static'
-import { Moment } from './moment'
+import { Order } from './order'
+import { Product } from './product'
 @Table({
   tableName: 'user',
   underscored: true
@@ -33,7 +34,6 @@ export class User extends Model<User> {
   @Column
   public id: string
 
-  @Default(consts.USER_TYPE_NORMAL)
   @Column({ field: 'user_type' })
   public userType: number
 
@@ -55,12 +55,6 @@ export class User extends Model<User> {
   @Column({ field: 'reset_key' })
   public resetKey: string
 
-  @Column({
-    field: 'gitlab_data',
-    type: DataType.JSONB
-  })
-  public gitlabData: object
-
   @CreatedAt
   @Column({ field: 'created_at' })
   public createdAt: Date
@@ -69,8 +63,11 @@ export class User extends Model<User> {
   @Column({ field: 'updated_at' })
   public updatedAt: Date
 
-  @HasMany(() => Moment, 'user_id')
-  public moments: Moment[];
+  @HasMany(() => Order, 'user_id')
+  public orders: Order[];
+
+  @HasMany(() => Product, 'user_id')
+  public products: Product[];
 
   // class methods
   @BeforeUpdate
@@ -82,7 +79,6 @@ export class User extends Model<User> {
   }
 
   // instance methods
-
   public validatePassword = (pwd: string) => {
     if (this.password) {
       return bcrypt.compare(pwd, this.password)

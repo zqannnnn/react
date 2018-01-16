@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-docker run --rm -i dev.ak5.cc:4567/kingqi/bounty-management-platform \
+docker run --rm -i dev.ak5.cc:4567/kingqi/bmp \
   npm run-script fetchdeps
 

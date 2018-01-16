@@ -5,7 +5,7 @@ const consts = require('./config/static')
 const Models = require('./models')
 const User = Models.User
 const userRouter = require('./routes/user')
-const momentRouter = require('./routes/moment')
+const productRouter = require('./routes/product')
 const uploadRouter = require('./routes/upload')
 const passRouter = require('./routes/pass')
 const qs = require('querystring')
@@ -86,6 +86,6 @@ module.exports = (app, passport) => {
   })
   app.use('/pass', passRouter)
   app.use('/user', userRouter);
-  app.use('/moment', momentRouter);
+  app.use('/product', productRouter);
   app.use('/upload', uploadRouter);
 }

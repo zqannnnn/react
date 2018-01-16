@@ -16,12 +16,11 @@ import {
   HasMany
 } from 'sequelize-typescript'
 import { User } from './user'
-import { Screenshot } from './screenshot';
 @Table({
-  tableName: 'moment',
+  tableName: 'product',
   underscored: true
 })
-export class Moment extends Model<Moment> {
+export class Product extends Model<Product> {
 
   // only allow string keys to do some iteration :)
   [key: string]: any
@@ -31,15 +30,6 @@ export class Moment extends Model<Moment> {
   @Default(DataType.UUIDV4)
   @Column
   public id: string
-
-  @Column({field: 'comment_number'})
-  public commentNumber: number
-
-  @Column({field: 'heart_number'})
-  public heartNumber: number
-
-  @Column({field: 'moment_at'})
-  public momentAt: Date
 
   @CreatedAt
   @Column({field: 'created_at'})
@@ -51,11 +41,9 @@ export class Moment extends Model<Moment> {
 
   @ForeignKey(() => User)
   @Column({field: 'user_id'})
-  userId: string;
+  creatorId: string;
   
   @BelongsTo(() => User,'user_id')
-  user: User; 
+  creator: User; 
 
-  @HasMany(() => Screenshot, 'moment_id')
-  public screenshots: Screenshot[];
 }

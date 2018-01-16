@@ -2,14 +2,13 @@ import { Sequelize } from 'sequelize-typescript'
 import { config } from './config/db'
 import { consts } from './config/static'
 import { User } from './models/user'
-import { Moment } from './models/moment'
-import { Screenshot } from './models/screenshot'
+import { Goods } from './models/goods'
 
 const sequelize = new Sequelize(config)
-sequelize.addModels([User, Moment, Screenshot])
+sequelize.addModels([User, Goods])
 
 const setupDatabase = async () => {
-  await sequelize.sync()
+  await sequelize.sync({force:true})
   const user: User = new User({
     userName: 'louis',
     email: 'louis@qq.com',
@@ -19,5 +18,5 @@ const setupDatabase = async () => {
   await user.save()
 }
 
-const models = { User, Moment, setupDatabase }
+const models = { User, Goods, setupDatabase }
 export = models

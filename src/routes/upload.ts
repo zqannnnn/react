@@ -15,7 +15,7 @@ function makeRandomName(originalname:string) {
     return name;
   }
 
-router.post('/screenshot', upload.single('screenshot'), 
+router.post('/image', upload.single('image'), 
     async (req: express.Request, res: express.Response) =>{
     //console.log(req.file);
     const fileName = makeRandomName(req.file.originalname)

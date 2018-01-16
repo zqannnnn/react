@@ -340,9 +340,3 @@ th {
 .previews-container:first-child{
     margin-left: 0px
 }
-.moment-page .message-block{
-    margin-bottom: 15px
-}
-.moment-page input[type="number"]{
-    max-width: 230px;
-}

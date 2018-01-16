@@ -12,7 +12,7 @@ const router = express.Router()
   
 const transporter = nodemailer.createTransport(smtpConfig)
 function genMessage(resetUrl: string, email: string) {
-    const ourName = "bounty-management-platform"
+    const ourName = "SITE_NAME"
     return {
         from: '', // sender address
         to: email, // list of receivers

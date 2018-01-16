@@ -46,20 +46,20 @@ password and `bms-db` as the host.
 #### Using Adminer
 
 When using docker-compose you can access the Adminer gui
-[in your browser](http://localhost:8011/?pgsql=bms-db&username=postgres&db=postgres)
+[in your browser](http://localhost:8011/?pgsql=bmp-db&username=postgres&db=postgres)
 
 #### Using psql
 
 For the psql cli:
 
 ```sh
-docker exec -u postgres -it bms-db psql
+docker exec -u postgres -it bmp-db psql
 ```
 
 You can also import a sql file:
 
 ```sh
-docker exec -u postgres -i bms-db psql < dump.sql
+docker exec -u postgres -i bmp-db psql < dump.sql
 ```
 
 ### Using tslint
