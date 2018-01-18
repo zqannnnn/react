@@ -1,11 +1,13 @@
 import { Sequelize } from 'sequelize-typescript'
 import { config } from './config/db'
-import { consts } from './config/static'
+import { consts,vealOptions } from './config/static'
 import { User } from './models/user'
-import { Goods } from './models/goods'
+import { Product } from './models/product'
+import { Order } from './models/order'
+import { Offer } from './models/offer'
 
 const sequelize = new Sequelize(config)
-sequelize.addModels([User, Goods])
+sequelize.addModels([User, Order, Offer])
 
 const setupDatabase = async () => {
   await sequelize.sync({force:true})
@@ -16,7 +18,12 @@ const setupDatabase = async () => {
     userType: consts.USER_TYPE_ADMIN
   })
   await user.save()
+  const product:Product = new Product({
+    type:'Veal',
+    options:vealOptions
+  })
+  await product.save()
 }
 
-const models = { User, Goods, setupDatabase }
+const models = { User, Order, Offer, setupDatabase }
 export = models

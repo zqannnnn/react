@@ -16,7 +16,7 @@ import {
   HasMany
 } from 'sequelize-typescript'
 import { User } from './user'
-import { Product } from './product'
+import { Offer } from './offer'
 @Table({
   tableName: 'order',
   underscored: true
@@ -32,14 +32,6 @@ export class Order extends Model<Order> {
   @Column
   public id: string
 
-  @CreatedAt
-  @Column({field: 'created_at'})
-  public createdAt: Date
-
-  @UpdatedAt
-  @Column({field: 'updated_at'})
-  public updatedAt: Date
-
   @ForeignKey(() => User)
   @Column({field: 'user_id'})
   userId: string;
@@ -47,11 +39,33 @@ export class Order extends Model<Order> {
   @BelongsTo(() => User,'user_id')
   user: User;
 
-  @ForeignKey(() => Product)
-  @Column({field: 'product_id'})
-  productId: string;
+  @ForeignKey(() => Offer)
+  @Column({field: 'offer_id'})
+  offerId: string;
 
-  @BelongsTo(() => Product,'product_id')
-  product: Product;
+  @Column
+  public storage: string
 
+  @Column
+  public breed: string
+
+  @Column
+  public grade: string
+
+  @Column
+  public slaughterSpec: string
+
+  @Column
+  public primalCuts: string
+
+  @Column
+  public hamId: string
+
+  @CreatedAt
+  @Column({field: 'created_at'})
+  public createdAt: Date
+
+  @UpdatedAt
+  @Column({field: 'updated_at'})
+  public updatedAt: Date
 }

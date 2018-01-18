@@ -6,6 +6,8 @@ const Models = require('./models')
 const User = Models.User
 const userRouter = require('./routes/user')
 const productRouter = require('./routes/product')
+const offerRouter = require('./routes/offer')
+const orderRouter = require('./routes/order')
 const uploadRouter = require('./routes/upload')
 const passRouter = require('./routes/pass')
 const qs = require('querystring')
@@ -87,5 +89,7 @@ module.exports = (app, passport) => {
   app.use('/pass', passRouter)
   app.use('/user', userRouter);
   app.use('/product', productRouter);
+  app.use('/offer', offerRouter);
+  app.use('/order', orderRouter);
   app.use('/upload', uploadRouter);
 }

@@ -17,10 +17,10 @@ import {
 } from 'sequelize-typescript'
 import { User } from './user'
 @Table({
-  tableName: 'product',
+  tableName: 'offer',
   underscored: true
 })
-export class Product extends Model<Product> {
+export class Offer extends Model<Offer> {
 
   // only allow string keys to do some iteration :)
   [key: string]: any
@@ -31,6 +31,31 @@ export class Product extends Model<Product> {
   @Column
   public id: string
 
+  @ForeignKey(() => User)
+  @Column({field: 'user_id'})
+  userId: string;
+  
+  @BelongsTo(() => User,'user_id')
+  user: User;
+
+  @Column
+  public storage: string
+
+  @Column
+  public breed: string
+
+  @Column
+  public grade: string
+
+  @Column
+  public slaughterSpec: string
+
+  @Column
+  public primalCuts: string
+
+  @Column
+  public hamId: string
+
   @CreatedAt
   @Column({field: 'created_at'})
   public createdAt: Date
@@ -38,14 +63,4 @@ export class Product extends Model<Product> {
   @UpdatedAt
   @Column({field: 'updated_at'})
   public updatedAt: Date
-
-  @Column({field: 'type'})
-  public type: string
-
-  @Column({
-    field: 'options',
-    type: DataType.JSONB
-  })
-  public options: object
-
 }
