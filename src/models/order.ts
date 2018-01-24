@@ -15,57 +15,62 @@ import {
   BelongsTo,
   HasMany
 } from 'sequelize-typescript'
-import { User } from './user'
-import { Offer } from './offer'
-@Table({
-  tableName: 'order',
-  underscored: true
-})
-export class Order extends Model<Order> {
+import {User} from './user'
+import {Offer} from './offer'
+import {consts} from '../config/static'
+@Table({tableName: 'order', underscored: true})
+export class Order extends Model < Order > {
 
   // only allow string keys to do some iteration :)
-  [key: string]: any
+  [key : string] : any
 
   @IsUUID(4)
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column
-  public id: string
+  public id : string
 
   @ForeignKey(() => User)
   @Column({field: 'user_id'})
-  userId: string;
-  
-  @BelongsTo(() => User,'user_id')
-  user: User;
+  userId : string;
 
   @ForeignKey(() => Offer)
   @Column({field: 'offer_id'})
-  offerId: string;
+  offerId : string;
 
   @Column
-  public storage: string
+  public type : string
+
+  @Default(consts.ORDER_STATUS_CREATED)
+  @Column
+  public status : number
 
   @Column
-  public breed: string
+  public storage : string
 
   @Column
-  public grade: string
+  public breed : string
 
   @Column
-  public slaughterSpec: string
+  public grade : string
+
+  @Column({field: 'slaughter_spec'})
+  public slaughterSpec : string
+
+  @Column({field: 'primal_cut'})
+  public primalCut : string
 
   @Column
-  public primalCuts: string
+  public bone : string
 
-  @Column
-  public hamId: string
+  @Column({field: 'ham_id'})
+  public hamId : string
 
   @CreatedAt
   @Column({field: 'created_at'})
-  public createdAt: Date
+  public createdAt : Date
 
   @UpdatedAt
   @Column({field: 'updated_at'})
-  public updatedAt: Date
+  public updatedAt : Date
 }

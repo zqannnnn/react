@@ -41,7 +41,7 @@ docker-compose up
 ### Accessing Postgres
 
 The default development config has `postgres` as the database name, user and
-password and `bms-db` as the host.
+password and `bmp-db` as the host.
 
 #### Using Adminer
 

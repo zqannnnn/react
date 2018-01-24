@@ -18,7 +18,6 @@ import {
 } from 'sequelize-typescript'
 import { consts } from '../config/static'
 import { Order } from './order'
-import { Product } from './product'
 @Table({
   tableName: 'user',
   underscored: true
@@ -66,8 +65,6 @@ export class User extends Model<User> {
   @HasMany(() => Order, 'user_id')
   public orders: Order[];
 
-  @HasMany(() => Product, 'user_id')
-  public products: Product[];
 
   // class methods
   @BeforeUpdate

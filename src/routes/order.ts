@@ -2,7 +2,7 @@ import * as express from 'express'
 import { authMiddleware } from '../middleware/auth'
 import { Order } from '../models/order'
 import { User } from '../models/user';
-
+import { consts } from '../config/static';
 const router = express.Router()
 
 router.use(authMiddleware)
@@ -14,7 +14,8 @@ interface Request extends express.Request {
 router.post('/new', async (req: Request, res: express.Response) => {
   try {
     const order = new Order({
-      userId: req.userId
+      userId: req.userId,
+      ...req.body
     })
     await order.save()
     return res.send({ success: true })
@@ -22,9 +23,24 @@ router.post('/new', async (req: Request, res: express.Response) => {
     return res.status(500).send({ error: e.message })
   }
 })
+router.get('/list', async (req:Request, res:express.Response) => {
+  try {
+    let orders = await Order.findAll({
+      where:{
+        userId: req.userId
+      }
+    })
+    return res.send(orders)
+  } catch (e) {
+    return res.status(500).send({error: e.message})
+  }
+})
 router.route('/:orderId')
   .get(async (req: Request, res: express.Response) => {
     const order = await Order.find({ where: { id: req.params.orderId } })
+    if(order&&order.userId!=req.userId){
+      return res.status(500).send({error: 'Permission denied'})
+    }
     if (!order) {
       return res.status(403).send({error: 'Order does not exist'})
     }
@@ -55,19 +71,12 @@ router.route('/:orderId')
       if (!order) {
         return res.status(500).send({error: 'Order does not exist'})
       }
-      order.destroy()
+      order.status = consts.ORDER_STATUS_CANCELLED
+      order.save();
       return res.send({success: true})
     } catch (e) {
       return res.status(500).send({error: e.message})
     }
   })
-router.get('/list', async (req:Request, res:express.Response) => {
-  let orders = await Order.findAll({
-    where:{
-      userId: req.userId
-    }
-  })
-  return res.send(orders)
-})
 
 export = router

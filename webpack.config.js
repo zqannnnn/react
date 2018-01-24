@@ -33,6 +33,7 @@ module.exports = {
   },
   devtool: "source-map",
   devServer: {
+    historyApiFallback:{ index: '/' },
     inline: true,
     stats: {
       colors: true

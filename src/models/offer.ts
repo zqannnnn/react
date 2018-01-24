@@ -16,6 +16,7 @@ import {
   HasMany
 } from 'sequelize-typescript'
 import { User } from './user'
+import {consts} from '../config/static'
 @Table({
   tableName: 'offer',
   underscored: true
@@ -39,6 +40,13 @@ export class Offer extends Model<Offer> {
   user: User;
 
   @Column
+  public type : string
+
+  @Default(consts.OFFER_STATUS_CREATED)
+  @Column
+  public status : number
+
+  @Column
   public storage: string
 
   @Column
@@ -47,13 +55,16 @@ export class Offer extends Model<Offer> {
   @Column
   public grade: string
 
-  @Column
-  public slaughterSpec: string
+  @Column({field: 'slaughter_spec'})
+  public slaughterSpec : string
+
+  @Column({field: 'primal_cuts'})
+  public primalCuts : string
 
   @Column
-  public primalCuts: string
+  public bone : string
 
-  @Column
+  @Column({field: 'ham_id'})
   public hamId: string
 
   @CreatedAt

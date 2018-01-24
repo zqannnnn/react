@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { authMiddleware } from '../middleware/auth'
-import { Product } from '../models/product'
+import { Category } from '../models/category'
 import { User } from '../models/user';
 
 const router = express.Router()
@@ -9,11 +9,11 @@ router.use(authMiddleware)
 
 
 router.get('/', async (req:express.Request, res:express.Response) => {
-  let productOptions = await Product.findAll({
-    attributes:['type','options']
+  let categorys = await Category.findAll({
+    attributes:['type','details']
   })
   
-  return res.send(productOptions)
+  return res.send(categorys)
 })
 
 export = router

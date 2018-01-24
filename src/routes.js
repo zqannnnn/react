@@ -5,10 +5,9 @@ const consts = require('./config/static')
 const Models = require('./models')
 const User = Models.User
 const userRouter = require('./routes/user')
-const productRouter = require('./routes/product')
+const categoryRouter = require('./routes/category')
 const offerRouter = require('./routes/offer')
 const orderRouter = require('./routes/order')
-const uploadRouter = require('./routes/upload')
 const passRouter = require('./routes/pass')
 const qs = require('querystring')
 const authMiddleware = require('./middleware/auth')
@@ -47,24 +46,6 @@ module.exports = (app, passport) => {
     })(req, res, next);
   });
 
-  app.get('/oauth/gitlab', passport.authenticate('gitlab'));
-  app.get('/oauth/gitlab/callback',
-    passport.authenticate('gitlab', {
-      failureRedirect: '/',
-      session: false
-    }),
-    (req, res) => {
-      const token = jwt.sign(req.user, app.get('secretKey'), { expiresIn })
-      const getParams = {
-        token,
-        id: req.user.id,
-      }
-      if (req.user.userType == 1) {
-        getParams.isAdmin = true
-      }
-      return res.redirect('/#/?' + qs.stringify(getParams))
-    }
-  );
   app.get('/pass/reset', async (req, res) => {
     const email = req.param('email')
     const key = req.param('key')
@@ -88,8 +69,7 @@ module.exports = (app, passport) => {
   })
   app.use('/pass', passRouter)
   app.use('/user', userRouter);
-  app.use('/product', productRouter);
+  app.use('/category', categoryRouter);
   app.use('/offer', offerRouter);
   app.use('/order', orderRouter);
-  app.use('/upload', uploadRouter);
 }

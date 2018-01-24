@@ -2,7 +2,7 @@ import * as express from 'express'
 import { authMiddleware } from '../middleware/auth'
 import { Offer } from '../models/offer'
 import { User } from '../models/user';
-
+import { consts } from '../config/static';
 const router = express.Router()
 
 router.use(authMiddleware)
@@ -49,7 +49,8 @@ router.route('/:offerId')
       if (!offer) {
         return res.status(500).send({error: 'Offer does not exist'})
       }
-      offer.destroy()
+      offer.status = consts.OFFER_STATUS_CANCELLED
+      offer.save();
       return res.send({success: true})
     } catch (e) {
       return res.status(500).send({error: e.message})
@@ -60,11 +61,16 @@ router.get('/list', async (req:Request, res:express.Response) => {
   if(req.query&&req.query.type==='my'){
     offers = await Offer.findAll({
       where:{
-        userId: req.userId
+        userId: req.userId,
+        status:consts.OFFER_STATUS_CREATED
       }
     })
   }else{
-    offers = await Offer.findAll({})
+    offers = await Offer.findAll({
+      where:{
+        status:consts.OFFER_STATUS_CREATED
+      }
+    })
   }
   
   return res.send(offers)

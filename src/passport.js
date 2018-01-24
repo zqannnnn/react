@@ -1,4 +1,3 @@
-const GitLabStrategy = require('passport-gitlab2').Strategy;
 const LocalStrategy    = require('passport-local').Strategy
 const jwt    = require('jsonwebtoken');
 
@@ -7,39 +6,9 @@ const UserGitlab = Models.UserGitlab
 const UserLocal = Models.UserLocal
 const User = Models.User
 
-const gitlabConfig = require('./config/gitlab')
 const consts = require('./config/static')
 
 module.exports = passport => {
-
-    passport.use("gitlab",new GitLabStrategy({
-        clientID: gitlabConfig.clientID,
-        clientSecret: gitlabConfig.clientSecret,
-        callbackURL: gitlabConfig.callbackURL,
-        baseURL: gitlabConfig.baseURL,
-        state: true
-    },function(accessToken, refreshToken, profile, done) {
-        // console.log("accessToken:",accessToken)
-        // console.log("refreshToken:",refreshToken)
-        // search for attributes
-        User.findOne({
-            where: { "gitlabData.id":{$eq: profile.id}}
-        }).then(user => {
-            // project will be the first entry of the Projects table with the title 'aProject' || null
-            if(user){
-                return done(null, user.get({
-                    plain: true
-                }));
-            }else{
-                User.create({ userName: profile.username, email: profile.emails[0].value, userType:consts.USER_TYPE_NORMAL, gitlabData: profile })
-                .then(user => {
-                    return done(null, user.get({
-                        plain: true
-                    })); 
-                })
-            }
-        })
-    }))
     passport.use('local-login', new LocalStrategy({
         // by default, local strategy uses username and password, we will override with email
         usernameField : 'username',
