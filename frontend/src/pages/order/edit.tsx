@@ -1,12 +1,11 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router-dom';
 import {connect,Dispatch} from 'react-redux';
-import {actionCreators as orderActions} from '../../actions/order'
-import {actionCreators as categoryActions} from '../../actions/category'
-import {Order} from '../../models/order'
-import {Entity as Category, Details as CategoryDetails} from '../../models/category'
-import {RootState} from '../../reducers/index'
-import orderConts from '../../constants/order'
+import {orderActionCreators,categoryActionCreators} from '../../actions'
+import {Order} from '../../models'
+import {Category,CategoryDetails} from '../../models'
+import {RootState} from '../../reducers'
+import {orderConsts} from '../../constants'
 interface OrderProps extends RouteComponentProps < {id: string} >  {
     dispatch: Dispatch<RootState>;
     loading:boolean;
@@ -53,10 +52,10 @@ class EditPage extends React.Component <OrderProps, OrderState>{
         orderId&&this.setState(
             {...this.state,
             orderId})
-        this.props.dispatch(categoryActions.getAll());
+        this.props.dispatch(categoryActionCreators.getAll());
         orderId && this
             .props
-            .dispatch(orderActions.getById(orderId))
+            .dispatch(orderActionCreators.getById(orderId))
     }
     componentWillReceiveProps(nextProps:OrderProps) {
         const {orderData} = nextProps;
@@ -94,9 +93,9 @@ class EditPage extends React.Component <OrderProps, OrderState>{
         const {dispatch} = this.props;
         if(order.type){
             if(orderId)
-                dispatch(orderActions.edit(order,orderId));   
+                dispatch(orderActionCreators.edit(order,orderId));   
             else
-                dispatch(orderActions.new(order));
+                dispatch(orderActionCreators.new(order));
         }
             
     }
@@ -161,7 +160,7 @@ class EditPage extends React.Component <OrderProps, OrderState>{
                             <div className="form-group"> 
                                 <label className="from-lable">Order type</label>
                                 <select className="form-control" name="type" value={type} onChange={this.handleChange}>
-                                    {orderConts.ORDER_TYPE.map((item,index)=>
+                                    {orderConsts.ORDER_TYPE.map((item,index)=>
                                         <option key={index}>{item}</option>)}
                                 </select>
                             </div>
