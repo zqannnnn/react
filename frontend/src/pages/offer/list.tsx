@@ -11,6 +11,7 @@ interface ListProps  {
     dispatch: Dispatch<RootState>;
     offer: OfferState;
     authInfo:AuthInfo;
+    onlyMine?:boolean
 }
 class ListPage extends React.Component<ListProps> {
     constructor(props:ListProps) {
@@ -19,77 +20,62 @@ class ListPage extends React.Component<ListProps> {
     componentDidMount() {
         this
             .props
-            .dispatch(offerActionCreators.getAll());
+            .dispatch(offerActionCreators.getAll({onlyMine:this.props.onlyMine}));
     }
 
     handleCancellOffer(id:string) {
         this.props.dispatch(offerActionCreators.cancell(id));
     }
     render() {
-        const {offer} = this.props;
+        const {offer,authInfo} = this.props;
         return (
             <div className="">
                 {offer.error && <span className="text-danger">ERROR: {offer.error}</span>}
-                <table className="table table-striped table-hover">
-                    <thead>
-                        <tr className="table-header">
-                            <th>
-                                <Link to={'/offer/new'}>
-                                    <i className="fa fa-plus-circle" aria-hidden="true"></i>
-                                </Link>
-                            </th>
-                            <th>Type</th>
-                            <th>Image</th>
-                            <th>Storage</th>
-                            <th>Breed</th>
-                            <th>Grade</th>
-                            <th>Slaughter Specification</th>
-                            <th>Primal Cut</th>
-                            <th>Bone</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody >
-                        {offer.items && offer
-                            .items
-                            .map((item, index) => {
-                                item.status!==offerConsts.OFFER_STATUS_CANCELLED?
-                                (<tr key={item.id} className={"table-row"}>
-                                <td>{item.cancelling
-                                        ? <i className="fa fa-spinner" aria-hidden="true"></i>
-                                        : item.cancellError
-                                            ? <span className="text-danger">- ERROR: {item.cancellError}</span>
-                                            : item.status!==offerConsts.OFFER_STATUS_CANCELLED &&< i onClick = {()=>{
-                                                if(item.id)
-                                                    this.handleCancellOffer(item.id)
-                                            }
-                                                
-                                            }
-                                    className = "fa fa-minus-square" aria-hidden="true" ></i>}</td>
-                                <td>{item.images&&<img src={item.images[0]}></img>}</td>
-                                <td>{item.type}</td>
-                                <td>{item.storage}</td>
-                                <td>{item.breed}</td>
-                                <td>{item.grade}</td>
-                                <td>{item.slaughterSpec}</td>
-                                <td>{item.primalCut}</td>
-                                <td>{item.bone}</td>
-                                <td>
-                                    <Link to={'/offer/' + item.id} className="control-btn">✎
-                                    </Link>
-                                </td>
-                            </tr>):''})
+                <div className="offer-block-container" >
+                        {offer.items&&offer.items.map((item, index) =>
+                            item.status!==offerConsts.OFFER_STATUS_CANCELLED&&
+                            (<div key={item.id} className="offer-block">
+                                <div className="image-wr">{item.images&&<img src={item.images[0].path}></img>}</div>
+                                <div className="content">
+                                    <div className="type">{item.type}</div>
+                                    <div className="details">
+                                        <span>{item.storage&&"Storage:"+item.storage+","}</span>
+                                        <span>{item.breed&&"Breed:"+item.breed+","}</span>
+                                        <span>{item.grade&&"Grade:"+item.grade+","}</span>
+                                        <span>{item.slaughterSpec&&"Slaughter Specificatin:"+item.slaughterSpec+","}</span>
+                                        <span>{item.primalCut&&"Primal Cut:"+item.primalCut+","}</span>
+                                    </div>
+                                </div> 
+                                <div className="menu">
+
+                                    {authInfo.id==item.userId&&<Link to={'/offer/' + item.id} className="control-btn">✎
+                                    </Link>}
+                                    <div >{item.cancelling
+                                            ? <i className="fa fa-spinner" aria-hidden="true"></i>
+                                            : item.cancellError
+                                                ? <span className="text-danger">- ERROR: {item.cancellError}</span>
+                                                : item.status!==offerConsts.OFFER_STATUS_CANCELLED &&< i onClick = {()=>{
+                                                    if(item.id)
+                                                        this.handleCancellOffer(item.id)
+                                                }
+                                                    
+                                                }
+                                        className = "fa fa-times-circle" aria-hidden="true" ></i>}</div>
+                                        </div> 
+                            </div>))
                         }
-                    </tbody>
-                </table>
+                    
+                </div>
+                <Link to={'/offer/new'}>add offer
+                </Link>
             </div>
         )
     }
 }
 
 function mapStateToProps(state:RootState) {
-    const {offer} = state;
-    return {offer};
+    const {offer,auth} = state;
+    return {offer,authInfo:auth.authInfo};
 }
 
 const connectedListPage = connect(mapStateToProps)(ListPage);

@@ -1,7 +1,6 @@
 import * as express from 'express'
 import { authMiddleware } from '../middleware/auth'
-import { Offer } from '../models/offer'
-import { User } from '../models/user';
+import { Offer,User,Image } from '../models'
 import { consts } from '../config/static';
 const router = express.Router()
 
@@ -14,17 +13,58 @@ interface Request extends express.Request {
 router.post('/new', async (req: Request, res: express.Response) => {
   try {
     const offer = new Offer({
-      userId: req.userId
+      userId: req.userId,
+      ...req.body
     })
     await offer.save()
+    if(req.body.images){
+      req.body.images.forEach((image: {path:string}) => {
+        const imageDb = new Image({
+          path: image.path,
+          offerId: offer.id
+        })
+        imageDb.save()
+      });
+    }
     return res.send({ success: true })
   } catch (e) {
     return res.status(500).send({ error: e.message })
   }
 })
+router.get('/list/my', async (req:Request, res:express.Response) => {
+  let offers
+  try {
+    offers = await Offer.findAll({
+      where:{
+        userId: req.userId,
+        status:consts.OFFER_STATUS_CREATED
+      },
+      include:[{model:Image,attributes:['path']}]
+    })
+    return res.send(offers)
+  } catch (e) {
+    return res.status(500).send({error: e.message})
+  }
+})
+router.get('/list/all', async (req:Request, res:express.Response) => {
+  let offers
+  try {
+    offers = await Offer.findAll({
+      where:{
+        status:consts.OFFER_STATUS_CREATED
+      },
+      include:[{model:Image,attributes:['path']}]
+    })
+    return res.send(offers)
+  } catch (e) {
+    return res.status(500).send({error: e.message})
+  }
+})
 router.route('/:offerId')
   .get(async (req: express.Request, res: express.Response) => {
-    const offer = await Offer.find({ where: { id: req.params.offerId } })
+    const offer = await Offer.find({ where: { id: req.params.offerId },
+      include:[{model:Image,attributes:['path']}] 
+    })
     if (!offer) {
       return res.status(403).send({error: 'Offer does not exist'})
     }
@@ -38,6 +78,16 @@ router.route('/:offerId')
       }
       Object.keys(req.body).forEach((key: string) => offer[key] = req.body[key])
       offer.save()
+      await Image.destroy({where:{offerId:req.params.offerId}})
+      if(req.body.images){
+        req.body.images.forEach((image: {path:string}) => {
+          const imageDb = new Image({
+            path: image.path,
+            offerId: offer.id
+          })
+          imageDb.save()
+        });
+      }
       return res.send({success: true})
     } catch (e) {
       return res.status(500).send({error: e.message})
@@ -56,24 +106,6 @@ router.route('/:offerId')
       return res.status(500).send({error: e.message})
     }
   })
-router.get('/list', async (req:Request, res:express.Response) => {
-  let offers
-  if(req.query&&req.query.type==='my'){
-    offers = await Offer.findAll({
-      where:{
-        userId: req.userId,
-        status:consts.OFFER_STATUS_CREATED
-      }
-    })
-  }else{
-    offers = await Offer.findAll({
-      where:{
-        status:consts.OFFER_STATUS_CREATED
-      }
-    })
-  }
-  
-  return res.send(offers)
-})
+
 
 export = router

@@ -4,19 +4,13 @@ import { User } from '../models'
 
 const router = express.Router()
 
-router.use(authMiddleware)
-
-router.get('/list', async (req, res) => {
-  const users = await User.findAll()
-  return res.send(users)
-})
-
 router.post('/new', async (req, res) => {
   try {
     const user = new User({
       email: req.body.email,
       password: req.body.password,
-      userName: req.body.userName
+      userName: req.body.userName,
+      userType: req.body.userType
     })
     await user.save()
     return res.send({success: true})
@@ -24,6 +18,15 @@ router.post('/new', async (req, res) => {
     return res.status(500).send({error: e.message})
   }
 })
+
+router.use(authMiddleware)
+
+router.get('/list', async (req, res) => {
+  const users = await User.findAll()
+  return res.send(users)
+})
+
+
 
 router.route('/:userId')
   .get(async (req: express.Request, res: express.Response) => {

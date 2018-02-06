@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import {connect,Dispatch} from 'react-redux';
-
-import {actionCreators as authActions,AuthInfo} from '../actions/auth';
-import {RootState} from '../reducers/index'
+import {ListPage as OfferListPage} from '../pages/offer'
+import {AuthInfo} from '../actions';
+import {RootState} from '../reducers'
 interface HomeProps  {
     dispatch: Dispatch<RootState>;
     authInfo: AuthInfo;
 }
+
 class HomePage extends React.Component<HomeProps> {
     constructor(props:HomeProps) {
         super(props);
@@ -16,11 +17,9 @@ class HomePage extends React.Component<HomeProps> {
     render() {
         const {authInfo} = this.props;
         return (
-            <div className="col-md-10 offset-md-1">
-                <div className="header">Home</div>
-                <div className="">
-                    
-                </div>
+            <div className="">
+                <div className="header">All Offers</div>
+                <OfferListPage {...this.props}/>
             </div>
         );
     }

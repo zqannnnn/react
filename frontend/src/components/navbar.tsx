@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {NavLink, Link, withRouter, RouteComponentProps} from 'react-router-dom';
 import {connect,Dispatch} from 'react-redux';
-import {actionCreators as authActionCreators, AuthInfo} from '../actions/auth';
-import {RootState} from '../reducers/index';
+import {authActionCreators, AuthInfo} from '../actions';
+import {RootState} from '../reducers';
 interface NavProps extends RouteComponentProps <{}> {
     dispatch: Dispatch<RootState>;
     authInfo: AuthInfo;
@@ -28,8 +28,12 @@ class NavBar extends React.Component <NavProps> {
                         <NavLink exact to="/orders" className="nav-link" activeClassName="active">My Orders</NavLink>
                     </li>
                     <li className="nav-item">
-                        <Link to="/login" className="nav-link" onClick={this.logout()}>Logout</Link>
+                        <NavLink exact to="/offers" className="nav-link" activeClassName="active">My Offers</NavLink>
                     </li>
+                    <li className="nav-item">
+                        <NavLink to="/login" className="nav-link" activeClassName="active" onClick={this.logout()}>{authInfo?"Logout":"Login"}</NavLink>
+                    </li>
+                   
                 </ul>
             </nav>
         );

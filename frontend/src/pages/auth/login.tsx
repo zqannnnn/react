@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Link, Redirect,RouteComponentProps } from 'react-router-dom';
 import {connect,Dispatch} from 'react-redux';
 
-import {actionCreators as authActions} from '../actions/auth';
-import {RootState} from '../reducers/index'
+import {authActionCreators} from '../../actions';
+import {RootState} from '../../reducers'
 interface LoginProps  extends RouteComponentProps <{}> {
     dispatch: Dispatch<RootState>;
-    loggingIn: boolean;
+    processing: boolean;
     loggedIn:boolean;
 }
 interface LoginState  {
@@ -40,12 +40,12 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
         const { username, password } = this.state;
         const { dispatch } = this.props;
         if (username && password) {
-            dispatch(authActions.login(username, password));
+            dispatch(authActionCreators.login(username, password));
         }
     }
 
     render() {
-        const { loggingIn,loggedIn } = this.props;
+        const { processing,loggedIn } = this.props;
         const { username, password, submitted } = this.state;
         return (
             (loggedIn?(<Redirect
@@ -73,11 +73,11 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
                 </div>
                 <div className="form-group">
                     <button className="btn btn-primary">Login</button>
-                    {loggingIn &&
-                        <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                    {processing &&
+                        <i className="fa fa-spinner" aria-hidden="true"></i>
                     }
-                    <a href="/oauth/gitlab" className="btn">Login with GitLab</a>
                     <Link to="/lost/pass" className="btn">Forget password?</Link>
+                    <Link to="/register" className="btn">Register</Link>
                 </div>
                 
             </form>
@@ -88,9 +88,9 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
 }
 
 function mapStateToProps(state:RootState) {
-    const { loggingIn,loggedIn } = state.auth;
+    const { processing,loggedIn } = state.auth;
     return {
-        loggingIn,loggedIn
+        processing,loggedIn
     };
 }
 

@@ -52,7 +52,8 @@ class EditPage extends React.Component <OrderProps, OrderState>{
         orderId&&this.setState(
             {...this.state,
             orderId})
-        this.props.dispatch(categoryActionCreators.getAll());
+        if(!this.props.categorys)
+            this.props.dispatch(categoryActionCreators.getAll());
         orderId && this
             .props
             .dispatch(orderActionCreators.getById(orderId))

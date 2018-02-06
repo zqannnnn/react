@@ -1,5 +1,4 @@
 import {authHeader} from '../helpers/auth';
-import { Entity as Option } from '../models/category'
 export const categoryService = {
     getAll
 };

@@ -16,6 +16,7 @@ import {
   HasMany
 } from 'sequelize-typescript'
 import { User } from './user'
+import { Image } from './image'
 import {consts} from '../config/static'
 @Table({
   tableName: 'offer',
@@ -36,7 +37,7 @@ export class Offer extends Model<Offer> {
   @Column({field: 'user_id'})
   userId: string;
   
-  @BelongsTo(() => User,'user_id')
+  @BelongsTo(() => User)
   user: User;
 
   @Column
@@ -66,6 +67,9 @@ export class Offer extends Model<Offer> {
 
   @Column({field: 'ham_id'})
   public hamId: string
+
+  @HasMany(() => Image, 'offer_id')
+  public images: Image[];
 
   @CreatedAt
   @Column({field: 'created_at'})

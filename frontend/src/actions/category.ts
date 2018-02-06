@@ -1,13 +1,12 @@
-import categoryConstants from '../constants/category';
-import {categoryService} from '../services/category';
-import {actionCreators as alertActions} from './alert';
+import {categoryConsts} from '../constants';
+import {categoryService} from '../services';
 import {history} from '../helpers/history';
 import * as auth from '../helpers/auth';
-import {Entity as Category } from '../models/category'
+import {Category} from '../models'
 import {Dispatch} from 'react-redux'
 import {ActionCreator} from 'redux'
 import {ThunkAction} from 'redux-thunk'
-import {RootState} from '../reducers/index'
+import {RootState} from '../reducers'
 
 export type Action = {
     type: string;
@@ -25,13 +24,13 @@ const getAll: ActionCreator<ThunkAction<void, RootState, void>> = () => {
     });
 
     function request() : Action {
-        return {type: categoryConstants.GET_REQUEST}
+        return {type: categoryConsts.GET_REQUEST}
     }
     function success(categorys : Array < Category >) : Action {
-        return {type: categoryConstants.GET_SUCCESS, categorys}
+        return {type: categoryConsts.GET_SUCCESS, categorys}
     }
     function failure(error : string) : Action {
-        return {type: categoryConstants.GET_FAILURE, error}
+        return {type: categoryConsts.GET_FAILURE, error}
     }
 }
 export const actionCreators = {

@@ -8,10 +8,12 @@ import {PrivateRoute} from './components/private-route';
 import {AdminRoute} from './components/admin-route';
 import {NavBar} from './components/navbar';
 import {HomePage} from './pages/home';
-import {LoginPage} from './pages/login';
+import {LoginPage} from './pages/auth';
+import {RegisterPage} from './pages/auth';
 import {LostPassPage} from './pages/auth/lost-pass';
 import {ResetPassPage} from './pages/auth/reset-pass';
 import {ListPage as OrderListPage, EditPage as OrderEditPage} from './pages/order';
+import {ListPage as OfferListPage, EditPage as OfferEditPage} from './pages/offer';
 import {Alert} from './models/alert' 
 import { RootState } from './reducers/index'
 interface AppProps {
@@ -43,7 +45,11 @@ class App extends React.Component<AppProps,any> {
                                 <Route path="/orders" component={OrderListPage}/>
                                 <Route path="/order/new" component={OrderEditPage}/>
                                 <Route path="/order/:id" component={OrderEditPage}/>
+                                <Route path="/offers" component={OfferListPage}/>
+                                <Route path="/offer/new" component={OfferEditPage}/>
+                                <Route path="/offer/:id" component={OfferEditPage}/>
                                 <Route path="/login" component={LoginPage}/>
+                                <Route path="/register" component={RegisterPage}/>
                                 <Route path="/lost/pass" component={LostPassPage}/>
                             </Switch>
                         </div>

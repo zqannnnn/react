@@ -1,7 +1,6 @@
 import * as express from 'express'
 import { authMiddleware } from '../middleware/auth'
-import { Category } from '../models/category'
-import { User } from '../models/user';
+import { Category,User } from '../models'
 
 const router = express.Router()
 

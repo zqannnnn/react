@@ -1,7 +1,7 @@
 import {authHeader} from '../helpers/auth';
 import {setAuth,removeAuth} from '../helpers/auth'
 import {AuthInfo} from '../actions/auth'
-import { UserEntity } from '../models/user';
+import { User } from '../models/user';
 export const userService = {
     login,
     logout,
@@ -54,7 +54,7 @@ function getById(id:string) {
     return fetch('/user/' + id, requestOptions).then(handleResponse);
 }
 
-function _new(user:UserEntity) {
+function _new(user:User) {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -67,7 +67,7 @@ function _new(user:UserEntity) {
     return fetch('/user/new', requestOptions).then(handleResponse);
 }
 
-function update(user:UserEntity, userId:string) {
+function update(user:User, userId:string) {
     const requestOptions = {
         method: 'PUT',
         headers: {

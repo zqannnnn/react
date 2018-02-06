@@ -1,4 +1,4 @@
-import {AuthInfo} from '../actions/auth'
+import {AuthInfo} from '../actions'
 function authHeader() {
     // return authorization header with jwt token
     let auth = getAuth();

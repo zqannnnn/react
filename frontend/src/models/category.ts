@@ -1,4 +1,4 @@
-export interface Entity {
+export interface Category {
   id?:string;
   type:string;
   details:Details;

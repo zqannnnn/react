@@ -2,6 +2,18 @@
     .page-container {
         padding-top: 2rem
     }
+    .offer-block-container{
+        display: flex;
+    }
+    .offer-block {
+        flex: 1 1 33.33%;
+        box-sizing: border-box;
+        -webkit-box-flex: 1;
+        max-width: 33.33%;
+    }
+}
+body{
+    background-color: #f8f9fa
 }
 .navbar{
     margin-bottom: 1rem
@@ -14,8 +26,90 @@
     cursor :pointer;
     font-size: 20px;
     font-weight: bold;
-    margin-right: 5px
+    margin-right: 5px;
+    color: #007bff
 }
 .control-btn:hover{
     text-decoration: none
+}
+.images-container{
+    padding: 5px;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid lightgray;
+    background-color: #eee;
+    overflow: auto;
+    width: 100%;
+}
+.images-container .image-add{
+    position: relative;
+}
+.images-container .image-add input[type="file"]{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+.images-container .add-icon{
+    font-size: 50px;
+    cursor: pointer;
+}
+.images-container .image-wrapper{
+    width: 100px;
+    margin-right: 10px;
+    min-height: 65px;
+    max-height: 65px;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+    background: white;
+}
+.images-container .remove-icon{
+    position: absolute;
+    right: 2px;
+    top:2px
+}
+.images-container img{
+    width: 100%;
+}
+
+.offer-block{
+    background-color: white;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 5px;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+}
+.offer-block .content{
+    padding:0 10px
+}
+.offer-block .content .type{
+    text-align: center;
+    padding:5px 0;
+}
+.offer-block .content .details{
+    word-break: break-word;
+}
+.offer-block .menu{
+    padding:0 10px;
+    display: flex;
+    align-content: right;
+    justify-content: flex-end;
+}
+.offer-block .image-wr{
+    overflow: hidden;
+}
+.offer-block .offer{
+    flex: 1 1 100%;
+    box-sizing: border-box;
+    -webkit-box-flex: 1;
+    max-width: 100%;
+}
+.offer-block img{
+    width: 100%;
 }

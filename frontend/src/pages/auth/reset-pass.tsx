@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect,Dispatch } from 'react-redux';
 
-import {actionCreators as userActions} from '../../actions/user';
-import { RootState } from '../../reducers/index';
+import {userActionCreators} from '../../actions';
+import { RootState } from '../../reducers';
 interface ResetPassProps{
     dispatch: Dispatch<RootState>;
     submiting:boolean;
@@ -38,7 +38,7 @@ class ResetPassPage extends React.Component<ResetPassProps,ResetPassState> {
         const { password,rePassword } = this.state;
         const { dispatch } = this.props;
         if (password&&password==rePassword) {
-            dispatch(userActions.resetPass(password));
+            dispatch(userActionCreators.resetPass(password));
         }
     }
 

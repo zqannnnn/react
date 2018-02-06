@@ -1,6 +1,6 @@
-import userConstants from '../constants/user';
-import {UserEntity as User} from '../models/user'
-import {Action} from '../actions/user'
+import {userConsts} from '../constants';
+import {User} from '../models'
+import {UserAction} from '../actions'
 export type State = {
   updating?: boolean;
   submiting?: boolean;
@@ -8,31 +8,19 @@ export type State = {
   userData?: User;
   error?: string;
 };
-export function user(state = {}, action : Action) : State {
+export function user(state = {}, action : UserAction) : State {
   switch(action.type) {
-    case userConstants.UPDATE_REQUEST:
+    case userConsts.UPDATE_REQUEST:
       return {updating: true};
-    case userConstants.UPDATE_SUCCESS:
+    case userConsts.UPDATE_SUCCESS:
       return {userData: action.user};
-    case userConstants.UPDATE_FAILURE:
+    case userConsts.UPDATE_FAILURE:
       return {error: action.error};
-    case userConstants.GET_REQUEST:
+    case userConsts.GET_REQUEST:
       return {loading: true};
-    case userConstants.GET_SUCCESS:
+    case userConsts.GET_SUCCESS:
       return {userData: action.user};
-    case userConstants.GET_FAILURE:
-      return {error: action.error};
-    case userConstants.LOST_PASS_REQUEST:
-      return {submiting: true};
-    case userConstants.LOST_PASS_SUCCESS:
-      return {submiting: false};
-    case userConstants.LOST_PASS_FAILURE:
-      return {error: action.error};
-    case userConstants.RESET_PASS_REQUEST:
-      return {submiting: true};
-    case userConstants.RESET_PASS_SUCCESS:
-      return {};
-    case userConstants.RESET_PASS_FAILURE:
+    case userConsts.GET_FAILURE:
       return {error: action.error};
     default:
       return state

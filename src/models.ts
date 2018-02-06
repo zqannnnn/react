@@ -1,13 +1,10 @@
 import { Sequelize } from 'sequelize-typescript'
 import { config } from './config/db'
 import { consts,beefOptions,vealOptions,sheepOptions } from './config/static'
-import { User } from './models/user'
-import { Category } from './models/category'
-import { Order } from './models/order'
-import { Offer } from './models/offer'
+import { User,Category,Order,Offer,Image } from './models/'
 
 const sequelize = new Sequelize(config)
-sequelize.addModels([User, Order, Offer, Category])
+sequelize.addModels([User, Order, Offer, Category, Image])
 
 const setupDatabase = async () => {
   await sequelize.sync()
@@ -35,5 +32,5 @@ const setupDatabase = async () => {
   await categorySheep.save()
 }
 
-const models = { User, Order, Offer, Category, setupDatabase }
+const models = { User, Order, Offer, Category, Image, setupDatabase }
 export = models

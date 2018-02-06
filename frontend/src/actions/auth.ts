@@ -1,57 +1,55 @@
-import userConstants from '../constants/user';
+import {userConsts} from '../constants';
 import {userService} from '../services/user';
-import {actionCreators as alertActions} from './alert';
+import {alertActionCreators} from '.';
 import {history} from '../helpers/history';
 import * as auth from '../helpers/auth';
 export type AuthInfo = {
-    id:string;
-    token:string;
-    isAdmin?:boolean
+    id: string;
+    token: string;
+    isAdmin?: boolean
 }
 export const actionCreators = {
     login,
     logout,
-    setAuth,
+    setAuth
 };
 export type Action = {
     type: string;
-    authInfo?:AuthInfo;
-    error?:string;
+    authInfo?: AuthInfo;
+    error?: string;
 }
-function login(username:string, password:string) {
+function login(username : string, password : string) {
     return (dispatch : (action : Action) => void) => {
         dispatch(request());
 
         userService
             .login(username, password)
-            .then((authInfo:AuthInfo) => {
+            .then((authInfo : AuthInfo) => {
                 dispatch(success(authInfo));
-            }, (error:string) => {
+            }, (error : string) => {
                 dispatch(failure(error));
-                dispatch(alertActions.error(error));
+                dispatch(alertActionCreators.error(error));
             });
     };
 
     function request() {
-        return {type: userConstants.LOGIN_REQUEST}
+        return {type: userConsts.LOGIN_REQUEST}
     }
     function success(authInfo : AuthInfo) {
-        return {type: userConstants.LOGIN_SUCCESS, authInfo}
+        return {type: userConsts.LOGIN_SUCCESS, authInfo}
     }
     function failure(error : string) {
-        return {type: userConstants.LOGIN_FAILURE, error}
+        return {type: userConsts.LOGIN_FAILURE, error}
     }
 }
 
 function logout() {
     userService.logout();
-    return {type: userConstants.LOGOUT};
+    return {type: userConsts.LOGOUT};
 }
-
-
 
 function setAuth(authInfo : AuthInfo) {
     auth.setAuth(authInfo)
-    return {type: userConstants.LOGIN_SUCCESS, authInfo}
+    return {type: userConsts.LOGIN_SUCCESS, authInfo}
 
 }

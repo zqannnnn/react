@@ -1,13 +1,10 @@
 import * as React from 'react';
 import {Link} from 'react-router-dom';
 import {connect,Dispatch} from 'react-redux';
-import orderConstants from '../../constants/order'
-import {actionCreators as orderActions} from '../../actions/order';
-import {RootState} from '../../reducers/index'
-import {State as OrderState} from '../../reducers/order'
-import { AuthInfo } from '../../actions/auth';
-import {Order} from '../../models/order'
-import {Entity as Category, Details as CategoryDetails} from '../../models/category'
+import {orderConsts} from '../../constants'
+import {orderActionCreators,AuthInfo} from '../../actions';
+import {RootState,OrderState} from '../../reducers'
+import {Order,Category, CategoryDetails} from '../../models'
 interface ListProps  {
     dispatch: Dispatch<RootState>;
     order: OrderState;
@@ -20,11 +17,11 @@ class ListPage extends React.Component<ListProps> {
     componentDidMount() {
         this
             .props
-            .dispatch(orderActions.getAll());
+            .dispatch(orderActionCreators.getAll());
     }
 
     handleCancellOrder(id:string) {
-        this.props.dispatch(orderActions.cancell(id));
+        this.props.dispatch(orderActionCreators.cancell(id));
     }
     render() {
         const {order} = this.props;
@@ -52,14 +49,12 @@ class ListPage extends React.Component<ListProps> {
                     <tbody >
                         {order.items && order
                             .items
-                            .map((item, index) => {
-                                item.status!==orderConstants.ORDER_STATUS_CANCELLED?
-                                (<tr key={item.id} className={"table-row"}>
+                            .map((item, index) => (<tr key={item.id} className={"table-row"}>
                                 <td>{item.cancelling
                                         ? <i className="fa fa-spinner" aria-hidden="true"></i>
                                         : item.cancellError
                                             ? <span className="text-danger">- ERROR: {item.cancellError}</span>
-                                            : item.status!==orderConstants.ORDER_STATUS_CANCELLED &&< i onClick = {()=>{
+                                            : item.status!==orderConsts.ORDER_STATUS_CANCELLED &&< i onClick = {()=>{
                                                 if(item.id)
                                                     this.handleCancellOrder(item.id)
                                             }
@@ -77,7 +72,7 @@ class ListPage extends React.Component<ListProps> {
                                     <Link to={'/order/' + item.id} className="control-btn">✎
                                     </Link>
                                 </td>
-                            </tr>):''})
+                            </tr>))
                         }
                     </tbody>
                 </table>

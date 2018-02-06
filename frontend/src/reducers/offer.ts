@@ -1,30 +1,32 @@
-import {orderConsts} from '../constants';
-import {OrderAction} from '../actions'
-import {Order} from '../models'
+import {offerConsts} from '../constants';
+import {OfferAction} from '../actions'
+import {Offer} from '../models'
 export type State = {
   editing?:boolean;
   cancelling?:boolean;
   cancellError?:string;
   loading?:boolean;
   error?:string;
-  orderData?:Order;
-  items?:Array<Order>;
+  offerData?:Offer;
+  items?:Array<Offer>;
+  uploading?:boolean;
+  image?:string;
 };
-export function order(state:State ={} , action:OrderAction):State {
+export function offer(state:State ={} , action:OfferAction):State {
   switch (action.type) {
-    case orderConsts.CREATE_REQUEST:
+    case offerConsts.CREATE_REQUEST:
       return { editing: true };
-    case orderConsts.CREATE_SUCCESS:
+    case offerConsts.CREATE_SUCCESS:
       return {};
-    case orderConsts.CREATE_FAILURE:
+    case offerConsts.CREATE_FAILURE:
       return {error : action.error};
-    case orderConsts.EDIT_REQUEST:
+    case offerConsts.EDIT_REQUEST:
       return { editing:true };
-    case orderConsts.EDIT_SUCCESS:
+    case offerConsts.EDIT_SUCCESS:
       return {};
-    case orderConsts.EDIT_FAILURE:
+    case offerConsts.EDIT_FAILURE:
       return {error : action.error};
-    case orderConsts.CANCELL_REQUEST:
+    case offerConsts.CANCELL_REQUEST:
       if (state.items) 
           return {
             ...state,
@@ -37,7 +39,7 @@ export function order(state:State ={} , action:OrderAction):State {
                 }
                 : item)
           };
-    case orderConsts.CANCELL_SUCCESS:
+    case offerConsts.CANCELL_SUCCESS:
       if (state.items) 
         return {
           ...state,
@@ -47,11 +49,11 @@ export function order(state:State ={} , action:OrderAction):State {
               ? {
                 ...item,
                 cancelling: false,
-                status:orderConsts.ORDER_STATUS_CANCELLED
+                status:offerConsts.OFFER_STATUS_CANCELLED
               }
               : item)
         };
-    case orderConsts.CANCELL_FAILURE:
+    case offerConsts.CANCELL_FAILURE:
       if (state.items) 
         return {
           ...state,
@@ -65,18 +67,27 @@ export function order(state:State ={} , action:OrderAction):State {
               }
               : item)
         };
-    case orderConsts.GET_REQUEST:
+    case offerConsts.GET_REQUEST:
       return {loading: true};
-    case orderConsts.GET_SUCCESS:
-      return {orderData: action.data};
-    case orderConsts.GET_FAILURE:
+    case offerConsts.GET_SUCCESS:
+      return {offerData: action.data};
+    case offerConsts.GET_FAILURE:
       return {error: action.error};
-    case orderConsts.GETALL_REQUEST:
+    case offerConsts.GETALL_REQUEST:
       return {loading: true};
-    case orderConsts.GETALL_SUCCESS:
-      return {items: action.orders};
-    case orderConsts.GETALL_FAILURE:
+    case offerConsts.GETALL_SUCCESS:
+      return {items: action.offers};
+    case offerConsts.GETALL_FAILURE:
       return {error: action.error};
+    case offerConsts.UPLOAD_REQUEST:
+      return { uploading: true };
+    case offerConsts.UPLOAD_SUCCESS:
+      return {...state,
+        uploading: false,
+        image:action.imagePath
+      };
+    case offerConsts.UPLOAD_FAILURE:
+      return {error : action.error,uploading: false};
     default:
       return state
   }

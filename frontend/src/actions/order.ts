@@ -1,13 +1,13 @@
-import orderConstants from '../constants/order';
-import {orderService} from '../services/order';
-import {actionCreators as alertActions} from './alert';
+import {orderConsts} from '../constants';
+import {orderService} from '../services';
+import {alertActionCreators} from '.';
 import {history} from '../helpers/history';
 import * as auth from '../helpers/auth';
-import {Order} from '../models/order'
+import {Order} from '../models'
 import {Dispatch} from 'react-redux'
 import {ActionCreator} from 'redux'
 import {ThunkAction} from 'redux-thunk'
-import {RootState} from '../reducers/index'
+import {RootState} from '../reducers'
 
 export type Action = {
     type: string;
@@ -27,20 +27,20 @@ const _new : ActionCreator < ThunkAction < void, RootState, void >> = (order : O
             .new(order)
             .then((order : Order) => {
                 dispatch(success());
-                dispatch(alertActions.success('Create order successful'));
+                dispatch(alertActionCreators.success('Create order successful'));
             }, (error : string) => {
                 dispatch(failure(error));
-                dispatch(alertActions.error(error));
+                dispatch(alertActionCreators.error(error));
             });
     })
     function request() : Action {
-        return {type: orderConstants.CREATE_REQUEST}
+        return {type: orderConsts.CREATE_REQUEST}
     }
     function success() : Action {
-        return {type: orderConstants.CREATE_SUCCESS}
+        return {type: orderConsts.CREATE_SUCCESS}
     }
     function failure(error : string) : Action {
-        return {type: orderConstants.CREATE_FAILURE, error}
+        return {type: orderConsts.CREATE_FAILURE, error}
     }
 }
 const edit : ActionCreator < ThunkAction < void, RootState, void >> = (order : Order, orderId:string) =>{
@@ -51,20 +51,20 @@ const edit : ActionCreator < ThunkAction < void, RootState, void >> = (order : O
             .edit(order,orderId)
             .then(() => {
                 dispatch(success());
-                dispatch(alertActions.success('Edit order successful'));
+                dispatch(alertActionCreators.success('Edit order successful'));
             }, (error : string) => {
                 dispatch(failure(error));
-                dispatch(alertActions.error(error));
+                dispatch(alertActionCreators.error(error));
             });
     })
     function request() : Action {
-        return {type: orderConstants.EDIT_REQUEST}
+        return {type: orderConsts.EDIT_REQUEST}
     }
     function success() : Action {
-        return {type: orderConstants.EDIT_SUCCESS}
+        return {type: orderConsts.EDIT_SUCCESS}
     }
     function failure(error : string) : Action {
-        return {type: orderConstants.EDIT_FAILURE, error}
+        return {type: orderConsts.EDIT_FAILURE, error}
     }
 }
 function getById(id : string) {
@@ -77,13 +77,13 @@ function getById(id : string) {
     };
 
     function request() {
-        return {type: orderConstants.GET_REQUEST}
+        return {type: orderConsts.GET_REQUEST}
     }
     function success(order : Order) {
-        return {type: orderConstants.GET_SUCCESS, data: order}
+        return {type: orderConsts.GET_SUCCESS, data: order}
     }
     function failure(error : string) {
-        return {type: orderConstants.GET_FAILURE, error}
+        return {type: orderConsts.GET_FAILURE, error}
     }
 }
 function cancell(id : string) {
@@ -94,15 +94,14 @@ function cancell(id : string) {
             .cancell(id)
             .then(() => dispatch(success(id)), error => dispatch(failure(error,id)));
     };
-
     function request(id:string) {
-        return {type: orderConstants.CANCELL_REQUEST,id}
+        return {type: orderConsts.CANCELL_REQUEST,id}
     }
     function success(id:string) {
-        return {type: orderConstants.CANCELL_SUCCESS,id}
+        return {type: orderConsts.CANCELL_SUCCESS,id}
     }
     function failure(error : string,id:string) {
-        return {type: orderConstants.CANCELL_FAILURE, error,id}
+        return {type: orderConsts.CANCELL_FAILURE, error,id}
     }
 }
 const getAll : ActionCreator < ThunkAction < void,RootState,void >> = () => {
@@ -114,13 +113,13 @@ const getAll : ActionCreator < ThunkAction < void,RootState,void >> = () => {
     });
 
     function request() : Action {
-        return {type: orderConstants.GETALL_REQUEST}
+        return {type: orderConsts.GETALL_REQUEST}
     }
     function success(orders : Array < Order >) : Action {
-        return {type: orderConstants.GETALL_SUCCESS, orders}
+        return {type: orderConsts.GETALL_SUCCESS, orders}
     }
     function failure(error : string) : Action {
-        return {type: orderConstants.GETALL_FAILURE, error}
+        return {type: orderConsts.GETALL_FAILURE, error}
     }
 }
 export const actionCreators = {

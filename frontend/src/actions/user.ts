@@ -1,9 +1,9 @@
-import userConstants from '../constants/user';
-import {userService} from '../services/user';
-import {actionCreators as alertActions} from './alert';
+import {userConsts} from '../constants';
+import {userService} from '../services';
+import {alertActionCreators } from '.';
 import {history} from '../helpers/history';
 import * as auth from '../helpers/auth';
-import {UserEntity as User} from '../models/user'
+import {User} from '../models'
 export const actionCreators = {
     update,
     new:_new,
@@ -25,21 +25,21 @@ function update(user:User,userId:string) {
             .update(user,userId)
             .then(user => {
                 dispatch(success(user));
-                dispatch(alertActions.success('Submit user successful'));
+                dispatch(alertActionCreators.success('Submit user successful'));
             }, error => {
                 dispatch(failure(error));
-                dispatch(alertActions.error(error));
+                dispatch(alertActionCreators.error(error));
             });
     };
 
     function request(user : User) {
-        return {type: userConstants.UPDATE_REQUEST}
+        return {type: userConsts.UPDATE_REQUEST}
     }
     function success(user : User) {
-        return {type: userConstants.UPDATE_SUCCESS,user}
+        return {type: userConsts.UPDATE_SUCCESS,user}
     }
     function failure(error : string) {
-        return {type: userConstants.UPDATE_FAILURE, error}
+        return {type: userConsts.UPDATE_FAILURE, error}
     }
 }
 // prefixed function name with underscore because new is a reserved word in
@@ -51,21 +51,21 @@ function _new(user : User) {
             .new(user)
             .then(user => {
                 dispatch(success());
-                dispatch(alertActions.success('Create user successful'));
+                dispatch(alertActionCreators.success('Create user successful'));
             }, error => {
                 dispatch(failure(error));
-                dispatch(alertActions.error(error));
+                dispatch(alertActionCreators.error(error));
             });
     };
 
     function request(user : User) {
-        return {type: userConstants.UPDATE_REQUEST, user}
+        return {type: userConsts.UPDATE_REQUEST, user}
     }
     function success() {
-        return {type: userConstants.UPDATE_SUCCESS}
+        return {type: userConsts.UPDATE_SUCCESS}
     }
     function failure(error : string) {
-        return {type: userConstants.UPDATE_FAILURE, error}
+        return {type: userConsts.UPDATE_FAILURE, error}
     }
 }
 
@@ -76,22 +76,22 @@ function lostPass(email:string) {
         userService
             .lostPass(email)
             .then(() => {
-                dispatch(alertActions.success("If there is a corresponding account, then you'll receive an email with a link to change your password."));
+                dispatch(alertActionCreators.success("If there is a corresponding account, then you'll receive an email with a link to change your password."));
                 dispatch(success());
             }, error => {
-                dispatch(alertActions.error(error));
+                dispatch(alertActionCreators.error(error));
                 dispatch(failure(error));
             });
     };
 
     function request() {
-        return {type: userConstants.LOST_PASS_REQUEST}
+        return {type: userConsts.LOST_PASS_REQUEST}
     }
     function success() {
-        return {type: userConstants.LOST_PASS_SUCCESS}
+        return {type: userConsts.LOST_PASS_SUCCESS}
     }
     function failure(error : string) {
-        return {type: userConstants.LOST_PASS_FAILURE, error}
+        return {type: userConsts.LOST_PASS_FAILURE, error}
     }
 }
 function resetPass(pass:string) {
@@ -101,21 +101,21 @@ function resetPass(pass:string) {
         userService
             .resetPass(pass)
             .then(() => {
-                dispatch(alertActions.success("Reset password successful."));
+                dispatch(alertActionCreators.success("Reset password successful."));
                 dispatch(success());
             }, error => {
-                dispatch(alertActions.error(error));
+                dispatch(alertActionCreators.error(error));
                 dispatch(failure(error));
             });
     };
 
     function request() {
-        return {type: userConstants.RESET_PASS_REQUEST}
+        return {type: userConsts.RESET_PASS_REQUEST}
     }
     function success() {
-        return {type: userConstants.RESET_PASS_SUCCESS}
+        return {type: userConsts.RESET_PASS_SUCCESS}
     }
     function failure(error : string) {
-        return {type: userConstants.RESET_PASS_FAILURE, error}
+        return {type: userConsts.RESET_PASS_FAILURE, error}
     }
 }

@@ -17,7 +17,7 @@ import {
 } from 'sequelize-typescript'
 import { User } from './user'
 @Table({
-  tableName: 'product_option',
+  tableName: 'category',
   underscored: true
 })
 export class Category extends Model<Category> {

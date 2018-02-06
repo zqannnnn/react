@@ -1,30 +1,42 @@
-import userConstants from '../constants/user';
+import {userConsts} from '../constants';
 import {getAuth} from '../helpers/auth';
-import {AuthInfo,Action} from '../actions/auth';
-import {UserEntity as User} from '../models/user' 
+import {AuthInfo,AuthAction} from '../actions';
+import {User} from '../models' 
 let authInfo = getAuth();
 const initialState = authInfo ? { loggedIn: true, authInfo } : {};
 export type State = {
   loggedIn?:boolean;
-  loggingIn?:boolean;
+  processing?:boolean;
   authInfo?:AuthInfo;
 };
 
-export function auth(state :State = initialState, action :Action):State {
+export function auth(state :State = initialState, action :AuthAction):State {
   switch (action.type) {
-    case userConstants.LOGIN_REQUEST:
+    case userConsts.LOGIN_REQUEST:
       return {
-        loggingIn: true,
+        processing: true,
         authInfo: action.authInfo
       };
-    case userConstants.LOGIN_SUCCESS:
+    case userConsts.LOGIN_SUCCESS:
       return {
         loggedIn: true,
         authInfo: action.authInfo
       };
-    case userConstants.LOGIN_FAILURE:
+    case userConsts.LOGIN_FAILURE:
       return {};
-    case userConstants.LOGOUT:
+    case userConsts.REGISTER_REQUEST:
+      return {
+        processing: true,
+        authInfo: action.authInfo
+      };
+    case userConsts.REGISTER_SUCCESS:
+      return {
+        loggedIn: true,
+        authInfo: action.authInfo
+      };
+    case userConsts.REGISTER_FAILURE:
+      return {};
+    case userConsts.LOGOUT:
       return {};
     default:
       return state

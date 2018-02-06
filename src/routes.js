@@ -9,6 +9,7 @@ const categoryRouter = require('./routes/category')
 const offerRouter = require('./routes/offer')
 const orderRouter = require('./routes/order')
 const passRouter = require('./routes/pass')
+const uploadRouter = require('./routes/upload')
 const qs = require('querystring')
 const authMiddleware = require('./middleware/auth')
 
@@ -72,4 +73,5 @@ module.exports = (app, passport) => {
   app.use('/category', categoryRouter);
   app.use('/offer', offerRouter);
   app.use('/order', orderRouter);
+  app.use('/upload', uploadRouter);
 }
