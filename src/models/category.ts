@@ -31,6 +31,7 @@ export class Category extends Model<Category> {
   @Column
   public id: string
 
+  @Unique
   @Column({field: 'type'})
   public type: string
 
