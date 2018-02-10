@@ -31,6 +31,12 @@ class NavBar extends React.Component <NavProps> {
                         <NavLink exact to="/offers" className="nav-link" activeClassName="active">My Offers</NavLink>
                     </li>
                     <li className="nav-item">
+                    <NavLink exact to="/order/new" className="nav-link" activeClassName="active">Add Order</NavLink>
+                    </li>
+                    <li className="nav-item">
+                    <NavLink exact to="/offer/new" className="nav-link" activeClassName="active">Add Offer</NavLink>
+                    </li>
+                    <li className="nav-item">
                         <NavLink to="/login" className="nav-link" activeClassName="active" onClick={this.logout()}>{authInfo?"Logout":"Login"}</NavLink>
                     </li>
                    

@@ -209,10 +209,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         }
         return (
             <div className="col-md-10 offset-md-1">
-                <h2 className="header">{id
-                        ? 'Edit'
-                        : 'Create'}
-                    Offer page</h2>
+                <h2 className="header">{id?'Edit':'Create'} Offer page</h2>
                 <form name="form" className="row" onSubmit={this.handleSubmit}>
                         <div className="form-group">
                             <label className="from-lable">Offer type</label>

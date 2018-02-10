@@ -13,13 +13,13 @@ export const userService = {
     resetPass
 };
 
-function login(username:string, password:string) {
+function login(email:string, password:string) {
     const requestOptions = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({username, password})
+        body: JSON.stringify({email, password})
     };
     return fetch('/login', requestOptions).then((response:Response) => {
         return response.ok

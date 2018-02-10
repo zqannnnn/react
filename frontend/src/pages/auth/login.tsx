@@ -10,7 +10,7 @@ interface LoginProps  extends RouteComponentProps <{}> {
     loggedIn:boolean;
 }
 interface LoginState  {
-    username: string;
+    email: string;
     password: string;
     submitted: boolean;
 }
@@ -19,7 +19,7 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
         super(props);
 
         this.state = {
-            username: '',
+            email: '',
             password: '',
             submitted: false
         };
@@ -37,16 +37,16 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
         e.preventDefault();
 
         this.setState({ submitted: true });
-        const { username, password } = this.state;
+        const { email, password } = this.state;
         const { dispatch } = this.props;
-        if (username && password) {
-            dispatch(authActionCreators.login(username, password));
+        if (email && password) {
+            dispatch(authActionCreators.login(email, password));
         }
     }
 
     render() {
         const { processing,loggedIn } = this.props;
-        const { username, password, submitted } = this.state;
+        const { email, password, submitted } = this.state;
         return (
             (loggedIn?(<Redirect
                 to={{
@@ -57,11 +57,11 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
             }}/>):<div className="page login without-nav one-row">
             <div className="header">Login</div>
             <form name="form" className="content-container" onSubmit={this.handleSubmit}>
-                <div className={'form-group' + (submitted && !username ? ' has-error' : '')}>
-                    <label htmlFor="username">Username</label>
-                    <input type="text" className="form-control" name="username" value={username} onChange={this.handleChange} />
-                    {submitted && !username &&
-                        <div className="help-block">Username is required</div>
+                <div className={'form-group' + (submitted && !email ? ' has-error' : '')}>
+                    <label htmlFor="email">Email</label>
+                    <input type="text" className="form-control" name="email" value={email} onChange={this.handleChange} />
+                    {submitted && !email &&
+                        <div className="help-block">Email is required</div>
                     }
                 </div>
                 <div className={'form-group' + (submitted && !password ? ' has-error' : '')}>

@@ -43,7 +43,7 @@ class ListPage extends React.Component<ListProps> {
                                         <span>{item.breed&&"Breed:"+item.breed+","}</span>
                                         <span>{item.grade&&"Grade:"+item.grade+","}</span>
                                         <span>{item.slaughterSpec&&"Slaughter Specificatin:"+item.slaughterSpec+","}</span>
-                                        <span>{item.primalCut&&"Primal Cut:"+item.primalCut+","}</span>
+                                        <span>{item.primalCut&&"Primal Cut:"+item.primalCut}</span>
                                     </div>
                                 </div> 
                                 <div className="menu">
@@ -66,8 +66,6 @@ class ListPage extends React.Component<ListProps> {
                         }
                     
                 </div>
-                <Link to={'/offer/new'}>add offer
-                </Link>
             </div>
         )
     }

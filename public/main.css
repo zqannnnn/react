@@ -11,6 +11,9 @@
         -webkit-box-flex: 1;
         max-width: 33.33%;
     }
+    .offer-block .content .details{
+        min-height: 80px;
+    }
 }
 body{
     background-color: #f8f9fa
@@ -94,6 +97,7 @@ body{
 }
 .offer-block .content .details{
     word-break: break-word;
+    min-height: inherit;
 }
 .offer-block .menu{
     padding:0 10px;
