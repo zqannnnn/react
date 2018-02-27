@@ -87,7 +87,7 @@ class RegisterPage extends React.Component < RegisterProps,RegisterState > {
         const {processing} = this.props;
         const {user, submitted, confirmFocused} = this.state;
         return (
-            <div className="page one-row">
+            <div className="page col-md-8 offset-md-2">
                 <div className="header">Register User</div>
                 <form name="form" onSubmit={this.handleSubmit}>
                     <div

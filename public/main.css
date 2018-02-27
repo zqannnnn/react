@@ -15,14 +15,12 @@
         min-height: 80px;
     }
 }
-body{
-    background-color: #f8f9fa
-}
 .navbar{
     margin-bottom: 1rem
 }
 .header{
-    text-align: center
+    text-align: center;
+    font-weight: bold;
 }
 
 .control-btn{

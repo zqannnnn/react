@@ -54,7 +54,7 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
                 state: {
                     from: this.props.location
                 }
-            }}/>):<div className="page login without-nav one-row">
+            }}/>):<div className="page login without-nav col-md-8 offset-md-2">
             <div className="header">Login</div>
             <form name="form" className="content-container" onSubmit={this.handleSubmit}>
                 <div className={'form-group' + (submitted && !email ? ' has-error' : '')}>

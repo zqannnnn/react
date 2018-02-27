@@ -36,7 +36,7 @@ class App extends React.Component<AppProps,any> {
         return (
             <div className="container">
                 <Router history={history}>
-                        <div className="col-md-10 offset-md-1">
+                        <div className="">
                             <NavBar/>
                             {alert.message && <div className={`alert ${alert.type}`}>{alert.message}</div>}
                             <Switch>

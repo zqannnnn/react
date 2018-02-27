@@ -52,7 +52,7 @@ class LostPassPage extends React.Component < LostPassProps,LostPassState > {
         const {submiting} = this.props;
         const {email, submitted} = this.state;
         return (
-            <div className="page one-row without-nav">
+            <div className="page col-md-8 offset-md-2 without-nav">
                 <div className="header">Lost Password</div>
                 <form name="form" onSubmit={this.handleSubmit}>
                     <div

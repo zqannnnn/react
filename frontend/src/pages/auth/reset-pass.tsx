@@ -46,7 +46,7 @@ class ResetPassPage extends React.Component<ResetPassProps,ResetPassState> {
         const { submiting } = this.props;
         const { password,rePassword, submitted } = this.state;
         return (
-            <div className="page one-row without-nav">
+            <div className="page col-md-8 offset-md-2 without-nav">
             <h4 className="header">Reset Password</h4>
             <form name="form" onSubmit={this.handleSubmit}>
             <div
