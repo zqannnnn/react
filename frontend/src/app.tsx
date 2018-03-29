@@ -13,7 +13,7 @@ import {RegisterPage} from './pages/auth';
 import {LostPassPage} from './pages/auth/lost-pass';
 import {ResetPassPage} from './pages/auth/reset-pass';
 import {ListPage as OrderListPage, EditPage as OrderEditPage} from './pages/order';
-import {ListPage as OfferListPage, EditPage as OfferEditPage} from './pages/offer';
+import {ListPage as OfferListPage, EditPage as OfferEditPage, ViewPage as OfferViewPage} from './pages/offer';
 import {Alert} from './models/alert' 
 import { RootState } from './reducers/index'
 interface AppProps {
@@ -42,12 +42,13 @@ class App extends React.Component<AppProps,any> {
                             <Switch>
                                 <PrivateRoute exact path="/" component={HomePage}/>
                                 <PrivateRoute path="/reset/pass" component={ResetPassPage}/>
-                                <Route path="/orders" component={OrderListPage}/>
-                                <Route path="/order/new" component={OrderEditPage}/>
-                                <Route path="/order/:id" component={OrderEditPage}/>
-                                <Route path="/offers" component={OfferListPage}/>
-                                <Route path="/offer/new" component={OfferEditPage}/>
-                                <Route path="/offer/:id" component={OfferEditPage}/>
+                                <PrivateRoute path="/orders" component={OrderListPage}/>
+                                <PrivateRoute path="/order/new" component={OrderEditPage}/>
+                                <PrivateRoute path="/order/edit/:id" component={OrderEditPage}/>
+                                <PrivateRoute path="/offers" component={OfferListPage}/>
+                                <PrivateRoute path="/offer/new" component={OfferEditPage}/>
+                                <PrivateRoute path="/offer/edit/:id" component={OfferEditPage}/>
+                                <PrivateRoute path="/offer/:id" component={OfferViewPage}/>
                                 <Route path="/login" component={LoginPage}/>
                                 <Route path="/register" component={RegisterPage}/>
                                 <Route path="/lost/pass" component={LostPassPage}/>

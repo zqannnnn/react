@@ -126,7 +126,7 @@ class EditPage extends React.Component <OrderProps, OrderState>{
         
         if(orderField!=undefined)
          return select = (
-            <div key={field} className="form-group">
+            <div key={field} className="form-group col-md-4">
                 <label className="from-lable">{field}</label>
                 <select  className="form-control" name={orderField} value={String(this.state.order[orderField])} onChange={this.handleChange}>
                     {items.map((item,index)=>
@@ -157,23 +157,23 @@ class EditPage extends React.Component <OrderProps, OrderState>{
                 <div className="col-md-10 offset-md-1">
                     <h2 className="header">{id?'Edit':'Create'} Order page</h2>
                     <form name="form" className="row" onSubmit={this.handleSubmit}>
-                        <div className="col-md-6 offset-md-3">
-                            <div className="form-group"> 
-                                <label className="from-lable">Order type</label>
-                                <select className="form-control" name="type" value={type} onChange={this.handleChange}>
-                                    {orderConsts.ORDER_TYPE.map((item,index)=>
-                                        <option key={index}>{item}</option>)}
-                                </select>
-                            </div>
-                            {/* } */}
-                        {options}
-                            <div className="form-group">
-                                <button className="btn btn-primary">Submit</button>
-                                {editing && <img
-                                    src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
-                                }
-                                <Link to="/orders" className="btn btn-link">Cancel</Link>
-                            </div>
+                        <div className="form-group"> 
+                            <label className="from-lable">Order type</label>
+                            <select className="form-control" name="type" value={type} onChange={this.handleChange}>
+                                {orderConsts.ORDER_TYPE.map((item,index)=>
+                                    <option key={index}>{item}</option>)}
+                            </select>
+                        </div>
+                        {/* } */}
+                        <div className="row" >
+                            {options}
+                        </div>
+                        <div className="form-group">
+                            <button className="btn btn-primary">Submit</button>
+                            {editing && <img
+                                src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+                            }
+                            <Link to="/orders" className="btn btn-link">Cancel</Link>
                         </div>
                     </form>
                 </div>

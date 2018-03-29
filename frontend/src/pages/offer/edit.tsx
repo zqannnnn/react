@@ -251,9 +251,12 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                     </div>
                 </form>
             </div>
-            ); } } function mapStateToProps(state:RootState) {const {offer, category} = state;
-            const {editing, loading, offerData, image, uploading} = offer;
-            const {items} = category
-            return {editing, categorys: items, offerData, image, uploading};
+            ); } } 
+function mapStateToProps(state:RootState) {
+    const {offer, category} = state;
+    const {editing, loading, offerData, image, uploading} = offer;
+    const {items} = category
+    return {editing, categorys: items, offerData, image, uploading};
 }
-            const connectedEditPage = connect(mapStateToProps)(EditPage); export {connectedEditPage as EditPage}
+const connectedEditPage = connect(mapStateToProps)(EditPage); 
+export {connectedEditPage as EditPage}

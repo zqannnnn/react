@@ -33,7 +33,7 @@ class ListPage extends React.Component<ListProps> {
                         <tr className="table-header">
                             <th>
                                 <Link to={'/order/new'}>
-                                    <i className="fa fa-plus-circle" aria-hidden="true"></i>
+                                    <i className="fa fa-plus-circle control-btn" aria-hidden="true"></i>
                                 </Link>
                             </th>
                             <th>Type</th>
@@ -60,7 +60,7 @@ class ListPage extends React.Component<ListProps> {
                                             }
                                                 
                                             }
-                                    className = "fa fa-minus-square" aria-hidden="true" ></i>}</td>
+                                    className = "fa fa-minus-square control-btn" aria-hidden="true" ></i>}</td>
                                 <td>{item.type}</td>
                                 <td>{item.storage}</td>
                                 <td>{item.breed}</td>
@@ -69,7 +69,7 @@ class ListPage extends React.Component<ListProps> {
                                 <td>{item.primalCut}</td>
                                 <td>{item.bone}</td>
                                 <td>
-                                    <Link to={'/order/' + item.id} className="control-btn">✎
+                                    <Link to={'/order/edit/' + item.id} className="control-btn">✎
                                     </Link>
                                 </td>
                             </tr>))

@@ -98,7 +98,6 @@
     min-height: inherit;
 }
 .offer-block .menu{
-    padding:0 10px;
     display: flex;
     align-content: right;
     justify-content: flex-end;
@@ -114,4 +113,11 @@
 }
 .offer-block img{
     width: 100%;
+}
+.view-page .group{
+    margin-bottom: 20px
+}
+.view-page .label{
+    font-size: 16px;
+    font-weight: bold;
 }

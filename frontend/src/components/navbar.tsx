@@ -19,7 +19,7 @@ class NavBar extends React.Component <NavProps> {
     render() {
         const {authInfo} = this.props
         return (
-            <nav className="navbar navbar-expand-lg navbar-light bg-light" role="navigation">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-primary" role="navigation">
             <NavLink exact to="/" className="navbar-brand" activeClassName="active">Home</NavLink>
                 <ul className="navbar-nav ">
                     <li className="nav-item">
