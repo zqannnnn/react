@@ -34,7 +34,7 @@ class App extends React.Component<AppProps,any> {
     render() {
         const {alert} = this.props;
         return (
-            <div className="container">
+            <div>
                 <Router history={history}>
                         <div className="">
                             <NavBar/>

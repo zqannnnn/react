@@ -78,4 +78,4 @@ export const sheepOptions = {
   "Bone": ["Bone In", "Bone Out"],
   "Primal Cut": ["Silverside", "Rump", "Knuckle", "Topside", "Leg Cuts", "Short Loin", "Loin", "Rack (Frenched)", "Rack (Frenched Cap Off)", "Rack", "Square Cut Shoulder", "Shoulder Square Cute Rolled/Netted", "Neck", "Leg Chump On", "Leg Chump Off Shank On", "Leg Chump On Shank Off", "Leg Chump Off Shank Off", "Leg Boneless", "Leg Chump Off Shank Off", "Tenderloin", "Backstrap", "Breast and Flap", "Fore Shank", "Tripe", "6-Way Cut", "Flap"]
 }
-export const OtherOptions = {}
+//export const OtherOptions = {}

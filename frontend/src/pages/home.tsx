@@ -18,7 +18,10 @@ class HomePage extends React.Component<HomeProps> {
         const {authInfo} = this.props;
         return (
             <div className="">
-                <div className="header">All Offers</div>
+                <div className="header">
+                    <div className="header-bg"></div>
+                    <div className="title">All Offer</div>
+                </div>
                 <OfferListPage {...this.props}/>
             </div>
         );
