@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import {connect,Dispatch} from 'react-redux';
-import {ListPage as OfferListPage} from '../pages/offer'
+import {List as OfferList} from '../pages/offer'
+import {List as OrderList} from '../pages/order'
 import {AuthInfo} from '../actions';
 import {RootState} from '../reducers'
 interface HomeProps  {
@@ -17,12 +18,22 @@ class HomePage extends React.Component<HomeProps> {
     render() {
         const {authInfo} = this.props;
         return (
-            <div className="">
-                <div className="header">
-                    <div className="header-bg"></div>
+            <div className="page">
+                <div className="banner">
+                    <div className="banner-bg"></div>
                     <div className="title">All Offer</div>
                 </div>
-                <OfferListPage {...this.props}/>
+                <div className="offers-container col-md-8 offset-md-2">
+                    <div className="header">
+                        <div className="title">New Offers</div>
+                        <div className="subtitle">
+                            <div className="des">People looking for sell</div>
+                            <Link className="link" to={'/offers?type=all'}>👁 view all offers</Link>
+                        </div>
+                    </div>
+                    <OfferList {...this.props}/>
+                </div>
+                
             </div>
         );
     }

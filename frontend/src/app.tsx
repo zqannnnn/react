@@ -12,8 +12,8 @@ import {LoginPage} from './pages/auth';
 import {RegisterPage} from './pages/auth';
 import {LostPassPage} from './pages/auth/lost-pass';
 import {ResetPassPage} from './pages/auth/reset-pass';
-import {ListPage as OrderListPage, EditPage as OrderEditPage} from './pages/order';
-import {ListPage as OfferListPage, EditPage as OfferEditPage, ViewPage as OfferViewPage} from './pages/offer';
+import {List as OrderListPage, EditPage as OrderEditPage} from './pages/order';
+import {List as OfferListPage, EditPage as OfferEditPage, ViewPage as OfferViewPage} from './pages/offer';
 import {Alert} from './models/alert' 
 import { RootState } from './reducers/index'
 interface AppProps {

@@ -13,7 +13,7 @@ interface ListProps  {
     authInfo:AuthInfo;
     onlyMine?:boolean
 }
-class ListPage extends React.Component<ListProps> {
+class List extends React.Component<ListProps> {
     constructor(props:ListProps) {
         super(props);
     }
@@ -35,31 +35,16 @@ class ListPage extends React.Component<ListProps> {
                     {offer.items&&offer.items.map((item, index) =>
                         item.status!==offerConsts.OFFER_STATUS_CANCELLED&&
                         (<div key={item.id} className="offer-block">
-                            <Link to={'/offer/' + item.id} className="control-btn"><div className="image-wr">{item.images&&<img src={item.images[0].path}></img>}</div></Link>
-                            <div className="content">
-                                <div className="type">{item.type}</div>
-                                <div className="details">
-                                    <span>{item.storage&&"Storage:"+item.storage+","}</span>
-                                    <span>{item.breed&&"Breed:"+item.breed+","}</span>
-                                    <span>{item.grade&&"Grade:"+item.grade+","}</span>
-                                    <span>{item.slaughterSpec&&"Slaughter Specificatin:"+item.slaughterSpec+","}</span>
-                                    <span>{item.primalCut&&"Primal Cut:"+item.primalCut}</span>
-                                </div>
-                            </div> 
-                        {authInfo.id==item.userId?<div className="menu">
-                            <Link to={'/offer/edit/' + item.id} className="control-btn">✎
-                            </Link>
-                            <div className="control-btn" >{item.cancelling
-                                ? <i className="fa fa-spinner" aria-hidden="true"></i>
-                                : item.cancellError
-                                    ? <span className="text-danger">- ERROR: {item.cancellError}</span>
-                                    : item.status!==offerConsts.OFFER_STATUS_CANCELLED &&< i onClick = {()=>{
-                                        if(item.id)
-                                            this.handleCancellOffer(item.id)
-                                    }
-                                }
-                            className = "fa fa-times-circle" aria-hidden="true" ></i>}</div>
-                            </div>:<div className="menu"></div> }
+                            <div className="header">{item.type}</div>
+                            <div className="desc">
+                                <span>{item.storage&&"Storage:"+item.storage+","}</span>
+                                <span>{item.breed&&"Breed:"+item.breed+","}</span>
+                                <span>{item.grade&&"Grade:"+item.grade+","}</span>
+                                <span>{item.slaughterSpec&&"Slaughter Specificatin:"+item.slaughterSpec+","}</span>
+                                <span>{item.primalCut&&"Primal Cut:"+item.primalCut}</span>
+                            </div>
+                            <Link to={'/offer/' + item.id}><div className="image-wr">{item.images&&<img src={item.images[0].path}></img>}</div></Link>
+                             
                         </div>))
                     }
                 </div>
@@ -73,5 +58,5 @@ function mapStateToProps(state:RootState) {
     return {offer,authInfo:auth.authInfo};
 }
 
-const connectedListPage = connect(mapStateToProps)(ListPage);
-export {connectedListPage as ListPage};
+const connectedList = connect(mapStateToProps)(List);
+export {connectedList as List};

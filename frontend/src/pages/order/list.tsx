@@ -10,7 +10,7 @@ interface ListProps  {
     order: OrderState;
     authInfo:AuthInfo;
 }
-class ListPage extends React.Component<ListProps> {
+class List extends React.Component<ListProps> {
     constructor(props:ListProps) {
         super(props);
     }
@@ -86,5 +86,5 @@ function mapStateToProps(state:RootState) {
     return {order};
 }
 
-const connectedListPage = connect(mapStateToProps)(ListPage);
-export {connectedListPage as ListPage};
+const connectedList = connect(mapStateToProps)(List);
+export {connectedList as List};

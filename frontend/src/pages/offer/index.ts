@@ -1,3 +1,3 @@
-export { ListPage } from './list'
+export { List } from './list'
 export { EditPage } from './edit'
 export { ViewPage } from './view'
