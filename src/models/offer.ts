@@ -68,6 +68,9 @@ export class Offer extends Model<Offer> {
   @Column({field: 'ham_id'})
   public hamId: string
 
+  @Column
+  public price: number
+
   @HasMany(() => Image, 'offer_id')
   public images: Image[];
 

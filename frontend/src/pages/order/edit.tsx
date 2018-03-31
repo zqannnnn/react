@@ -129,6 +129,7 @@ class EditPage extends React.Component <OrderProps, OrderState>{
             <div key={field} className="form-group col-md-4">
                 <label className="from-lable">{field}</label>
                 <select  className="form-control" name={orderField} value={String(this.state.order[orderField])} onChange={this.handleChange}>
+                    <option></option>
                     {items.map((item,index)=>
                         <option key={index} value={item}>{item}</option>)}
                 </select>

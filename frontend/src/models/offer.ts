@@ -10,6 +10,7 @@ export interface Offer {
   slaughterSpec?:string;
   primalCut?: string;
   bone?:string;
+  price?:number;
   hamId?: string;
   images?:Image[];
   cancelling?:boolean;

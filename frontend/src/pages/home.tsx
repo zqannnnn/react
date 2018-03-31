@@ -33,7 +33,6 @@ class HomePage extends React.Component<HomeProps> {
                     </div>
                     <OfferList {...this.props}/>
                 </div>
-                
             </div>
         );
     }

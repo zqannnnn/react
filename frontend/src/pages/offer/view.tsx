@@ -38,32 +38,43 @@ class ViewPage extends React.Component < OfferProps, OfferState > {
         const {offer} = this.props
         const {loading} = this.state
         return (
-            <div className="col-md-10 offset-md-1 view-page">
+            <div className="col-md-8 offset-md-2 view-page page">
                 <h2 className="header">Offer View page</h2>
                 {loading?<i className="fa fa-spinner" aria-hidden="true"></i>:<div className="content">
                     <div className="group">
                         <div className="label">Storage</div>
-                        <div className="detail">{offer.storage}</div>
+                        <div className="detail">{offer.storage||"null"}</div>
                     </div>
                     <div className="group">
                         <div className="label">Breed</div>
-                        <div className="detail">{offer.breed}</div>
+                        <div className="detail">{offer.breed||"null"}</div>
                     </div>
                     <div className="group">
                         <div className="label">Grade</div>
-                        <div className="detail">{offer.grade}</div>
+                        <div className="detail">{offer.grade||"null"}</div>
                     </div>
                     <div className="group">
                         <div className="label">Slaughter Specification</div>
-                        <div className="detail">{offer.slaughterSpec}</div>
+                        <div className="detail">{offer.slaughterSpec||"null"}</div>
                     </div>
                     <div className="group">
                         <div className="label">Bone</div>
-                        <div className="detail">{offer.bone}</div>
+                        <div className="detail">{offer.bone||"null"}</div>
                     </div>
                     <div className="group">
                         <div className="label">Primal Cut</div>
-                        <div className="detail">{offer.primalCut}</div>
+                        <div className="detail">{offer.primalCut||"null"}</div>
+                    </div>
+                    <div className="group">
+                        <div className="label">images</div>
+                        <div className="images">
+                            
+                            {offer.images&&offer.images.map((image, index)=>
+                                <div key={index} className="image-wr col">
+                                    <img className="img" src={image.path}></img>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>}
             </div>

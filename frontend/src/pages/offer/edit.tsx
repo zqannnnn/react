@@ -98,7 +98,17 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                 });
         }
     }
-    handleChange = (e : React.FormEvent < HTMLSelectElement >) => {
+    handleSelectChange = (e : React.FormEvent < HTMLSelectElement >) => {
+        const {name, value} = e.currentTarget;
+        const {offer} = this.state;
+        this.setState({
+            offer: {
+                ...offer,
+                [name]: value
+            }
+        });
+    }
+    handleInputChange = (e : React.FormEvent < HTMLInputElement >) => {
         const {name, value} = e.currentTarget;
         const {offer} = this.state;
         this.setState({
@@ -176,12 +186,13 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         if (offerField != undefined) 
             return select = (
                 <div key={field} className="form-group col-md-4">
-                    <label className="from-lable">{field}</label>
+                    <label className="form-lable">{field}</label>
                     <select
                         className="form-control"
                         name={offerField}
                         value={String(this.state.offer[offerField])}
-                        onChange={this.handleChange}>
+                        onChange={this.handleSelectChange}>
+                        <option></option>
                         {items.map((item, index) => 
                             <option key={index} value={item}>{item}</option>)}
                     </select>
@@ -189,7 +200,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
             );
         }
     render() {
-        const {id, type, images} = this.state.offer;
+        const {id, type, images,price} = this.state.offer;
         const {editing, categorys, uploading} = this.props
         let options = null
         let currentCategory : Category
@@ -211,37 +222,52 @@ class EditPage extends React.Component < OfferProps, OfferState > {
             <div className="col-md-10 offset-md-1">
                 <h2 className="header">{id?'Edit':'Create'} Offer page</h2>
                 <form name="form" className="row" onSubmit={this.handleSubmit}>
-                        <div className="form-group">
-                            <label className="from-lable">Offer type</label>
-                            <select
-                                className="form-control"
-                                name="type"
-                                value={type}
-                                onChange={this.handleChange}>
-                                {offerConsts
-                                    .OFFER_TYPE
-                                    .map((item, index) => <option key={index}>{item}</option>)}
-                            </select>
-                        </div>
+                    <div className="form-group">
+                        <label className="form-lable">Offer type</label>
+                        <select
+                            className="form-control"
+                            name="type"
+                            value={type}
+                            onChange={this.handleSelectChange}>
+                            {offerConsts
+                                .OFFER_TYPE
+                                .map((item, index) => <option key={index}>{item}</option>)}
+                        </select>
+                    </div>
                     <div className="row">
                         {options}
+                        
                     </div>
                     <div className="row">
-                    <div className="form-group col-md-12">
-                        <label className="from-lable">Images</label>
-                        <div className="images-container">
-                            {images&&images.map((image, index) => <div key={index} className="image-wrapper">
-                                <i className="fa fa-times-circle remove-icon"  aria-hidden="true" onClick = {()=>{
-                                        this.handleDeltetImage(index)
-                                    }}></i>
-                                <img className="image" src={image.path}/>
-                            </div>)}
-                            <div className="image-add">
-                                <i className="fa fa-plus-circle add-icon" aria-hidden="true"></i>
-                                <input type="file" onChange={this.handleUpload}/>
-                            </div>
+                        <div className="form-group col-md-8">
+                                <label className="form-lable">Price</label>
+                                <div className="row col">
+                                <input
+                                    className="form-control col-md-6"
+                                    type="text"
+                                    name="price"
+                                    value={price}
+                                    onChange={this.handleInputChange}/>
+                                    <span className="col-md-1" >USD/kg</span>
+                                </div>
                         </div>
                     </div>
+                    <div className="row">
+                        <div className="form-group col-md-12">
+                            <label className="from-lable">Images</label>
+                            <div className="images-container">
+                                {images&&images.map((image, index) => <div key={index} className="image-wrapper">
+                                    <i className="fa fa-times-circle remove-icon"  aria-hidden="true" onClick = {()=>{
+                                            this.handleDeltetImage(index)
+                                        }}></i>
+                                    <img className="image" src={image.path}/>
+                                </div>)}
+                                <div className="image-add">
+                                    <i className="fa fa-plus-circle add-icon" aria-hidden="true"></i>
+                                    <input type="file" onChange={this.handleUpload}/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div className="form-group col-md-12">
                         <button className="btn btn-primary">Submit</button>
