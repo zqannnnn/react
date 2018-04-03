@@ -1,4 +1,3 @@
-
 export interface Offer {
   id?:string;
   userId?:string;
@@ -11,7 +10,6 @@ export interface Offer {
   primalCut?: string;
   bone?:string;
   price?:number;
-  hamId?: string;
   images?:Image[];
   cancelling?:boolean;
   cancellError?:string;

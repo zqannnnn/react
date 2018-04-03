@@ -22,11 +22,24 @@ router.post('/new', async (req: Request, res: express.Response) => {
     return res.status(500).send({ error: e.message })
   }
 })
-router.get('/list', async (req:Request, res:express.Response) => {
+router.get('/list/my', async (req:Request, res:express.Response) => {
   try {
     let orders = await Order.findAll({
       where:{
-        userId: req.userId
+        userId: req.userId,
+        status:consts.ORDER_STATUS_CREATED
+      }
+    })
+    return res.send(orders)
+  } catch (e) {
+    return res.status(500).send({error: e.message})
+  }
+})
+router.get('/list/all', async (req:Request, res:express.Response) => {
+  try {
+    let orders = await Order.findAll({
+      where:{
+        status:consts.ORDER_STATUS_CREATED
       }
     })
     return res.send(orders)

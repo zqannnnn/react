@@ -73,7 +73,7 @@ function getById(id : string) {
 
         orderService
             .getById(id)
-            .then(order => dispatch(success(order)), error => dispatch(failure(error)));
+            .then((order:any) => dispatch(success(order)), (error:any) => dispatch(failure(error)));
     };
 
     function request() {
@@ -92,7 +92,7 @@ function cancell(id : string) {
 
         orderService
             .cancell(id)
-            .then(() => dispatch(success(id)), error => dispatch(failure(error,id)));
+            .then(() => dispatch(success(id)), (error:any) => dispatch(failure(error,id)));
     };
     function request(id:string) {
         return {type: orderConsts.CANCELL_REQUEST,id}
@@ -104,11 +104,11 @@ function cancell(id : string) {
         return {type: orderConsts.CANCELL_FAILURE, error,id}
     }
 }
-const getAll : ActionCreator < ThunkAction < void,RootState,void >> = () => {
+const getAll : ActionCreator < ThunkAction < void,RootState,void >> = (option:{onlyMine:boolean}) => {
     return ((dispatch : Dispatch < RootState >) : void => {
         dispatch(request());
         orderService
-            .getAll()
+            .getAll(option)
             .then((orders : Array < Order >) => dispatch(success(orders)), (error : string) => dispatch(failure(error)));
     });
 

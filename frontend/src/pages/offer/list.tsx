@@ -43,7 +43,7 @@ class List extends React.Component<ListProps> {
                                 <span>{item.slaughterSpec&&"Slaughter Specificatin:"+item.slaughterSpec+","}</span>
                                 <span>{item.primalCut&&"Primal Cut:"+item.primalCut}</span>
                             </div>
-                            <Link to={'/offer/' + item.id}><div className="image-wr">{item.images&&item.images[0]?<img src={item.images[0].path}></img>:<img src="/asset/default-thumbnail.jpg"></img>}</div></Link>
+                            <Link to={'/offer/' + item.id}><div className="image-wr">{item.images&&item.images[0]?<img src={item.images[0].path}></img>:<img src="/asset/no-image.jpg"></img>}</div></Link>
                             <div className="footer">${item.price}
                              <div className="menu">
                                 {authInfo.id==item.userId&&<Link to={'/offer/edit/' + item.id} className="control-btn">✎</Link>}
@@ -55,8 +55,7 @@ class List extends React.Component<ListProps> {
                                                 if(item.id)
                                                     this.handleCancellOffer(item.id)
                                             }
-                                                
-                                            }
+                                        }
                                     className = "fa fa-times-circle" aria-hidden="true" ></i>}</div>
                                     </div>
                                 </div>

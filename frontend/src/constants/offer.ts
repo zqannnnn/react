@@ -26,5 +26,5 @@ export const consts = {
     OFFER_TYPE: ["Beef","Veal","Sheep"],
     OFFER_STATUS_CANCELLED:0,
     OFFER_STATUS_CREATED:1,
-    OFFER_STATUS_SUCCESSFULL:2,
+    OFFER_STATUS_SUCCEED:2,
 };

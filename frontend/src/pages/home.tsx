@@ -33,6 +33,16 @@ class HomePage extends React.Component<HomeProps> {
                     </div>
                     <OfferList {...this.props}/>
                 </div>
+                <div className="orders-container col-md-8 offset-md-2">
+                    <div className="header">
+                        <div className="title">New Orders</div>
+                        <div className="subtitle">
+                            <div className="des">People looking for buy</div>
+                            <Link className="link" to={'/orders?type=all'}>👁 view all orders</Link>
+                        </div>
+                    </div>
+                    <OrderList {...this.props}/>
+                </div>
             </div>
         );
     }

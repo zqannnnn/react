@@ -146,8 +146,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                 dispatch(offerActionCreators.edit(offer, offerId));
             else 
                 dispatch(offerActionCreators.new(offer));
-            }
-        
+        }
     }
     handleDeltetImage = (imageIndex:number) => {
         const {offer} = this.state

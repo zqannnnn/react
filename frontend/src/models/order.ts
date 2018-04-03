@@ -1,5 +1,6 @@
 export interface Order {
   id?:string;
+  userId?:string;
   status?:number;
   type?:string
   storage?:string;
@@ -8,7 +9,6 @@ export interface Order {
   slaughterSpec?:string;
   primalCut?: string;
   bone?:string;
-  // hamId?: string;
   offerId?:string;
   cancelling?:boolean;
   cancellError?:string;

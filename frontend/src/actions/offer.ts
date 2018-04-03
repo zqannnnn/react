@@ -74,7 +74,7 @@ function getById(id : string) {
 
         offerService
             .getById(id)
-            .then(offer => dispatch(success(offer)), error => dispatch(failure(error)));
+            .then((offer:Offer) => dispatch(success(offer)), (error:string) => dispatch(failure(error)));
     };
 
     function request() {
@@ -93,7 +93,7 @@ function cancell(id : string) {
 
         offerService
             .cancell(id)
-            .then(() => dispatch(success(id)), error => dispatch(failure(error,id)));
+            .then(() => dispatch(success(id)), (error:string) => dispatch(failure(error,id)));
     };
 
     function request(id:string) {

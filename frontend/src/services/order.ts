@@ -45,12 +45,15 @@ function cancell(id:string) {
 
     return fetch('/order/' + id, requestOptions).then(handleResponse);
 }
-function getAll() {
+function getAll(option:{onlyMine:boolean}) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
-    return fetch('/order/list', requestOptions).then(handleResponse);
+    if(option.onlyMine)
+        return fetch('/order/list/my', requestOptions).then(handleResponse);
+    else
+        return fetch('/order/list/all', requestOptions).then(handleResponse);
 }
 
 function handleResponse(response:Response) {

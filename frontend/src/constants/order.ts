@@ -22,5 +22,5 @@ export const consts = {
     ORDER_TYPE: ["Beef","Veal","Sheep"],
     ORDER_STATUS_CANCELLED:0,
     ORDER_STATUS_CREATED:1,
-    ORDER_STATUS_SUCCESSFULL:2,
+    ORDER_STATUS_SUCCEED:2,
 };
