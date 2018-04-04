@@ -7,7 +7,8 @@ const router = express.Router()
 router.use(authMiddleware)
 
 interface Request extends express.Request {
-  userId: string
+  userId: string;
+  isAdmin:boolean;
 }
 
 router.post('/new', async (req: Request, res: express.Response) => {
@@ -56,6 +57,22 @@ router.get('/list/all', async (req:Request, res:express.Response) => {
       include:[{model:Image,attributes:['path']}]
     })
     return res.send(offers)
+  } catch (e) {
+    return res.status(500).send({error: e.message})
+  }
+})
+router.get('/finish/:offerId', async (req: Request, res: express.Response) => {
+  try {
+    if(!req.isAdmin){
+      return res.status(500).send({error: 'Permission denied.'})
+    }
+    const offer = await Offer.find({ where: { id: req.params.offerId } })
+    if (!offer) {
+      return res.status(500).send({error: 'Offer does not exist'})
+    }
+    offer.status = consts.OFFER_STATUS_FINISHED
+    offer.save();
+    return res.send({success: true})
   } catch (e) {
     return res.status(500).send({error: e.message})
   }

@@ -32,7 +32,7 @@ class RegisterPage extends React.Component < RegisterProps,RegisterState > {
                 userName: '',
                 password: '',
                 rePassword: '',
-                userType:userConsts.USER_TYPE_BUYER
+                userType:userConsts.USER_TYPE_NORMAL
             },
             submitted: false,
             confirmFocused: false
@@ -142,17 +142,6 @@ class RegisterPage extends React.Component < RegisterProps,RegisterState > {
                             onFocus={this.onFocusConfirm}
                             onChange={this.handleChange}/> {user.password != user.rePassword && <div className="invalid-feedback">Password does not match the confirm password.</div>}
                         {submitted && !user.rePassword && <div className="invalid-feedback">Comfirm Password is required</div>}
-                    </div>
-                    <div className="form-group">
-                        <label className="from-lable">User Type</label>
-                            <select
-                                className="form-control"
-                                name="userType"
-                                value={user.userType}
-                                onChange={this.handleSelect}>
-                                <option value={userConsts.USER_TYPE_BUYER}>Buyer</option>
-                                <option value={userConsts.USER_TYPE_SELLER}>SELLER</option>
-                            </select>
                     </div>
                     <div className="form-group">
                         <button className="btn btn-primary">Submit</button>

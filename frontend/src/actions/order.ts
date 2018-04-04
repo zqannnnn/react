@@ -104,6 +104,25 @@ function cancell(id : string) {
         return {type: orderConsts.CANCELL_FAILURE, error,id}
     }
 }
+function finish(id : string) {
+    return (dispatch : (action : Action) => void) => {
+        dispatch(request(id));
+
+        orderService
+            .finish(id)
+            .then(() => dispatch(success(id)), (error:string) => dispatch(failure(error,id)));
+    };
+
+    function request(id:string) {
+        return {type: orderConsts.FINISH_REQUEST,id}
+    }
+    function success(id:string) {
+        return {type: orderConsts.FINISH_SUCCESS,id}
+    }
+    function failure(error : string,id:string) {
+        return {type: orderConsts.FINISH_FAILURE, error,id}
+    }
+}
 const getAll : ActionCreator < ThunkAction < void,RootState,void >> = (option:{onlyMine:boolean}) => {
     return ((dispatch : Dispatch < RootState >) : void => {
         dispatch(request());
@@ -127,5 +146,6 @@ export const actionCreators = {
     edit,
     getAll,
     getById,
-    cancell
+    cancell,
+    finish
 };

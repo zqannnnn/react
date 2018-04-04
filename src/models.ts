@@ -8,12 +8,12 @@ sequelize.addModels([User, Order, Offer, Category, Image])
 
 const setupDatabase = async () => {
   await sequelize.sync()
-  User.findOne({ where: {email: 'louis@qq.com'} }).then(user => {
+  User.findOne({ where: {email: 'admin@admin.com'} }).then(user => {
     if(!user){ 
       user= new User({
-        userName: 'louis',
-        email: 'louis@qq.com',
-        password: '1234567',
+        userName: 'admin',
+        email: 'admin@admin.com',
+        password: 'admin',
         userType: consts.USER_TYPE_ADMIN
       })
       user.save()

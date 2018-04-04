@@ -23,10 +23,10 @@ function update(user:User,userId:string) {
 
         userService
             .update(user,userId)
-            .then(user => {
+            .then((user:User) => {
                 dispatch(success(user));
                 dispatch(alertActionCreators.success('Submit user successful'));
-            }, error => {
+            }, (error:any) => {
                 dispatch(failure(error));
                 dispatch(alertActionCreators.error(error));
             });
@@ -49,10 +49,10 @@ function _new(user : User) {
 
         userService
             .new(user)
-            .then(user => {
+            .then((user:User) => {
                 dispatch(success());
                 dispatch(alertActionCreators.success('Create user successful'));
-            }, error => {
+            }, (error:any) => {
                 dispatch(failure(error));
                 dispatch(alertActionCreators.error(error));
             });
@@ -103,7 +103,7 @@ function resetPass(pass:string) {
             .then(() => {
                 dispatch(alertActionCreators.success("Reset password successful."));
                 dispatch(success());
-            }, error => {
+            }, (error:any) => {
                 dispatch(alertActionCreators.error(error));
                 dispatch(failure(error));
             });

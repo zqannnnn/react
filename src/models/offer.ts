@@ -65,9 +65,6 @@ export class Offer extends Model<Offer> {
   @Column
   public bone : string
 
-  @Column({field: 'ham_id'})
-  public hamId: string
-
   @Column
   public price: number
 

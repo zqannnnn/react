@@ -24,15 +24,18 @@ class List extends React.Component<ListProps> {
     handleCancellOrder(id:string) {
         this.props.dispatch(orderActionCreators.cancell(id));
     }
+    handleFinishOrder(id:string) {
+        this.props.dispatch(orderActionCreators.finish(id));
+    }
     render() {
         const {order,authInfo} = this.props;
         return (
             <div className="">
                 {order.error && <span className="text-danger">ERROR: {order.error}</span>}
-                <div className="order-block-container" >
+                <div className="blocks-container" >
                     {order.items&&order.items.map((item, index) =>
                         item.status!==orderConsts.ORDER_STATUS_CANCELLED&&
-                        (<div key={item.id} className="order-block">
+                        (<div key={item.id} className="block">
                             <div className="header">{item.type}</div>
                             <div className="desc">
                                 <span>{item.storage&&"Storage:"+item.storage+","}</span>
@@ -43,12 +46,11 @@ class List extends React.Component<ListProps> {
                             </div>
                             
                             <div className="footer">
-                                <div className="status">On Sale</div>
+                            <div className="price">${item.price}</div>
                                 <Link className="" to={'/order/' + item.id}>details</Link>
-                                <div className="menu">
-                                
-                                {authInfo.id==item.userId&&<Link to={'/order/edit/' + item.id} className="control-btn">✎</Link>}
-                                <div >{item.cancelling
+                                {authInfo.id==item.userId&&<div className="menu">
+                                    <Link to={'/order/edit/' + item.id} className="control-btn">✎</Link>
+                                    <div >{item.cancelling
                                         ? <i className="fa fa-spinner" aria-hidden="true"></i>
                                         : item.cancellError
                                             ? <span className="text-danger">- ERROR: {item.cancellError}</span>
@@ -58,8 +60,13 @@ class List extends React.Component<ListProps> {
                                             }
                                             }
                                     className = "fa fa-times-circle" aria-hidden="true" ></i>}</div>
-                                </div>
+                                </div>}
                             </div>
+                            {authInfo.isAdmin&&<div className="admin-menu" onClick = {()=>{
+                                        if(item.id)
+                                            this.handleFinishOrder(item.id)
+                                    }
+                                }>Bought</div>}
                         </div>))
                     }
                 </div>

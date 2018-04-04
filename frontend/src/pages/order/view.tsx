@@ -65,14 +65,20 @@ class ViewPage extends React.Component < OrderProps, OrderState > {
                         <div className="label">Primal Cut</div>
                         <div className="detail">{order.primalCut||"null"}</div>
                     </div>
+                    <div className="group">
+                        <div className="label">Price</div>
+                        <div className="detail">${order.price||"null"}</div>
+                    </div>
                 </div>}
             </div>
         ); 
     } 
 } 
             
-function mapStateToProps(state:RootState) {const {order} = state;
+function mapStateToProps(state:RootState) {
+    const {order} = state;
     const {orderData} = order;
     return { order:orderData};
 }
-const connectedViewPage = connect(mapStateToProps)(ViewPage); export {connectedViewPage as ViewPage}
+const connectedViewPage = connect(mapStateToProps)(ViewPage); 
+export {connectedViewPage as ViewPage}

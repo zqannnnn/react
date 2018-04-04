@@ -5,6 +5,8 @@ export type State = {
   editing?:boolean;
   cancelling?:boolean;
   cancellError?:string;
+  finishing?:boolean;
+  finishError?:string;
   loading?:boolean;
   error?:string;
   offerData?:Offer;
@@ -64,6 +66,47 @@ export function offer(state:State ={} , action:OfferAction):State {
                 ...item,
                 cancelling: false,
                 cancellError:action.error
+              }
+              : item)
+        };
+    case offerConsts.FINISH_REQUEST:
+      if (state.items) 
+          return {
+            ...state,
+            items: state
+              .items
+              .map(item => item.id === action.id
+                ? {
+                  ...item,
+                  finishing: true
+                }
+                : item)
+          };
+    case offerConsts.FINISH_SUCCESS:
+      if (state.items) 
+        return {
+          ...state,
+          items: state
+            .items
+            .map(item => item.id === action.id
+              ? {
+                ...item,
+                finishing: false,
+                status:offerConsts.OFFER_STATUS_FINISHED
+              }
+              : item)
+        };
+    case offerConsts.FINISH_FAILURE:
+      if (state.items) 
+        return {
+          ...state,
+          items: state
+            .items
+            .map(item => item.id === action.id
+              ? {
+                ...item,
+                finishing: false,
+                finishError:action.error
               }
               : item)
         };

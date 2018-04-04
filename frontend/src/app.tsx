@@ -12,7 +12,7 @@ import {LoginPage} from './pages/auth';
 import {RegisterPage} from './pages/auth';
 import {LostPassPage} from './pages/auth/lost-pass';
 import {ResetPassPage} from './pages/auth/reset-pass';
-import {List as OrderListPage, EditPage as OrderEditPage} from './pages/order';
+import {List as OrderListPage, EditPage as OrderEditPage, ViewPage as OrderViewPage} from './pages/order';
 import {List as OfferListPage, EditPage as OfferEditPage, ViewPage as OfferViewPage} from './pages/offer';
 import {Alert} from './models/alert' 
 import { RootState } from './reducers/index'
@@ -44,6 +44,7 @@ class App extends React.Component<AppProps,any> {
                                 <PrivateRoute path="/reset/pass" component={ResetPassPage}/>
                                 <PrivateRoute path="/orders" component={OrderListPage}/>
                                 <PrivateRoute path="/order/new" component={OrderEditPage}/>
+                                <PrivateRoute path="/order/:id" component={OrderViewPage}/>
                                 <PrivateRoute path="/order/edit/:id" component={OrderEditPage}/>
                                 <PrivateRoute path="/offers" component={OfferListPage}/>
                                 <PrivateRoute path="/offer/new" component={OfferEditPage}/>

@@ -107,16 +107,6 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                 [name]: value
             }
         });
-    }
-    handleInputChange = (e : React.FormEvent < HTMLInputElement >) => {
-        const {name, value} = e.currentTarget;
-        const {offer} = this.state;
-        this.setState({
-            offer: {
-                ...offer,
-                [name]: value
-            }
-        });
         if (name == "type") {
             let newOffer = this.initOffer(value)
             this.setState({
@@ -127,6 +117,17 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                 }
             })
         }
+    }
+    handleInputChange = (e : React.FormEvent < HTMLInputElement >) => {
+        const {name, value} = e.currentTarget;
+        const {offer} = this.state;
+        this.setState({
+            offer: {
+                ...offer,
+                [name]: value
+            }
+        });
+        
     }
     handleUpload = (e : React.FormEvent < HTMLInputElement >) => {
         const {files} = e.currentTarget

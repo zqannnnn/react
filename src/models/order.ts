@@ -63,8 +63,8 @@ export class Order extends Model < Order > {
   @Column
   public bone : string
 
-  @Column({field: 'ham_id'})
-  public hamId : string
+  @Column
+  public price: number
 
   @CreatedAt
   @Column({field: 'created_at'})

@@ -2,16 +2,16 @@
     .page-container {
         padding-top: 2rem
     }
-    .offer-block-container{
+    .blocks-container{
         display: flex;
     }
-    .offer-block {
+    .block {
         flex: 1 1 33.33%;
         box-sizing: border-box;
         -webkit-box-flex: 1;
         max-width: 33.33%;
     }
-    .offer-block .content .details{
+    .block .content .details{
         min-height: 80px;
     }
     .order-block {
@@ -159,88 +159,60 @@ ul.nav li{
     width: 100%;
 }
 
-.offer-block{
+.block{
     background-color: white;
     border-radius: 2px;
     overflow: hidden;
     margin: 5px;
     box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
 }
-.offer-block .content{
+.block .content{
     padding:0 10px
 }
-.offer-block .header{
+.block .header{
     text-align: center;
     padding:5px 0;
     padding:0 10px;
 }
-.offer-block .footer{
+.block .footer{
     padding: 10px;
     border-top:solid 1px #ccc;
     display: flex;
     justify-content: space-between;
 }
-.offer-block .footer a{
+.block .footer a{
     color: #000;
 }
-.offer-block .menu{
+.block .menu{
     display: flex;
     justify-content: flex-end;
 }
-.offer-block .desc{
+.block .desc{
     word-break: break-word;
     min-height: inherit;
     font-size: 13px;
     padding:0 10px;
 }
-.offer-block .image-wr{
+.block .image-wr{
     overflow: hidden;
     padding:10px;
 }
-.offer-block .offer{
+.block .offer{
     flex: 1 1 100%;
     box-sizing: border-box;
     -webkit-box-flex: 1;
     max-width: 100%;
 }
-.offer-block img{
+.block img{
     width: 100%;
     max-height: 150px;
 }
-
-.order-block{
-    background-color: white;
-    border-radius: 2px;
-    overflow: hidden;
-    margin: 5px;
-    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
-}
-.order-block .content{
-    padding:0 10px
-}
-.order-block .header{
+.block .admin-menu{
+    padding: 0 10px;
     text-align: center;
-    padding:5px 0;
-    padding:0 10px;
-}
-.order-block .footer{
-    padding: 10px;
-    border-top:solid 1px #ccc;
-    display: flex;
-    justify-content: space-between;
-}
-.order-block .footer a{
-    color: #000;
-}
-.order-block .menu{
-    display: flex;
-    justify-content: flex-end;
-}
-.order-block .desc{
-    word-break: break-word;
-    min-height: inherit;
-    font-size: 13px;
-    padding:0 10px;
+    text-decoration:underline;
+    color: #007bff;
+    cursor: pointer;
 }
 .view-page .group{
     margin-bottom: 20px

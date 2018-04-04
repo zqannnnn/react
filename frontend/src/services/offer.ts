@@ -6,6 +6,7 @@ export const offerService = {
     getById,
     getAll,
     cancell,
+    finish,
     uploadImage
 };
 function _new(offer:Offer) {
@@ -45,6 +46,14 @@ function cancell(id:string) {
     };
 
     return fetch('/offer/' + id, requestOptions).then(handleResponse);
+}
+function finish(id:string) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('/offer/finish/' + id, requestOptions).then(handleResponse);
 }
 function getAll(option:{onlyMine:boolean}) {
     const requestOptions = {

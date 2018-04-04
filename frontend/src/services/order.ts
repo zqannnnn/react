@@ -5,7 +5,8 @@ export const orderService = {
     edit,
     getById,
     getAll,
-    cancell
+    cancell,
+    finish
 };
 function _new(order:Order) {
     const requestOptions = {
@@ -44,6 +45,14 @@ function cancell(id:string) {
     };
 
     return fetch('/order/' + id, requestOptions).then(handleResponse);
+}
+function finish(id:string) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('/order/finish/' + id, requestOptions).then(handleResponse);
 }
 function getAll(option:{onlyMine:boolean}) {
     const requestOptions = {

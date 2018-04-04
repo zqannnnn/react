@@ -26,15 +26,18 @@ class List extends React.Component<ListProps> {
     handleCancellOffer(id:string) {
         this.props.dispatch(offerActionCreators.cancell(id));
     }
+    handleFinishOffer(id:string) {
+        this.props.dispatch(offerActionCreators.finish(id));
+    }
     render() {
         const {offer,authInfo} = this.props;
         return (
             <div className="">
                 {offer.error && <span className="text-danger">ERROR: {offer.error}</span>}
-                <div className="offer-block-container" >
+                <div className="blocks-container" >
                     {offer.items&&offer.items.map((item, index) =>
-                        item.status!==offerConsts.OFFER_STATUS_CANCELLED&&
-                        (<div key={item.id} className="offer-block">
+                        item.status==offerConsts.OFFER_STATUS_CREATED&&
+                        (<div key={item.id} className="block">
                             <div className="header">{item.type}</div>
                             <div className="desc">
                                 <span>{item.storage&&"Storage:"+item.storage+","}</span>
@@ -44,10 +47,12 @@ class List extends React.Component<ListProps> {
                                 <span>{item.primalCut&&"Primal Cut:"+item.primalCut}</span>
                             </div>
                             <Link to={'/offer/' + item.id}><div className="image-wr">{item.images&&item.images[0]?<img src={item.images[0].path}></img>:<img src="/asset/no-image.jpg"></img>}</div></Link>
-                            <div className="footer">${item.price}
-                             <div className="menu">
-                                {authInfo.id==item.userId&&<Link to={'/offer/edit/' + item.id} className="control-btn">✎</Link>}
-                                <div >{item.cancelling
+                            <div className="footer">
+                                <div className="price">${item.price}</div>
+                           
+                                {authInfo.id==item.userId||authInfo.isAdmin&&<div className="menu">
+                                    <Link to={'/offer/edit/' + item.id} className="control-btn">✎</Link>}
+                                    <div >{item.cancelling
                                         ? <i className="fa fa-spinner" aria-hidden="true"></i>
                                         : item.cancellError
                                             ? <span className="text-danger">- ERROR: {item.cancellError}</span>
@@ -57,8 +62,13 @@ class List extends React.Component<ListProps> {
                                             }
                                         }
                                     className = "fa fa-times-circle" aria-hidden="true" ></i>}</div>
-                                    </div>
-                                </div>
+                                </div>}
+                            </div>
+                            {authInfo.isAdmin&&<div className="admin-menu" onClick = {()=>{
+                                    if(item.id)
+                                        this.handleFinishOffer(item.id)
+                                }
+                            }>Sold</div>}
                         </div>))
                     }
                 </div>
