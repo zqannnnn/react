@@ -7,8 +7,6 @@ function authHeader() {
         return {
             'Authorization': 'Bearer ' + auth.token
         };
-    } else {
-        return {};
     }
 }
 function setAuth(auth:AuthInfo) {

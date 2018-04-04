@@ -55,15 +55,12 @@ function finish(id:string) {
 
     return fetch('/offer/finish/' + id, requestOptions).then(handleResponse);
 }
-function getAll(option:{onlyMine:boolean}) {
+function getAll(option:{selectType:string}) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
-    if(option.onlyMine)
-        return fetch('/offer/list/my', requestOptions).then(handleResponse);
-    else
-        return fetch('/offer/list/all', requestOptions).then(handleResponse);
+    return fetch('/offer/list?selectType='+option.selectType, requestOptions).then(handleResponse);
 }
 function uploadImage(file:File) {
     const formData = new FormData();

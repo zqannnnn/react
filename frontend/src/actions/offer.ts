@@ -125,7 +125,7 @@ function finish(id : string) {
         return {type: offerConsts.FINISH_FAILURE, error,id}
     }
 }
-const getAll : ActionCreator < ThunkAction < void,RootState,void >> = (option:{onlyMine:boolean}) => {
+const getAll : ActionCreator < ThunkAction < void,RootState,void >> = (option:{selectType:string}) => {
     return ((dispatch : Dispatch < RootState >) : void => {
         dispatch(request());
         offerService

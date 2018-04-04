@@ -5,13 +5,13 @@ import {List as OfferList} from '../pages/offer'
 import {List as OrderList} from '../pages/order'
 import {AuthInfo} from '../actions';
 import {RootState} from '../reducers'
-interface HomeProps  {
+interface AdminProps  {
     dispatch: Dispatch<RootState>;
     authInfo: AuthInfo;
 }
 
-class HomePage extends React.Component<HomeProps> {
-    constructor(props:HomeProps) {
+class AdminPage extends React.Component<AdminProps> {
+    constructor(props:AdminProps) {
         super(props);
     }
 
@@ -21,27 +21,19 @@ class HomePage extends React.Component<HomeProps> {
             <div className="page">
                 <div className="banner">
                     <div className="banner-bg"></div>
-                    <div className="title">All Offer</div>
+                    <div className="title">Finished Offers/Orders</div>
                 </div>
                 <div className="offers-container col-md-8 offset-md-2">
                     <div className="header">
-                        <div className="title">New Offers</div>
-                        <div className="subtitle">
-                            <div className="des">People looking for sell</div>
-                            <Link className="link" to={'/offers'}>👁 view all offers</Link>
-                        </div>
+                        <div className="title">Offers</div>
                     </div>
-                    <OfferList {...this.props,{selectType:'all'}}/>
+                    <OfferList {...this.props,{selectType:'finished'}}/>
                 </div>
                 <div className="orders-container col-md-8 offset-md-2">
                     <div className="header">
-                        <div className="title">New Orders</div>
-                        <div className="subtitle">
-                            <div className="des">People looking for buy</div>
-                            <Link className="link" to={'/orders'}>👁 view all orders</Link>
-                        </div>
+                        <div className="title">Orders</div>
                     </div>
-                    <OrderList {...this.props,{selectType:'all'}}/>
+                    <OrderList {...this.props,{selectType:'finished'}}/>
                 </div>
             </div>
         );
@@ -54,5 +46,5 @@ function mapStateToProps(state:RootState) {
     return {authInfo};
 }
 
-const connectedHomePage = connect(mapStateToProps)(HomePage);
-export {connectedHomePage as HomePage};
+const connectedHomePage = connect(mapStateToProps)(AdminPage);
+export {connectedHomePage as AdminPage};

@@ -54,15 +54,12 @@ function finish(id:string) {
 
     return fetch('/order/finish/' + id, requestOptions).then(handleResponse);
 }
-function getAll(option:{onlyMine:boolean}) {
+function getAll(option:{selectType:string}) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
-    if(option.onlyMine)
-        return fetch('/order/list/my', requestOptions).then(handleResponse);
-    else
-        return fetch('/order/list/all', requestOptions).then(handleResponse);
+    return fetch('/order/list?selectType='+option.selectType, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response:Response) {

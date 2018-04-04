@@ -36,7 +36,6 @@ module.exports = (app, passport) => {
         return res.send(401, { error: 'Incorrect email or password.' });
       }
       const data = {
-        success: true,
         token: jwt.sign(user, app.get('secretKey'), { expiresIn }),
         id: user.id,
       }

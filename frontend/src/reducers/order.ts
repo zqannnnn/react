@@ -43,13 +43,7 @@ export function order(state:State ={} , action:OrderAction):State {
           ...state,
           items: state
             .items
-            .map(item => item.id === action.id
-              ? {
-                ...item,
-                cancelling: false,
-                status:orderConsts.ORDER_STATUS_CANCELLED
-              }
-              : item)
+            .filter(item => item.id !== action.id)
         };
     case orderConsts.CANCELL_FAILURE:
       if (state.items) 
@@ -84,13 +78,7 @@ export function order(state:State ={} , action:OrderAction):State {
             ...state,
             items: state
               .items
-              .map(item => item.id === action.id
-                ? {
-                  ...item,
-                  finishing: false,
-                  status:orderConsts.ORDER_STATUS_FINISHED
-                }
-                : item)
+              .filter(item => item.id !== action.id)
           };
       case orderConsts.FINISH_FAILURE:
         if (state.items) 

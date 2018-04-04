@@ -47,13 +47,7 @@ export function offer(state:State ={} , action:OfferAction):State {
           ...state,
           items: state
             .items
-            .map(item => item.id === action.id
-              ? {
-                ...item,
-                cancelling: false,
-                status:offerConsts.OFFER_STATUS_CANCELLED
-              }
-              : item)
+            .filter(item => item.id !== action.id)
         };
     case offerConsts.CANCELL_FAILURE:
       if (state.items) 
@@ -88,13 +82,7 @@ export function offer(state:State ={} , action:OfferAction):State {
           ...state,
           items: state
             .items
-            .map(item => item.id === action.id
-              ? {
-                ...item,
-                finishing: false,
-                status:offerConsts.OFFER_STATUS_FINISHED
-              }
-              : item)
+            .filter(item => item.id !== action.id)
         };
     case offerConsts.FINISH_FAILURE:
       if (state.items) 

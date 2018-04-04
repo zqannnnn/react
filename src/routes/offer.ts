@@ -32,30 +32,32 @@ router.post('/new', async (req: Request, res: express.Response) => {
     return res.status(500).send({ error: e.message })
   }
 })
-router.get('/list/my', async (req:Request, res:express.Response) => {
-  let offers
+router.get('/list', async (req:Request, res:express.Response) => {
+  let offers;
+  let selectType = req.query.selectType;
   try {
-    offers = await Offer.findAll({
-      where:{
-        userId: req.userId,
-        status:consts.OFFER_STATUS_CREATED
-      },
-      include:[{model:Image,attributes:['path']}]
-    })
-    return res.send(offers)
-  } catch (e) {
-    return res.status(500).send({error: e.message})
-  }
-})
-router.get('/list/all', async (req:Request, res:express.Response) => {
-  let offers
-  try {
-    offers = await Offer.findAll({
-      where:{
-        status:consts.OFFER_STATUS_CREATED
-      },
-      include:[{model:Image,attributes:['path']}]
-    })
+    if(selectType==='mine'){
+      offers = await Offer.findAll({
+        where:{
+          userId:req.userId
+        },
+        include:[{model:Image,attributes:['path']}]
+      })
+    }else if (selectType==='finished'){
+      offers = await Offer.findAll({
+        where:{
+          status:consts.OFFER_STATUS_FINISHED
+        },
+        include:[{model:Image,attributes:['path']}]
+      })
+    }else{
+      offers = await Offer.findAll({
+        where:{
+          status:consts.OFFER_STATUS_CREATED
+        },
+        include:[{model:Image,attributes:['path']}]
+      })
+    }
     return res.send(offers)
   } catch (e) {
     return res.status(500).send({error: e.message})

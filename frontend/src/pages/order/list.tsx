@@ -9,7 +9,7 @@ interface ListProps  {
     dispatch: Dispatch<RootState>;
     order: OrderState;
     authInfo:AuthInfo;
-    onlyMine?:boolean;
+    selectType?:string;
 }
 class List extends React.Component<ListProps> {
     constructor(props:ListProps) {
@@ -18,14 +18,16 @@ class List extends React.Component<ListProps> {
     componentDidMount() {
         this
             .props
-            .dispatch(orderActionCreators.getAll({onlyMine:this.props.onlyMine}));
+            .dispatch(orderActionCreators.getAll({selectType:this.props.selectType}));
     }
 
     handleCancellOrder(id:string) {
         this.props.dispatch(orderActionCreators.cancell(id));
     }
     handleFinishOrder(id:string) {
-        this.props.dispatch(orderActionCreators.finish(id));
+        let r=confirm("Are you sure?")
+        if(r)
+            this.props.dispatch(orderActionCreators.finish(id));
     }
     render() {
         const {order,authInfo} = this.props;
@@ -45,6 +47,13 @@ class List extends React.Component<ListProps> {
                                 <span>{item.primalCut&&"Primal Cut:"+item.primalCut}</span>
                             </div>
                             
+                            
+                            <div className="status">{item.status!=orderConsts.ORDER_STATUS_FINISHED?'On Sale':'Sold'}</div>
+                            {(authInfo.isAdmin&&item.status!=orderConsts.ORDER_STATUS_FINISHED)&&<div className="admin-menu" onClick = {()=>{
+                                    if(item.id)
+                                        this.handleFinishOrder(item.id)
+                                }
+                            }>Set Bought</div>}
                             <div className="footer">
                             <div className="price">${item.price}</div>
                                 <Link className="" to={'/order/' + item.id}>details</Link>
@@ -62,11 +71,6 @@ class List extends React.Component<ListProps> {
                                     className = "fa fa-times-circle" aria-hidden="true" ></i>}</div>
                                 </div>}
                             </div>
-                            {authInfo.isAdmin&&<div className="admin-menu" onClick = {()=>{
-                                        if(item.id)
-                                            this.handleFinishOrder(item.id)
-                                    }
-                                }>Bought</div>}
                         </div>))
                     }
                 </div>

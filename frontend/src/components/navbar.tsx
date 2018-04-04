@@ -23,17 +23,21 @@ class NavBar extends React.Component <NavProps> {
             <NavLink exact to="/" className="navbar-brand" activeClassName="active">Home</NavLink>
                 <ul className="navbar-nav nav">
                     <li className="nav-item">
-                        <NavLink exact to="/orders" className="nav-link" activeClassName="active">My Orders</NavLink>
+                        <NavLink exact to="/my/orders" className="nav-link" activeClassName="active">My Orders</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink exact to="/offers" className="nav-link" activeClassName="active">My Offers</NavLink>
+                        <NavLink exact to="/my/offers" className="nav-link" activeClassName="active">My Offers</NavLink>
                     </li>
                     <li className="nav-item">
-                    <NavLink exact to="/order/new" className="nav-link" activeClassName="active">Add Order</NavLink>
+                        <NavLink exact to="/order/new" className="nav-link" activeClassName="active">Add Order</NavLink>
                     </li>
                     <li className="nav-item">
-                    <NavLink exact to="/offer/new" className="nav-link" activeClassName="active">Add Offer</NavLink>
+                        <NavLink exact to="/offer/new" className="nav-link" activeClassName="active">Add Offer</NavLink>
                     </li>
+                    {authInfo&&authInfo.isAdmin&&
+                        <li className="nav-item">
+                            <NavLink to="/admin/list" className="nav-link" activeClassName="active">Admin List</NavLink>
+                        </li>}
                     <li className="nav-item">
                         <NavLink to="/login" className="nav-link" activeClassName="active" onClick={this.logout()}>{authInfo?"Logout":"Login"}</NavLink>
                     </li>
