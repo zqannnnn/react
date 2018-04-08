@@ -7,9 +7,12 @@
   "license": "MIT",
   "scripts": {
     "watch": "nodemon -e js,ts,jsx -w src/ -w frontend/ -x ts-node --inspect src/index",
-    "fetchdeps": "yarn install "
+    "fetchdeps": "yarn install ",
+    "json2pot": "rip json2pot '/frontend/src/messages/*.json' -o ./frontend/src/locales/translations.pot",
+    "po2json": "rip po2json './src/locales/*.po' -m './build/messages/*.json' -o ./src/locales/translations.json"
   },
   "dependencies": {
+    "babel-plugin-react-intl": "^2.4.0",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
@@ -29,6 +32,8 @@
     "query-string": "^5.0.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-intl": "^2.4.0",
+    "react-intl-po": "^2.2.0",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.2",
     "redux": "^3.7.2",
@@ -47,6 +52,7 @@
     "@types/query-string": "^5.0.1",
     "@types/react": "^16.0.31",
     "@types/react-dom": "^16.0.0",
+    "@types/react-intl": "^2.3.5",
     "@types/react-redux": "^5.0.5",
     "@types/react-router-dom": "^4.1.2",
     "@types/redux-logger": "^3.0.5",

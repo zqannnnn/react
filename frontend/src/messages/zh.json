@@ -1,0 +1,10 @@
+{
+    "navbar.home":"Home",
+    "navbar.myOffers": "我的商品",
+    "navbar.myOrders": "我的订单",
+    "navbar.addOffer": "添加商品",
+    "navbar.addOrder": "添加订单",
+    "navbar.adminList": "管理员页",
+    "navbar.login": "登录",
+    "navbar.logout": "登出"
+}

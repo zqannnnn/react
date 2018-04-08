@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {NavLink, Link, withRouter, RouteComponentProps} from 'react-router-dom';
 import {connect,Dispatch} from 'react-redux';
+import {FormattedMessage} from 'react-intl';
 import {authActionCreators, AuthInfo} from '../actions';
 import {RootState} from '../reducers';
 interface NavProps extends RouteComponentProps <{}> {
@@ -23,23 +24,31 @@ class NavBar extends React.Component <NavProps> {
             <NavLink exact to="/" className="navbar-brand" activeClassName="active">Home</NavLink>
                 <ul className="navbar-nav nav">
                     <li className="nav-item">
-                        <NavLink exact to="/my/orders" className="nav-link" activeClassName="active">My Orders</NavLink>
+                        <NavLink exact to="/my/orders" className="nav-link" activeClassName="active">
+                            <FormattedMessage id="navbar.myOrders"/>
+                        </NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink exact to="/my/offers" className="nav-link" activeClassName="active">My Offers</NavLink>
+                        <NavLink exact to="/my/offers" className="nav-link" activeClassName="active">
+                            <FormattedMessage id="navbar.myOffers"/>
+                        </NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink exact to="/order/new" className="nav-link" activeClassName="active">Add Order</NavLink>
+                        <NavLink exact to="/order/new" className="nav-link" activeClassName="active">
+                            <FormattedMessage id="navbar.addOrder"/>
+                        </NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink exact to="/offer/new" className="nav-link" activeClassName="active">Add Offer</NavLink>
+                        <NavLink exact to="/offer/new" className="nav-link" activeClassName="active">
+                            <FormattedMessage id="navbar.addOffer"/>
+                        </NavLink>
                     </li>
                     {authInfo&&authInfo.isAdmin&&
                         <li className="nav-item">
-                            <NavLink to="/admin/list" className="nav-link" activeClassName="active">Admin List</NavLink>
+                            <NavLink to="/admin/list" className="nav-link" activeClassName="active"><FormattedMessage id="navbar.adminList"/></NavLink>
                         </li>}
                     <li className="nav-item">
-                        <NavLink to="/login" className="nav-link" activeClassName="active" onClick={this.logout()}>{authInfo?"Logout":"Login"}</NavLink>
+                        <NavLink to="/login" className="nav-link" activeClassName="active" onClick={this.logout()}>{authInfo?<FormattedMessage id="navbar.logout"/>:<FormattedMessage id="navbar.login"/>}</NavLink>
                     </li>
                    
                 </ul>

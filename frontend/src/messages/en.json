@@ -1,0 +1,10 @@
+{
+    "navbar.home":"Home",
+    "navbar.myOffers": "My Offers",
+    "navbar.myOrders": "My Orders",
+    "navbar.addOffer": "Add Offer",
+    "navbar.addOrder": "Add Order",
+    "navbar.adminList": "Admin List",
+    "navbar.login": "Login",
+    "navbar.logout": "Logout"
+}

@@ -1,13 +1,21 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { IntlProvider, addLocaleData } from 'react-intl';
 import { Provider } from 'react-redux';
 import { store } from './helpers/store';
 import App from './app';
+import * as en from 'react-intl/locale-data/en';
+import * as zh from 'react-intl/locale-data/zh';
+let zhCN = require('./messages/zh.json');
+let enUS = require('./messages/en.json');
 
+addLocaleData([...en, ...zh]);
 
 ReactDOM.render(
-    <Provider store={store}>
-        <App/>
-    </Provider>,
+    <IntlProvider locale='zh' messages={zhCN}>
+        <Provider store={store}>
+            <App/>
+        </Provider>
+    </IntlProvider>,
     document.getElementById('main')
 );
