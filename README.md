@@ -81,7 +81,7 @@ Also try to automagically fix them like so:
 ```
 
 ### i18n solution
-1.Extract pot file
+1. Extract pot file
 ```sh
 ./bin/yarn run extract-translation
 ./bin/yarn run json2pot
