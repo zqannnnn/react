@@ -81,13 +81,16 @@ Also try to automagically fix them like so:
 ```
 
 ### i18n solution
-1. Extract pot file
+1. Extract pot file,use:
+
 ```sh
 ./bin/yarn run extract-translation
 ./bin/yarn run json2pot
 ```
-2. Translate pot file
-3. Resolve po file
+2. Translate pot file get po file
+
+3. Resolve po file,use:
+
 ```sh
 ./bin/yarn run pot2json
 ```
