@@ -81,17 +81,18 @@ Also try to automagically fix them like so:
 ```
 
 ### i18n solution
-1. Extract pot file,use:
+
+First,extract pot file,use:
 
 ```sh
 ./bin/yarn run extract-translation
 ./bin/yarn run json2pot
 ```
-2. Translate pot file get po file
+Then translate pot file get po file
 
-3. Resolve po file,use:
+Then resolve po file,use:
 
 ```sh
 ./bin/yarn run pot2json
 ```
-4. Set locales file in /frontend/src/index/tsx
+Then set json files in /frontend/src/index/tsx
