@@ -20,10 +20,7 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'awesome-typescript-loader',
-        options: {
-          useBabel: true,
-        },
+        loader: 'awesome-typescript-loader'
       },
       {
 				test: /\.css$/,

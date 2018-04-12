@@ -7,10 +7,15 @@ Development Quickstart
 
 Requires docker, docker-compose
 
-After a fresh clone if you want to fetch deps, use:
+After a fresh clone you need build container first,use:
 
 ```sh
-./bin/fetchdeps
+docker-compose build
+```
+if you want to fetch deps, use:
+
+```sh
+./bin/yarn install
 ```
 
 Now that the deps are there, we can start for realz:
@@ -23,8 +28,7 @@ Note that `./src/` and `./frontend` are now mounted with livereload
 
 ### Managing Dependencies
 
-You can use `yarn` and `elm` inside of a container by using the `./bin/yarn` and
-`./bin/elm` scripts.
+You can use `yarn` inside of a container by using the `./bin/yarn`  scripts.
 
 ### Rebuilding Container
 
@@ -76,3 +80,15 @@ Also try to automagically fix them like so:
 ./bin/tslint --fix
 ```
 
+### i18n solution
+1.Extract pot file
+```sh
+./bin/yarn run extract-translation
+./bin/yarn run json2pot
+```
+2. Translate pot file
+3. Resolve po file
+```sh
+./bin/yarn run pot2json
+```
+4. Set locales file in /frontend/src/index/tsx

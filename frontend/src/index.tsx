@@ -6,13 +6,14 @@ import { store } from './helpers/store';
 import App from './app';
 import * as en from 'react-intl/locale-data/en';
 import * as zh from 'react-intl/locale-data/zh';
-let zhCN = require('./messages/zh.json');
-let enUS = require('./messages/en.json');
+
+//let zhCN = require('../translation/locales/zh.json');
 
 addLocaleData([...en, ...zh]);
 
+
 ReactDOM.render(
-    <IntlProvider locale='zh' messages={zhCN}>
+    <IntlProvider locale='en'>
         <Provider store={store}>
             <App/>
         </Provider>

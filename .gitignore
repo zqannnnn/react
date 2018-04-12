@@ -71,3 +71,9 @@ uploads/
 
 pkg/
 frontend/src/test.html
+.vscode/
+# translation files
+translation/*
+!translation/locales
+translation/locales/*
+

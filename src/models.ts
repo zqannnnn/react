@@ -50,5 +50,4 @@ const setupDatabase = async () => {
 })
 }
 
-const models = { User, Order, Offer, Category, Image, setupDatabase }
-export = models
+export { User, Order, Offer, Category, Image, setupDatabase };

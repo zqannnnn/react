@@ -25,30 +25,30 @@ class NavBar extends React.Component <NavProps> {
                 <ul className="navbar-nav nav">
                     <li className="nav-item">
                         <NavLink exact to="/my/orders" className="nav-link" activeClassName="active">
-                            <FormattedMessage id="navbar.myOrders"/>
+                            <FormattedMessage id="navbar.myOrders" defaultMessage="My Orders"/>
                         </NavLink>
                     </li>
                     <li className="nav-item">
                         <NavLink exact to="/my/offers" className="nav-link" activeClassName="active">
-                            <FormattedMessage id="navbar.myOffers"/>
+                            <FormattedMessage id="navbar.myOffers" defaultMessage="My Offers"/>
                         </NavLink>
                     </li>
                     <li className="nav-item">
                         <NavLink exact to="/order/new" className="nav-link" activeClassName="active">
-                            <FormattedMessage id="navbar.addOrder"/>
+                            <FormattedMessage id="navbar.addOrder" defaultMessage="Add Order"/>
                         </NavLink>
                     </li>
                     <li className="nav-item">
                         <NavLink exact to="/offer/new" className="nav-link" activeClassName="active">
-                            <FormattedMessage id="navbar.addOffer"/>
+                            <FormattedMessage id="navbar.addOffer" defaultMessage="Add Offer"/>
                         </NavLink>
                     </li>
                     {authInfo&&authInfo.isAdmin&&
                         <li className="nav-item">
-                            <NavLink to="/admin/list" className="nav-link" activeClassName="active"><FormattedMessage id="navbar.adminList"/></NavLink>
+                            <NavLink to="/admin/list" className="nav-link" activeClassName="active"><FormattedMessage id="navbar.adminList"  defaultMessage="Admin List"/></NavLink>
                         </li>}
                     <li className="nav-item">
-                        <NavLink to="/login" className="nav-link" activeClassName="active" onClick={this.logout()}>{authInfo?<FormattedMessage id="navbar.logout"/>:<FormattedMessage id="navbar.login"/>}</NavLink>
+                        <NavLink to="/login" className="nav-link" activeClassName="active" onClick={this.logout()}>{authInfo?<FormattedMessage id="navbar.logout" defaultMessage="Logout"/>:<FormattedMessage id="navbar.login" defaultMessage="Login"/>}</NavLink>
                     </li>
                    
                 </ul>
