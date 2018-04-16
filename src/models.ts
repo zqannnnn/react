@@ -1,13 +1,13 @@
 import { Sequelize } from 'sequelize-typescript'
 import { config } from './config/db'
-import { consts,beefOptions,vealOptions,sheepOptions } from './config/static'
+import { consts,beefOptions,vealOptions,sheepOptions, currencyList } from './config/static'
 import { User,Category,Order,Offer,Image,Currency } from './models/'
 
 const sequelize = new Sequelize(config)
 sequelize.addModels([User, Order, Offer, Category, Image, Currency])
 
 const setupDatabase = async () => {
-  await sequelize.sync({force:true})
+  await sequelize.sync()
   User.findOne({ where: {email: 'admin@admin.com'} }).then(user => {
     if(!user){ 
       user= new User({
@@ -46,8 +46,13 @@ const setupDatabase = async () => {
       })
       categorySheep.save()
     }
-  
-})
+  Currency.truncate({cascade:true}).then(()=>{
+      currencyList.forEach(currency=>{
+        let currencyData = new Currency({currency})
+        currencyData.save();
+      })
+    })
+  })
 }
 
 export { User, Order, Offer, Category, Image, setupDatabase };

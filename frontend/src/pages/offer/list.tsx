@@ -42,6 +42,9 @@ class List extends React.Component<ListProps> {
                     {offer.items&&offer.items.map((item, index) =>
                         (<div key={item.id} className="block">
                             <div className="header">{item.type}</div>
+                            <div className="title">
+                                {item.title}
+                            </div>
                             <div className="desc">
                                 <span>{item.storage&&"Storage:"+item.storage+","}</span>
                                 <span>{item.breed&&"Breed:"+item.breed+","}</span>

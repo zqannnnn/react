@@ -43,6 +43,9 @@ export class Offer extends Model<Offer> {
   @Column
   public type : string
 
+  @Column
+  public title : string
+
   @Default(consts.OFFER_STATUS_CREATED)
   @Column
   public status : number

@@ -6,7 +6,8 @@ import {
     Model,
     PrimaryKey,
     Table,
-    HasOne
+    HasOne,
+    Unique
   } from 'sequelize-typescript'
   import { Offer } from '.';
   @Table({
@@ -21,6 +22,7 @@ import {
     @Column
     public id: string
   
+    @Unique
     @Column({field:"currency"})
     public currency : string
 

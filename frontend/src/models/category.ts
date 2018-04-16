@@ -8,6 +8,6 @@ export interface Details{
   "Breed":Array < string >;
   "Grade":Array < string >;
   "Slaughter Specification":Array < string >;
-  "Primal Cut":Array < string >;
   "Bone":Array < string >
+  "Marble Score":Array < string >
 }

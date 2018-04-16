@@ -1,8 +1,7 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router-dom';
 import {connect, Dispatch} from 'react-redux';
-import {offerActionCreators} from '../../actions'
-import {categoryActionCreators} from '../../actions'
+import {offerActionCreators,categoryActionCreators,alertActionCreators} from '../../actions'
 import {Offer} from '../../models'
 import {Category, CategoryDetails} from '../../models'
 import {RootState} from '../../reducers'
@@ -31,27 +30,6 @@ class EditPage extends React.Component < OfferProps, OfferState > {
             }
         };
     }
-    initOffer =(offerType : string) : Offer=> {
-        let {categorys} = this.props
-        let currentCategory: CategoryDetails
-        let newCategorys = categorys.filter((category : Category) => {
-            return category.type === offerType
-        })
-        if (newCategorys.length > 0) {
-            currentCategory = newCategorys[0].details
-            return {
-                storage: currentCategory.Storage? currentCategory.Storage[0]: undefined,
-                breed: currentCategory.Breed ? currentCategory.Breed[0]: undefined,
-                grade: currentCategory.Grade? currentCategory.Grade[0]: undefined,
-                slaughterSpec: currentCategory["Slaughter Specification"]? currentCategory["Slaughter Specification"][0]: undefined,
-                primalCut: currentCategory["Primal Cut"]? currentCategory["Primal Cut"][0]: undefined,
-                bone: currentCategory.Bone? currentCategory.Bone[0]: undefined,
-            }
-        } else {
-            return {}
-        }
-
-    }
     componentDidMount() {
         let offerId = this.props.match.params.id
         offerId && this.setState({
@@ -77,7 +55,6 @@ class EditPage extends React.Component < OfferProps, OfferState > {
             this.setState({
                 offer: {
                     ...offer,
-                    
                 }
             })
         }
@@ -107,16 +84,6 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                 [name]: value
             }
         });
-        if (name == "type") {
-            let newOffer = this.initOffer(value)
-            this.setState({
-                offer: {
-                    ...offer,
-                    ...newOffer,
-                    [name]: value
-                }
-            })
-        }
     }
     handleInputChange = (e : React.FormEvent < HTMLInputElement >) => {
         const {name, value} = e.currentTarget;
@@ -142,11 +109,13 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         event.preventDefault();
         const {offer, offerId} = this.state;
         const {dispatch} = this.props;
-        if (offer.type) {
+        if (offer.type&&offer.title) {
             if (offerId) 
                 dispatch(offerActionCreators.edit(offer, offerId));
             else 
                 dispatch(offerActionCreators.new(offer));
+        }else{
+            //dispatch(alertActionCreators.error(""));
         }
     }
     handleDeltetImage = (imageIndex:number) => {
@@ -159,101 +128,127 @@ class EditPage extends React.Component < OfferProps, OfferState > {
             this.setState({offer:{...offer,images:newImages}})
         }
     }
-    renderSelect(items : Array < string >, field : string) {
-        let offerField : (keyof Offer | undefined)
-        let select = null
-        switch (field) {
-            case "Storage":
-                offerField = "storage"
-                break;
-            case "Breed":
-                offerField = "breed"
-                break;
-            case "Grade":
-                offerField = "grade"
-                break;
-            case "Slaughter Specification":
-                offerField = "slaughterSpec"
-                break;
-            case "Primal Cut":
-                offerField = "primalCut"
-                break;
-            case "Bone":
-                offerField = "bone"
-                break;
-        }
-
-        if (offerField != undefined) 
-            return select = (
-                <div key={field} className="form-group col-md-4">
-                    <label className="form-lable">{field}</label>
-                    <select
-                        className="form-control"
-                        name={offerField}
-                        value={String(this.state.offer[offerField])}
-                        onChange={this.handleSelectChange}>
-                        <option></option>
-                        {items.map((item, index) => 
-                            <option key={index} value={item}>{item}</option>)}
-                    </select>
-                </div>
-            );
+    //for render select input
+    renderSelect(optionItems : Array < string >, field : keyof Offer) {
+        return (
+            <select
+                className="form-control"
+                name={field}
+                value={String(this.state.offer[field])}
+                onChange={this.handleSelectChange}>
+                <option></option>
+                {optionItems.map((item, index) => 
+                    <option key={index} value={item}>{item}</option>)}
+            </select>
+        );
         }
     render() {
-        const {id, type, images,price} = this.state.offer;
+        const {id, type, images,price,bone,title,quantity,primalCut,deliveryTerm} = this.state.offer;
         const {editing, categorys, uploading} = this.props
         let options = null
-        let currentCategory : Category
-        let newCategorys : Category[] = []
-        if (type && categorys && categorys.length > 0) {
-            newCategorys = categorys.filter((category : Category) => {
-                return category.type === type
-            })
-            if (newCategorys.length > 0) {
-                currentCategory = newCategorys[0]
-                options = Object
-                    .keys(newCategorys[0].details)
-                    .map((key : keyof CategoryDetails) => {
-                        return this.renderSelect(currentCategory.details[key], key)
-                    })
-            }
-        }
+        let currentCategory : Category = categorys&&categorys.filter(
+            (category:Category)=>{
+                return category.type===type})[0]
+        
         return (
             <div className="col-md-10 offset-md-1">
                 <h2 className="header">{id?'Edit':'Create'} Offer page</h2>
-                <form name="form" className="row" onSubmit={this.handleSubmit}>
-                    <div className="form-group">
-                        <label className="form-lable">Offer type</label>
-                        <select
-                            className="form-control"
-                            name="type"
-                            value={type}
-                            onChange={this.handleSelectChange}>
-                            {offerConsts
-                                .OFFER_TYPE
-                                .map((item, index) => <option key={index}>{item}</option>)}
-                        </select>
-                    </div>
+                <form name="form" onSubmit={this.handleSubmit}>
                     <div className="row">
-                        {options}
-                        
-                    </div>
-                    <div className="row">
-                        <div className="form-group col-md-8">
-                                <label className="form-lable">Price</label>
-                                <div className="row col">
-                                <input
-                                    className="form-control col-md-6"
-                                    type="text"
-                                    name="price"
-                                    value={price}
-                                    onChange={this.handleInputChange}/>
-                                    <span className="col-md-1" >USD/kg</span>
-                                </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">Offer type</label>
+                            <select
+                                className="form-control"
+                                name="type"
+                                value={type}
+                                onChange={this.handleSelectChange}>
+                                {offerConsts
+                                    .OFFER_TYPE
+                                    .map((item, index) => <option key={index}>{item}</option>)}
+                            </select>
                         </div>
                     </div>
                     <div className="row">
                         <div className="form-group col-md-12">
+                            <label className="form-lable">Title</label>
+                            <input
+                                className="form-control"
+                                type="text"
+                                name="title"
+                                value={title}
+                                onChange={this.handleInputChange}/>
+                        </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">Bone</label>
+                            {currentCategory&&this.renderSelect(currentCategory.details["Bone"],"bone")}
+                        </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">Storage</label>
+                            {currentCategory&&this.renderSelect(currentCategory.details["Storage"],"storage")}
+                        </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">Grade</label>
+                            {currentCategory&&this.renderSelect(currentCategory.details["Grade"],"grade")}
+                        </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">Slaughter Specification</label>
+                            {currentCategory&&this.renderSelect(currentCategory.details["Slaughter Specification"],"slaughterSpec")}
+                        </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">Marble Score</label>
+                            {currentCategory&&this.renderSelect(currentCategory.details["Marble Score"],"marbleScore")}
+                        </div>
+                        {currentCategory&&currentCategory.type!="Sheep"&&<div className="form-group col-md-4">
+                            <label className="form-lable">Breed</label>
+                            {this.renderSelect(currentCategory.details["Breed"],"breed")}
+                        </div>}
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">Primal Cut</label>
+                            <input
+                                    className="form-control"
+                                    type="text"
+                                    name="primalCut"
+                                    value={primalCut}
+                                    onChange={this.handleInputChange}/>
+                        </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">Delivery Term</label>
+                            <input
+                                    className="form-control"
+                                    type="text"
+                                    name="deliveryTerm"
+                                    value={deliveryTerm}
+                                    onChange={this.handleInputChange}/>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="form-group col-md-4">
+                                <label className="form-lable">Quantity</label>
+                                <div className="row col">
+                                <input
+                                    className="form-control col-md-10"
+                                    type="number"
+                                    name="quantity"
+                                    value={quantity}
+                                    onChange={this.handleInputChange}/>
+                                    <span className="col-md-2">Ton</span>
+                                </div>
+                        </div>
+                        <div className="form-group col-md-4">
+                                <label className="form-lable">Price</label>
+                                <div className="row col">
+                                <input
+                                    className="form-control col-md-10"
+                                    type="number"
+                                    name="price"
+                                    value={price}
+                                    onChange={this.handleInputChange}/>
+                                    <span className="col-md-2">USD/kg</span>
+                                </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="form-group col-md-8">
                             <label className="from-lable">Images</label>
                             <div className="images-container">
                                 {images&&images.map((image, index) => <div key={index} className="image-wrapper">

@@ -70,4 +70,5 @@ export const sheepOptions = {
   "Marble Score":["1", "2", "3", "4", "5", "6", "7", "8", "9"],
   "Bone": ["Bone In", "Bone Out"]
 }
+export const currencyList = ["RMB","USD"]
 //export const OtherOptions = {}

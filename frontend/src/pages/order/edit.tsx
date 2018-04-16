@@ -39,7 +39,6 @@ class EditPage extends React.Component <OrderProps, OrderState>{
                 breed:currentCategory.Breed?currentCategory.Breed[0]:undefined,
                 grade:currentCategory.Grade?currentCategory.Grade[0]:undefined,
                 slaughterSpec:currentCategory["Slaughter Specification"]?currentCategory["Slaughter Specification"][0]:undefined,
-                primalCut:currentCategory["Primal Cut"]?currentCategory["Primal Cut"][0]:undefined,
                 bone:currentCategory.Bone?currentCategory.Bone[0]:undefined,
             }
         }else{

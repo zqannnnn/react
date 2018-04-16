@@ -6,6 +6,7 @@ const Models = require('./models')
 const User = Models.User
 const userRouter = require('./routes/user')
 const categoryRouter = require('./routes/category')
+const currencyRouter = require('./routes/category')
 const offerRouter = require('./routes/offer')
 const orderRouter = require('./routes/order')
 const passRouter = require('./routes/pass')
@@ -73,4 +74,5 @@ module.exports = (app, passport) => {
   app.use('/offer', offerRouter);
   app.use('/order', orderRouter);
   app.use('/upload', uploadRouter);
+  app.use('/currency', currencyRouter);
 }
