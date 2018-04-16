@@ -15,8 +15,7 @@ import {
   BelongsTo,
   HasMany
 } from 'sequelize-typescript'
-import {User} from './user'
-import {Offer} from './offer'
+import {User,Offer} from './'
 import {consts} from '../config/static'
 @Table({tableName: 'order', underscored: true})
 export class Order extends Model < Order > {

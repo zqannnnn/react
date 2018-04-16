@@ -31,7 +31,7 @@ export const beefOptions= {
     "1/8 cuts (eight way cuts)",
     "Selected Beef Cuts (Primals)"
   ],
-  "Primal Cut": ["Blade", "Brisket", "Brisket NE", "Brisket PE", "Brisket PEDO", "Chuck", "Chuck Roll", "Chuck Tender", "Chuck-Square Cut", "Cube Roll/Rib Eye", "D-Rump", "Eye Round", "Forequarter", "Hindquarter", "Inside Meat", "Knuckle", "Neck", "Neck Bone", "Outside", "Outside Flat", "Rostbiff", "Rump", "Shin/Shank", "Short Loin", "Short Rib", "Silverside", "Sirloin Butt", "Spencer Roll", "Striploin", "Tenderloin SS-off", "Tenderloin SS-on", "Thick Flank", "Thin Flank", "Topside", "Full Set", "T-Bone Steak", "Tenderloin Steak", "1/4 Cut", "Wagyu", "Other"],
+  "Marble Score":["1", "2", "3", "4", "5", "6", "7", "8", "9"],
   "Bone": ["Bone In", "Bone Out"],
 }
 
@@ -58,15 +58,8 @@ export const vealOptions = {
     "1/8 cuts (eight way cuts)",
     "Selected Beef Cuts (Primals)"
   ],
-  "Bone": ["Bone In", "Bone Out"],
-  "Primal Cut": [
-    "Backstrap","Carcase (Pieces or 6 Way Cut)","Lag Long Cut","Leg Set (Hind Set)","Tenderloin",
-    "Brisket Navel End","Brisket Point End","Loin","Osso Bucco","Rib Prepared","Shin/Shank",
-    "Short Ribs","Spare Ribs","Blade (Clod)","Chuck","Chuck Roll","Chuck Tender","Cube Roll",
-    "Eye of Loin (Backstrap)","Knuckle","Outside","Rump","Shin/Shank","Silverside","Striploin",
-    "Tenderloin","Tenderloin-Side Strap Off","Thick Flank","Topside(lnside)","Topside Cap Off",
-    "Forequarter","Forequarter& Hindquarter","Forequarter& Hindquarter Meat","Forequarter Meat",
-    "Hindquarter","Hindquarter Meat","Trimmings"]
+  "Marble Score":["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+  "Bone": ["Bone In", "Bone Out"]
 }
 export const sheepOptions = {
   "Storage": ["Frozen", "Chilled"],
@@ -74,7 +67,7 @@ export const sheepOptions = {
   "Slaughter Specification": [
     "Whole","1/4 cuts","Six way cut","Slected Primals",
   ],
-  "Bone": ["Bone In", "Bone Out"],
-  "Primal Cut": ["Silverside", "Rump", "Knuckle", "Topside", "Leg Cuts", "Short Loin", "Loin", "Rack (Frenched)", "Rack (Frenched Cap Off)", "Rack", "Square Cut Shoulder", "Shoulder Square Cute Rolled/Netted", "Neck", "Leg Chump On", "Leg Chump Off Shank On", "Leg Chump On Shank Off", "Leg Chump Off Shank Off", "Leg Boneless", "Leg Chump Off Shank Off", "Tenderloin", "Backstrap", "Breast and Flap", "Fore Shank", "Tripe", "6-Way Cut", "Flap"]
+  "Marble Score":["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+  "Bone": ["Bone In", "Bone Out"]
 }
 //export const OtherOptions = {}

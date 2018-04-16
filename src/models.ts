@@ -1,13 +1,13 @@
 import { Sequelize } from 'sequelize-typescript'
 import { config } from './config/db'
 import { consts,beefOptions,vealOptions,sheepOptions } from './config/static'
-import { User,Category,Order,Offer,Image } from './models/'
+import { User,Category,Order,Offer,Image,Currency } from './models/'
 
 const sequelize = new Sequelize(config)
-sequelize.addModels([User, Order, Offer, Category, Image])
+sequelize.addModels([User, Order, Offer, Category, Image, Currency])
 
 const setupDatabase = async () => {
-  await sequelize.sync()
+  await sequelize.sync({force:true})
   User.findOne({ where: {email: 'admin@admin.com'} }).then(user => {
     if(!user){ 
       user= new User({

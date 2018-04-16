@@ -13,10 +13,10 @@ import {
   UpdatedAt,
   ForeignKey,
   BelongsTo,
-  HasMany
+  HasMany,
+  HasOne
 } from 'sequelize-typescript'
-import { User } from './user'
-import { Image } from './image'
+import { User, Image, Currency } from './'
 import {consts} from '../config/static'
 @Table({
   tableName: 'offer',
@@ -61,12 +61,27 @@ export class Offer extends Model<Offer> {
 
   @Column({field: 'primal_cuts'})
   public primalCuts : string
+  
+  @Column({field: 'delivery_term'})
+  public deliveryTerm : string
+
+  @Column({field: 'place_of_origin'})
+  public placeOfOrigin : string
+
+  @Column({field: 'marble_score'})
+  public marbleScore : string
+  
+  @Column
+  public quantity : number
 
   @Column
   public bone : string
 
   @Column
   public price: number
+
+  @ForeignKey(() => Currency)
+  currency: Currency;
 
   @HasMany(() => Image, 'offer_id')
   public images: Image[];
