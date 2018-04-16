@@ -107,7 +107,7 @@ class EditPage extends React.Component < OrderProps, OrderState > {
         );
         }
     render() {
-        const {id, type,price,bone,primalCut} = this.state.order;
+        const {id, type,price,bone,primalCut,quantity,deliveryTerm} = this.state.order;
         const {editing, categorys} = this.props
         let options = null
         let currentCategory : Category = categorys&&categorys.filter(
@@ -169,6 +169,12 @@ class EditPage extends React.Component < OrderProps, OrderState > {
                         </div>}
                         <div className="form-group col-md-4">
                             <label className="form-lable">
+                                <FormattedMessage id="orderEdit.marbleScore" defaultMessage="Marble Score"/>
+                            </label>
+                            {currentCategory&&this.renderSelect(currentCategory.details["Marble Score"],"marbleScore")}
+                        </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">
                                 <FormattedMessage id="orderEdit.primalCut" defaultMessage="Primal Cut"/>
                             </label>
                             <input
@@ -178,8 +184,35 @@ class EditPage extends React.Component < OrderProps, OrderState > {
                                     value={primalCut}
                                     onChange={this.handleInputChange}/>
                         </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">
+                                <FormattedMessage id="orderEdit.deliveryTerm" defaultMessage="Delivery Term"/>
+                            </label>
+                            <input
+                                    className="form-control"
+                                    type="text"
+                                    name="deliveryTerm"
+                                    value={deliveryTerm}
+                                    onChange={this.handleInputChange}/>
+                        </div>
                     </div>
                     <div className="row">
+                        <div className="form-group col-md-4">
+                                <label className="form-lable">
+                                    <FormattedMessage id="orderEdit.quantity" defaultMessage="Quantity"/>
+                                </label>
+                                <div className="row col">
+                                <input
+                                    className="form-control col-md-10"
+                                    type="number"
+                                    name="quantity"
+                                    value={quantity}
+                                    onChange={this.handleInputChange}/>
+                                    <span className="col-md-2">
+                                        <FormattedMessage id="orderEdit.ton" defaultMessage="Ton"/>
+                                    </span>
+                                </div>
+                        </div>
                         <div className="form-group col-md-4">
                                 <label className="form-lable">
                                     <FormattedMessage id="orderEdit.price" defaultMessage="Price"/>

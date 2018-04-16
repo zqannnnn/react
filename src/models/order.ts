@@ -59,6 +59,18 @@ export class Order extends Model < Order > {
   @Column({field: 'primal_cut'})
   public primalCut : string
 
+  @Column({field: 'delivery_term'})
+  public deliveryTerm : string
+
+  @Column({field: 'place_of_origin'})
+  public placeOfOrigin : string
+
+  @Column({field: 'marble_score'})
+  public marbleScore : string
+  
+  @Column
+  public quantity : number
+
   @Column
   public bone : string
 

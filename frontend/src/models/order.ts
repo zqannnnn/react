@@ -9,6 +9,10 @@ export interface Order {
   slaughterSpec?:string;
   primalCut?: string;
   bone?:string;
+  deliveryTerm?:string;
+  placeOfOrigin?:string;
+  marbleScore?:number;
+  quantity?:number;
   price?:number;
   offerId?:string;
   cancelling?:boolean;

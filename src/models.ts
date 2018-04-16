@@ -7,7 +7,7 @@ const sequelize = new Sequelize(config)
 sequelize.addModels([User, Order, Offer, Category, Image, Currency])
 
 const setupDatabase = async () => {
-  await sequelize.sync()
+  await sequelize.sync({force:true})
   User.findOne({ where: {email: 'admin@admin.com'} }).then(user => {
     if(!user){ 
       user= new User({
