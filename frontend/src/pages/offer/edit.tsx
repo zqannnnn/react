@@ -153,8 +153,9 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         
         return (
             <div className="col-md-10 offset-md-1">
-                <h2 className="header">{id?'Edit':'Create'} 
-                    <FormattedMessage id="offerEdit.offerPage" defaultMessage="Offer Page"/>
+                <h2 className="header">{id? 
+                    <FormattedMessage id="offerEdit.editOfferPage" defaultMessage="Edit Offer Page"/>:
+                    <FormattedMessage id="offerEdit.createOfferPage" defaultMessage="Create Offer Page"/>}
                 </h2>
                 <form name="form" onSubmit={this.handleSubmit}>
                     <div className="row">
