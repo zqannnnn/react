@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router-dom';
 import {connect, Dispatch} from 'react-redux';
-import {orderActionCreators,categoryActionCreators,alertActionCreators} from '../../actions'
+import {orderActionCreators,categoryActionCreators,currencyActionCreators} from '../../actions'
 import {Order} from '../../models'
-import {Category, CategoryDetails} from '../../models'
+import {Category, CategoryDetails, Currency} from '../../models'
 import {RootState} from '../../reducers'
 import {orderConsts} from '../../constants'
 import {FormattedMessage} from 'react-intl';
@@ -13,6 +13,7 @@ interface OrderProps extends RouteComponentProps < { id: string } > {
     editing: boolean;
     orderData: Order;
     categorys: Category[];
+    currencys: Currency[];
 }
 interface OrderState {
     order : Order;
@@ -37,6 +38,8 @@ class EditPage extends React.Component < OrderProps, OrderState > {
         })
         if(!this.props.categorys)
             this.props.dispatch(categoryActionCreators.getAll());
+        if(!this.props.currencys)
+            this.props.dispatch(currencyActionCreators.getAll());
         orderId && this.props.dispatch(orderActionCreators.getById(orderId))
     }
     componentWillReceiveProps(nextProps : OrderProps) {
@@ -107,15 +110,15 @@ class EditPage extends React.Component < OrderProps, OrderState > {
         );
         }
     render() {
-        const {id, type,price,bone,primalCut,quantity,deliveryTerm} = this.state.order;
-        const {editing, categorys} = this.props
+        const {id, type,price,bone,primalCuts,quantity,brand,factoryNum,deliveryTerm,placeOfOrigin,fed,grainFedDays} = this.state.order;
+        const {editing, categorys,currencys} = this.props
         let options = null
         let currentCategory : Category = categorys&&categorys.filter(
             (category:Category)=>{
                 return category.type===type})[0]
         
         return (
-            <div className="col-md-10 offset-md-1">
+            <div className="col-md-10 offset-md-1 edit-page">
                 <h2 className="header">{id? 
                     <FormattedMessage id="orderEdit.editOrderPage" defaultMessage="Edit Order Page"/>:
                     <FormattedMessage id="orderEdit.createOrderPage" defaultMessage="Create Order Page"/>}
@@ -173,15 +176,70 @@ class EditPage extends React.Component < OrderProps, OrderState > {
                             </label>
                             {currentCategory&&this.renderSelect(currentCategory.details["Marble Score"],"marbleScore")}
                         </div>
+                        {currentCategory&&currentCategory.type=="Beef"&&<div className="form-group col-md-4">
+                            <label className="form-lable">
+                                <FormattedMessage id="orderEdit.fed" defaultMessage="Fed"/>
+                            </label>
+                            {this.renderSelect(currentCategory.details["Fed"],"fed")}
+                        </div>}
+                        {fed=="Grain fed"&&<div className="form-group col-md-4">
+                            <label className="form-lable">
+                                <FormattedMessage id="orderEdit.grainFedDays" defaultMessage="Grain fed days"/>
+                            </label>
+                            <div className="flex">
+                                <input
+                                    className="form-control"
+                                    type="number"
+                                    name="grainFedDays"
+                                    value={grainFedDays}
+                                    onChange={this.handleInputChange}/>
+                                <span className="lable-right">
+                                    <FormattedMessage id="orderEdit.day" defaultMessage="Day"/>
+                                </span>
+                            </div>
+                        </div>}
                         <div className="form-group col-md-4">
                             <label className="form-lable">
-                                <FormattedMessage id="orderEdit.primalCut" defaultMessage="Primal Cut"/>
+                                <FormattedMessage id="orderEdit.primalCuts" defaultMessage="Primal Cut"/>
                             </label>
                             <input
                                     className="form-control"
                                     type="text"
-                                    name="primalCut"
-                                    value={primalCut}
+                                    name="primalCuts"
+                                    value={primalCuts}
+                                    onChange={this.handleInputChange}/>
+                        </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">
+                                <FormattedMessage id="orderEdit.brand" defaultMessage="Brand"/>
+                            </label>
+                            <input
+                                    className="form-control"
+                                    type="text"
+                                    name="brand"
+                                    value={brand}
+                                    onChange={this.handleInputChange}/>
+                        </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">
+                                <FormattedMessage id="orderEdit.factoryNum" defaultMessage="Factory Number"/>
+                            </label>
+                            <input
+                                    className="form-control"
+                                    type="text"
+                                    name="factoryNum"
+                                    value={factoryNum}
+                                    onChange={this.handleInputChange}/>
+                        </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">
+                                <FormattedMessage id="orderEdit.placeOfOrigin" defaultMessage="Place Of Origin"/>
+                            </label>
+                            <input
+                                    className="form-control"
+                                    type="text"
+                                    name="placeOfOrigin"
+                                    value={placeOfOrigin}
                                     onChange={this.handleInputChange}/>
                         </div>
                         <div className="form-group col-md-4">
@@ -201,14 +259,14 @@ class EditPage extends React.Component < OrderProps, OrderState > {
                                 <label className="form-lable">
                                     <FormattedMessage id="orderEdit.quantity" defaultMessage="Quantity"/>
                                 </label>
-                                <div className="row col">
-                                <input
-                                    className="form-control col-md-10"
-                                    type="number"
-                                    name="quantity"
-                                    value={quantity}
-                                    onChange={this.handleInputChange}/>
-                                    <span className="col-md-2">
+                                <div className="flex">
+                                    <input
+                                        className="form-control"
+                                        type="number"
+                                        name="quantity"
+                                        value={quantity}
+                                        onChange={this.handleInputChange}/>
+                                    <span className="lable-right">
                                         <FormattedMessage id="orderEdit.ton" defaultMessage="Ton"/>
                                     </span>
                                 </div>
@@ -217,15 +275,24 @@ class EditPage extends React.Component < OrderProps, OrderState > {
                                 <label className="form-lable">
                                     <FormattedMessage id="orderEdit.price" defaultMessage="Price"/>
                                 </label>
-                                <div className="row col">
-                                <input
-                                    className="form-control col-md-10"
-                                    type="number"
-                                    name="price"
-                                    value={price}
-                                    onChange={this.handleInputChange}/>
-                                    <span className="col-md-2">USD/kg</span>
-                                </div>
+                                {currencys&&<div className="flex">
+                                    <input
+                                        className="form-control"
+                                        type="number"
+                                        name="price"
+                                        value={price}
+                                        onChange={this.handleInputChange}/>
+                                    <select
+                                        className="form-control select-right"
+                                        name="currencyId"
+                                        value={String(this.state.order["currencyId"])}
+                                        onChange={this.handleSelectChange}>
+                                        <option>
+                                        <FormattedMessage id="orderEdit.currency" defaultMessage="Currency"/></option>
+                                        {currencys.map((item, index) => 
+                                            <option key={index} value={item.id}>{item.currency}</option>)}
+                                    </select>
+                                </div>}
                         </div>
                     </div>
                     <div className="form-group col-md-12">
@@ -242,10 +309,9 @@ class EditPage extends React.Component < OrderProps, OrderState > {
             </div>
             ); } } 
 function mapStateToProps(state:RootState) {
-    const {order, category} = state;
+    const {order, category, currency} = state;
     const {editing, loading, orderData} = order;
-    const {items} = category
-    return {editing, categorys: items, orderData};
+    return {editing, categorys: category.items,currencys: currency.items, orderData};
 }
 const connectedEditPage = connect(mapStateToProps)(EditPage); 
 export {connectedEditPage as EditPage}

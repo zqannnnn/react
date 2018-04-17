@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { authMiddleware } from '../middleware/auth'
-import { Order,User } from '../models'
+import { Order,User,Currency } from '../models/'
 import { consts } from '../config/static';
 const router = express.Router()
 
@@ -69,7 +69,8 @@ router.get('/finish/:orderId', async (req: Request, res: express.Response) => {
 })
 router.route('/:orderId')
   .get(async (req: Request, res: express.Response) => {
-    const order = await Order.find({ where: { id: req.params.orderId } })
+    const order = await Order.find({ where: { id: req.params.orderId },
+      include:[{model:Currency,attributes:['currency']}] })
     if (!order) {
       return res.status(403).send({error: 'Order does not exist'})
     }

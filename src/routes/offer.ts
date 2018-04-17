@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { authMiddleware } from '../middleware/auth'
-import { Offer,User,Image } from '../models'
+import { Offer,User,Image,Currency } from '../models/'
 import { consts } from '../config/static';
 const router = express.Router()
 
@@ -82,7 +82,7 @@ router.get('/finish/:offerId', async (req: Request, res: express.Response) => {
 router.route('/:offerId')
   .get(async (req: express.Request, res: express.Response) => {
     const offer = await Offer.find({ where: { id: req.params.offerId },
-      include:[{model:Image,attributes:['path']}] 
+      include:[{model:Image,attributes:['path']},{model:Currency,attributes:['currency']}] 
     })
     if (!offer) {
       return res.status(403).send({error: 'Offer does not exist'})

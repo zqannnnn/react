@@ -67,12 +67,11 @@ class ViewPage extends React.Component < OfferProps, OfferState > {
                     </div>
                     <div className="group">
                         <div className="label">Price</div>
-                        <div className="detail">${offer.price||"null"}</div>
+                        <div className="detail">{offer.currencyId}{offer.price||"null"}</div>
                     </div>
                     <div className="group">
                         <div className="label">images</div>
                         <div className="images">
-                            
                             {offer.images&&offer.images.map((image, index)=>
                                 <div key={index} className="image-wr col">
                                     <img className="img" src={image.path}></img>

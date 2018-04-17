@@ -63,7 +63,7 @@ class ViewPage extends React.Component < OrderProps, OrderState > {
                     </div>
                     <div className="group">
                         <div className="label">Primal Cut</div>
-                        <div className="detail">{order.primalCut||"null"}</div>
+                        <div className="detail">{order.primalCuts||"null"}</div>
                     </div>
                     <div className="group">
                         <div className="label">Price</div>
