@@ -1,5 +1,4 @@
 import * as express from 'express'
-import { authMiddleware } from '../middleware/auth'
 import { Currency } from '../models/'
 
 const router = express.Router()

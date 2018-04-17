@@ -251,3 +251,15 @@ ul.nav li{
 .view-page .images img{
     width: 100%;
 }
+.flex{
+    display: flex;
+}
+.edit-page .select-right{
+    width: 95px;
+    margin-left: 10px;
+    padding: 5px;
+}
+.edit-page .lable-right{
+    line-height: 38px;
+    padding: 0 10px;
+}

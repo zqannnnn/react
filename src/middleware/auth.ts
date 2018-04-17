@@ -39,5 +39,5 @@ export const authMiddleware = (req: Request, res: express.Response, next: expres
       })
     }
   }
-  return res.status(403).send({ success : false, message: 'Please log in before this operation.' })
+  return res.status(403).send({ success : false, message: 'Please log in before this operation' })
 }

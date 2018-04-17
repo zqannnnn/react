@@ -87,8 +87,9 @@ export class Offer extends Model<Offer> {
   public price: number
 
   @ForeignKey(() => Currency)
-  currency: Currency;
-
+  @Column({field: 'currency_id'})
+  currencyId: string;
+  
   @HasMany(() => Image, 'offer_id')
   public images: Image[];
 

@@ -3,4 +3,5 @@ export { actionCreators as categoryActionCreators, Action as CategoryAction } fr
 export { actionCreators as offerActionCreators, Action as OfferAction } from './offer'
 export { actionCreators as orderActionCreators, Action as OrderAction } from './order'
 export { actionCreators as userActionCreators, Action as UserAction } from './user'
+export { actionCreators as currencyActionCreators, Action as CurrencyAction } from './currency'
 export { actionCreators as authActionCreators, Action as AuthAction, AuthInfo } from './auth'

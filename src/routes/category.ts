@@ -3,7 +3,6 @@ import { authMiddleware } from '../middleware/auth'
 import { Category,User } from '../models'
 
 const router = express.Router()
-
 router.use(authMiddleware)
 
 

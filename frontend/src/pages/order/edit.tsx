@@ -234,7 +234,7 @@ class EditPage extends React.Component < OrderProps, OrderState > {
                         </button>
                         {editing && <i className="fa fa-plus-circle" aria-hidden="true"></i>
 }
-                        <Link to="/orders" className="btn btn-link">
+                        <Link to="/" className="btn btn-link">
                             <FormattedMessage id="orderEdit.cancel" defaultMessage="Cancel"/>
                         </Link>
                     </div>

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router-dom';
 import {connect, Dispatch} from 'react-redux';
-import {offerActionCreators,categoryActionCreators,alertActionCreators} from '../../actions'
+import {offerActionCreators,categoryActionCreators,currencyActionCreators} from '../../actions'
 import {Offer} from '../../models'
-import {Category, CategoryDetails} from '../../models'
+import {Category, CategoryDetails,Currency} from '../../models'
 import {RootState} from '../../reducers'
 import {offerConsts} from '../../constants'
 import {FormattedMessage} from 'react-intl';
@@ -13,6 +13,7 @@ interface OfferProps extends RouteComponentProps < { id: string } > {
     editing: boolean;
     offerData: Offer;
     categorys: Category[];
+    currencys: Currency[];
     image: string;
     uploading: boolean
 }
@@ -39,6 +40,8 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         })
         if(!this.props.categorys)
             this.props.dispatch(categoryActionCreators.getAll());
+        if(!this.props.currencys)
+            this.props.dispatch(currencyActionCreators.getAll());
         offerId && this.props.dispatch(offerActionCreators.getById(offerId))
     }
     componentWillReceiveProps(nextProps : OfferProps) {
@@ -145,14 +148,14 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         }
     render() {
         const {id, type, images,price,bone,title,quantity,primalCut,deliveryTerm} = this.state.offer;
-        const {editing, categorys, uploading} = this.props
+        const {editing, categorys, currencys, uploading} = this.props
         let options = null
         let currentCategory : Category = categorys&&categorys.filter(
             (category:Category)=>{
                 return category.type===type})[0]
         
         return (
-            <div className="col-md-10 offset-md-1">
+            <div className="col-md-10 offset-md-1 edit-page">
                 <h2 className="header">{id? 
                     <FormattedMessage id="offerEdit.editOfferPage" defaultMessage="Edit Offer Page"/>:
                     <FormattedMessage id="offerEdit.createOfferPage" defaultMessage="Create Offer Page"/>}
@@ -249,14 +252,14 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                 <label className="form-lable">
                                     <FormattedMessage id="offerEdit.quantity" defaultMessage="Quantity"/>
                                 </label>
-                                <div className="row col">
-                                <input
-                                    className="form-control col-md-10"
-                                    type="number"
-                                    name="quantity"
-                                    value={quantity}
-                                    onChange={this.handleInputChange}/>
-                                    <span className="col-md-2">
+                                <div className="flex">
+                                    <input
+                                        className="form-control"
+                                        type="number"
+                                        name="quantity"
+                                        value={quantity}
+                                        onChange={this.handleInputChange}/>
+                                    <span className="lable-right">
                                         <FormattedMessage id="offerEdit.ton" defaultMessage="Ton"/>
                                     </span>
                                 </div>
@@ -265,15 +268,23 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                 <label className="form-lable">
                                     <FormattedMessage id="offerEdit.price" defaultMessage="Price"/>
                                 </label>
-                                <div className="row col">
-                                <input
-                                    className="form-control col-md-10"
-                                    type="number"
-                                    name="price"
-                                    value={price}
-                                    onChange={this.handleInputChange}/>
-                                    <span className="col-md-2">USD/kg</span>
-                                </div>
+                                {currencys&&<div className="flex">
+                                    <input
+                                        className="form-control"
+                                        type="number"
+                                        name="price"
+                                        value={price}
+                                        onChange={this.handleInputChange}/>
+                                    <select
+                                        className="form-control select-right"
+                                        name="currencyId"
+                                        value={String(this.state.offer["currencyId"])}
+                                        onChange={this.handleSelectChange}>
+                                        <option>currency</option>
+                                        {currencys.map((item, index) => 
+                                            <option key={index} value={item.id}>{item.currency}</option>)}
+                                    </select>
+                                </div>}
                         </div>
                     </div>
                     <div className="row">
@@ -301,7 +312,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                         </button>
                         {editing && <i className="fa fa-plus-circle" aria-hidden="true"></i>
 }
-                        <Link to="/offers" className="btn btn-link">
+                        <Link to="/" className="btn btn-link">
                             <FormattedMessage id="offerEdit.cancel" defaultMessage="Cancel"/>
                         </Link>
                     </div>
@@ -309,10 +320,9 @@ class EditPage extends React.Component < OfferProps, OfferState > {
             </div>
             ); } } 
 function mapStateToProps(state:RootState) {
-    const {offer, category} = state;
+    const {offer, category,currency} = state;
     const {editing, loading, offerData, image, uploading} = offer;
-    const {items} = category
-    return {editing, categorys: items, offerData, image, uploading};
+    return {editing, categorys: category.items,currencys: currency.items, offerData, image, uploading};
 }
 const connectedEditPage = connect(mapStateToProps)(EditPage); 
 export {connectedEditPage as EditPage}
