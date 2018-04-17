@@ -147,7 +147,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         );
         }
     render() {
-        const {id, type, images,price,bone,title,quantity,primalCut,deliveryTerm} = this.state.offer;
+        const {id, type, images,price,bone,title,quantity,primalCuts,brand,factoryNum,deliveryTerm,placeOfOrigin,fed,grainFedDays} = this.state.offer;
         const {editing, categorys, currencys, uploading} = this.props
         let options = null
         let currentCategory : Category = categorys&&categorys.filter(
@@ -224,15 +224,70 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                             </label>
                             {this.renderSelect(currentCategory.details["Breed"],"breed")}
                         </div>}
+                        {currentCategory&&currentCategory.type=="Beef"&&<div className="form-group col-md-4">
+                            <label className="form-lable">
+                                <FormattedMessage id="offerEdit.fed" defaultMessage="Fed"/>
+                            </label>
+                            {this.renderSelect(currentCategory.details["Fed"],"fed")}
+                        </div>}
+                        {fed=="Grain fed"&&<div className="form-group col-md-4">
+                            <label className="form-lable">
+                                <FormattedMessage id="offerEdit.grainFedDays" defaultMessage="Grain fed days"/>
+                            </label>
+                            <div className="flex">
+                                <input
+                                    className="form-control"
+                                    type="number"
+                                    name="grainFedDays"
+                                    value={grainFedDays}
+                                    onChange={this.handleInputChange}/>
+                                <span className="lable-right">
+                                    <FormattedMessage id="offerEdit.day" defaultMessage="Day"/>
+                                </span>
+                            </div>
+                        </div>}
                         <div className="form-group col-md-4">
                             <label className="form-lable">
-                                <FormattedMessage id="offerEdit.primalCut" defaultMessage="Primal Cut"/>
+                                <FormattedMessage id="offerEdit.primalCuts" defaultMessage="Primal Cuts"/>
                             </label>
                             <input
                                     className="form-control"
                                     type="text"
-                                    name="primalCut"
-                                    value={primalCut}
+                                    name="primalCuts"
+                                    value={primalCuts}
+                                    onChange={this.handleInputChange}/>
+                        </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">
+                                <FormattedMessage id="offerEdit.brand" defaultMessage="Brand"/>
+                            </label>
+                            <input
+                                    className="form-control"
+                                    type="text"
+                                    name="brand"
+                                    value={brand}
+                                    onChange={this.handleInputChange}/>
+                        </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">
+                                <FormattedMessage id="offerEdit.factoryNum" defaultMessage="Factory Number"/>
+                            </label>
+                            <input
+                                    className="form-control"
+                                    type="text"
+                                    name="factoryNum"
+                                    value={factoryNum}
+                                    onChange={this.handleInputChange}/>
+                        </div>
+                        <div className="form-group col-md-4">
+                            <label className="form-lable">
+                                <FormattedMessage id="offerEdit.placeOfOrigin" defaultMessage="Place Of Origin"/>
+                            </label>
+                            <input
+                                    className="form-control"
+                                    type="text"
+                                    name="placeOfOrigin"
+                                    value={placeOfOrigin}
                                     onChange={this.handleInputChange}/>
                         </div>
                         <div className="form-group col-md-4">
@@ -280,7 +335,8 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                         name="currencyId"
                                         value={String(this.state.offer["currencyId"])}
                                         onChange={this.handleSelectChange}>
-                                        <option>currency</option>
+                                        <option>
+                                        <FormattedMessage id="offerEdit.currency" defaultMessage="Currency"/></option>
                                         {currencys.map((item, index) => 
                                             <option key={index} value={item.id}>{item.currency}</option>)}
                                     </select>

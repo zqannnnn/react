@@ -22,6 +22,7 @@ export const beefOptions= {
     "Mixed Breed",
     "Cross Cattle"
   ],
+  "Fed":["Grass fed","Grain fed"],
   "Grade": ["A", "B", "V", "C", "PR", "PRS", "S", "SS", "Y", "YG", "YGS", "YP", "YPS", "YS", "YE", "YGE", "BYG", "Other"],
   "Slaughter Specification": [
     "Full Set",

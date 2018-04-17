@@ -62,6 +62,12 @@ export class Offer extends Model<Offer> {
   @Column
   public grade: string
 
+  @Column
+  public fed: string
+  
+  @Column({field: 'grain_fed_days'})
+  public grainFedDays: number
+  
   @Column({field: 'slaughter_spec'})
   public slaughterSpec : string
 
@@ -73,6 +79,9 @@ export class Offer extends Model<Offer> {
 
   @Column({field: 'place_of_origin'})
   public placeOfOrigin : string
+
+  @Column({field: 'factory_num'})
+  public factoryNum : string
 
   @Column({field: 'marble_score'})
   public marbleScore : string
@@ -89,7 +98,7 @@ export class Offer extends Model<Offer> {
   @ForeignKey(() => Currency)
   @Column({field: 'currency_id'})
   currencyId: string;
-  
+
   @HasMany(() => Image, 'offer_id')
   public images: Image[];
 

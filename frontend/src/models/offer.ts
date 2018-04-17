@@ -7,9 +7,13 @@ export interface Offer {
   breed?:string;
   grade?:string;
   slaughterSpec?:string;
-  primalCut?: string;
+  primalCuts?: string;
   bone?:string;
   title?:string;
+  fed?:string;
+  grainFedDays?:number;
+  brand?:string;
+  factoryNum?:string;
   deliveryTerm?:string;
   placeOfOrigin?:string;
   marbleScore?:number;
