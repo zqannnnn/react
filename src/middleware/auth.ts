@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as jwt from 'jsonwebtoken'
-import { User } from '../models/user'
 import { consts } from '../config/static'
+import { User } from '../models/user'
 
 // TODO use the User model to identify if user is logged in or not, not the JWT
 
@@ -11,12 +11,12 @@ interface IDecodedObject {
 }
 
 // our middleware adds some stuff
-interface Request extends express.Request {
+interface IRequest extends express.Request {
   isAdmin: boolean
   userId: string
 }
 
-export const authMiddleware = (req: Request, res: express.Response, next: express.NextFunction) => {
+export const authMiddleware = (req: IRequest, res: express.Response, next: express.NextFunction) => {
   const bearerHeader = req.header('authorization')
   if (typeof bearerHeader === 'string') {
     const token = bearerHeader.split(' ')[1]
@@ -34,7 +34,7 @@ export const authMiddleware = (req: Request, res: express.Response, next: expres
         } else {
           req.isAdmin = false
         }
-        req.userId = decoded.id;
+        req.userId = decoded.id
         next()
       })
     }

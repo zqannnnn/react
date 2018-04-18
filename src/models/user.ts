@@ -2,22 +2,22 @@ import * as bcrypt from 'bcrypt'
 import { DataTypeJSONB } from 'sequelize'
 import {
   BeforeCreate,
+  BeforeUpdate,
   Column,
   CreatedAt,
   DataType,
   Default,
+  HasMany,
   IsEmail,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
   Unique,
-  UpdatedAt,
-  BeforeUpdate,
-  HasMany
+  UpdatedAt
 } from 'sequelize-typescript'
+import { Offer, Order } from '.'
 import { consts } from '../config/static'
-import { Order,Offer } from '.'
 @Table({
   tableName: 'user',
   underscored: true
@@ -63,10 +63,10 @@ export class User extends Model<User> {
   public updatedAt: Date
 
   @HasMany(() => Order, 'user_id')
-  public orders: Order[];
+  public orders: Order[]
 
   @HasMany(() => Offer, 'user_id')
-  public offers: Offer[];
+  public offers: Offer[]
 
   // class methods
   @BeforeUpdate

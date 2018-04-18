@@ -26,8 +26,6 @@ router.get('/list', async (req, res) => {
   return res.send(users)
 })
 
-
-
 router.route('/:userId')
   .get(async (req: express.Request, res: express.Response) => {
     const user = await User.find({ where: { id: req.params.userId } })

@@ -1,54 +1,54 @@
 import {
   BeforeCreate,
+  BelongsTo,
   Column,
   CreatedAt,
   DataType,
   Default,
+  ForeignKey,
+  HasOne,
   IsEmail,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
   Unique,
-  UpdatedAt,
-  ForeignKey,
-  BelongsTo,
-  HasOne
+  UpdatedAt
 } from 'sequelize-typescript'
-import {User,Offer,Currency} from './'
 import {consts} from '../config/static'
+import {Currency, Offer, User} from './'
 @Table({tableName: 'order', underscored: true})
 export class Order extends Model < Order > {
 
   // only allow string keys to do some iteration :)
-  [key : string] : any
+  [key: string]: any
 
   @IsUUID(4)
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column
-  public id : string
+  public id: string
 
   @ForeignKey(() => User)
   @Column({field: 'user_id'})
-  userId : string;
+  public userId: string
 
   @ForeignKey(() => Offer)
   @Column({field: 'offer_id'})
-  offerId : string;
+  public offerId: string
 
   @Column
-  public type : string
+  public type: string
 
   @Default(consts.ORDER_STATUS_CREATED)
   @Column
-  public status : number
+  public status: number
 
   @Column
-  public title : string
+  public title: string
 
   @Column
-  public desc : string
+  public desc: string
 
   @Column
   public storage: string
@@ -61,33 +61,33 @@ export class Order extends Model < Order > {
 
   @Column
   public fed: string
-  
+
   @Column({field: 'grain_fed_days'})
   public grainFedDays: number
-  
+
   @Column({field: 'slaughter_spec'})
-  public slaughterSpec : string
+  public slaughterSpec: string
 
   @Column({field: 'primal_cuts'})
-  public primalCuts : string
-  
+  public primalCuts: string
+
   @Column({field: 'delivery_term'})
-  public deliveryTerm : string
+  public deliveryTerm: string
 
   @Column({field: 'place_of_origin'})
-  public placeOfOrigin : string
+  public placeOfOrigin: string
 
   @Column({field: 'factory_num'})
-  public factoryNum : string
+  public factoryNum: string
 
   @Column({field: 'marble_score'})
-  public marbleScore : string
-  
-  @Column
-  public quantity : number
+  public marbleScore: string
 
   @Column
-  public bone : string
+  public quantity: number
+
+  @Column
+  public bone: string
 
   @Column
   public price: number
@@ -97,11 +97,11 @@ export class Order extends Model < Order > {
 
   @ForeignKey(() => Currency)
   @Column({field: 'currency_id'})
-  currencyId: string;
+  public currencyId: string
 
   @BelongsTo(() => Currency)
-  currency: Currency;
-  
+  public currency: Currency
+
   @CreatedAt
   @Column({field: 'created_at'})
   public createdAt: Date

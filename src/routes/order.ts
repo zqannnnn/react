@@ -1,17 +1,17 @@
 import * as express from 'express'
+import { consts } from '../config/static'
 import { authMiddleware } from '../middleware/auth'
-import { Order,User,Currency } from '../models/'
-import { consts } from '../config/static';
+import { Currency, Order, User } from '../models/'
 const router = express.Router()
 
 router.use(authMiddleware)
 
-interface Request extends express.Request {
-  userId: string;
-  isAdmin:boolean;
+interface IRequest extends express.Request {
+  userId: string
+  isAdmin: boolean
 }
 
-router.post('/new', async (req: Request, res: express.Response) => {
+router.post('/new', async (req: IRequest, res: express.Response) => {
   try {
     const order = new Order({
       userId: req.userId,
@@ -23,26 +23,26 @@ router.post('/new', async (req: Request, res: express.Response) => {
     return res.status(500).send({ error: e.message })
   }
 })
-router.get('/list', async (req:Request, res:express.Response) => {
-  let offers;
-  let selectType = req.query.selectType;
+router.get('/list', async (req: IRequest, res: express.Response) => {
+  let offers
+  const selectType = req.query.selectType
   try {
-    if(selectType==='mine'){
+    if (selectType === 'mine') {
       offers = await Order.findAll({
-        where:{
-          userId:req.userId
+        where: {
+          userId: req.userId
         }
       })
-    }else if (selectType==='finished'){
+    } else if (selectType === 'finished') {
       offers = await Order.findAll({
-        where:{
-          status:consts.ORDER_STATUS_FINISHED
+        where: {
+          status: consts.ORDER_STATUS_FINISHED
         }
       })
-    }else{
+    } else {
       offers = await Order.findAll({
-        where:{
-          status:consts.ORDER_STATUS_CREATED
+        where: {
+          status: consts.ORDER_STATUS_CREATED
         }
       })
     }
@@ -51,9 +51,9 @@ router.get('/list', async (req:Request, res:express.Response) => {
     return res.status(500).send({error: e.message})
   }
 })
-router.get('/finish/:orderId', async (req: Request, res: express.Response) => {
+router.get('/finish/:orderId', async (req: IRequest, res: express.Response) => {
   try {
-    if(!req.isAdmin){
+    if (!req.isAdmin) {
       return res.status(500).send({error: 'Permission denied'})
     }
     const offer = await Order.find({ where: { id: req.params.orderId } })
@@ -61,25 +61,25 @@ router.get('/finish/:orderId', async (req: Request, res: express.Response) => {
       return res.status(500).send({error: 'Order does not exist'})
     }
     offer.status = consts.ORDER_STATUS_FINISHED
-    offer.save();
+    offer.save()
     return res.send({success: true})
   } catch (e) {
     return res.status(500).send({error: e.message})
   }
 })
 router.route('/:orderId')
-  .get(async (req: Request, res: express.Response) => {
+  .get(async (req: IRequest, res: express.Response) => {
     const order = await Order.find({ where: { id: req.params.orderId },
-      include:[{model:Currency,attributes:['currency']}] })
+      include: [{model: Currency, attributes: ['currency']}] })
     if (!order) {
       return res.status(403).send({error: 'Order does not exist'})
     }
     return res.send(order)
   })
-  .put(async (req: Request, res: express.Response) => {
+  .put(async (req: IRequest, res: express.Response) => {
     try {
       const order = await Order.find({ where: { id: req.params.orderId } })
-      if(order&&order.userId!=req.userId){
+      if (order && order.userId !== req.userId) {
         return res.status(500).send({error: 'Permission denied'})
       }
       if (!order) {
@@ -92,17 +92,17 @@ router.route('/:orderId')
       return res.status(500).send({error: e.message})
     }
   })
-  .delete(async (req: Request, res: express.Response) => {
+  .delete(async (req: IRequest, res: express.Response) => {
     try {
       const order = await Order.find({ where: { id: req.params.orderId } })
-      if(order&&order.userId!=req.userId){
+      if (order && order.userId !== req.userId) {
         return res.status(500).send({error: 'Permission denied'})
       }
       if (!order) {
         return res.status(500).send({error: 'Order does not exist'})
       }
       order.status = consts.ORDER_STATUS_CANCELLED
-      order.save();
+      order.save()
       return res.send({success: true})
     } catch (e) {
       return res.status(500).send({error: e.message})

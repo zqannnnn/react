@@ -1,19 +1,19 @@
 import {
   BeforeCreate,
+  BelongsTo,
   Column,
   CreatedAt,
   DataType,
   Default,
+  ForeignKey,
+  HasMany,
   IsEmail,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
   Unique,
-  UpdatedAt,
-  ForeignKey,
-  BelongsTo,
-  HasMany
+  UpdatedAt
 } from 'sequelize-typescript'
 import { User } from './user'
 @Table({

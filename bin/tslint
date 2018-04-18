@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
-docker exec -u node -i bms-app \
+docker run --rm -i \
+  -v `pwd`:/home/node/bmp \
+  dev.ak5.cc:4567/kingqi/bmp \
   /home/node/bmp/node_modules/.bin/tslint "$@" src/**/*.ts
-

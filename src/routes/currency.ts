@@ -3,11 +3,11 @@ import { Currency } from '../models/'
 
 const router = express.Router()
 
-router.get('/', async (req:express.Request, res:express.Response) => {
-  let currencys = await Currency.findAll({
-    attributes:['id','currency']
+router.get('/', async (req: express.Request, res: express.Response) => {
+  const currencys = await Currency.findAll({
+    attributes: ['id', 'currency']
   })
-  
+
   return res.send(currencys)
 })
 
