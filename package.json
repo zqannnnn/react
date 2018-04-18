@@ -6,6 +6,7 @@
   "author": "Louis Liu <liukangqi56@hotmail.com>",
   "license": "MIT",
   "scripts": {
+    "watch": "nodemon -e js,ts,jsx -w src/ -w frontend/ -x ts-node --inspect src/index",
     "extract-translation": "node ./script/extract-translation.js",
     "json2pot": "rip json2pot ./translation/frontend/**/*.json -o ./translation/messages.pot",
     "po2json": "rip po2json './translation/*.po' -m './translation/frontend/**/*.json' -o './translation/locales'"
