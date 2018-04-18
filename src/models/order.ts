@@ -45,6 +45,9 @@ export class Order extends Model < Order > {
   public status : number
 
   @Column
+  public title : string
+
+  @Column
   public desc : string
 
   @Column
@@ -89,9 +92,15 @@ export class Order extends Model < Order > {
   @Column
   public price: number
 
+  @Column
+  public trimmings: number
+
   @ForeignKey(() => Currency)
   @Column({field: 'currency_id'})
   currencyId: string;
+
+  @BelongsTo(() => Currency)
+  currency: Currency;
   
   @CreatedAt
   @Column({field: 'created_at'})

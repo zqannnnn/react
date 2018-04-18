@@ -12,6 +12,7 @@ export interface Order {
   primalCuts?: string;
   bone?:string;
   title?:string;
+  desc?:string;
   fed?:string;
   grainFedDays?:number;
   brand?:string;
@@ -23,6 +24,7 @@ export interface Order {
   price?:number;
   currencyId?:string;
   currency?:Currency;
+  trimmings?:number;
   offerId?:string;
   cancelling?:boolean;
   cancellError?:string;

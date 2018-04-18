@@ -62,7 +62,8 @@ class List extends React.Component<ListProps> {
                             }>Set Sold</div>}
                             <div className="footer">
                                 <div className="price">${item.price}</div>
-                                {(authInfo.id==item.userId||authInfo.isAdmin)&&<div className="menu">
+                                    <Link className="" to={'/offer/' + item.id}>details</Link>
+                                    {(authInfo.id==item.userId||authInfo.isAdmin)&&<div className="menu">
                                     <Link to={'/offer/edit/' + item.id} className="control-btn">✎</Link>
                                     <div >{item.cancelling
                                         ? <i className="fa fa-spinner" aria-hidden="true"></i>

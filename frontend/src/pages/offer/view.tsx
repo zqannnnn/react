@@ -5,6 +5,7 @@ import {offerActionCreators} from '../../actions'
 import {Offer} from '../../models'
 import {Category, CategoryDetails} from '../../models'
 import {RootState} from '../../reducers'
+import {FormattedMessage} from 'react-intl';
 interface OfferProps extends RouteComponentProps < { id: string } > {
     dispatch: Dispatch < RootState >;
     offer: Offer;
@@ -39,49 +40,123 @@ class ViewPage extends React.Component < OfferProps, OfferState > {
         const {loading} = this.state
         return (
             <div className="col-md-8 offset-md-2 view-page page">
-                <h2 className="header">Offer View page</h2>
+                <h2 className="header">
+                    <FormattedMessage id="pages.offerViewPage" defaultMessage="Offer View Page"/>
+                </h2>
                 {loading?<i className="fa fa-spinner" aria-hidden="true"></i>:<div className="content">
-                    <div className="group">
-                        <div className="label">Storage</div>
-                        <div className="detail">{offer.storage||"null"}</div>
-                    </div>
-                    <div className="group">
-                        <div className="label">Breed</div>
-                        <div className="detail">{offer.breed||"null"}</div>
-                    </div>
-                    <div className="group">
-                        <div className="label">Grade</div>
-                        <div className="detail">{offer.grade||"null"}</div>
-                    </div>
-                    <div className="group">
-                        <div className="label">Slaughter Specification</div>
-                        <div className="detail">{offer.slaughterSpec||"null"}</div>
-                    </div>
-                    <div className="group">
-                        <div className="label">Bone</div>
-                        <div className="detail">{offer.bone||"null"}</div>
-                    </div>
-                    <div className="group">
-                        <div className="label">Primal Cut</div>
-                        <div className="detail">{offer.primalCuts||"null"}</div>
-                    </div>
-                    <div className="group">
-                        <div className="label">Price</div>
-                        <div className="detail">{offer.currencyId}{offer.price||"null"}</div>
-                    </div>
-                    <div className="group">
-                        <div className="label">images</div>
-                        <div className="images">
-                            {offer.images&&offer.images.map((image, index)=>
-                                <div key={index} className="image-wr col">
-                                    <img className="img" src={image.path}></img>
-                                </div>
-                            )}
+                <div className="group">
+                        <div className="label">
+                            <FormattedMessage id="itemFeilds.title" defaultMessage="Title"/>
                         </div>
+                        <div className="detail">{offer.title||"null"}</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.storage" defaultMessage="Storage"/>
                     </div>
-                </div>}
-            </div>
-        ); 
+                    <div className="detail">{offer.storage||"null"}</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.breed" defaultMessage="Breed"/>
+                    </div>
+                    <div className="detail">{offer.breed||"null"}</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.grade" defaultMessage="Grade"/>
+                    </div>
+                    <div className="detail">{offer.grade||"null"}</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.marbleScore" defaultMessage="MarbleScore"/>
+                    </div>
+                    <div className="detail">{offer.marbleScore||"null"}</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.slaughterSpec" defaultMessage="Slaughter Specification"/>
+                    </div>
+                    <div className="detail">{offer.slaughterSpec||"null"}</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.bone" defaultMessage="Bone"/>
+                    </div>
+                    <div className="detail">{offer.bone||"null"}</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.primalCuts" defaultMessage="Primal Cuts"/>
+                    </div>
+                    <div className="detail">{offer.primalCuts||"null"}</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.trimmings" defaultMessage="Trimmings"/>
+                    </div>
+                    <div className="detail">{offer.trimmings||"null"}CL</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.fed" defaultMessage="Fed"/>
+                    </div>
+                    <div className="detail">{offer.fed||"null"}{offer.grainFedDays?<span><br/>
+                        {offer.grainFedDays} Day
+                        </span>:''}
+                    </div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.price" defaultMessage="Price"/>
+                    </div>
+                    <div className="detail">{offer.price||"null"}{offer.currency?offer.currency.currency:''}/KG</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.quantity" defaultMessage="Quantity"/>
+                    </div>
+                    <div className="detail">{offer.quantity||"null"}KG</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.brand" defaultMessage="Brand"/>
+                    </div>
+                    <div className="detail">{offer.brand||"null"}</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.factoryNum" defaultMessage="Factory Number"/>
+                    </div>
+                    <div className="detail">{offer.factoryNum||"null"}</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.deliveryTerm" defaultMessage="Delivery Term"/>
+                    </div>
+                    <div className="detail">{offer.deliveryTerm||"null"}</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.placeOfOrigin" defaultMessage="Place Of Origin"/>
+                    </div>
+                    <div className="detail">{offer.placeOfOrigin||"null"}</div>
+                </div>
+                <div className="group">
+                    <div className="label">
+                        <FormattedMessage id="itemFeilds.image" defaultMessage="Images"/>
+                    </div>
+                    <div className="images">
+                        {offer.images&&offer.images.map((image, index)=>
+                            <div key={index} className="image-wr col">
+                                <img className="img" src={image.path}></img>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>}
+        </div>); 
     } 
 } 
             

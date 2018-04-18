@@ -26,7 +26,5 @@ import {
     @Column({field:"currency"})
     public currency : string
 
-    @HasOne(() => Offer,'currency_id')
-    currencyId: string;
   }
   

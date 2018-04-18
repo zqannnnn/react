@@ -1,3 +1,4 @@
+import { Currency } from ".";
 export interface Offer {
   id?:string;
   userId?:string;
@@ -10,6 +11,7 @@ export interface Offer {
   primalCuts?: string;
   bone?:string;
   title?:string;
+  desc?:string;
   fed?:string;
   grainFedDays?:number;
   brand?:string;
@@ -20,6 +22,8 @@ export interface Offer {
   quantity?:number;
   price?:number;
   currencyId?:string;
+  currency?:Currency;
+  trimmings?:number;
   images?:Image[];
   cancelling?:boolean;
   cancellError?:string;
