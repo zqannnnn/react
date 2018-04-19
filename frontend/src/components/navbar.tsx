@@ -24,12 +24,12 @@ class NavBar extends React.Component <NavProps> {
             <NavLink exact to="/" className="navbar-brand" activeClassName="active">Home</NavLink>
                 <ul className="navbar-nav nav">
                     <li className="nav-item">
-                        <NavLink exact to="/my/orders" className="nav-link" activeClassName="active">
+                        <NavLink exact to="/orders/my" className="nav-link" activeClassName="active">
                             <FormattedMessage id="navbar.myOrders" defaultMessage="My Orders"/>
                         </NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink exact to="/my/offers" className="nav-link" activeClassName="active">
+                        <NavLink exact to="/offers/my" className="nav-link" activeClassName="active">
                             <FormattedMessage id="navbar.myOffers" defaultMessage="My Offers"/>
                         </NavLink>
                     </li>
