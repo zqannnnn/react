@@ -2,8 +2,7 @@ import {userConsts} from '../constants';
 import {User} from '../models'
 import {UserAction} from '../actions'
 export type State = {
-  updating?: boolean;
-  submiting?: boolean;
+  processing?: boolean;
   loading?: boolean;
   userData?: User;
   error?: string;
@@ -11,7 +10,7 @@ export type State = {
 export function user(state = {}, action : UserAction) : State {
   switch(action.type) {
     case userConsts.UPDATE_REQUEST:
-      return {updating: true};
+      return {processing: true};
     case userConsts.UPDATE_SUCCESS:
       return {userData: action.user};
     case userConsts.UPDATE_FAILURE:

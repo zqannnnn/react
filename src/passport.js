@@ -22,7 +22,8 @@ module.exports = passport => {
         // asynchronous
         process.nextTick(function() {
             User.findOne({
-                where: {email: email}
+                where: {email},
+                attributes:['id','userType','password']
             }).then(user => {
                 if (!user)
                     return done(null, false);

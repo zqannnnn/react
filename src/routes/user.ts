@@ -21,20 +21,32 @@ router.post('/new', async (req, res) => {
 
 router.use(authMiddleware)
 
-router.get('/list', async (req, res) => {
-  const users = await User.findAll()
-  return res.send(users)
+interface IRequest extends express.Request {
+    userId: string;
+    isAdmin:boolean;
+}
+router.get('/list', async (req:IRequest, res:express.Response) => {
+  if(req.isAdmin){
+    const users = await User.findAll({attributes:{ exclude: ['password'] }})
+    return res.send(users)
+  }
 })
 
 router.route('/:userId')
-  .get(async (req: express.Request, res: express.Response) => {
-    const user = await User.find({ where: { id: req.params.userId } })
+  .get(async (req: IRequest, res: express.Response) => {
+    if(req.params.userId!=req.userId||!req.isAdmin){
+      return res.status(500).send({error: 'Permission denied'})      
+    }
+    const user = await User.find({ where: { id: req.params.userId },attributes:{ exclude: ['password'] }})
     if (!user) {
-      return res.status(403).send({error: 'User does not exist'})
+      return res.status(500).send({error: 'User does not exist'})
     }
     return res.send(user)
   })
-  .put(async (req: express.Request, res: express.Response) => {
+  .put(async (req: IRequest, res: express.Response) => {
+    if(req.params.userId!=req.userId||!req.isAdmin){
+      return res.status(500).send({error: 'Permission denied'})      
+    }
     try {
       const user = await User.find({ where: { id: req.params.userId } })
       if (!user) {
@@ -47,7 +59,11 @@ router.route('/:userId')
       return res.status(500).send({error: e.message})
     }
   })
-  .delete(async (req: express.Request, res: express.Response) => {
+  .delete(async (req: IRequest, res: express.Response) => {
+    console.log('delete was called')
+    if(req.params.userId!=req.userId||!req.isAdmin){
+      return res.status(500).send({error: 'Permission denied'})      
+    }
     try {
       const user = await User.find({ where: { id: req.params.userId } })
       if (!user) {

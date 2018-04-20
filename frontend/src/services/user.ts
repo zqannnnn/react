@@ -67,7 +67,7 @@ function _new(user:User) {
     return fetch('/user/new', requestOptions).then(handleResponse);
 }
 
-function update(user:User, userId:string) {
+function update(user:User) {
     const requestOptions = {
         method: 'PUT',
         headers: {
@@ -77,7 +77,7 @@ function update(user:User, userId:string) {
         body: JSON.stringify(user)
     };
 
-    return fetch('/user/' + userId, requestOptions).then(handleResponse);;
+    return fetch('/user/' + user.id, requestOptions).then(handleResponse);;
 }
 
 

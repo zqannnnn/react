@@ -163,7 +163,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                 <form name="form" onSubmit={this.handleSubmit}>
                     <div className="row">
                         <div className="form-group col-md-4">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.offerType" defaultMessage="Offer Type"/></label>
                                 <select
                                     className="form-control"
@@ -178,7 +178,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                     </div>
                     <div className="row">
                         <div className="form-group col-md-12">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.title" defaultMessage="Title"/>
                             </label>
                             <input
@@ -189,49 +189,49 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                 onChange={this.handleInputChange}/>
                         </div>
                         <div className="form-group col-md-4">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.bone" defaultMessage="Bone"/>
                             </label>
                             {currentCategory&&this.renderSelect(currentCategory.details["Bone"],"bone")}
                         </div>
                         <div className="form-group col-md-4">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.storage" defaultMessage="Storage"/>
                             </label>
                             {currentCategory&&this.renderSelect(currentCategory.details["Storage"],"storage")}
                         </div>
                         <div className="form-group col-md-4">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.grade" defaultMessage="Grade"/>
                             </label>
                             {currentCategory&&this.renderSelect(currentCategory.details["Grade"],"grade")}
                         </div>
                         <div className="form-group col-md-4">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.slaughterSpec" defaultMessage="Slaughter Specification"/>
                             </label>
                             {currentCategory&&this.renderSelect(currentCategory.details["Slaughter Specification"],"slaughterSpec")}
                         </div>
                         <div className="form-group col-md-4">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.marbleScore" defaultMessage="Marble Score"/>
                             </label>
                             {currentCategory&&this.renderSelect(currentCategory.details["Marble Score"],"marbleScore")}
                         </div>
                         {currentCategory&&currentCategory.type!="Sheep"&&<div className="form-group col-md-4">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.breed" defaultMessage="Breed"/>
                             </label>
                             {this.renderSelect(currentCategory.details["Breed"],"breed")}
                         </div>}
                         {currentCategory&&currentCategory.type=="Beef"&&<div className="form-group col-md-4">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.fed" defaultMessage="Fed"/>
                             </label>
                             {this.renderSelect(currentCategory.details["Fed"],"fed")}
                         </div>}
                         {fed=="Grain fed"&&<div className="form-group col-md-4">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.grainFedDays" defaultMessage="Grain fed days"/>
                             </label>
                             <div className="flex">
@@ -241,13 +241,13 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                     name="grainFedDays"
                                     value={grainFedDays}
                                     onChange={this.handleInputChange}/>
-                                <span className="lable-right">
+                                <span className="label-right">
                                     <FormattedMessage id="itemFields.day" defaultMessage="Day"/>
                                 </span>
                             </div>
                         </div>}
                         <div className="form-group col-md-4">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.primalCuts" defaultMessage="Primal Cuts"/>
                             </label>
                             <input
@@ -258,7 +258,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                     onChange={this.handleInputChange}/>
                         </div>
                         <div className="form-group col-md-4">
-                                <label className="form-lable">
+                                <label>
                                     <FormattedMessage id="itemFields.trimmings" defaultMessage="Trimmings"/>
                                 </label>
                                 <div className="flex">
@@ -268,13 +268,13 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                         name="trimmings"
                                         value={trimmings}
                                         onChange={this.handleInputChange}/>
-                                    <span className="lable-right">
+                                    <span className="label-right">
                                         CL
                                     </span>
                                 </div>
                         </div>
                         <div className="form-group col-md-4">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.brand" defaultMessage="Brand"/>
                             </label>
                             <input
@@ -285,7 +285,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                     onChange={this.handleInputChange}/>
                         </div>
                         <div className="form-group col-md-4">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.factoryNum" defaultMessage="Factory Number"/>
                             </label>
                             <input
@@ -296,7 +296,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                     onChange={this.handleInputChange}/>
                         </div>
                         <div className="form-group col-md-4">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.placeOfOrigin" defaultMessage="Place Of Origin"/>
                             </label>
                             <input
@@ -307,7 +307,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                     onChange={this.handleInputChange}/>
                         </div>
                         <div className="form-group col-md-4">
-                            <label className="form-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.deliveryTerm" defaultMessage="Delivery Term"/>
                             </label>
                             <input
@@ -320,7 +320,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                     </div>
                     <div className="row">
                         <div className="form-group col-md-4">
-                                <label className="form-lable">
+                                <label>
                                     <FormattedMessage id="itemFields.quantity" defaultMessage="Quantity"/>
                                 </label>
                                 <div className="flex">
@@ -330,13 +330,13 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                         name="quantity"
                                         value={quantity}
                                         onChange={this.handleInputChange}/>
-                                    <span className="lable-right">
+                                    <span className="label-right">
                                         KG
                                     </span>
                                 </div>
                         </div>
                         <div className="form-group col-md-4">
-                                <label className="form-lable">
+                                <label>
                                     <FormattedMessage id="itemFields.price" defaultMessage="Price"/>
                                 </label>
                                 {currencys&&<div className="flex">
@@ -348,20 +348,22 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                         onChange={this.handleInputChange}/>
                                     <select
                                         className="form-control select-right"
-                                        name="currencyId"
-                                        value={String(this.state.offer["currencyId"])}
+                                        name="currencyCode"
+                                        value={String(this.state.offer["currencyCode"])}
                                         onChange={this.handleSelectChange}>
                                         <option>
-                                        <FormattedMessage id="itemFields.currency" defaultMessage="Currency"/></option>
+                                            <FormattedMessage id="itemFields.currency" defaultMessage="Currency"/>
+                                        </option>
                                         {currencys.map((item, index) => 
-                                            <option key={index} value={item.id}>{item.currency}</option>)}
-                                    </select>/kg
+                                            <option key={index} value={item.code}>{item.code}</option>)}
+                                    </select>
+                                    <span className="label-right">/KG</span>
                                 </div>}
                         </div>
                     </div>
                     <div className="row">
                         <div className="form-group col-md-8">
-                            <label className="from-lable">
+                            <label>
                                 <FormattedMessage id="itemFields.images" defaultMessage="Images"/>
                             </label>
                             <div className="images-container">

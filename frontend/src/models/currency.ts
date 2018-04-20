@@ -1,4 +1,5 @@
 export interface Currency {
-    id?:string;
-    currency:string;
+    code:string;
+    symbel:string;
+    rate:number
 }

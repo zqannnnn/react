@@ -5,6 +5,7 @@ import {history} from '../helpers/history';
 import * as auth from '../helpers/auth';
 import {User} from '../models'
 export const actionCreators = {
+    getById,
     update,
     new:_new,
     lostPass,
@@ -16,13 +17,31 @@ export type Action = {
     error?:string;
     id?:string;
 }
+function getById(id : string) {
+    return (dispatch : (action : Action) => void) => {
+        dispatch(request());
 
-function update(user:User,userId:string) {
+        userService
+            .getById(id)
+            .then((user:any) => dispatch(success(user)), (error:any) => dispatch(failure(error)));
+    };
+
+    function request() {
+        return {type: userConsts.GET_REQUEST}
+    }
+    function success(user : User) {
+        return {type: userConsts.GET_SUCCESS, data: user}
+    }
+    function failure(error : string) {
+        return {type: userConsts.GET_FAILURE, error}
+    }
+}
+function update(user:User) {
     return (dispatch : (action : Action) => void) => {
         dispatch(request(user));
 
         userService
-            .update(user,userId)
+            .update(user)
             .then((user:User) => {
                 dispatch(success(user));
                 dispatch(alertActionCreators.success('Submit user successful'));

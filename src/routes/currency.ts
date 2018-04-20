@@ -4,9 +4,7 @@ import { Currency } from '../models/'
 const router = express.Router()
 
 router.get('/', async (req: express.Request, res: express.Response) => {
-  const currencys = await Currency.findAll({
-    attributes: ['id', 'currency']
-  })
+  const currencys = await Currency.findAll({})
 
   return res.send(currencys)
 })

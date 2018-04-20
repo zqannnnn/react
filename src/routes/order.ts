@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { consts } from '../config/static'
 import { authMiddleware } from '../middleware/auth'
-import { Currency, Order, User } from '../models/'
+import { Currency, Order } from '../models/'
 const router = express.Router()
 
 router.use(authMiddleware)

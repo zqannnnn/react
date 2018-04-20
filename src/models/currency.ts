@@ -18,14 +18,12 @@ import { Offer } from '.'
 
     @IsUUID(4)
     @PrimaryKey
-    @Default(DataType.UUIDV4)
-    @Column
-    public id: string
+    @Column({field: 'code'})
+    public code: string
 
-    @Unique
-    @Column({field: 'currency'})
-    public currency: string
-
-    @HasOne(() => Offer, 'currency_id')
-    public currencyId: string
+    @Column({field:'symbol'})
+    public symbol: string
+    
+    @Column({field:'rate'})
+    public rate: number
   }

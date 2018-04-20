@@ -73,34 +73,25 @@ ul.nav li{
     color: white;
     line-height: 200px;
 }
-.page>div{
-    margin-bottom: 30px
-}
 .page>.header{
+    padding: 15px;
+    font-weight: bold;
+    font-size: 25px;
     text-align: center;
 }
-.offers-container .header .title{
+.list-container{
+    margin-top: 30px;
+}
+.list-container .header .title{
     font-size:18px;
     font-weight: bold;
 }
-.offers-container .header .subtitle{
+.list-container .header .subtitle{
     display:flex;
     justify-content: space-between;
     color: #818182;
 }
-.offers-container .header a{
-    color: #818182;
-}
-.orders-container .header .title{
-    font-size:18px;
-    font-weight: bold;
-}
-.orders-container .header .subtitle{
-    display:flex;
-    justify-content: space-between;
-    color: #818182;
-}
-.orders-container .header a{
+.list-container .header a{
     color: #818182;
 }
 .control-btn{
@@ -259,7 +250,7 @@ ul.nav li{
     margin-left: 10px;
     padding: 5px;
 }
-.edit-page .lable-right{
+.edit-page .label-right{
     line-height: 38px;
     padding: 0 10px;
 }

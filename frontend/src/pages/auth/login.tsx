@@ -3,7 +3,8 @@ import { Link, Redirect,RouteComponentProps } from 'react-router-dom';
 import {connect,Dispatch} from 'react-redux';
 
 import {authActionCreators} from '../../actions';
-import {RootState} from '../../reducers'
+import {RootState} from '../../reducers';
+import {FormattedMessage} from 'react-intl';
 interface LoginProps  extends RouteComponentProps <{}> {
     dispatch: Dispatch<RootState>;
     processing: boolean;
@@ -55,29 +56,45 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
                     from: this.props.location
                 }
             }}/>):<div className="page login without-nav col-md-8 offset-md-2">
-            <div className="header">Login</div>
+            <div className="header">
+                <FormattedMessage id="pages.login" defaultMessage="Login"/>
+            </div>
             <form name="form" className="content-container" onSubmit={this.handleSubmit}>
                 <div className={'form-group' + (submitted && !email ? ' has-error' : '')}>
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">
+                        <FormattedMessage id="authFields.email" defaultMessage="Email"/>
+                    </label>
                     <input type="text" className="form-control" name="email" value={email} onChange={this.handleChange} />
                     {submitted && !email &&
-                        <div className="help-block">Email is required</div>
+                        <div className="help-block">
+                            <FormattedMessage id="authErrors.emailMissed" defaultMessage="Email is required"/>
+                        </div>
                     }
                 </div>
                 <div className={'form-group' + (submitted && !password ? ' has-error' : '')}>
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">
+                        <FormattedMessage id="authFields.pass" defaultMessage="Password"/>
+                    </label>
                     <input type="password" className="form-control" name="password" value={password} onChange={this.handleChange} />
                     {submitted && !password &&
-                        <div className="help-block">Password is required</div>
+                        <div className="help-block">
+                            <FormattedMessage id="authErrors.passMissed" defaultMessage="Password is required"/>
+                        </div>
                     }
                 </div>
                 <div className="form-group">
-                    <button className="btn btn-primary">Login</button>
+                    <button className="btn btn-primary">
+                        <FormattedMessage id="authButtons.login" defaultMessage="Login"/>
+                    </button>
                     {processing &&
                         <i className="fa fa-spinner" aria-hidden="true"></i>
                     }
-                    <Link to="/lost/pass" className="btn">Forget password?</Link>
-                    <Link to="/register" className="btn">Register</Link>
+                    <Link to="/lost/pass" className="btn">
+                        <FormattedMessage id="authButtons.forgetPass" defaultMessage="Forget password?"/>
+                    </Link>
+                    <Link to="/register" className="btn">
+                        <FormattedMessage id="authButtons.register" defaultMessage="Register"/>
+                    </Link>
                 </div>
                 
             </form>

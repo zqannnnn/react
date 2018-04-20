@@ -7,7 +7,7 @@ import {RootState} from '../../reducers';
 
 interface LostPassProps {
     dispatch : Dispatch < RootState >;
-    submiting : boolean;
+    processing : boolean;
 }
 interface LostPassState {
     email : string;
@@ -49,7 +49,7 @@ class LostPassPage extends React.Component < LostPassProps,LostPassState > {
     }
 
     render() {
-        const {submiting} = this.props;
+        const {processing} = this.props;
         const {email, submitted} = this.state;
         return (
             <div className="page col-md-8 offset-md-2 without-nav">
@@ -70,7 +70,7 @@ class LostPassPage extends React.Component < LostPassProps,LostPassState > {
                     </div>
                     <div className="form-group">
                         <button className="btn btn-primary">Reset Password</button>
-                        {submiting && <img
+                        {processing && <img
                             src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
 }
                         <Link to="/login" className="btn btn-link">Back to login</Link>
@@ -83,9 +83,9 @@ class LostPassPage extends React.Component < LostPassProps,LostPassState > {
 }
 
 function mapStateToProps(state : RootState) {
-    const {submiting} = state.user;
+    const {processing} = state.user;
 
-    return {submiting};
+    return {processing};
 }
 
 const connectedLostPassPage = connect(mapStateToProps)(LostPassPage);

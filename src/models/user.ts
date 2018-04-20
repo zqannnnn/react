@@ -14,9 +14,11 @@ import {
   PrimaryKey,
   Table,
   Unique,
-  UpdatedAt
+  UpdatedAt,
+  ForeignKey,
+  BelongsTo
 } from 'sequelize-typescript'
-import { Offer, Order } from '.'
+import { Offer, Order,Currency } from './'
 import { consts } from '../config/static'
 @Table({
   tableName: 'user',
@@ -41,12 +43,15 @@ export class User extends Model<User> {
   @Column
   public email: string
 
-  @Column({ field: 'user_name' })
-  public userName: string
-
   @Default(true)
   @Column({ field: 'is_active' })
   public isActive: boolean
+
+  @Column({ field: 'first_name' })
+  public firstName: string
+
+  @Column({ field: 'last_name' })
+  public lastName: string
 
   @Column
   public password: string
@@ -67,6 +72,13 @@ export class User extends Model<User> {
 
   @HasMany(() => Offer, 'user_id')
   public offers: Offer[]
+
+  @ForeignKey(() => Currency)
+  @Column({field: 'prefered_currency_code'})
+  public preferedCurrencyCode: string
+
+  @BelongsTo(() => Currency,'prefered_currency')
+  public preferedCurrency: Currency
 
   // class methods
   @BeforeUpdate

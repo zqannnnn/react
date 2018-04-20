@@ -34,7 +34,7 @@ module.exports = (app, passport) => {
       }
       // Generate a JSON response reflecting authentication status
       if (!user) {
-        return res.send(401, { error: 'Incorrect email or password.' });
+        return res.status(401).send({ error: 'Incorrect email or password.' });
       }
       const data = {
         token: jwt.sign(user, app.get('secretKey'), { expiresIn }),

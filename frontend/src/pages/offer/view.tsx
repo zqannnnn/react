@@ -111,7 +111,7 @@ class ViewPage extends React.Component < OfferProps, OfferState > {
                     <div className="label">
                         <FormattedMessage id="itemFeilds.price" defaultMessage="Price"/>
                     </div>
-                    <div className="detail">{offer.price||"null"}{offer.currency?offer.currency.currency:''}/KG</div>
+                    <div className="detail">{offer.price||"null"}{offer.currencyCode}/KG</div>
                 </div>
                 <div className="group">
                     <div className="label">
@@ -164,4 +164,5 @@ function mapStateToProps(state:RootState) {const {offer} = state;
     const {offerData} = offer;
     return { offer:offerData};
 }
-const connectedViewPage = connect(mapStateToProps)(ViewPage); export {connectedViewPage as ViewPage}
+const connectedViewPage = connect(mapStateToProps)(ViewPage); 
+export {connectedViewPage as ViewPage}

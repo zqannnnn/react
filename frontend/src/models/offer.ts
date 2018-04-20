@@ -21,8 +21,8 @@ export interface Offer {
   marbleScore?:number;
   quantity?:number;
   price?:number;
-  currencyId?:string;
   currency?:Currency;
+  currencyCode?:string;
   trimmings?:number;
   images?:Image[];
   cancelling?:boolean;

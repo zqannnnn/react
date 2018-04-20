@@ -6,6 +6,7 @@ import {userActionCreators} from '../../actions';
 import {RootState} from '../../reducers';
 import {User} from '../../models'
 import {userConsts} from '../../constants'
+import {FormattedMessage} from 'react-intl';
 interface RegisterProps{
     dispatch: Dispatch < RootState >;
     processing: boolean;
@@ -13,7 +14,8 @@ interface RegisterProps{
 interface RegisterState {
     user : {
         email: string;
-        userName: string;
+        firstName: string;
+        lastName: string;
         password: string;
         rePassword: string;
         userType:number
@@ -29,7 +31,8 @@ class RegisterPage extends React.Component < RegisterProps,RegisterState > {
         this.state = {
             user: {
                 email: '',
-                userName: '',
+                firstName: '',
+                lastName:'',
                 password: '',
                 rePassword: '',
                 userType:userConsts.USER_TYPE_NORMAL
@@ -76,9 +79,9 @@ class RegisterPage extends React.Component < RegisterProps,RegisterState > {
 
         this.setState({submitted: true});
         const {dispatch} = this.props;
-        const {email,userName,password,rePassword,userType} = this.state.user;
-        if (email && userName && password && rePassword && password === rePassword) {
-            let newUser:User = {email,userName,password,userType,isActive:true}    
+        const {email,firstName,lastName,password,rePassword,userType} = this.state.user;
+        if (email && firstName && password && rePassword && password === rePassword) {
+            let newUser:User = {email,firstName,lastName,password,userType,isActive:true}    
             dispatch(userActionCreators.new(newUser));
         }
     }
@@ -90,48 +93,82 @@ class RegisterPage extends React.Component < RegisterProps,RegisterState > {
             <div className="page col-md-8 offset-md-2">
                 <div className="header">Register User</div>
                 <form name="form" onSubmit={this.handleSubmit}>
-                    <div
-                        className={'form-group' + (submitted && !user.email
+                    <div className={'form-group' + (submitted && !user.email
                         ? ' has-error'
                         : '')}>
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="email">
+                            <FormattedMessage id="authFields.email" defaultMessage="Email"/>
+                        </label>
                         <input
                             type="text"
                             className="form-control"
                             name="email"
                             value={user.email||''}
-                            onChange={this.handleChange}/> {submitted && !user.email && <div className="invalid-feedback">Email is required</div>
-}
+                            onChange={this.handleChange}/> 
+                        {submitted && !user.email && 
+                            <div className="invalid-feedback">
+                                <FormattedMessage id="authErrors.emailMissed" defaultMessage="Email is required"/>
+                            </div>
+                        }
                     </div>
-                    <div
-                        className={'form-group' + (submitted && !user.userName
+                    <div className={'form-group' + (submitted && !user.firstName
                         ? ' has-error'
                         : '')}>
-                        <label htmlFor="username">Username</label>
+                        <label htmlFor="firstName">
+                        <FormattedMessage id="authFields.firstName" defaultMessage="First Name"/>
+                        Username</label>
                         <input
                             type="text"
                             className="form-control"
-                            name="userName"
-                            value={user.userName||''}
-                            onChange={this.handleChange}/> {submitted && !user.userName && <div className="invalid-feedback">Username is required</div>
-}
+                            name="firstName"
+                            value={user.firstName||''}
+                            onChange={this.handleChange}/> 
+                        {submitted && !user.firstName && 
+                            <div className="invalid-feedback">
+                                <FormattedMessage id="authErrors.firstNameMissed" defaultMessage="First Name is required"/>
+                            </div>
+                        }
                     </div>
-                    <div
-                        className={'form-group' + (submitted && !user.password
+                    <div className={'form-group' + (submitted && !user.firstName
                         ? ' has-error'
                         : '')}>
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="lastName">
+                            <FormattedMessage id="authFields.lastName" defaultMessage="Last Name"/>
+                        </label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            name="lastName"
+                            value={user.lastName||''}
+                            onChange={this.handleChange}/> 
+                        {submitted && !user.lastName && 
+                            <div className="invalid-feedback">
+                                <FormattedMessage id="authErrors.lastNameMissed" defaultMessage="Last Name is required"/>
+                            </div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !user.password
+                        ? ' has-error'
+                        : '')}>
+                        <label htmlFor="password">
+                            <FormattedMessage id="authFields.password" defaultMessage="Password"/>
+                        </label>
                         <input
                             type="password"
                             className="form-control"
                             name="password"
                             value={user.password||''}
-                            onChange={this.handleChange}/> {submitted && !user.password && <div className="invalid-feedback">Password is required</div>
-}
+                            onChange={this.handleChange}/> 
+                            {submitted && !user.password && 
+                                <div className="invalid-feedback">
+                                    <FormattedMessage id="authErrors.password" defaultMessage="Password is required"/>
+                                </div>
+                            }
                     </div>
-                    <div
-                        className='form-group'>
-                        <label htmlFor="rePassword">Confirm Password</label>
+                    <div className='form-group'>
+                        <label htmlFor="rePassword">
+                            <FormattedMessage id="authFields.rePassword" defaultMessage="Confirm Password"/>
+                        </label>
                         <input
                             type="password"
                             className={"form-control"+ (submitted && !user.rePassword || confirmFocused && user.rePassword != user.password || submitted && user.rePassword != user.password
@@ -141,13 +178,21 @@ class RegisterPage extends React.Component < RegisterProps,RegisterState > {
                             value={user.rePassword||''}
                             onFocus={this.onFocusConfirm}
                             onChange={this.handleChange}/> {user.password != user.rePassword && <div className="invalid-feedback">Password does not match the confirm password.</div>}
-                        {submitted && !user.rePassword && <div className="invalid-feedback">Comfirm Password is required</div>}
+                        {submitted && !user.rePassword && 
+                            <div className="invalid-feedback">
+                                <FormattedMessage id="authErrors.rePassword" defaultMessage="Comfirm Password is required"/>
+                            </div>
+                        }
                     </div>
                     <div className="form-group">
-                        <button className="btn btn-primary">Submit</button>
+                        <button className="btn btn-primary">
+                            <FormattedMessage id="authButtons.submit" defaultMessage="Submit"/>
+                        </button>
                         {processing && <i className="fa fa-spinner" aria-hidden="true"></i>
 }
-                        <Link to="/" className="btn btn-link">Cancel</Link>
+                        <Link to="/" className="btn btn-link">
+                            <FormattedMessage id="authButtons.cancel" defaultMessage="Cancel"/>
+                        </Link>
                     </div>
                 </form>
             </div>

@@ -111,7 +111,7 @@ class ViewPage extends React.Component < OrderProps, OrderState > {
                     <div className="label">
                         <FormattedMessage id="itemFeilds.price" defaultMessage="Price"/>
                     </div>
-                    <div className="detail">{order.price||"null"}{order.currency?order.currency.currency:''}</div>
+                    <div className="detail">{order.price||"null"}{order.currencyCode}</div>
                 </div>
                 <div className="group">
                     <div className="label">

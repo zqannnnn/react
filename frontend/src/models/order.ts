@@ -22,8 +22,8 @@ export interface Order {
   marbleScore?:number;
   quantity?:number;
   price?:number;
-  currencyId?:string;
-  currency?:Currency;
+  currencyCode?:string;
+  currency?:Currency
   trimmings?:number;
   offerId?:string;
   cancelling?:boolean;

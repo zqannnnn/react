@@ -96,8 +96,8 @@ export class Order extends Model < Order > {
   public trimmings: number
 
   @ForeignKey(() => Currency)
-  @Column({field: 'currency_id'})
-  public currencyId: string
+  @Column({field: 'currency_code'})
+  public currencyCode: string
 
   @BelongsTo(() => Currency)
   public currency: Currency

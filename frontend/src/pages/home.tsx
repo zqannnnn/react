@@ -44,7 +44,7 @@ class HomePage extends React.Component<HomeProps> {
                     <div className="banner-bg"></div>
                     <div className="title">All Offer</div>
                 </div>
-                <div className="offers-container col-md-8 offset-md-2">
+                <div className="list-container col-md-8 offset-md-2">
                     <div className="header">
                         <div className="title">New Offers</div>
                         <div className="subtitle">
@@ -58,7 +58,7 @@ class HomePage extends React.Component<HomeProps> {
                         )}
                     </div>
                 </div>
-                <div className="orders-container col-md-8 offset-md-2">
+                <div className="list-container col-md-8 offset-md-2">
                     <div className="header">
                         <div className="title">New Orders</div>
                         <div className="subtitle">
