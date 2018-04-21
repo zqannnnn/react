@@ -3,10 +3,12 @@ import { DataTypeJSONB } from 'sequelize'
 import {
   BeforeCreate,
   BeforeUpdate,
+  BelongsTo,
   Column,
   CreatedAt,
   DataType,
   Default,
+  ForeignKey,
   HasMany,
   IsEmail,
   IsUUID,
@@ -14,12 +16,10 @@ import {
   PrimaryKey,
   Table,
   Unique,
-  UpdatedAt,
-  ForeignKey,
-  BelongsTo
+  UpdatedAt
 } from 'sequelize-typescript'
-import { Offer, Order,Currency } from './'
 import { consts } from '../config/static'
+import { Currency, Offer, Order } from './'
 @Table({
   tableName: 'user',
   underscored: true
@@ -77,8 +77,15 @@ export class User extends Model<User> {
   @Column({field: 'prefered_currency_code'})
   public preferedCurrencyCode: string
 
-  @BelongsTo(() => Currency,'prefered_currency')
+  @BelongsTo(() => Currency, 'prefered_currency')
   public preferedCurrency: Currency
+
+  @Column
+  public desc: string
+
+  // feilds for company
+  @Column
+  public companyName: string
 
   // class methods
   @BeforeUpdate

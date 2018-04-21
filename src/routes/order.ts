@@ -1,15 +1,11 @@
 import * as express from 'express'
 import { consts } from '../config/static'
 import { authMiddleware } from '../middleware/auth'
+import { IRequest } from '../middleware/auth'
 import { Currency, Order } from '../models/'
 const router = express.Router()
 
 router.use(authMiddleware)
-
-interface IRequest extends express.Request {
-  userId: string
-  isAdmin: boolean
-}
 
 router.post('/new', async (req: IRequest, res: express.Response) => {
   try {

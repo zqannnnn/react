@@ -95,7 +95,7 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
             <div className="page col-md-8 offset-md-2">
                 <div className="header">User Profile</div>
                 <form name="form" onSubmit={this.handleSubmit}>
-                <div className='form-group'>
+                    <div className='form-group'>
                         <label htmlFor="fristName">
                             <FormattedMessage id="userFields.firstName" defaultMessage="First Name"/>
                         </label>

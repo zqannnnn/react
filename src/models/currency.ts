@@ -21,9 +21,9 @@ import { Offer } from '.'
     @Column({field: 'code'})
     public code: string
 
-    @Column({field:'symbol'})
+    @Column({field: 'symbol'})
     public symbol: string
-    
-    @Column({field:'rate'})
+
+    @Column({field: 'rate'})
     public rate: number
   }

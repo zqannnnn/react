@@ -4,9 +4,9 @@ import * as nodemailer from 'nodemailer'
 import * as qs from 'querystring'
 import { smtpConfig } from '../config/email'
 import { authMiddleware } from '../middleware/auth'
+import { IRequest } from '../middleware/auth'
 import { User } from '../models/user'
 import { makeRandomString } from '../util'
-
 const router = express.Router()
 
 const transporter = nodemailer.createTransport(smtpConfig)
@@ -58,9 +58,7 @@ router.post('/lost', async (req: express.Request, res: express.Response) => {
 })
 
 router.use(authMiddleware)
-interface IRequest extends express.Request {
-    userId: string
-}
+
 router.post('/reset', async (req: IRequest, res: express.Response) => {
     try {
         const user = await User.findOne({ where: { id: req.userId } })

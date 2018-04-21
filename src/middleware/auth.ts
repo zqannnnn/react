@@ -11,7 +11,7 @@ interface IDecodedObject {
 }
 
 // our middleware adds some stuff
-interface IRequest extends express.Request {
+export interface IRequest extends express.Request {
   isAdmin: boolean
   userId: string
 }

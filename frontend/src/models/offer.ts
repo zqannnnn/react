@@ -1,5 +1,5 @@
 import { Currency } from ".";
-export interface Offer {
+export interface Offer{
   id?:string;
   userId?:string;
   status?:number;

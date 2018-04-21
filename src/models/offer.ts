@@ -105,7 +105,6 @@ export class Offer extends Model<Offer> {
   @BelongsTo(() => Currency)
   public currency: Currency
 
-
   @HasMany(() => Image, 'offer_id')
   public images: Image[]
 

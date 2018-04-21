@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { authMiddleware } from '../middleware/auth'
+import { IRequest } from '../middleware/auth'
 import { User } from '../models'
-
 const router = express.Router()
 
 router.post('/new', async (req, res) => {
@@ -21,31 +21,27 @@ router.post('/new', async (req, res) => {
 
 router.use(authMiddleware)
 
-interface IRequest extends express.Request {
-    userId: string;
-    isAdmin:boolean;
-}
-router.get('/list', async (req:IRequest, res:express.Response) => {
-  if(req.isAdmin){
-    const users = await User.findAll({attributes:{ exclude: ['password'] }})
+router.get('/list', async (req: IRequest, res: express.Response) => {
+  if (req.isAdmin) {
+    const users = await User.findAll({attributes: { exclude: ['password'] }})
     return res.send(users)
   }
 })
 
 router.route('/:userId')
   .get(async (req: IRequest, res: express.Response) => {
-    if(req.params.userId!=req.userId||!req.isAdmin){
-      return res.status(500).send({error: 'Permission denied'})      
+    if (req.params.userId !== req.userId || !req.isAdmin) {
+      return res.status(500).send({error: 'Permission denied'})
     }
-    const user = await User.find({ where: { id: req.params.userId },attributes:{ exclude: ['password'] }})
+    const user = await User.find({ where: { id: req.params.userId }, attributes: { exclude: ['password'] }})
     if (!user) {
       return res.status(500).send({error: 'User does not exist'})
     }
     return res.send(user)
   })
   .put(async (req: IRequest, res: express.Response) => {
-    if(req.params.userId!=req.userId||!req.isAdmin){
-      return res.status(500).send({error: 'Permission denied'})      
+    if (req.params.userId !== req.userId || !req.isAdmin) {
+      return res.status(500).send({error: 'Permission denied'})
     }
     try {
       const user = await User.find({ where: { id: req.params.userId } })
@@ -60,9 +56,8 @@ router.route('/:userId')
     }
   })
   .delete(async (req: IRequest, res: express.Response) => {
-    console.log('delete was called')
-    if(req.params.userId!=req.userId||!req.isAdmin){
-      return res.status(500).send({error: 'Permission denied'})      
+    if (req.params.userId !== req.userId || !req.isAdmin) {
+      return res.status(500).send({error: 'Permission denied'})
     }
     try {
       const user = await User.find({ where: { id: req.params.userId } })
