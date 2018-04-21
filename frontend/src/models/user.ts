@@ -10,6 +10,6 @@ export interface User {
     userType?:number;
     deleting?:boolean;
     deleteError?:string;
-    preferedCurrencyId?:string;
+    preferedCurrencyCode?:string;
     preferedCurrency?:Currency;
   }

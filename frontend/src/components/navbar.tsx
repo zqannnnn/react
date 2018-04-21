@@ -43,6 +43,11 @@ class NavBar extends React.Component <NavProps> {
                             <FormattedMessage id="navbar.addOffer" defaultMessage="Add Offer"/>
                         </NavLink>
                     </li>
+                    <li className="nav-item">
+                        <NavLink exact to="/profile" className="nav-link" activeClassName="active">
+                            <FormattedMessage id="navbar.myProfile" defaultMessage="My Profile"/>
+                        </NavLink>
+                    </li>
                     {authInfo&&authInfo.isAdmin&&
                         <li className="nav-item">
                             <NavLink to="/admin/list" className="nav-link" activeClassName="active"><FormattedMessage id="navbar.adminList"  defaultMessage="Admin List"/></NavLink>

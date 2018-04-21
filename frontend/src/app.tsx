@@ -8,14 +8,15 @@ import {PrivateRoute,AdminRoute,NavBar} from './components';
 import {LoginPage,RegisterPage,LostPassPage,ResetPassPage} from './pages/auth';
 import {EditPage as OrderEditPage, ViewPage as OrderViewPage} from './pages/order';
 import {EditPage as OfferEditPage, ViewPage as OfferViewPage} from './pages/offer';
+import {ProfilePage} from './pages/user'
 import {AdminPage,HomePage,ListPage } from './pages';
 
 import {Alert} from './models/alert' 
-import { RootState } from './reducers/index'
+import { RootState } from './reducers'
 interface AppProps {
     dispatch: (action: any) => void;
     alert: Alert;
-  }
+}
 class App extends React.Component<AppProps,any> {
     constructor(props:AppProps) {
         super(props);
@@ -48,6 +49,7 @@ class App extends React.Component<AppProps,any> {
                                 <PrivateRoute path="/offer/new" component={OfferEditPage}/>
                                 <PrivateRoute path="/offer/edit/:id" component={OfferEditPage}/>
                                 <PrivateRoute path="/offer/:id" component={OfferViewPage}/>
+                                <PrivateRoute path="/profile" component={ProfilePage}/>
                                 <AdminRoute path="/admin" component={AdminPage}/>
                                 <Route path="/login" component={LoginPage}/>
                                 <Route path="/register" component={RegisterPage}/>

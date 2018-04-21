@@ -23,14 +23,14 @@ function getById(id : string) {
 
         userService
             .getById(id)
-            .then((user:any) => dispatch(success(user)), (error:any) => dispatch(failure(error)));
+            .then((user:User) => dispatch(success(user)), (error:any) => dispatch(failure(error)));
     };
 
     function request() {
         return {type: userConsts.GET_REQUEST}
     }
     function success(user : User) {
-        return {type: userConsts.GET_SUCCESS, data: user}
+        return {type: userConsts.GET_SUCCESS, user}
     }
     function failure(error : string) {
         return {type: userConsts.GET_FAILURE, error}
