@@ -6,8 +6,7 @@ export const offerService = {
     getById,
     getAll,
     cancell,
-    finish,
-    uploadImage
+    finish
 };
 function _new(offer:Offer) {
     const requestOptions = {
@@ -62,18 +61,7 @@ function getAll(option:{selectType:string}) {
     };
     return fetch('/offer/list?selectType='+option.selectType, requestOptions).then(handleResponse);
 }
-function uploadImage(file:File) {
-    const formData = new FormData();
-    formData.append('image',file)
-    const requestOptions = {
-        method: 'POST',
-        headers: {
-            ...authHeader()
-        },
-        body: formData
-    };
-    return fetch('/upload/image', requestOptions).then(handleResponse);
-}
+
 function handleResponse(response:Response) {
     if (!response.ok) {
         return Promise.reject(response.statusText);

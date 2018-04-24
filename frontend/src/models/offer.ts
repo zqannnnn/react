@@ -1,8 +1,10 @@
-import { Currency } from ".";
-export interface Offer{
+import { Currency,ListItem,Image } from ".";
+
+export class Offer implements ListItem{
   id?:string;
   userId?:string;
   status?:number;
+  itemType?:string;
   type?:string
   storage?:string;
   breed?:string;
@@ -27,7 +29,4 @@ export interface Offer{
   images?:Image[];
   cancelling?:boolean;
   cancellError?:string;
-}
-export interface Image{
-  path:string
 }

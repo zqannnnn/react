@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router-dom';
 import {connect, Dispatch} from 'react-redux';
-import {offerActionCreators,categoryActionCreators,currencyActionCreators} from '../../actions'
+import {offerActionCreators,categoryActionCreators,currencyActionCreators,uploadActionCreators} from '../../actions'
 import {Offer} from '../../models'
 import {Category, CategoryDetails,Currency} from '../../models'
 import {RootState} from '../../reducers'
@@ -77,6 +77,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                         images: [{path:image}]
                     }
                 });
+            this.props.dispatch(uploadActionCreators.clear());
         }
     }
     handleSelectChange = (e : React.FormEvent < HTMLSelectElement >) => {
@@ -102,15 +103,16 @@ class EditPage extends React.Component < OfferProps, OfferState > {
     }
     handleUpload = (e : React.FormEvent < HTMLInputElement >) => {
         const {files} = e.currentTarget
-        let screenshot = files
+        let image = files
             ? files[0]
             : null
         this
             .props
-            .dispatch(offerActionCreators.uploadImage(screenshot))
+            .dispatch(uploadActionCreators.uploadImage(image))
     }
     handleSubmit = (event : React.FormEvent < HTMLFormElement >) => {
         event.preventDefault();
+        this.setState({submitted:true})
         const {offer, offerId} = this.state;
         const {dispatch} = this.props;
         if (offer.type&&offer.title) {
@@ -127,7 +129,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         const {images} = offer
         if (images){
             let newImages = images.filter((image:{path:string},index:number)=>{
-                return imageIndex!=imageIndex
+                return index!=imageIndex
             })
             this.setState({offer:{...offer,images:newImages}})
         }
@@ -148,6 +150,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         }
     render() {
         let {id, type, images,price,bone,title,quantity,primalCuts,brand,factoryNum,deliveryTerm,placeOfOrigin,fed,grainFedDays,trimmings} = this.state.offer;
+        let {submitted} = this.state
         let {editing, categorys, currencys, uploading} = this.props
         let options = null
         let currentCategory : Category = categorys&&categorys.filter(
@@ -177,7 +180,9 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="form-group col-md-12">
+                        <div className={'form-group col-md-12' + (submitted && !title
+                        ? ' has-error'
+                        : '')}>
                             <label>
                                 <FormattedMessage id="itemFields.title" defaultMessage="Title"/>
                             </label>
@@ -187,6 +192,10 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                 name="title"
                                 value={title}
                                 onChange={this.handleInputChange}/>
+                                {submitted && !title && 
+                                <div className="invalid-feedback">
+                                    <FormattedMessage id="itemErrors.missingTitle" defaultMessage="Title is required"/>
+                                </div>}
                         </div>
                         <div className="form-group col-md-4">
                             <label>
@@ -394,9 +403,9 @@ class EditPage extends React.Component < OfferProps, OfferState > {
             </div>
             ); } } 
 function mapStateToProps(state:RootState) {
-    const {offer, category,currency} = state;
-    const {editing, loading, offerData, image, uploading} = offer;
-    return {editing, categorys: category.items,currencys: currency.items, offerData, image, uploading};
+    const {offer, category,currency,upload} = state;
+    const {editing, loading, offerData} = offer;
+    return {editing, categorys: category.items,currencys: currency.items, offerData, image:upload.image, uploading:upload.uploading};
 }
 const connectedEditPage = connect(mapStateToProps)(EditPage); 
 export {connectedEditPage as EditPage}

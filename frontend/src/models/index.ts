@@ -1,6 +1,8 @@
 export { Alert } from './alert'
 export { Category,Details as CategoryDetails } from './category'
+export { ListItem } from './list-item'
 export { Offer } from './offer'
 export { Order } from './order'
+export { Image } from './image'
 export { User } from './user'
 export { Currency } from './currency'

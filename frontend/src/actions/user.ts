@@ -4,6 +4,10 @@ import {alertActionCreators } from '.';
 import {history} from '../helpers/history';
 import * as auth from '../helpers/auth';
 import {User} from '../models'
+import {Dispatch} from 'react-redux'
+import {ActionCreator} from 'redux'
+import {ThunkAction} from 'redux-thunk'
+import {RootState} from '../reducers'
 export const actionCreators = {
     getById,
     update,
@@ -16,6 +20,7 @@ export type Action = {
     user?:User;
     error?:string;
     id?:string;
+    licensePath?:string;
 }
 function getById(id : string) {
     return (dispatch : (action : Action) => void) => {

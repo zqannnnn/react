@@ -1,10 +1,11 @@
-import { Currency } from ".";
+import { Currency,ListItem } from ".";
 
-export interface Order {
+export class Order implements ListItem{
   id?:string;
   userId?:string;
   status?:number;
-  type?:string
+  itemType?:string;
+  type?:string;
   storage?:string;
   breed?:string;
   grade?:string;

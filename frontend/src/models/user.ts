@@ -1,4 +1,4 @@
-import { Currency } from ".";
+import { Currency,Image } from ".";
 export interface User {
     id?:string;
     firstName?:string;
@@ -12,4 +12,8 @@ export interface User {
     deleteError?:string;
     preferedCurrencyCode?:string;
     preferedCurrency?:Currency;
+    companyName?: string
+    companyAddress?: string
+    businessLicenses?: Image[]
+    companyAffirmed?: boolean;
   }

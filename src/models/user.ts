@@ -19,7 +19,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { consts } from '../config/static'
-import { Currency, Offer, Order } from './'
+import { Currency, Image, Offer, Order } from './'
 @Table({
   tableName: 'user',
   underscored: true
@@ -84,8 +84,17 @@ export class User extends Model<User> {
   public desc: string
 
   // feilds for company
-  @Column
+  @Column({ field: 'company_name' })
   public companyName: string
+
+  @Column({ field: 'company_adress' })
+  public companyAddress: string
+
+  @HasMany(() => Image, 'user_id')
+  public businessLicenses: Image[]
+
+  @Column({ field: 'company_affirmed' })
+  public companyAffirmed: string
 
   // class methods
   @BeforeUpdate

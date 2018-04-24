@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { authMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
-import { User } from '../models'
+import { Image, User } from '../models'
 const router = express.Router()
 
 router.post('/new', async (req, res) => {
@@ -13,6 +13,15 @@ router.post('/new', async (req, res) => {
       userType: req.body.userType
     })
     await user.save()
+    if (req.body.businessLicenses) {
+      req.body.businessLicenses.forEach((image: {path: string}) => {
+        const imageDb = new Image({
+          path: image.path,
+          userId: user.id
+        })
+        imageDb.save()
+      })
+    }
     return res.send({success: true})
   } catch (e) {
     return res.status(500).send({error: e.message})
@@ -33,7 +42,9 @@ router.route('/:userId')
     if (req.params.userId !== req.userId || !req.isAdmin) {
       return res.status(500).send({error: 'Permission denied'})
     }
-    const user = await User.find({ where: { id: req.params.userId }, attributes: { exclude: ['password'] }})
+    const user = await User.find({ where: { id: req.params.userId }, attributes: { exclude: ['password'] },
+      include: [{model: Image, attributes: ['path']}
+    ]})
     if (!user) {
       return res.status(500).send({error: 'User does not exist'})
     }
@@ -50,6 +61,16 @@ router.route('/:userId')
       }
       Object.keys(req.body).forEach((key: string) => user[key] = req.body[key])
       user.save()
+      await Image.destroy({where: {userId: req.params.userId}})
+      if (req.body.businessLicenses) {
+        req.body.businessLicenses.forEach((image: {path: string}) => {
+          const imageDb = new Image({
+            path: image.path,
+            userId: user.id
+          })
+          imageDb.save()
+        })
+      }
       return res.send({success: true})
     } catch (e) {
       return res.status(500).send({error: e.message})

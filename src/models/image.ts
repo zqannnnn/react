@@ -11,7 +11,7 @@ import {
     Table,
     UpdatedAt
   } from 'sequelize-typescript'
-import { Offer } from './offer'
+import { Offer, User } from '.'
 @Table({
     tableName: 'image',
     underscored: true
@@ -41,5 +41,9 @@ import { Offer } from './offer'
     @ForeignKey(() => Offer)
     @Column({field: 'offer_id'})
     public offerId: string
+
+    @ForeignKey(() => User)
+    @Column({field: 'user_id'})
+    public userId: string
 
   }

@@ -11,8 +11,6 @@ export type State = {
   error?:string;
   offerData?:Offer;
   items?:Array<Offer>;
-  uploading?:boolean;
-  image?:string;
 };
 export function offer(state:State ={} , action:OfferAction):State {
   switch (action.type) {
@@ -110,15 +108,6 @@ export function offer(state:State ={} , action:OfferAction):State {
       return {items: action.offers};
     case offerConsts.GETALL_FAILURE:
       return {error: action.error};
-    case offerConsts.UPLOAD_REQUEST:
-      return { uploading: true };
-    case offerConsts.UPLOAD_SUCCESS:
-      return {...state,
-        uploading: false,
-        image:action.imagePath
-      };
-    case offerConsts.UPLOAD_FAILURE:
-      return {error : action.error,uploading: false};
     default:
       return state
   }

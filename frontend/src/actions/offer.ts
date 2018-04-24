@@ -143,36 +143,12 @@ const getAll : ActionCreator < ThunkAction < void,RootState,void >> = (option:{s
         return {type: offerConsts.GETALL_FAILURE, error}
     }
 }
-const uploadImage: ActionCreator<ThunkAction<void, RootState, void>> = (file : File)=>{
-    return ((dispatch: Dispatch<Action>): void => {
-        dispatch(request());
 
-        offerService
-            .uploadImage(file)
-            .then((result:{path:string}) => {
-                dispatch(success(result.path));
-            }, (error:string) => {
-                dispatch(failure(error));
-                dispatch(alertActionCreators.error(error));
-            });
-    });
-
-    function request() : Action {
-        return {type: offerConsts.UPLOAD_REQUEST}
-    }
-    function success(imagePath : string) : Action {
-        return {type: offerConsts.UPLOAD_SUCCESS, imagePath}
-    }
-    function failure(error : string) : Action {
-        return {type: offerConsts.UPLOAD_FAILURE, error}
-    }
-}
 export const actionCreators = {
     new: _new,
     edit,
     getAll,
     getById,
     cancell,
-    finish,
-    uploadImage
+    finish
 };
