@@ -3,9 +3,7 @@ import {connect,Dispatch} from 'react-redux';
 import {offerActionCreators,orderActionCreators} from '../actions';
 import {RootState,OfferState,OrderState} from '../reducers'
 import {AuthInfo} from '../actions';
-import {Offer,Order} from '../models'
-import {Item as OfferItem} from './offer'
-import {Item as OrderItem} from './order'
+import {List} from '../components'
 interface AdminProps  {
     dispatch: Dispatch<RootState>;
     offer: OfferState;
@@ -43,25 +41,11 @@ class AdminPage extends React.Component<AdminProps> {
                     <div className="banner-bg"></div>
                     <div className="title">Finished Offers/Orders</div>
                 </div>
-                <div className="offers-container col-md-8 offset-md-2">
-                    <div className="header">
-                        <div className="title">Offers</div>
-                    </div>
-                    <div className="block-container" >
-                        {offer.items&&offer.items.map((item, index) =>
-                            <OfferItem key={index} offer={item} authInfo={authInfo} handleCancellOffer={this.handleCancellOffer} handleFinishOffer={this.handleFinishOffer}/>
-                        )}
-                    </div>
+                <div className="list-container col-md-8 offset-md-2">
+                    {offer.items&&<List items={offer.items} title="Offers"/>}
                 </div>
-                <div className="orders-container col-md-8 offset-md-2">
-                    <div className="header">
-                        <div className="title">Orders</div>
-                    </div>
-                    <div className="block-container" >
-                        {order.items&&order.items.map((item, index) =>
-                            <OrderItem key={index} order={item} authInfo={authInfo} handleCancellOrder={this.handleCancellOrder} handleFinishOrder={this.handleFinishOrder}/>
-                        )}
-                    </div>
+                <div className="list-container col-md-8 offset-md-2">
+                    {order.items&&<List items={order.items} title="Orders"/>}
                 </div>
             </div>
         );

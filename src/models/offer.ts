@@ -40,6 +40,9 @@ export class Offer extends Model<Offer> {
   @BelongsTo(() => User)
   public user: User
 
+  @Column({field: 'item_type'})
+  public itemType: string
+
   @Column
   public type: string
 

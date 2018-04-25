@@ -223,6 +223,9 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
                             </div>
                         </div>
                     </div>
+                    {user.companyAffirmed&&<div className="row">
+                    <FormattedMessage id="userTips.companyInfo" defaultMessage="Please fullfill company information for adding offer"/>
+                    </div>}
                     <div className="form-group">
                         <button className="btn btn-primary">Submit</button>
                         {processing && 

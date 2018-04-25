@@ -1,27 +1,27 @@
 import * as React from 'react';
 import {Link} from 'react-router-dom';
+import {connect,Dispatch} from 'react-redux';
+import {offerActionCreators,AuthInfo} from '../../actions';
+import {RootState,OfferState} from '../../reducers'
+import {Offer,ListItem} from '../../models'
 import {offerConsts} from '../../constants'
-import { AuthInfo } from '../../actions';
-import {Offer} from '../../models'
 interface ItemProps  {
-    key:number;
+    dispatch: Dispatch<RootState>;
     offer: Offer;
-    authInfo:AuthInfo;
-    handleCancellOffer:(id: string) => void;
-    handleFinishOffer:(id: string) => void;
+    authInfo:AuthInfo
 }
 class Item extends React.Component<ItemProps> {
     constructor(props:ItemProps) {
         super(props);
     }
 
-    handleCancell(id:string) {
-        this.props.handleCancellOffer(id);
+    handleCancell = (id:string) => {
+        this.props.dispatch(offerActionCreators.cancell(id));
     }
-    handleFinish(id:string) {
+    handleFinish = (id:string)=> {
         let r=confirm("Are you sure?")
         if(r)
-            this.props.handleFinishOffer(id);
+            this.props.dispatch(offerActionCreators.finish(id));
     }
     render() {
         const {offer,authInfo} = this.props;
@@ -67,4 +67,11 @@ class Item extends React.Component<ItemProps> {
         )
     }
 }
-export {Item};
+
+function mapStateToProps(state:RootState) {
+    const {auth} = state;
+    return {authInfo:auth.authInfo};
+}
+
+const connectedItem = connect(mapStateToProps)(Item);
+export {connectedItem as Item};

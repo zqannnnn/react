@@ -37,6 +37,9 @@ export class Order extends Model < Order > {
   @Column({field: 'offer_id'})
   public offerId: string
 
+  @Column({field: 'item_type'})
+  public itemType: string
+
   @Column
   public type: string
 

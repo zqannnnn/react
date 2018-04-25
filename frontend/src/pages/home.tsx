@@ -4,9 +4,7 @@ import {connect,Dispatch} from 'react-redux';
 import {offerActionCreators,orderActionCreators} from '../actions';
 import {RootState,OfferState,OrderState} from '../reducers'
 import {AuthInfo} from '../actions';
-import {Offer,Order} from '../models'
-import {Item as OfferItem} from './offer'
-import {Item as OrderItem} from './order'
+import {List as ListC} from '../components'
 interface HomeProps  {
     dispatch: Dispatch<RootState>;
     offer: OfferState;
@@ -52,11 +50,7 @@ class HomePage extends React.Component<HomeProps> {
                             <Link className="link" to={'/offers'}>👁 view all offers</Link>
                         </div>
                     </div>
-                    <div className="block-container" >
-                        {offer.items&&offer.items.map((item, index) =>
-                            <OfferItem key={index} offer={item} authInfo={authInfo} handleCancellOffer={this.handleCancellOffer} handleFinishOffer={this.handleFinishOffer}/>
-                        )}
-                    </div>
+                    {offer.items&&<ListC items={offer.items}/>}
                 </div>
                 <div className="list-container col-md-8 offset-md-2">
                     <div className="header">
@@ -66,11 +60,7 @@ class HomePage extends React.Component<HomeProps> {
                             <Link className="link" to={'/orders'}>👁 view all orders</Link>
                         </div>
                     </div>
-                    <div className="block-container" >
-                        {order.items&&order.items.map((item, index) =>
-                            <OrderItem key={index} order={item} authInfo={authInfo} handleCancellOrder={this.handleCancellOrder} handleFinishOrder={this.handleFinishOrder}/>
-                        )}
-                    </div>
+                    {order.items&&<ListC items={order.items}/>}
                 </div>
             </div>
         );

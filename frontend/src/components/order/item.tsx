@@ -1,27 +1,26 @@
 import * as React from 'react';
 import {Link} from 'react-router-dom';
-import {orderConsts} from '../../constants';
-import {AuthInfo} from '../../actions';
-import {Order} from '../../models'
+import {connect,Dispatch} from 'react-redux';
+import {orderActionCreators,AuthInfo} from '../../actions';
+import {RootState,OrderState} from '../../reducers'
+import {Order,ListItem} from '../../models'
+import {orderConsts} from '../../constants'
 interface ItemProps  {
-    key:number;
+    dispatch: Dispatch<RootState>;
     order: Order;
     authInfo:AuthInfo;
-    handleCancellOrder:(id: string) => void;
-    handleFinishOrder:(id: string) => void;
 }
 class Item extends React.Component<ItemProps> {
     constructor(props:ItemProps) {
         super(props);
     }
-
-    handleCancell(id:string) {
-        this.props.handleCancellOrder(id);
+    handleCancell = (id:string) => {
+        this.props.dispatch(orderActionCreators.cancell(id));
     }
-    handleFinish(id:string) {
+    handleFinish = (id:string)=> {
         let r=confirm("Are you sure?")
         if(r)
-            this.props.handleFinishOrder(id);
+            this.props.dispatch(orderActionCreators.finish(id));
     }
     render() {
         const {order,authInfo} = this.props;
@@ -63,4 +62,11 @@ class Item extends React.Component<ItemProps> {
     }
 }
 
-export {Item};
+
+function mapStateToProps(state:RootState) {
+    const {auth} = state;
+    return {authInfo:auth.authInfo};
+}
+
+const connectedItem = connect(mapStateToProps)(Item);
+export {connectedItem as Item};
