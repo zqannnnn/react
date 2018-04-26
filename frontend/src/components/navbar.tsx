@@ -50,7 +50,7 @@ class NavBar extends React.Component <NavProps> {
                     </li>
                     {authInfo&&authInfo.isAdmin&&
                         <li className="nav-item">
-                            <NavLink to="/admin/list" className="nav-link" activeClassName="active"><FormattedMessage id="navbar.adminList"  defaultMessage="Admin List"/></NavLink>
+                            <NavLink to="/admin" className="nav-link" activeClassName="active"><FormattedMessage id="navbar.adminList"  defaultMessage="Admin"/></NavLink>
                         </li>}
                     <li className="nav-item">
                         <NavLink to="/login" className="nav-link" activeClassName="active" onClick={this.logout()}>{authInfo?<FormattedMessage id="navbar.logout" defaultMessage="Logout"/>:<FormattedMessage id="navbar.login" defaultMessage="Login"/>}</NavLink>

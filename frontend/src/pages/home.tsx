@@ -22,18 +22,6 @@ class HomePage extends React.Component<HomeProps> {
         this.props
             .dispatch(orderActionCreators.getAll({selectType:'all'}));
     }
-    handleCancellOffer = (id:string) => {
-        this.props.dispatch(offerActionCreators.cancell(id));
-    }
-    handleFinishOffer = (id:string)=> {
-        this.props.dispatch(offerActionCreators.finish(id));
-    }
-    handleCancellOrder = (id:string) => {
-        this.props.dispatch(orderActionCreators.cancell(id));
-    }
-    handleFinishOrder = (id:string)=> {
-        this.props.dispatch(orderActionCreators.finish(id));
-    }
     render() {
         const {authInfo,offer,order} = this.props;
         return (

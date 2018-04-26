@@ -49,8 +49,8 @@ class EditPage extends React.Component < OrderProps, OrderState > {
         if (orderId && orderData && !submitted) {
             this.setState({
                 order: {
-                    ...order,
-                    ...orderData
+                    ...orderData,
+                    ...order
                 }
             });
         }

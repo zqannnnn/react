@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import {history} from './helpers/history';
 import {actionCreators as alertActions} from './actions/alert';
-import {PrivateRoute,AdminRoute,NavBar} from './components';
+import {PrivateRoute,AdminRoute,NavBar,Lightbox} from './components';
 import {LoginPage,RegisterPage,LostPassPage,ResetPassPage} from './pages/auth';
 import {EditPage as OrderEditPage, ViewPage as OrderViewPage} from './pages/order';
 import {EditPage as OfferEditPage, ViewPage as OfferViewPage} from './pages/offer';
@@ -12,10 +12,11 @@ import {ProfilePage} from './pages/user'
 import {AdminPage,HomePage,ListPage } from './pages';
 
 import {Alert} from './models/alert' 
-import { RootState } from './reducers'
+import { RootState,LightboxState } from './reducers'
 interface AppProps {
     dispatch: (action: any) => void;
     alert: Alert;
+    lightbox:LightboxState
 }
 class App extends React.Component<AppProps,any> {
     constructor(props:AppProps) {
@@ -29,12 +30,13 @@ class App extends React.Component<AppProps,any> {
     }
 
     render() {
-        const {alert} = this.props;
+        const {alert,lightbox} = this.props;
         return (
             <div>
                 <Router history={history}>
                         <div className="">
                             <NavBar/>
+                            {lightbox.showing&&<Lightbox />}
                             {alert.message && <div className={`alert ${alert.type}`}>{alert.message}</div>}
                             <Switch>
                                 <PrivateRoute exact path="/" component={HomePage}/>
@@ -64,8 +66,8 @@ class App extends React.Component<AppProps,any> {
 }
 
 function mapStateToProps(state:RootState) {
-    const {alert} = state;
-    return {alert};
+    const {alert,lightbox} = state;
+    return {alert,lightbox};
 }
 
 export default connect(mapStateToProps)(App);

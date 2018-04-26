@@ -17,7 +17,7 @@ class List extends React.Component<ListProps> {
     render() {
         const {items,title} = this.props;
         return (
-            <div className="offers-container">
+            <div>
                 {title&&<div className="header">
                         <div className="title">{title}</div>
                     </div>}

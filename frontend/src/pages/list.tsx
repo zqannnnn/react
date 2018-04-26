@@ -8,7 +8,6 @@ interface ListProps  {
     dispatch: Dispatch<RootState>;
     offer: OfferState;
     order:OrderState;
-    authInfo:AuthInfo;
     selectType:string;
     listType:string;
 }
@@ -26,16 +25,8 @@ class List extends React.Component<ListProps> {
                 .props
                 .dispatch(orderActionCreators.getAll({selectType:this.props.selectType}));
     }
-
-    handleCancellOffer = (id:string) => {
-        this.props.dispatch(offerActionCreators.cancell(id));
-    }
-    handleFinishOffer = (id:string)=> {
-        this.props.dispatch(offerActionCreators.finish(id));
-    }
-    
     render() {
-        const {offer,order,authInfo,listType,selectType} = this.props;
+        const {offer,order,listType,selectType} = this.props;
         return (
             <div className="page">
                 <div className="banner">
@@ -55,8 +46,8 @@ class List extends React.Component<ListProps> {
 }
 
 function mapStateToProps(state:RootState) {
-    const {offer,order,auth} = state;
-    return {offer,order,authInfo:auth.authInfo};
+    const {offer,order} = state;
+    return {offer,order};
 }
 
 const connectedList = connect(mapStateToProps)(List);

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router-dom';
 import {connect, Dispatch} from 'react-redux';
-import {offerActionCreators,categoryActionCreators,currencyActionCreators,uploadActionCreators} from '../../actions'
+import {offerActionCreators,categoryActionCreators,currencyActionCreators,uploadActionCreators,lightboxActionCreators} from '../../actions'
 import {Offer} from '../../models'
 import {Category, CategoryDetails,Currency} from '../../models'
 import {RootState} from '../../reducers'
@@ -51,8 +51,8 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         if (offerId && offerData && !submitted) {
             this.setState({
                 offer: {
-                    ...offer,
-                    ...offerData
+                    ...offerData,
+                    ...offer
                 }
             });
         }
@@ -135,6 +135,10 @@ class EditPage extends React.Component < OfferProps, OfferState > {
             this.setState({offer:{...offer,images:newImages}})
         }
     }
+    openLightbox = (images:string[],index:number)=>{
+            this.props.dispatch(lightboxActionCreators.open(images,index))
+        
+      }
     //for render select input
     renderSelect(optionItems : Array < string >, field : keyof Offer) {
         return (
@@ -157,7 +161,13 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         let currentCategory : Category = categorys&&categorys.filter(
             (category:Category)=>{
                 return category.type===type})[0]
-        
+        let imagePaths: string []
+        if(images){
+            imagePaths = images.map(image=>image.path)
+        }else{
+            imagePaths = []
+        }
+            
         return (
             <div className="col-md-10 offset-md-1 edit-page">
                 <h2 className="header">{id? 
@@ -377,11 +387,11 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                 <FormattedMessage id="itemFields.images" defaultMessage="Images"/>
                             </label>
                             <div className="images-container">
-                                {images&&images.map((image, index) => <div key={index} className="image-wrapper">
+                                {imagePaths.map((image, index) => <div key={index} className="image-wrapper">
                                     <i className="fa fa-times-circle remove-icon"  aria-hidden="true" onClick = {()=>{
                                             this.handleDeltetImage(index)
                                         }}></i>
-                                    <img className="image" src={image.path}/>
+                                    <img className="image" src={image} onClick={()=>this.openLightbox(imagePaths,index)}/>
                                 </div>)}
                                 <div className="image-add">
                                     <i className="fa fa-plus-circle add-icon" aria-hidden="true"></i>

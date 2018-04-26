@@ -8,7 +8,6 @@ interface AdminProps  {
     dispatch: Dispatch<RootState>;
     offer: OfferState;
     order:OrderState;
-    authInfo:AuthInfo;
 }
 
 class AdminPage extends React.Component<AdminProps> {
@@ -21,20 +20,8 @@ class AdminPage extends React.Component<AdminProps> {
         this.props
             .dispatch(orderActionCreators.getAll({selectType:'finished'}));
     }
-    handleCancellOffer = (id:string) => {
-        this.props.dispatch(offerActionCreators.cancell(id));
-    }
-    handleFinishOffer = (id:string)=> {
-        this.props.dispatch(offerActionCreators.finish(id));
-    }
-    handleCancellOrder = (id:string) => {
-        this.props.dispatch(orderActionCreators.cancell(id));
-    }
-    handleFinishOrder = (id:string)=> {
-        this.props.dispatch(orderActionCreators.finish(id));
-    }
     render() {
-        const {authInfo,offer,order} = this.props;
+        const {offer,order} = this.props;
         return (
             <div className="page">
                 <div className="banner">
@@ -53,8 +40,8 @@ class AdminPage extends React.Component<AdminProps> {
 }
 
 function mapStateToProps(state:RootState) {
-    const {auth,offer,order} = state;
-    return {authInfo:auth.authInfo,offer,order};
+    const {offer,order} = state;
+    return {offer,order};
 }
 
 const connectedHomePage = connect(mapStateToProps)(AdminPage);
