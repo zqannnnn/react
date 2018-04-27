@@ -135,6 +135,7 @@ const getAll : ActionCreator < ThunkAction < void,RootState,void >> = (option:{s
         return {type: orderConsts.GETALL_REQUEST}
     }
     function success(orders : Array < Order >) : Action {
+        orders.forEach(order=>order.itemType="Order")
         return {type: orderConsts.GETALL_SUCCESS, orders}
     }
     function failure(error : string) : Action {

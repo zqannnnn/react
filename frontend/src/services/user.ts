@@ -10,9 +10,17 @@ export const userService = {
     update,
     delete: _delete,
     lostPass,
-    resetPass
+    resetPass,
+    listUnconfirmedCompanies
 };
+function listUnconfirmedCompanies(){
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
 
+    return fetch('/user/unconfirmed/list', requestOptions).then(handleResponse);
+}
 function login(email:string, password:string) {
     const requestOptions = {
         method: 'POST',

@@ -1,6 +1,8 @@
-import { Currency,Image } from ".";
-export interface User {
+import { Currency,Image,ListItem } from ".";
+
+export class User implements ListItem {
     id?:string;
+    itemType?:string;
     firstName?:string;
     lastName?:string;
     password?:string;
@@ -15,5 +17,6 @@ export interface User {
     companyName?: string
     companyAddress?: string
     businessLicenses?: Image[]
-    companyAffirmed?: boolean;
+    companyInfoFilled?:boolean;
+    companyConfirmed?: boolean;
   }

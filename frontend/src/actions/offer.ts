@@ -134,9 +134,11 @@ const getAll : ActionCreator < ThunkAction < void,RootState,void >> = (option:{s
     });
 
     function request() : Action {
+        
         return {type: offerConsts.GETALL_REQUEST}
     }
     function success(offers : Array < Offer >) : Action {
+        offers.forEach(offer=>offer.itemType="Offer")
         return {type: offerConsts.GETALL_SUCCESS, offers}
     }
     function failure(error : string) : Action {

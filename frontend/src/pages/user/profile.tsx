@@ -107,7 +107,11 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
         event.preventDefault();
 
         this.setState({submitted: true});
-        this.props.dispatch(userActionCreators.update(this.state.user));
+        let user = this.state.user
+        if(user.companyName){
+            user.companyInfoFilled = true
+        }
+        this.props.dispatch(userActionCreators.update(user));
     }
     //for render select input
     renderCurrencySelect(optionItems :  Currency[]) {
@@ -223,8 +227,8 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
                             </div>
                         </div>
                     </div>
-                    {user.companyAffirmed&&<div className="row">
-                    <FormattedMessage id="userTips.companyInfo" defaultMessage="Please fullfill company information for adding offer"/>
+                    {user.companyConfirmed&&<div className="row">
+                        <FormattedMessage id="userTips.companyInfo" defaultMessage="Please fullfill company information for adding offer"/>
                     </div>}
                     <div className="form-group">
                         <button className="btn btn-primary">Submit</button>

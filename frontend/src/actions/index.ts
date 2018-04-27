@@ -7,3 +7,4 @@ export { actionCreators as currencyActionCreators, Action as CurrencyAction } fr
 export { actionCreators as authActionCreators, Action as AuthAction, AuthInfo } from './auth'
 export { actionCreators as uploadActionCreators, Action as UploadAction} from './upload'
 export { actionCreators as lightboxActionCreators, Action as LightboxAction} from './lightbox'
+export { actionCreators as adminActionCreators, Action as AdminAction} from './admin'

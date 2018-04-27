@@ -34,6 +34,19 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   if (req.isAdmin) {
     const users = await User.findAll({attributes: { exclude: ['password'] }})
     return res.send(users)
+  } else {
+    return res.status(500).send({error: 'Permission denied'})
+  }
+})
+router.get('/unconfirmed/list', async (req: IRequest, res: express.Response) => {
+  if (req.isAdmin) {
+    const users = await User.findAll({
+      attributes: { exclude: ['password'] },
+      where: {companyConfirmed: false, companyInfoFilled: true}
+    })
+    return res.send(users)
+  } else {
+    return res.status(500).send({error: 'Permission denied'})
   }
 })
 

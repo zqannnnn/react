@@ -26,8 +26,7 @@ class EditPage extends React.Component < OrderProps, OrderState > {
         this.state = {
             submitted: false,
             order: {
-                type: "Beef",
-                itemType:"Order"
+                type: "Beef"
             }
         };
     }

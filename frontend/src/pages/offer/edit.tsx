@@ -28,8 +28,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         this.state = {
             submitted: false,
             offer: {
-                type: "Beef",
-                itemType:"Offer"
+                type: "Beef"
             }
         };
     }

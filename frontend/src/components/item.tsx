@@ -6,6 +6,7 @@ import {AuthInfo} from '../actions';
 import {Offer,Order,ListItem} from '../models'
 import {Item as OfferItem} from './offer/item'
 import {Item as OrderItem} from './order/item'
+import {Item as CompanyItem} from './company/item'
 interface ItemProps  {
     dispatch: Dispatch<RootState>;
     key:number;
@@ -15,10 +16,25 @@ class Item extends React.Component<ItemProps> {
     constructor(props:ItemProps) {
         super(props);
     }
-    render() {
+    renderItem = (type:string)=>{
         const item = this.props.item
+        switch (type){
+            case "Offer":
+                return <OfferItem offer={item}/>;
+            case "Order":
+                return <OrderItem order={item}/>;
+            case "Company":
+                return <CompanyItem company={item}/>;
+            default:
+                break;
+        }
+    }
+    render() {
+        let itemType = this.props.item.itemType
         return (
-            item.itemType==="Offer"?<OfferItem offer={item}/>:<OrderItem order={item}/>
+            <div>
+                {itemType&&this.renderItem(itemType)}
+            </div>
         )
     }
 }
