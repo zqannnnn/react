@@ -135,9 +135,8 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         }
     }
     openLightbox = (images:string[],index:number)=>{
-            this.props.dispatch(lightboxActionCreators.open(images,index))
-        
-      }
+        this.props.dispatch(lightboxActionCreators.open(images,index))
+    }
     //for render select input
     renderSelect(optionItems : Array < string >, field : keyof Offer) {
         return (

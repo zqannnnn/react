@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Link} from 'react-router-dom';
 import {connect, Dispatch} from 'react-redux';
 
-import {userActionCreators,AuthInfo,currencyActionCreators,uploadActionCreators} from '../../actions';
+import {userActionCreators,AuthInfo,currencyActionCreators,uploadActionCreators,lightboxActionCreators} from '../../actions';
 import {RootState,UserState,UploadState} from '../../reducers';
 import {User,Currency,Image} from '../../models'
 import {userConsts} from '../../constants'
@@ -114,7 +114,7 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
         this.props.dispatch(userActionCreators.update(user));
     }
     //for render select input
-    renderCurrencySelect(optionItems :  Currency[]) {
+    renderCurrencySelect = (optionItems :  Currency[]) => {
         return (
             <select
                 className="form-control"
@@ -127,10 +127,19 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
             </select>
         );
     }
+    openLightbox = (images:string[],index:number)=>{
+        this.props.dispatch(lightboxActionCreators.open(images,index))
+    }
     render() {
         const {userState,currencys} = this.props;
         const {processing} = userState;
         const {user, submitted} = this.state;
+        let licensePaths: string []
+        if(user.businessLicenses){
+            licensePaths = user.businessLicenses.map(license=>license.path)
+        }else{
+            licensePaths = []
+        }
         return (
             <div className="page col-md-8 offset-md-2">
                 <div className="header">
@@ -214,11 +223,11 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
                                 <FormattedMessage id="userFields.businessLicense" defaultMessage="Business License"/>
                             </label>
                             <div className="images-container">
-                                {user.businessLicenses&&user.businessLicenses.map((image, index) => <div key={index} className="image-wrapper">
+                                {licensePaths.map((image, index) => <div key={index} className="image-wrapper">
                                     <i className="fa fa-times-circle remove-icon"  aria-hidden="true" onClick = {()=>{
                                             this.handleDeltetImage(index)
                                         }}></i>
-                                    <img className="image" src={image.path}/>
+                                    <img className="image" onClick={()=>this.openLightbox(licensePaths,index)}  src={image}/>
                                 </div>)}
                                 <div className="image-add">
                                     <i className="fa fa-plus-circle add-icon" aria-hidden="true"></i>
