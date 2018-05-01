@@ -49,7 +49,32 @@ router.get('/unconfirmed/list', async (req: IRequest, res: express.Response) => 
     return res.status(500).send({error: 'Permission denied'})
   }
 })
-
+router.get('/confirm/:id', async (req: IRequest, res: express.Response) => {
+  if (req.isAdmin) {
+    const user = await User.find({ where: { id: req.params.id }})
+    if (!user) {
+      return res.status(500).send({error: 'User does not exist'})
+    }
+    user.companyConfirmed = true
+    await user.save()
+    return res.send({success: true})
+  } else {
+    return res.status(500).send({error: 'Permission denied'})
+  }
+})
+// router.get('/rebut/:id', async (req: IRequest, res: express.Response) => {
+//   if (req.isAdmin) {
+//     const user = await User.find({ where: { id: req.params.id }})
+//     if (!user) {
+//       return res.status(500).send({error: 'User does not exist'})
+//     }
+//     user.companyConfirmed = false
+//     await user.save()
+//     return res.send({success: true})
+//   } else {
+//     return res.status(500).send({error: 'Permission denied'})
+//   }
+// })
 router.route('/:userId')
   .get(async (req: IRequest, res: express.Response) => {
     if (req.params.userId !== req.userId || !req.isAdmin) {

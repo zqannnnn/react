@@ -8,7 +8,7 @@ import {PrivateRoute,AdminRoute,NavBar,Lightbox} from './components';
 import {LoginPage,RegisterPage,LostPassPage,ResetPassPage} from './pages/auth';
 import {EditPage as OrderEditPage, ViewPage as OrderViewPage} from './pages/order';
 import {EditPage as OfferEditPage, ViewPage as OfferViewPage} from './pages/offer';
-import {ProfilePage} from './pages/user'
+import {ProfilePage,CompanyConfirmPage} from './pages/user'
 import {AdminPage,HomePage,ListPage } from './pages';
 
 import {Alert} from './models/alert' 
@@ -53,6 +53,7 @@ class App extends React.Component<AppProps,any> {
                                 <PrivateRoute path="/offer/:id" component={OfferViewPage}/>
                                 <PrivateRoute path="/profile" component={ProfilePage}/>
                                 <AdminRoute path="/admin" component={AdminPage}/>
+                                <AdminRoute path="/company/confirm/:id" component={CompanyConfirmPage}/>
                                 <Route path="/login" component={LoginPage}/>
                                 <Route path="/register" component={RegisterPage}/>
                                 <Route path="/lost/pass" component={LostPassPage}/>

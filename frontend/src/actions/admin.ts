@@ -13,6 +13,7 @@ export type Action = {
     type: string;
     error?: string;
     unconfirmedCompanies?: User[];
+    confirmingCompany?:User;
 }
 type Thunk = ThunkAction < void, RootState, void >;
 
@@ -54,6 +55,25 @@ const listUnconfirmedCompanies : ActionCreator < ThunkAction < void,RootState,vo
         return {type: adminConsts.UNCONFIRMED_COMPANIES_FAILURE, error}
     }
 }
+const getConfirmingConpany : ActionCreator < ThunkAction < void,RootState,void >> = (id:string) => {
+    return ((dispatch : Dispatch < RootState >) : void => {
+        dispatch(request());
+        userService
+            .getById(id)
+            .then((user : User) => dispatch(success(user)), (error : string) => dispatch(failure(error)));
+    });
+
+    function request() : Action {
+        return {type: adminConsts.GET_CONFIRMING_COMPANY_REQUSET}
+    }
+    function success(confirmingCompany : User) : Action {
+        return {type: adminConsts.GET_CONFIRMING_COMPANY_SUCCESS, confirmingCompany}
+    }
+    function failure(error : string) : Action {
+        return {type: adminConsts.GET_CONFIRMING_COMPANY_FAILURE, error}
+    }
+}
 export const actionCreators = {
-    listUnconfirmedCompanies
+    listUnconfirmedCompanies,
+    getConfirmingConpany,
 };

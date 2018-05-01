@@ -33,11 +33,11 @@ class Item extends React.Component<ItemProps> {
                 <div className="desc">
                     <span>{company.companyAddress&&"Address:"+company.companyAddress}</span>
                 </div>
-                <Link to={'/company/' + company.id}><div className="image-wr">{company.businessLicenses&&company.businessLicenses[0]?<img src={company.businessLicenses[0].path}></img>:<img src="/asset/no-image.jpg"></img>}</div></Link>
+                <div className="image-wr">{company.businessLicenses&&company.businessLicenses[0]?<img src={company.businessLicenses[0].path}></img>:<img src="/asset/no-image.jpg"></img>}</div>
 
-                {/* <div className="footer">
-                    <Link className="" to={'/company/' + company.id}>Read More</Link>
-                </div> */}
+                <div className="footer">
+                    <Link className="" to={'/company/confirm/' + company.id}>Read More</Link>
+                </div> 
             </div>
         )
     }
