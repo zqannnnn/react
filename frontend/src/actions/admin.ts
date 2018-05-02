@@ -17,25 +17,56 @@ export type Action = {
 }
 type Thunk = ThunkAction < void, RootState, void >;
 
-// function finish(id : string) {
-//     return (dispatch : (action : Action) => void) => {
-//         dispatch(request(id));
+function confirm(id : string) {
+    return (dispatch : (action : Action) => void) => {
+        dispatch(request());
 
-//         orderService
-//             .finish(id)
-//             .then(() => dispatch(success(id)), (error:string) => dispatch(failure(error,id)));
-//     };
+        userService
+            .confirm(id)
+            .then(() => {
+                dispatch(success())
+                dispatch(alertActionCreators.success("Operation succeed"));
+            }, (error:string) => {
+                dispatch(failure(error))
+                dispatch(alertActionCreators.error(error));
+            }
+        );
+    };
 
-//     function request(id:string) {
-//         return {type: userConsts.FINISH_REQUEST,id}
-//     }
-//     function success(id:string) {
-//         return {type: userConsts.FINISH_SUCCESS,id}
-//     }
-//     function failure(error : string,id:string) {
-//         return {type: userConsts.FINISH_FAILURE, error,id}
-//     }
-// }
+    function request() {
+        return {type: adminConsts.CONFIRM_COMPANY_REQUSET}
+    }
+    function success() {
+        return {type: adminConsts.CONFIRM_COMPANY_SUCCESS}
+    }
+    function failure(error : string) {
+        return {type: adminConsts.CONFIRM_COMPANY_FAILURE, error}
+    }
+}
+function disconfirm(id : string) {
+    return (dispatch : (action : Action) => void) => {
+        dispatch(request());
+
+        userService
+            .disconfirm(id)
+            .then(() => {dispatch(success())
+                dispatch(alertActionCreators.success("Operation succeed"));
+            }, (error:string) => {
+                dispatch(failure(error))
+                dispatch(alertActionCreators.error(error));
+            });
+    };
+
+    function request() {
+        return {type: adminConsts.DISCONFIRM_COMPANY_REQUSET}
+    }
+    function success() {
+        return {type: adminConsts.DISCONFIRM_COMPANY_SUCCESS}
+    }
+    function failure(error : string) {
+        return {type: adminConsts.DISCONFIRM_COMPANY_FAILURE, error}
+    }
+}
 const listUnconfirmedCompanies : ActionCreator < ThunkAction < void,RootState,void >> = () => {
     return ((dispatch : Dispatch < RootState >) : void => {
         dispatch(request());
@@ -45,14 +76,14 @@ const listUnconfirmedCompanies : ActionCreator < ThunkAction < void,RootState,vo
     });
 
     function request() : Action {
-        return {type: adminConsts.UNCONFIRMED_COMPANIES_REQUSET}
+        return {type: adminConsts.GET_UNCONFIRMED_COMPANIES_REQUSET}
     }
     function success(unconfirmedCompanies : User []) : Action {
         unconfirmedCompanies.forEach(company=>company.itemType = "Company")
-        return {type: adminConsts.UNCONFIRMED_COMPANIES_SUCCESS, unconfirmedCompanies}
+        return {type: adminConsts.GET_UNCONFIRMED_COMPANIES_SUCCESS, unconfirmedCompanies}
     }
     function failure(error : string) : Action {
-        return {type: adminConsts.UNCONFIRMED_COMPANIES_FAILURE, error}
+        return {type: adminConsts.GET_UNCONFIRMED_COMPANIES_FAILURE, error}
     }
 }
 const getConfirmingConpany : ActionCreator < ThunkAction < void,RootState,void >> = (id:string) => {
@@ -76,4 +107,6 @@ const getConfirmingConpany : ActionCreator < ThunkAction < void,RootState,void >
 export const actionCreators = {
     listUnconfirmedCompanies,
     getConfirmingConpany,
+    confirm,
+    disconfirm
 };

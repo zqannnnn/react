@@ -11,8 +11,26 @@ export const userService = {
     delete: _delete,
     lostPass,
     resetPass,
-    listUnconfirmedCompanies
+    listUnconfirmedCompanies,
+    confirm,
+    disconfirm
 };
+function confirm(id:string) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('/user/confirm/' + id, requestOptions).then(handleResponse);;
+}
+function disconfirm(id:string) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('/user/disconfirm/' + id, requestOptions).then(handleResponse);;
+}
 function listUnconfirmedCompanies(){
     const requestOptions = {
         method: 'GET',

@@ -98,6 +98,10 @@ export class User extends Model<User> {
   public companyConfirmed: boolean
 
   @Default(false)
+  @Column({ field: 'company_disconfirmed' })
+  public companyDisconfirmed: boolean
+
+  @Default(false)
   @Column({ field: 'company_info_filled' })
   public companyInfoFilled: boolean
 

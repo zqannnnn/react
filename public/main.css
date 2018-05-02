@@ -191,7 +191,7 @@ ul.nav li{
 }
 .block .image-wr{
     overflow: hidden;
-    padding:10px;
+    height: 140px;
 }
 .block .offer{
     flex: 1 1 100%;
@@ -220,30 +220,15 @@ ul.nav li{
     font-size: 16px;
     font-weight: bold;
 }
-.view-page .images {
-    padding: 5px;
-    display: inline-flex;
-    align-items: center;
-    border: 1px solid lightgray;
-    background-color: #eee;
-    overflow: auto;
-    width: 100%;
-}
-.view-page .images .image-wr{
-    width: 100px;
-    margin-right: 10px;
-    display: flex;
-    position: relative;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background: white;
-}
-.view-page .images img{
-    width: 100%;
-}
 .flex{
     display: flex;
+}
+.space-between{
+    display: flex;
+    justify-content: space-between;
+}
+.cursor-pointer{
+    cursor: pointer;
 }
 .edit-page .select-right{
     width: 95px;
@@ -367,4 +352,3 @@ ul.nav li{
     margin-bottom: -4px;
     width: 100%
   }
-  

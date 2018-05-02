@@ -108,10 +108,12 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
 
         this.setState({submitted: true});
         let user = this.state.user
-        if(user.companyName){
-            user.companyInfoFilled = true
+        if(user.firstName&&user.lastName&&user.email){
+            if(user.companyName){
+                user.companyInfoFilled = true
+            }
+            this.props.dispatch(userActionCreators.update(user));
         }
-        this.props.dispatch(userActionCreators.update(user));
     }
     //for render select input
     renderCurrencySelect = (optionItems :  Currency[]) => {
@@ -149,7 +151,9 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
                     <FormattedMessage id="profile.personalInfo" defaultMessage="Personal Information"/>
                 </div>
                 <form name="form" onSubmit={this.handleSubmit}>
-                    <div className='form-group'>
+                    <div className={'form-group'+ (submitted && !user.firstName
+                        ? ' has-error'
+                        : '')}>
                         <label htmlFor="fristName">
                             <FormattedMessage id="userFields.firstName" defaultMessage="First Name"/>
                         </label>
@@ -161,7 +165,9 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
                             onChange={this.handleChange}/> {submitted && !user.firstName && <div className="invalid-feedback">First Name is required</div>
                         }
                     </div>
-                    <div className='form-group'>
+                    <div className={'form-group'+ (submitted && !user.lastName
+                        ? ' has-error'
+                        : '')}>
                         <label htmlFor="lastName">
                             <FormattedMessage id="userFields.lastName" defaultMessage="Last Name"/>
                         </label>
@@ -227,7 +233,7 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
                                     <i className="fa fa-times-circle remove-icon"  aria-hidden="true" onClick = {()=>{
                                             this.handleDeltetImage(index)
                                         }}></i>
-                                    <img className="image" onClick={()=>this.openLightbox(licensePaths,index)}  src={image}/>
+                                    <img className="image cursor-pointer" onClick={()=>this.openLightbox(licensePaths,index)}  src={image}/>
                                 </div>)}
                                 <div className="image-add">
                                     <i className="fa fa-plus-circle add-icon" aria-hidden="true"></i>

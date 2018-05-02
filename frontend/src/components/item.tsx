@@ -32,9 +32,9 @@ class Item extends React.Component<ItemProps> {
     render() {
         let itemType = this.props.item.itemType
         return (
-            <div>
+            <>
                 {itemType&&this.renderItem(itemType)}
-            </div>
+            </>
         )
     }
 }
