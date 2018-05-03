@@ -36,7 +36,7 @@ class App extends React.Component<AppProps,any> {
                 <Router history={history}>
                         <div className="">
                             <NavBar/>
-                            {lightbox.showing&&<Lightbox />}
+                            {lightbox.showing&&<Lightbox/>}
                             {alert.message && <div className={`alert ${alert.type}`}>{alert.message}</div>}
                             <Switch>
                                 <PrivateRoute exact path="/" component={HomePage}/>

@@ -28,9 +28,13 @@ function getById(id : string) {
 
         userService
             .getById(id)
-            .then((user:User) => dispatch(success(user)), (error:any) => dispatch(failure(error)));
+            .then((user:User) =>{ 
+                dispatch(success(user))
+                if(user.companyDisconfirmed){
+                    dispatch(alertActionCreators.warning("Company information has beed discomfirmed by admin, please refill it."))
+                }
+            }, (error:any) => dispatch(failure(error)));
     };
-
     function request() {
         return {type: userConsts.GET_REQUEST}
     }

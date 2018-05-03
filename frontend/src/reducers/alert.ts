@@ -16,6 +16,11 @@ export function alert(state = {}, action : AlertAction):State {
         type: 'alert-danger',
         message: action.message
       };
+    case alertConsts.WARNING:
+      return {
+        type: 'alert-warning',
+        message: action.message
+      };
     case alertConsts.CLEAR:
       return {};
     default:

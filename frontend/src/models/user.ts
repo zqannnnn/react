@@ -18,5 +18,6 @@ export class User implements ListItem {
     companyAddress?: string
     businessLicenses?: Image[]
     companyInfoFilled?:boolean;
+    companyDisconfirmed?: boolean;
     companyConfirmed?: boolean;
   }
