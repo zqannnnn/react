@@ -23,7 +23,7 @@ module.exports = passport => {
         process.nextTick(function() {
             User.findOne({
                 where: {email},
-                attributes:['id','userType','password']
+                attributes:['id','userType','password','companyConfirmed']
             }).then(user => {
                 if (!user)
                     return done(null, false);

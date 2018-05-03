@@ -97,7 +97,7 @@ Then resolve po file,use:
 ```
 Then set json files in /frontend/src/index/tsx
 
-###Import Currency
+### Import Currency
 
 ```sh
 docker exec -u postgres -i bmp-db psql < script/currency.sql

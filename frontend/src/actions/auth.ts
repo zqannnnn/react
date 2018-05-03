@@ -6,7 +6,8 @@ import * as auth from '../helpers/auth';
 export type AuthInfo = {
     id: string;
     token: string;
-    isAdmin?: boolean
+    isAdmin?: boolean;
+    companyConfirmed?:boolean;
 }
 export const actionCreators = {
     login,

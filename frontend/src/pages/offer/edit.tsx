@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Link, RouteComponentProps} from 'react-router-dom';
 import {connect, Dispatch} from 'react-redux';
-import {offerActionCreators,categoryActionCreators,currencyActionCreators,uploadActionCreators,lightboxActionCreators} from '../../actions'
+import {offerActionCreators,categoryActionCreators,currencyActionCreators,uploadActionCreators,lightboxActionCreators,alertActionCreators,AuthInfo} from '../../actions'
 import {Offer} from '../../models'
 import {Category, CategoryDetails,Currency} from '../../models'
 import {RootState} from '../../reducers'
@@ -15,7 +15,8 @@ interface OfferProps extends RouteComponentProps < { id: string } > {
     categorys: Category[];
     currencys: Currency[];
     image: string;
-    uploading: boolean
+    uploading: boolean;
+    authInfo:AuthInfo;
 }
 interface OfferState {
     offer : Offer;
@@ -113,6 +114,10 @@ class EditPage extends React.Component < OfferProps, OfferState > {
     handleSubmit = (event : React.FormEvent < HTMLFormElement >) => {
         event.preventDefault();
         this.setState({submitted:true})
+        if(!this.props.authInfo.companyConfirmed){
+            this.props.dispatch(alertActionCreators.error("You are not allowed to add offer, please fullfill company info first."))
+            return
+        }
         const {offer, offerId} = this.state;
         const {dispatch} = this.props;
         if (offer.type&&offer.title) {
@@ -412,9 +417,9 @@ class EditPage extends React.Component < OfferProps, OfferState > {
             </div>
             ); } } 
 function mapStateToProps(state:RootState) {
-    const {offer, category,currency,upload} = state;
+    const {offer, category,currency,upload,auth} = state;
     const {editing, loading, offerData} = offer;
-    return {editing, categorys: category.items,currencys: currency.items, offerData, image:upload.image, uploading:upload.uploading};
+    return {editing, categorys: category.items,currencys: currency.items, offerData, image:upload.image, uploading:upload.uploading,authInfo:auth.authInfo};
 }
 const connectedEditPage = connect(mapStateToProps)(EditPage); 
 export {connectedEditPage as EditPage}
