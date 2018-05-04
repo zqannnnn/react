@@ -94,6 +94,7 @@ class EditPage extends React.Component < OrderProps, OrderState > {
         }else{
             //dispatch(alertActionCreators.error(""));
         }
+        window.scrollTo(0, 0);
     }
     //for render select input
     renderSelect(optionItems : Array < string >, field : keyof Order) {

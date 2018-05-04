@@ -30,8 +30,8 @@ function getById(id : string) {
             .getById(id)
             .then((user:User) =>{ 
                 dispatch(success(user))
-                if(user.companyDisconfirmed){
-                    dispatch(alertActionCreators.warning("Company information has beed discomfirmed by admin, please refill it."))
+                if(user.licenseStatus===userConsts.LICENSE_STATUS_DENIED){
+                    dispatch(alertActionCreators.warning("Company information has beed denied by admin, please refill it."))
                 }
             }, (error:any) => dispatch(failure(error)));
     };

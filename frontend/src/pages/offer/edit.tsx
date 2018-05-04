@@ -5,7 +5,7 @@ import {offerActionCreators,categoryActionCreators,currencyActionCreators,upload
 import {Offer} from '../../models'
 import {Category, CategoryDetails,Currency} from '../../models'
 import {RootState} from '../../reducers'
-import {offerConsts} from '../../constants'
+import {offerConsts,userConsts} from '../../constants'
 import {FormattedMessage} from 'react-intl';
 interface OfferProps extends RouteComponentProps < { id: string } > {
     dispatch: Dispatch < RootState >;
@@ -114,8 +114,9 @@ class EditPage extends React.Component < OfferProps, OfferState > {
     handleSubmit = (event : React.FormEvent < HTMLFormElement >) => {
         event.preventDefault();
         this.setState({submitted:true})
-        if(!this.props.authInfo.companyConfirmed){
+        if(this.props.authInfo.licenseStatus!==userConsts.LICENSE_STATUS_CONFIRMED){
             this.props.dispatch(alertActionCreators.error("You are not allowed to add offer, please fullfill company info first."))
+            window.scrollTo(0, 0);
             return
         }
         const {offer, offerId} = this.state;
@@ -128,6 +129,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         }else{
             //dispatch(alertActionCreators.error(""));
         }
+        window.scrollTo(0, 0);
     }
     handleDeltetImage = (imageIndex:number) => {
         const {offer} = this.state

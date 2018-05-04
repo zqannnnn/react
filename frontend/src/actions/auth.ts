@@ -4,15 +4,16 @@ import {alertActionCreators} from '.';
 import {history} from '../helpers/history';
 import * as auth from '../helpers/auth';
 export type AuthInfo = {
-    id: string;
-    token: string;
+    id?: string;
+    token?: string;
     isAdmin?: boolean;
-    companyConfirmed?:boolean;
+    licenseStatus?:number;
 }
 export const actionCreators = {
     login,
     logout,
-    setAuth
+    setAuth,
+    refresh
 };
 export type Action = {
     type: string;
@@ -43,7 +44,33 @@ function login(username : string, password : string) {
         return {type: userConsts.LOGIN_FAILURE, error}
     }
 }
+function refresh() {
+    return (dispatch : (action : Action) => void) => {
+        dispatch(request());
 
+        userService
+            .refreshAuth()
+            .then((authInfo : AuthInfo) => {
+                let oldAuth = auth.getAuth()
+                authInfo.token = oldAuth.token
+                dispatch(success(authInfo));
+                dispatch(setAuth(authInfo))
+            }, (error : string) => {
+                dispatch(failure(error));
+                dispatch(alertActionCreators.error(error));
+            });
+    };
+
+    function request() {
+        return {type: userConsts.LOGIN_REQUEST}
+    }
+    function success(authInfo : AuthInfo) {
+        return {type: userConsts.LOGIN_SUCCESS, authInfo}
+    }
+    function failure(error : string) {
+        return {type: userConsts.LOGIN_FAILURE, error}
+    }
+}
 function logout() {
     userService.logout();
     return {type: userConsts.LOGOUT};

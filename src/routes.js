@@ -43,7 +43,7 @@ module.exports = (app, passport) => {
       if (user.userType == 1) {
         data.isAdmin = true
       }
-      data.companyConfirmed = user.companyConfirmed 
+      data.licenseStatus = user.licenseStatus
       res.send(data)
     })(req, res, next);
   });

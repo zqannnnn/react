@@ -1,7 +1,9 @@
 import * as express from 'express'
+import { consts } from '../config/static'
 import { authMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
 import { Image, User } from '../models'
+import { AuthInfo } from '../../frontend/src/actions';
 const router = express.Router()
 
 router.post('/new', async (req, res) => {
@@ -30,6 +32,22 @@ router.post('/new', async (req, res) => {
 
 router.use(authMiddleware)
 
+router.get('/refresh/auth', async (req: IRequest, res: express.Response) => {
+  User.findOne({
+    where: {id:req.userId},
+    attributes:['userType','licenseStatus']
+  }).then(user => {
+    if(!user){
+      return res.status(401).send({error:"Server error"})
+    }
+    let authInfo: AuthInfo = {id:req.userId}
+    if (user.userType == 1) {
+      authInfo.isAdmin = true
+    }
+    authInfo.licenseStatus = user.licenseStatus
+    res.send(authInfo)
+  })
+})
 router.get('/list', async (req: IRequest, res: express.Response) => {
   if (req.isAdmin) {
     const users = await User.findAll({attributes: { exclude: ['password'] }})
@@ -42,7 +60,7 @@ router.get('/unconfirmed/list', async (req: IRequest, res: express.Response) => 
   if (req.isAdmin) {
     const users = await User.findAll({
       attributes: { exclude: ['password'] },
-      where: {companyConfirmed: false, companyInfoFilled: true}
+      where: {licenseStatus: consts.LICENSE_STATUS_UNCONFIRMED}
     })
     return res.send(users)
   } else {
@@ -55,22 +73,20 @@ router.get('/confirm/:id', async (req: IRequest, res: express.Response) => {
     if (!user) {
       return res.status(500).send({error: 'User does not exist'})
     }
-    user.companyConfirmed = true
-    user.companyDisconfirmed = false
+    user.licenseStatus = consts.LICENSE_STATUS_CONFIRMED
     await user.save()
     return res.send({success: true})
   } else {
     return res.status(500).send({error: 'Permission denied'})
   }
 })
-router.get('/disconfirm/:id', async (req: IRequest, res: express.Response) => {
+router.get('/denie/:id', async (req: IRequest, res: express.Response) => {
   if (req.isAdmin) {
     const user = await User.find({ where: { id: req.params.id }})
     if (!user) {
       return res.status(500).send({error: 'User does not exist'})
     }
-    user.companyConfirmed = false
-    user.companyDisconfirmed = true
+    user.licenseStatus = consts.LICENSE_STATUS_DENIED
     await user.save()
     return res.send({success: true})
   } else {

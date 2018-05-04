@@ -93,17 +93,8 @@ export class User extends Model<User> {
   @HasMany(() => Image, 'user_id')
   public businessLicenses: Image[]
 
-  @Default(false)
-  @Column({ field: 'company_confirmed' })
-  public companyConfirmed: boolean
-
-  @Default(false)
-  @Column({ field: 'company_disconfirmed' })
-  public companyDisconfirmed: boolean
-
-  @Default(false)
-  @Column({ field: 'company_info_filled' })
-  public companyInfoFilled: boolean
+  @Column({ field: 'license_status' })
+  public licenseStatus: number
 
   // class methods
   @BeforeUpdate

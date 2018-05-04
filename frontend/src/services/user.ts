@@ -13,7 +13,8 @@ export const userService = {
     resetPass,
     listUnconfirmedCompanies,
     confirm,
-    disconfirm
+    disconfirm,
+    refreshAuth
 };
 function confirm(id:string) {
     const requestOptions = {
@@ -29,7 +30,7 @@ function disconfirm(id:string) {
         headers: authHeader()
     };
 
-    return fetch('/user/disconfirm/' + id, requestOptions).then(handleResponse);;
+    return fetch('/user/denie/' + id, requestOptions).then(handleResponse);;
 }
 function listUnconfirmedCompanies(){
     const requestOptions = {
@@ -38,6 +39,14 @@ function listUnconfirmedCompanies(){
     };
 
     return fetch('/user/unconfirmed/list', requestOptions).then(handleResponse);
+}
+function refreshAuth(){
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('/user/refresh/auth', requestOptions).then(handleResponse);
 }
 function login(email:string, password:string) {
     const requestOptions = {

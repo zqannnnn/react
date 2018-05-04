@@ -28,7 +28,7 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
         };
     }
     componentDidMount() {
-        this.props.dispatch(userActionCreators.getById(this.props.authInfo.id));
+        this.props.authInfo.id&&this.props.dispatch(userActionCreators.getById(this.props.authInfo.id));
         if(!this.props.currencys)
             this.props.dispatch(currencyActionCreators.getAll());
     }
@@ -110,10 +110,11 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
         let user = this.state.user
         if(user.firstName&&user.lastName&&user.email){
             if(user.companyName){
-                user.companyInfoFilled = true
+                user.licenseStatus = userConsts.LICENSE_STATUS_UNCONFIRMED
             }
             this.props.dispatch(userActionCreators.update(user));
         }
+        window.scrollTo(0, 0);
     }
     //for render select input
     renderCurrencySelect = (optionItems :  Currency[]) => {
@@ -242,7 +243,7 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
                             </div>
                         </div>
                     </div>
-                    {user.companyConfirmed&&<div className="row">
+                    {user.licenseStatus!==userConsts.LICENSE_STATUS_CONFIRMED&&<div className="row">
                         <FormattedMessage id="userTips.companyInfo" defaultMessage="Please fullfill company information for adding offer"/>
                     </div>}
                     <div className="form-group">

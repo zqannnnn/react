@@ -8,7 +8,11 @@ export const consts = {
 
   OFFER_STATUS_CANCELLED: 0,
   OFFER_STATUS_CREATED: 1,
-  OFFER_STATUS_FINISHED: 2
+  OFFER_STATUS_FINISHED: 2,
+
+  LICENSE_STATUS_UNCONFIRMED: 0,
+  LICENSE_STATUS_CONFIRMED: 1,
+  LICENSE_STATUS_DENIED: 2
 }
 export const beefOptions = {
   'Storage': ['Frozen', 'Chilled'],

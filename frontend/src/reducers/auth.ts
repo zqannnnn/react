@@ -36,6 +36,13 @@ export function auth(state :State = initialState, action :AuthAction):State {
       };
     case userConsts.REGISTER_FAILURE:
       return {};
+    case userConsts.REFRESH_AUTH_SUCCESS:
+      return {
+        ...state,
+        authInfo: action.authInfo
+      };
+    case userConsts.REFRESH_AUTH_FAILURE:
+      return {...state};
     case userConsts.LOGOUT:
       return {};
     default:
