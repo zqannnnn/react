@@ -18,7 +18,18 @@ router.post('/new', async (req: IRequest, res: express.Response) => {
       req.body.images.forEach((image: {path: string}) => {
         const imageDb = new Image({
           path: image.path,
-          offerId: offer.id
+          offerId: offer.id,
+          type: consts.IMAGE_TYPE_MEDIE
+        })
+        imageDb.save()
+      })
+    }
+    if (req.body.certificates) {
+      req.body.certificates.forEach((certificate: {path: string}) => {
+        const imageDb = new Image({
+          path: certificate.path,
+          offerId: offer.id,
+          type: consts.IMAGE_TYPE_CERTIFICATE
         })
         imageDb.save()
       })
@@ -37,21 +48,21 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
         where: {
           userId: req.userId
         },
-        include: [{model: Image, attributes: ['path']}]
+        include: [{model: Image, attributes: ['path','type']}]
       })
     } else if (selectType === 'finished') {
       offers = await Offer.findAll({
         where: {
           status: consts.OFFER_STATUS_FINISHED
         },
-        include: [{model: Image, attributes: ['path']}]
+        include: [{model: Image, attributes: ['path','type']}]
       })
     } else {
       offers = await Offer.findAll({
         where: {
           status: consts.OFFER_STATUS_CREATED
         },
-        include: [{model: Image, attributes: ['path']}]
+        include: [{model: Image, attributes: ['path','type']}]
       })
     }
     return res.send(offers)
@@ -78,7 +89,7 @@ router.get('/finish/:offerId', async (req: IRequest, res: express.Response) => {
 router.route('/:offerId')
   .get(async (req: express.Request, res: express.Response) => {
     const offer = await Offer.find({ where: { id: req.params.offerId },
-      include: [{model: Image, attributes: ['path']}]
+      include: [{model: Image, attributes: ['path','type']}]
     })
     if (!offer) {
       return res.status(403).send({error: 'Offer does not exist'})
@@ -98,7 +109,18 @@ router.route('/:offerId')
         req.body.images.forEach((image: {path: string}) => {
           const imageDb = new Image({
             path: image.path,
-            offerId: offer.id
+            offerId: offer.id,
+            type: consts.IMAGE_TYPE_MEDIE
+          })
+          imageDb.save()
+        })
+      }
+      if (req.body.certificates) {
+        req.body.certificates.forEach((certificate: {path: string}) => {
+          const imageDb = new Image({
+            path: certificate.path,
+            offerId: offer.id,
+            type: consts.IMAGE_TYPE_CERTIFICATE
           })
           imageDb.save()
         })

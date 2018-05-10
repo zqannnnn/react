@@ -15,13 +15,14 @@ interface OfferProps extends RouteComponentProps < { id: string } > {
     categorys: Category[];
     currencys: Currency[];
     image: string;
-    uploading: boolean;
     authInfo:AuthInfo;
 }
 interface OfferState {
     offer : Offer;
     offerId?: string;
     submitted : boolean;
+    imageUploading : boolean;
+    certificateUploading : boolean;
 }
 class EditPage extends React.Component < OfferProps, OfferState > {
     constructor(props : OfferProps) {
@@ -30,7 +31,9 @@ class EditPage extends React.Component < OfferProps, OfferState > {
             submitted: false,
             offer: {
                 type: "Beef"
-            }
+            },
+            imageUploading : false,
+            certificateUploading : false
         };
     }
     componentDidMount() {
@@ -47,7 +50,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
     }
     componentWillReceiveProps(nextProps : OfferProps) {
         const {offerData,image,categorys} = nextProps;
-        const {submitted, offerId,offer} = this.state;
+        const {submitted, offerId,offer,imageUploading,certificateUploading} = this.state;
         if (offerId && offerData && !submitted) {
             this.setState({
                 offer: {
@@ -63,22 +66,43 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                 }
             })
         }
-        if (image) {
-            if (offer.images)
+        if (image&&imageUploading) {
+            if (offer.images){
                 this.setState({
                     offer: {
                         ...offer,
                         images: [...offer.images,{path:image}]
                     }
                 });
-            else
+            } else{
                 this.setState({
                     offer: {
                         ...offer,
                         images: [{path:image}]
                     }
                 });
+            }
             this.props.dispatch(uploadActionCreators.clear());
+            this.setState({imageUploading:false})
+        }
+        if (image&&certificateUploading) {
+            if (offer.certificates){
+                this.setState({
+                    offer: {
+                        ...offer,
+                        certificates: [...offer.certificates,{path:image}]
+                    }
+                });
+            } else{
+                this.setState({
+                    offer: {
+                        ...offer,
+                        certificates: [{path:image}]
+                    }
+                });
+            }
+            this.props.dispatch(uploadActionCreators.clear());
+            this.setState({certificateUploading:false})
         }
     }
     handleSelectChange = (e : React.FormEvent < HTMLSelectElement >) => {
@@ -102,14 +126,18 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         });
         
     }
-    handleUpload = (e : React.FormEvent < HTMLInputElement >) => {
-        const {files} = e.currentTarget
+    handleUpload = (files:FileList|null, isCertificate?:boolean) => {
         let image = files
             ? files[0]
             : null
         this
             .props
             .dispatch(uploadActionCreators.uploadImage(image))
+        if(isCertificate){
+            this.setState({certificateUploading:true})
+        }else{
+            this.setState({imageUploading:true})
+        }
     }
     handleSubmit = (event : React.FormEvent < HTMLFormElement >) => {
         event.preventDefault();
@@ -141,6 +169,16 @@ class EditPage extends React.Component < OfferProps, OfferState > {
             this.setState({offer:{...offer,images:newImages}})
         }
     }
+    handleDeltetCertificate = (index:number) => {
+        const {offer} = this.state
+        const {certificates} = offer
+        if (certificates){
+            let newCertificates = certificates.filter((image:{path:string},i:number)=>{
+                return i!=index
+            })
+            this.setState({offer:{...offer,certificates:newCertificates}})
+        }
+    }
     openLightbox = (images:string[],index:number)=>{
         this.props.dispatch(lightboxActionCreators.open(images,index))
     }
@@ -159,9 +197,9 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         );
         }
     render() {
-        let {id, type, images,price,bone,title,quantity,primalCuts,brand,factoryNum,deliveryTerm,placeOfOrigin,fed,grainFedDays,trimmings} = this.state.offer;
+        let {id, type, images,certificates,price,bone,title,quantity,primalCuts,brand,factoryNum,deliveryTerm,placeOfOrigin,fed,grainFedDays,trimmings} = this.state.offer;
         let {submitted} = this.state
-        let {editing, categorys, currencys, uploading} = this.props
+        let {editing, categorys, currencys} = this.props
         let options = null
         let currentCategory : Category = categorys&&categorys.filter(
             (category:Category)=>{
@@ -172,7 +210,12 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         }else{
             imagePaths = []
         }
-            
+        let certificatePaths: string []
+        if(certificates){
+            certificatePaths = certificates.map(image=>image.path)
+        }else{
+            certificatePaths = []
+        }
         return (
             <div className="col-md-10 offset-md-1 edit-page">
                 <h2 className="header">{id? 
@@ -400,7 +443,26 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                 </div>)}
                                 <div className="image-add">
                                     <i className="fa fa-plus-circle add-icon" aria-hidden="true"></i>
-                                    <input type="file" onChange={this.handleUpload}/>
+                                    <input type="file" onChange={ (e) => this.handleUpload(e.target.files) }/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="form-group col-md-8">
+                            <label>
+                                <FormattedMessage id="itemFields.certificates" defaultMessage="Certificates"/>
+                            </label>
+                            <div className="images-container">
+                                {certificatePaths.map((certificate, index) => <div key={index} className="image-wrapper">
+                                    <i className="fa fa-times-circle remove-icon"  aria-hidden="true" onClick = {()=>{
+                                            this.handleDeltetCertificate(index)
+                                        }}></i>
+                                    <img className="image" src={certificate} onClick={()=>this.openLightbox(certificatePaths,index)}/>
+                                </div>)}
+                                <div className="image-add">
+                                    <i className="fa fa-plus-circle add-icon" aria-hidden="true"></i>
+                                    <input type="file" onChange={ (e) => this.handleUpload(e.target.files,true) } />
                                 </div>
                             </div>
                         </div>
@@ -421,7 +483,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
 function mapStateToProps(state:RootState) {
     const {offer, category,currency,upload,auth} = state;
     const {editing, loading, offerData} = offer;
-    return {editing, categorys: category.items,currencys: currency.items, offerData, image:upload.image, uploading:upload.uploading,authInfo:auth.authInfo};
+    return {editing, categorys: category.items,currencys: currency.items, offerData, image:upload.image,authInfo:auth.authInfo};
 }
 const connectedEditPage = connect(mapStateToProps)(EditPage); 
 export {connectedEditPage as EditPage}

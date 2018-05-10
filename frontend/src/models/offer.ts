@@ -27,6 +27,7 @@ export class Offer implements ListItem{
   currencyCode?:string;
   trimmings?:number;
   images?:Image[];
+  certificates?:Image[];
   cancelling?:boolean;
   cancellError?:string;
 }

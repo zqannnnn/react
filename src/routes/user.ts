@@ -1,9 +1,9 @@
 import * as express from 'express'
+import { AuthInfo } from '../../frontend/src/actions'
 import { consts } from '../config/static'
 import { authMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
 import { Image, User } from '../models'
-import { AuthInfo } from '../../frontend/src/actions';
 const router = express.Router()
 
 router.post('/new', async (req, res) => {
@@ -34,14 +34,14 @@ router.use(authMiddleware)
 
 router.get('/refresh/auth', async (req: IRequest, res: express.Response) => {
   User.findOne({
-    where: {id:req.userId},
-    attributes:['userType','licenseStatus']
+    where: {id: req.userId},
+    attributes: ['userType', 'licenseStatus']
   }).then(user => {
-    if(!user){
-      return res.status(401).send({error:"Server error"})
+    if (!user) {
+      return res.status(401).send({error: 'Server error'})
     }
-    let authInfo: AuthInfo = {id:req.userId}
-    if (user.userType == 1) {
+    const authInfo: AuthInfo = {id: req.userId}
+    if (user.userType === 1) {
       authInfo.isAdmin = true
     }
     authInfo.licenseStatus = user.licenseStatus

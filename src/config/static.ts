@@ -12,7 +12,10 @@ export const consts = {
 
   LICENSE_STATUS_UNCONFIRMED: 0,
   LICENSE_STATUS_CONFIRMED: 1,
-  LICENSE_STATUS_DENIED: 2
+  LICENSE_STATUS_DENIED: 2,
+
+  IMAGE_TYPE_MEDIE: 1,
+  IMAGE_TYPE_CERTIFICATE: 2
 }
 export const beefOptions = {
   'Storage': ['Frozen', 'Chilled'],

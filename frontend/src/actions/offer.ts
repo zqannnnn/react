@@ -8,7 +8,6 @@ import {Dispatch} from 'react-redux'
 import {ActionCreator} from 'redux'
 import {ThunkAction} from 'redux-thunk'
 import {RootState} from '../reducers'
-
 export type Action = {
     type: string;
     error?: string;
@@ -81,6 +80,17 @@ function getById(id : string) {
         return {type: offerConsts.GET_REQUEST}
     }
     function success(offer : Offer) {
+        if(offer.images){
+            let images = offer.images.filter(image=>
+                image.type === offerConsts.IMAGE_TYPE_MEDIE
+            )
+            
+            let certificates = offer.images.filter(image=>
+                image.type === offerConsts.IMAGE_TYPE_CERTIFICATE
+            )
+            offer.images = images
+            offer.certificates = certificates
+        }
         return {type: offerConsts.GET_SUCCESS, data: offer}
     }
     function failure(error : string) {
@@ -138,7 +148,21 @@ const getAll : ActionCreator < ThunkAction < void,RootState,void >> = (option:{s
         return {type: offerConsts.GETALL_REQUEST}
     }
     function success(offers : Array < Offer >) : Action {
-        offers.forEach(offer=>offer.itemType="Offer")
+        offers.forEach(offer=>{
+            offer.itemType="Offer"
+            if(offer.images){
+                let images = offer.images.filter(image=>
+                    image.type === offerConsts.IMAGE_TYPE_MEDIE
+                )
+                console.log(images)
+                let certificates = offer.images.filter(image=>
+                    image.type === offerConsts.IMAGE_TYPE_CERTIFICATE
+                )
+                offer.certificates = certificates
+                offer.images = images
+            }
+          })
+          
         return {type: offerConsts.GETALL_SUCCESS, offers}
     }
     function failure(error : string) : Action {

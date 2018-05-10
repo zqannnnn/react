@@ -30,6 +30,9 @@ import { Offer, User } from '.'
     @Column({field: 'path'})
     public path: string
 
+    @Column({field: 'type'})
+    public type: number
+
     @CreatedAt
     @Column({field: 'created_at'})
     public createdAt: Date
