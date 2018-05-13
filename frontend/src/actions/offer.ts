@@ -15,6 +15,7 @@ export type Action = {
     offers?: Array < Offer >;
     data?: Offer;
     imagePath?:string;
+    comment?:string;
 }
 type Thunk = ThunkAction < void, RootState, void >;
 
@@ -169,12 +170,35 @@ const getAll : ActionCreator < ThunkAction < void,RootState,void >> = (option:{s
         return {type: offerConsts.GETALL_FAILURE, error}
     }
 }
+function addComment(id : string,comment:string) {
+    return (dispatch : (action : Action) => void) => {
+        dispatch(request(id));
 
+        offerService
+            .addComment(id,comment)
+            .then(() => dispatch(success(id,comment)), 
+            (error:string) => {
+                dispatch(failure(id,error))
+                dispatch(alertActionCreators.error(error));
+            });
+    };
+
+    function request(id:string) {
+        return {type: offerConsts.COMMENT_FAILURE,id}
+    }
+    function success(id:string,comment:string) {
+        return {type: offerConsts.COMMENT_SUCCESS,id,comment}
+    }
+    function failure(id:string,error : string) {
+        return {type: offerConsts.COMMENT_FAILURE, error,id}
+    }
+}
 export const actionCreators = {
     new: _new,
     edit,
     getAll,
     getById,
     cancell,
-    finish
+    finish,
+    addComment
 };

@@ -28,7 +28,8 @@ class App extends React.Component<AppProps,any> {
             // clear alert on location change
             dispatch(alertActionCreators.clear());
         });
-        dispatch(authActionCreators.refresh())
+        if(authInfo)
+            dispatch(authActionCreators.refresh())
         
     }
     render() {

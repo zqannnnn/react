@@ -119,7 +119,7 @@ class EditPage extends React.Component < OrderProps, OrderState > {
                 return category.type===type})[0]
 
         return (
-            <div className="col-md-10 offset-md-1 edit-page">
+            <div className="col-md-10 offset-md-1 edit-page page">
                 <h2 className="header">{id? 
                     <FormattedMessage id="pages.editOrderPage" defaultMessage="Edit Order Page"/>:
                     <FormattedMessage id="pages.createOrderPage" defaultMessage="Create Order Page"/>}

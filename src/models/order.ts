@@ -95,6 +95,9 @@ export class Order extends Model < Order > {
   @Column
   public trimmings: number
 
+  @Column({type: DataType.TEXT})
+  public comment: string
+
   @ForeignKey(() => Currency)
   @Column({field: 'currency_code'})
   public currencyCode: string

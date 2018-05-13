@@ -26,6 +26,7 @@ export class Order implements ListItem{
   currencyCode?:string;
   currency?:Currency
   trimmings?:number;
+  comment?:string;
   offerId?:string;
   cancelling?:boolean;
   cancellError?:string;

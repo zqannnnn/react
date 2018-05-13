@@ -34,7 +34,7 @@ class List extends React.Component<ListProps> {
                     <div className="title">{selectType==='mine'?'My ':'All '}{listType==='offer'?'Offer':'Order'}</div>
                 </div>
                 {offer.error && <span className="text-danger">ERROR: {offer.error}</span>}
-                <div className="block-container col-md-8 offset-md-2" >
+                <div className="col-md-8 offset-md-2" >
                 {listType==='offer'?
                     offer.items&&<ListC items={offer.items}/>:
                     order.items&&<ListC items={order.items}/>

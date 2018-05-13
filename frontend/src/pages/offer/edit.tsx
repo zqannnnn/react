@@ -217,7 +217,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
             certificatePaths = []
         }
         return (
-            <div className="col-md-10 offset-md-1 edit-page">
+            <div className="col-md-10 offset-md-1 edit-page page">
                 <h2 className="header">{id? 
                     <FormattedMessage id="pages.editOfferPage" defaultMessage="Edit Offer Page"/>:
                     <FormattedMessage id="pages.createOfferPage" defaultMessage="Create Offer Page"/>}

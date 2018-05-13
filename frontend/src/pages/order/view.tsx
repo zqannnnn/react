@@ -48,61 +48,61 @@ class ViewPage extends React.Component < OrderProps, OrderState > {
                         <div className="label">
                             <FormattedMessage id="itemFeilds.title" defaultMessage="Title"/>
                         </div>
-                        <div className="detail">{order.title||"null"}</div>
+                        <div className="detail">{order.title}</div>
                     </div>
                 <div className="group">
                     <div className="label">
                         <FormattedMessage id="itemFeilds.storage" defaultMessage="Storage"/>
                     </div>
-                    <div className="detail">{order.storage||"null"}</div>
+                    <div className="detail">{order.storage}</div>
                 </div>
                 <div className="group">
                     <div className="label">
                         <FormattedMessage id="itemFeilds.breed" defaultMessage="Breed"/>
                     </div>
-                    <div className="detail">{order.breed||"null"}</div>
+                    <div className="detail">{order.breed}</div>
                 </div>
                 <div className="group">
                     <div className="label">
                         <FormattedMessage id="itemFeilds.grade" defaultMessage="Grade"/>
                     </div>
-                    <div className="detail">{order.grade||"null"}</div>
+                    <div className="detail">{order.grade}</div>
                 </div>
                 <div className="group">
                     <div className="label">
                         <FormattedMessage id="itemFeilds.marbleScore" defaultMessage="MarbleScore"/>
                     </div>
-                    <div className="detail">{order.marbleScore||"null"}</div>
+                    <div className="detail">{order.marbleScore}</div>
                 </div>
                 <div className="group">
                     <div className="label">
                         <FormattedMessage id="itemFeilds.slaughterSpec" defaultMessage="Slaughter Specification"/>
                     </div>
-                    <div className="detail">{order.slaughterSpec||"null"}</div>
+                    <div className="detail">{order.slaughterSpec}</div>
                 </div>
                 <div className="group">
                     <div className="label">
                         <FormattedMessage id="itemFeilds.bone" defaultMessage="Bone"/>
                     </div>
-                    <div className="detail">{order.bone||"null"}</div>
+                    <div className="detail">{order.bone}</div>
                 </div>
                 <div className="group">
                     <div className="label">
                         <FormattedMessage id="itemFeilds.primalCuts" defaultMessage="Primal Cuts"/>
                     </div>
-                    <div className="detail">{order.primalCuts||"null"}</div>
+                    <div className="detail">{order.primalCuts}</div>
                 </div>
                 <div className="group">
                     <div className="label">
                         <FormattedMessage id="itemFeilds.trimmings" defaultMessage="Trimmings"/>
                     </div>
-                    <div className="detail">{order.trimmings||"null"}CL</div>
+                    <div className="detail">{order.trimmings}CL</div>
                 </div>
                 <div className="group">
                     <div className="label">
                         <FormattedMessage id="itemFeilds.fed" defaultMessage="Fed"/>
                     </div>
-                    <div className="detail">{order.fed||"null"}{order.grainFedDays?<span><br/>
+                    <div className="detail">{order.fed}{order.grainFedDays?<span><br/>
                         {order.grainFedDays} Day
                         </span>:''}
                     </div>
@@ -111,37 +111,37 @@ class ViewPage extends React.Component < OrderProps, OrderState > {
                     <div className="label">
                         <FormattedMessage id="itemFeilds.price" defaultMessage="Price"/>
                     </div>
-                    <div className="detail">{order.price||"null"}{order.currencyCode}</div>
+                    <div className="detail">{order.price}{order.currencyCode}</div>
                 </div>
                 <div className="group">
                     <div className="label">
                         <FormattedMessage id="itemFeilds.quantity" defaultMessage="Quantity"/>
                     </div>
-                    <div className="detail">{order.quantity||"null"}KG</div>
+                    <div className="detail">{order.quantity}KG</div>
                 </div>
                 <div className="group">
                     <div className="label">
                         <FormattedMessage id="itemFeilds.brand" defaultMessage="Brand"/>
                     </div>
-                    <div className="detail">{order.brand||"null"}</div>
+                    <div className="detail">{order.brand}</div>
                 </div>
                 <div className="group">
                     <div className="label">
                         <FormattedMessage id="itemFeilds.factoryNum" defaultMessage="Factory Number"/>
                     </div>
-                    <div className="detail">{order.factoryNum||"null"}</div>
+                    <div className="detail">{order.factoryNum}</div>
                 </div>
                 <div className="group">
                     <div className="label">
                         <FormattedMessage id="itemFeilds.deliveryTerm" defaultMessage="Delivery Term"/>
                     </div>
-                    <div className="detail">{order.deliveryTerm||"null"}</div>
+                    <div className="detail">{order.deliveryTerm}</div>
                 </div>
                 <div className="group">
                     <div className="label">
                         <FormattedMessage id="itemFeilds.placeOfOrigin" defaultMessage="Place Of Origin"/>
                     </div>
-                    <div className="detail">{order.placeOfOrigin||"null"}</div>
+                    <div className="detail">{order.placeOfOrigin}</div>
                 </div>
             </div>}
         </div>); 

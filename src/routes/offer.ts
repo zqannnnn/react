@@ -48,21 +48,21 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
         where: {
           userId: req.userId
         },
-        include: [{model: Image, attributes: ['path','type']}]
+        include: [{model: Image, attributes: ['path', 'type']}]
       })
     } else if (selectType === 'finished') {
       offers = await Offer.findAll({
         where: {
           status: consts.OFFER_STATUS_FINISHED
         },
-        include: [{model: Image, attributes: ['path','type']}]
+        include: [{model: Image, attributes: ['path', 'type']}]
       })
     } else {
       offers = await Offer.findAll({
         where: {
           status: consts.OFFER_STATUS_CREATED
         },
-        include: [{model: Image, attributes: ['path','type']}]
+        include: [{model: Image, attributes: ['path', 'type']}]
       })
     }
     return res.send(offers)
@@ -86,10 +86,29 @@ router.get('/finish/:offerId', async (req: IRequest, res: express.Response) => {
     return res.status(500).send({error: e.message})
   }
 })
+router.post('/comment/:offerId', async (req: IRequest, res: express.Response) => {
+  try {
+    if (!req.isAdmin) {
+      return res.status(500).send({error: 'Permission denied.'})
+    }
+    const offer = await Offer.find({ where: { id: req.params.offerId } })
+    if (!offer) {
+      return res.status(500).send({error: 'Offer does not exist'})
+    }
+    offer.comment = req.body.comment
+    console.log(req.body)
+    offer.save()
+    return res.send({success: true})
+  } catch (e) {
+    return res.status(500).send({error: e.message})
+  }
+})
 router.route('/:offerId')
   .get(async (req: express.Request, res: express.Response) => {
     const offer = await Offer.find({ where: { id: req.params.offerId },
-      include: [{model: Image, attributes: ['path','type']}]
+      include: [
+        {model: Image, attributes: ['path', 'type']},
+        {model: Currency, attributes: ['code']}]
     })
     if (!offer) {
       return res.status(403).send({error: 'Offer does not exist'})

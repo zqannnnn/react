@@ -98,6 +98,9 @@ export class Offer extends Model<Offer> {
   @Column
   public trimmings: number
 
+  @Column({type: DataType.TEXT})
+  public comment: string
+
   @ForeignKey(() => Currency)
   @Column({field: 'currency_code'})
   public currencyCode: string

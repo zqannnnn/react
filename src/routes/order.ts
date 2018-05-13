@@ -20,29 +20,29 @@ router.post('/new', async (req: IRequest, res: express.Response) => {
   }
 })
 router.get('/list', async (req: IRequest, res: express.Response) => {
-  let offers
+  let orders
   const selectType = req.query.selectType
   try {
     if (selectType === 'mine') {
-      offers = await Order.findAll({
+      orders = await Order.findAll({
         where: {
           userId: req.userId
         }
       })
     } else if (selectType === 'finished') {
-      offers = await Order.findAll({
+      orders = await Order.findAll({
         where: {
           status: consts.ORDER_STATUS_FINISHED
         }
       })
     } else {
-      offers = await Order.findAll({
+      orders = await Order.findAll({
         where: {
           status: consts.ORDER_STATUS_CREATED
         }
       })
     }
-    return res.send(offers)
+    return res.send(orders)
   } catch (e) {
     return res.status(500).send({error: e.message})
   }
@@ -52,12 +52,28 @@ router.get('/finish/:orderId', async (req: IRequest, res: express.Response) => {
     if (!req.isAdmin) {
       return res.status(500).send({error: 'Permission denied'})
     }
-    const offer = await Order.find({ where: { id: req.params.orderId } })
-    if (!offer) {
+    const order = await Order.find({ where: { id: req.params.orderId } })
+    if (!order) {
       return res.status(500).send({error: 'Order does not exist'})
     }
-    offer.status = consts.ORDER_STATUS_FINISHED
-    offer.save()
+    order.status = consts.ORDER_STATUS_FINISHED
+    order.save()
+    return res.send({success: true})
+  } catch (e) {
+    return res.status(500).send({error: e.message})
+  }
+})
+router.post('/comment/:orderId', async (req: IRequest, res: express.Response) => {
+  try {
+    if (!req.isAdmin) {
+      return res.status(500).send({error: 'Permission denied.'})
+    }
+    const order = await Order.find({ where: { id: req.params.orderId } })
+    if (!order) {
+      return res.status(500).send({error: 'Order does not exist'})
+    }
+    order.comment = req.body.comment
+    order.save()
     return res.send({success: true})
   } catch (e) {
     return res.status(500).send({error: e.message})
@@ -66,7 +82,7 @@ router.get('/finish/:orderId', async (req: IRequest, res: express.Response) => {
 router.route('/:orderId')
   .get(async (req: IRequest, res: express.Response) => {
     const order = await Order.find({ where: { id: req.params.orderId },
-      include: [{model: Currency, attributes: ['currency']}] })
+      include: [{model: Currency, attributes: ['code']}] })
     if (!order) {
       return res.status(403).send({error: 'Order does not exist'})
     }

@@ -10,9 +10,17 @@ interface ItemProps  {
     offer: Offer;
     authInfo:AuthInfo
 }
-class Item extends React.Component<ItemProps> {
+interface ItemState {
+    commentInputShowing:boolean;
+    comment:string
+}
+class Item extends React.Component<ItemProps,ItemState> {
     constructor(props:ItemProps) {
         super(props);
+        this.state = {   
+            commentInputShowing:false,
+            comment: props.offer.comment||''
+        }
     }
 
     handleCancell = (id:string) => {
@@ -23,15 +31,31 @@ class Item extends React.Component<ItemProps> {
         if(r)
             this.props.dispatch(offerActionCreators.finish(id));
     }
+    triggerCommentInput = ()=>{
+        let value = this.state.commentInputShowing
+        this.setState({commentInputShowing:!value})
+    }
+    handleInputChange = (e : React.FormEvent < HTMLInputElement >) => {
+        const {name, value} = e.currentTarget;
+        this.setState({
+            ...this.state,
+            [name]: value
+        });
+    }
+    sendComment = (id:string)=>{
+        this.props.dispatch(offerActionCreators.addComment(id,this.state.comment))
+        this.setState({commentInputShowing:false})
+    }
     render() {
         const {offer,authInfo} = this.props;
+        const {commentInputShowing,comment} = this.state;
         return (
             <div key={offer.id} className="block">
                 <div className="header">{offer.type}</div>
-                <div className="title">
+                <div className="title content">
                     {offer.title}
                 </div>
-                <div className="desc">
+                <div className="desc content">
                     <span>{offer.storage&&"Storage:"+offer.storage+","}</span>
                     <span>{offer.breed&&"Breed:"+offer.breed+","}</span>
                     <span>{offer.grade&&"Grade:"+offer.grade+","}</span>
@@ -39,30 +63,51 @@ class Item extends React.Component<ItemProps> {
                     <span>{offer.primalCuts&&"Primal Cut:"+offer.primalCuts}</span>
                 </div>
                 <Link to={'/offer/' + offer.id}><div className="image-wr">{offer.images&&offer.images[0]?<img src={offer.images[0].path}></img>:<img src="/asset/no-image.jpg"></img>}</div></Link>
-
-                <div className="status">{offer.status!=offerConsts.OFFER_STATUS_FINISHED?'On Sale':'Sold'}</div>
-                {authInfo.isAdmin&&offer.status!=offerConsts.OFFER_STATUS_FINISHED&&<div className="admin-menu" onClick = {()=>{
-                        if(offer.id)
-                            this.handleFinish(offer.id)
-                    }
-                }>Set Sold</div>}
-                <div className="footer">
-                    <div className="price">${offer.price}</div>
-                        <Link className="" to={'/offer/' + offer.id}>details</Link>
-                        {(authInfo.id==offer.userId||authInfo.isAdmin)&&<div className="menu">
-                        <Link to={'/offer/edit/' + offer.id} className="control-btn">✎</Link>
-                        <div >{offer.cancelling
-                            ? <i className="fa fa-spinner" aria-hidden="true"></i>
-                            : offer.cancellError
-                                ? <span className="text-danger">- ERROR: {offer.cancellError}</span>
-                                : offer.status!==offerConsts.OFFER_STATUS_CANCELLED &&< i onClick = {()=>{
+                <div className="space-between content">
+                    <div className="status" >{offer.status!=offerConsts.OFFER_STATUS_FINISHED?'On Sale':'Sold'}</div>
+                    {authInfo.isAdmin&&offer.status!=offerConsts.OFFER_STATUS_FINISHED?<div className="control-btn" onClick = {()=>{
+                            if(offer.id)
+                                this.handleFinish(offer.id)
+                        }
+                    }>Set Sold</div>:
+                   ''}
+                </div>
+                {offer.price&&<div className="content">${offer.price}</div>}
+                <div className="menu content">
+                    <Link className="control-btn" to={'/offer/' + offer.id}>Read More</Link>
+                    {(authInfo.id==offer.userId||authInfo.isAdmin)?
+                    <>
+                        {offer.status===offerConsts.OFFER_STATUS_CREATED &&<>
+                            <Link to={'/offer/edit/' + offer.id} className="control-btn">Edit ✎</Link>
+                            <div className="control-btn" onClick = {()=>{
                                     if(offer.id)
                                         this.handleCancell(offer.id)
-                                }
-                            }
-                        className = "fa fa-times-circle" aria-hidden="true" ></i>}</div>
-                    </div>}
+                                    }
+                                }>
+                                Cancel < i className = "fa fa-times-circle" aria-hidden="true" ></i>
+                            </div>
+                        </>}
+                        {(authInfo.isAdmin&&offer.status==offerConsts.OFFER_STATUS_FINISHED)?
+                        <div className="control-btn" onClick={()=>{this.triggerCommentInput()}}>{"Comment "}
+                            <i className={"fa fa-comment-o "+(commentInputShowing?"icon-active":"")} aria-hidden="true"  ></i>
+                        </div>:''}
+                    </>:''}
                 </div>
+                {commentInputShowing?<div className="input-wr content">
+                    <input
+                        type="text"
+                        name="comment"
+                        value={comment}
+                        onChange={this.handleInputChange}/>
+                    <div className="input-btn-wr">
+                        <i className="fa fa-share-square-o input-btn" aria-hidden="true" onClick={()=>{
+                            if(offer.id)
+                                this.sendComment(offer.id)
+                        }}></i>
+                    </div>
+                </div>:<div className="comment content">
+                    {offer.comment}
+                </div>}
             </div>
         )
     }

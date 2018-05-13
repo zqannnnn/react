@@ -6,7 +6,8 @@ export const offerService = {
     getById,
     getAll,
     cancell,
-    finish
+    finish,
+    addComment
 };
 function _new(offer:Offer) {
     const requestOptions = {
@@ -53,6 +54,18 @@ function finish(id:string) {
     };
 
     return fetch('/offer/finish/' + id, requestOptions).then(handleResponse);
+}
+function addComment(id:string, comment:string) {
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            ...authHeader(),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({comment})
+    };
+
+    return fetch('/offer/comment/' + id, requestOptions).then(handleResponse);
 }
 function getAll(option:{selectType:string}) {
     const requestOptions = {

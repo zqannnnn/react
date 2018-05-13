@@ -15,6 +15,7 @@ export type Action = {
     id?:string;
     orders?: Array < Order >;
     data?: Order;
+    comment?:string;
 }
 type Thunk = ThunkAction < void, RootState, void >;
 
@@ -123,6 +124,29 @@ function finish(id : string) {
         return {type: orderConsts.FINISH_FAILURE, error,id}
     }
 }
+function addComment(id : string,comment:string) {
+    return (dispatch : (action : Action) => void) => {
+        dispatch(request(id));
+
+        orderService
+            .addComment(id,comment)
+            .then(() => dispatch(success(id,comment)), 
+            (error:string) => {
+                dispatch(failure(id,error))
+                dispatch(alertActionCreators.error(error));
+            });
+    };
+
+    function request(id:string) {
+        return {type: orderConsts.COMMENT_FAILURE,id}
+    }
+    function success(id:string,comment:string) {
+        return {type: orderConsts.COMMENT_SUCCESS,id,comment}
+    }
+    function failure(id:string,error : string) {
+        return {type: orderConsts.COMMENT_FAILURE, error,id}
+    }
+}
 const getAll : ActionCreator < ThunkAction < void,RootState,void >> = (option:{selectType:string}) => {
     return ((dispatch : Dispatch < RootState >) : void => {
         dispatch(request());
@@ -148,5 +172,6 @@ export const actionCreators = {
     getAll,
     getById,
     cancell,
-    finish
+    finish,
+    addComment
 };

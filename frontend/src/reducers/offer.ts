@@ -80,8 +80,14 @@ export function offer(state:State ={} , action:OfferAction):State {
           ...state,
           items: state
             .items
-            .filter(item => item.id !== action.id)
+            .map(item => item.id === action.id
+              ? {
+                ...item,
+                status:offerConsts.OFFER_STATUS_FINISHED
+              }
+              : item)
         };
+          
     case offerConsts.FINISH_FAILURE:
       if (state.items) 
         return {
@@ -96,6 +102,47 @@ export function offer(state:State ={} , action:OfferAction):State {
               }
               : item)
         };
+      case offerConsts.COMMENT_REQUEST:
+        if (state.items) 
+            return {
+              ...state,
+              items: state
+                .items
+                .map(item => item.id === action.id
+                  ? {
+                    ...item,
+                    processing: true
+                  }
+                  : item)
+            };
+      case offerConsts.COMMENT_SUCCESS:
+        if (state.items) 
+          return {
+            ...state,
+            items: state
+              .items
+              .map(item => item.id === action.id
+                ? {
+                  ...item,
+                  comment:action.comment
+                }
+                : item)
+          };
+            
+      case offerConsts.COMMENT_FAILURE:
+        if (state.items) 
+          return {
+            ...state,
+            items: state
+              .items
+              .map(item => item.id === action.id
+                ? {
+                  ...item,
+                  finishing: false,
+                  finishError:action.error
+                }
+                : item)
+          };
     case offerConsts.GET_REQUEST:
       return {loading: true};
     case offerConsts.GET_SUCCESS:

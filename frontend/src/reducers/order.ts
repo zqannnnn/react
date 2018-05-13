@@ -77,10 +77,56 @@ export function order(state:State ={} , action:OrderAction):State {
           return {
             ...state,
             items: state
-              .items
-              .filter(item => item.id !== action.id)
+            .items
+            .map(item => item.id === action.id
+              ? {
+                ...item,
+                status:orderConsts.ORDER_STATUS_FINISHED
+              }
+              : item)
           };
       case orderConsts.FINISH_FAILURE:
+        if (state.items) 
+          return {
+            ...state,
+            items: state
+              .items
+              .map(item => item.id === action.id
+                ? {
+                  ...item,
+                  finishing: false,
+                  finishError:action.error
+                }
+                : item)
+          };
+      case orderConsts.COMMENT_REQUEST:
+        if (state.items) 
+            return {
+              ...state,
+              items: state
+                .items
+                .map(item => item.id === action.id
+                  ? {
+                    ...item,
+                    processing: true
+                  }
+                  : item)
+            };
+      case orderConsts.COMMENT_SUCCESS:
+        if (state.items) 
+          return {
+            ...state,
+            items: state
+              .items
+              .map(item => item.id === action.id
+                ? {
+                  ...item,
+                  comment:action.comment
+                }
+                : item)
+          };
+            
+      case orderConsts.COMMENT_FAILURE:
         if (state.items) 
           return {
             ...state,
