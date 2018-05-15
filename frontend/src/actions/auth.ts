@@ -46,7 +46,6 @@ function login(username : string, password : string) {
 }
 function refresh() {
     return (dispatch : (action : Action) => void) => {
-        dispatch(request());
 
         userService
             .refreshAuth()
@@ -61,14 +60,11 @@ function refresh() {
             });
     };
 
-    function request() {
-        return {type: userConsts.LOGIN_REQUEST}
-    }
     function success(authInfo : AuthInfo) {
-        return {type: userConsts.LOGIN_SUCCESS, authInfo}
+        return {type: userConsts.REFRESH_AUTH_SUCCESS, authInfo}
     }
     function failure(error : string) {
-        return {type: userConsts.LOGIN_FAILURE, error}
+        return {type: userConsts.REFRESH_AUTH_FAILURE, error}
     }
 }
 function logout() {

@@ -29,8 +29,6 @@ class PrivateRoute extends React.Component < PrivateRouteProps > {
 
             if (params.route && params.route == 'resetPass') 
                 history.replace('/reset/pass')
-            else 
-                history.replace('/')
         }
     }
     render() {
@@ -51,7 +49,8 @@ class PrivateRoute extends React.Component < PrivateRouteProps > {
                     state: {
                         from: props.location
                     }
-                }}/>)}/>
+                }}/>)
+            }/>
         )
     }
 }

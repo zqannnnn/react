@@ -30,7 +30,7 @@ module.exports = {
   },
   devtool: "source-map",
   devServer: {
-    historyApiFallback:{ index: '/' },
+    historyApiFallback:true,
     inline: true,
     stats: {
       colors: true

@@ -3,7 +3,7 @@ import {Router, Route, Switch} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import {history} from './helpers/history';
-import {alertActionCreators,authActionCreators,AuthInfo} from './actions';
+import {alertActionCreators,authActionCreators} from './actions';
 import {PrivateRoute,AdminRoute,NavBar,Lightbox} from './components';
 import {LoginPage,RegisterPage,LostPassPage,ResetPassPage} from './pages/auth';
 import {EditPage as OrderEditPage, ViewPage as OrderViewPage} from './pages/order';
@@ -12,23 +12,23 @@ import {ProfilePage,CompanyConfirmPage} from './pages/user'
 import {AdminPage,HomePage,ListPage } from './pages';
 
 import {Alert} from './models/alert' 
-import { RootState,LightboxState } from './reducers'
+import { RootState,LightboxState,AuthState } from './reducers'
 interface AppProps {
     dispatch: (action: any) => void;
     alert: Alert;
     lightbox:LightboxState;
-    authInfo:AuthInfo;
+    auth:AuthState;
 }
 class App extends React.Component<AppProps,any> {
     constructor(props:AppProps) {
         super(props);
 
-        const {dispatch,authInfo} = this.props;
+        const {dispatch,auth} = this.props;
         history.listen((location, action) => {
             // clear alert on location change
             dispatch(alertActionCreators.clear());
         });
-        if(authInfo)
+        if(auth.loggedIn)
             dispatch(authActionCreators.refresh())
         
     }
@@ -71,7 +71,7 @@ class App extends React.Component<AppProps,any> {
 
 function mapStateToProps(state:RootState) {
     const {alert,lightbox,auth} = state;
-    return {alert,lightbox,authInfo:auth.authInfo};
+    return {alert,lightbox,auth:auth};
 }
 
 export default connect(mapStateToProps)(App);
