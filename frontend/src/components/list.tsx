@@ -21,8 +21,8 @@ class List extends React.Component<ListProps> {
                 {title&&<div className="header">
                         <div className="title">{title}</div>
                     </div>}
-                    
-                <div className="block-container" >
+
+                <div className="block-container row" >
                     {items.map((item, index) =>
                         <Item key={index} item={item} />
                     )}
