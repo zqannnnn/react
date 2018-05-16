@@ -17,7 +17,7 @@ function uploadImage(file:File) {
 }
 function handleResponse(response:Response) {
     if (!response.ok) {
-        return Promise.reject(response.json());
+        return response.json().then(result=> Promise.reject(result.error))
     }
 
     return response.json();
