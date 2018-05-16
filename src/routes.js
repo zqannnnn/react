@@ -14,7 +14,7 @@ const uploadRouter = require('./routes/upload')
 const qs = require('querystring')
 const authMiddleware = require('./middleware/auth')
 
-const expiresIn = 60
+const expiresIn = 60 * 60 * 24 * 7
 
 const handleSequelizeError = (res, error) => {
   console.error(error)

@@ -24,9 +24,9 @@ export const authMiddleware = (req: IRequest, res: express.Response, next: expre
       return jwt.verify(token, req.app.get('secretKey'), (err: jwt.JsonWebTokenError, decoded: IDecodedObject) => {
         if (err) {
           if (err.name === 'TokenExpiredError') {
-            return res.status(401).send('TokenExpiredError')
+            return res.status(498).send({error:'Login has expired, please login again.'})
           } else {
-            return res.status(401).send('JsonWebTokenError')
+            return res.status(401).send({error:'Invalid Token.'})
           }
         }
         if (decoded.userType === consts.USER_TYPE_ADMIN) {
@@ -39,5 +39,5 @@ export const authMiddleware = (req: IRequest, res: express.Response, next: expre
       })
     }
   }
-  return res.status(403).send({ success : false, message: 'Please log in before this operation' })
+  return res.status(403).send({ error: 'Please log in before this operation' })
 }
