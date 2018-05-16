@@ -22,16 +22,13 @@ class ResetPassPage extends React.Component<ResetPassProps,ResetPassState> {
             rePassword: '',
             submitted: false
         };
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
-    handleChange(e:React.FormEvent<HTMLInputElement>) {
+    handleChange = (e:React.FormEvent<HTMLInputElement>) => {
         const { name, value } = e.currentTarget;
         this.setState({...this.state, [name]: value });
     }
 
-    handleSubmit(e:React.FormEvent<HTMLFormElement>) {
+    handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         this.setState({ submitted: true });

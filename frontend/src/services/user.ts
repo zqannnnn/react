@@ -56,13 +56,8 @@ function login(email:string, password:string) {
         },
         body: JSON.stringify({email, password})
     };
-    return fetch('/login', requestOptions).then((response:Response) => {
-        return response.ok
-            ? response.json()
-            : response
-                .json()
-                .then(err => Promise.reject(err.error))
-    }).then((result: AuthInfo) => {
+    return fetch('/login', requestOptions).then(handleResponse)
+        .then((result: AuthInfo) => {
         // login successful if there's a jwt token in the response
         if (result ) {
             // store user details and jwt token in local storage to keep user logged in
@@ -134,13 +129,7 @@ function lostPass(email:string) {
         },
         body: JSON.stringify({email})
     };
-    return fetch('/pass/lost', requestOptions).then((response:Response) => {
-        return response.ok
-            ? response.json()
-            : response
-                .json()
-                .then(err => Promise.reject(err.error))
-    });
+    return fetch('/pass/lost', requestOptions).then(handleResponse);
 }
 function resetPass(password:string) {
     const requestOptions = {
@@ -151,23 +140,11 @@ function resetPass(password:string) {
         },
         body: JSON.stringify({password})
     };
-    return fetch('/pass/reset', requestOptions).then(response => {
-        return response.ok
-            ? response.json()
-            : response
-                .json()
-                .then(err => Promise.reject(err.error))
-    }).then(result => {
-        if (result && result.success) {
-            return ;
-        }
-
-        return {};
-    });
+    return fetch('/pass/reset', requestOptions).then(handleResponse)
 }
 function handleResponse(response:Response) {
     if (!response.ok) {
-        return Promise.reject(response.statusText);
+        return Promise.reject(response.json());
     }
 
     return response.json();

@@ -10,7 +10,7 @@ function getAll() {
 
 function handleResponse(response:Response) {
     if (!response.ok) {
-        return Promise.reject(response.statusText);
+        return Promise.reject(response.json());
     }
 
     return response.json();

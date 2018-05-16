@@ -31,7 +31,7 @@ const _new : ActionCreator < ThunkAction < void, RootState, void >> = (order : O
                 dispatch(success());
                 dispatch(alertActionCreators.success('Create order successful'));
                 setTimeout(function(){
-                  history.replace('/orders/my')
+                  history.replace('/')
                 },1000)
 
             }, (error : string) => {
@@ -59,7 +59,7 @@ const edit : ActionCreator < ThunkAction < void, RootState, void >> = (order : O
                 dispatch(success());
                 dispatch(alertActionCreators.success('Edit order successful'));
                 setTimeout(function(){
-                  history.replace('/orders/my')
+                  history.replace('/')
                 },1000)
             }, (error : string) => {
                 dispatch(failure(error));

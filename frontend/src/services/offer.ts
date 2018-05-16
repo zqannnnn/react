@@ -77,7 +77,7 @@ function getAll(option:{selectType:string}) {
 
 function handleResponse(response:Response) {
     if (!response.ok) {
-        return Promise.reject(response.statusText);
+        return Promise.reject(response.json());
     }
 
     return response.json();

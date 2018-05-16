@@ -91,7 +91,8 @@ const getConfirmingConpany : ActionCreator < ThunkAction < void,RootState,void >
         dispatch(request());
         userService
             .getById(id)
-            .then((user : User) => dispatch(success(user)), (error : string) => dispatch(failure(error)));
+            .then((user : User) => dispatch(success(user)), 
+            (error : string) => dispatch(failure(error)));
     });
 
     function request() : Action {

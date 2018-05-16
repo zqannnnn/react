@@ -57,7 +57,7 @@ const edit : ActionCreator < ThunkAction < void, RootState, void >> = (offer : O
                 dispatch(success());
                 dispatch(alertActionCreators.success('Edit offer successful'));
                 setTimeout(function(){
-                  history.replace('/offers/my')
+                  history.replace('/')
                 },1000)
             }, (error : string) => {
                 dispatch(failure(error));
@@ -161,7 +161,6 @@ const getAll : ActionCreator < ThunkAction < void,RootState,void >> = (option:{s
                 let images = offer.images.filter(image=>
                     image.type === offerConsts.IMAGE_TYPE_MEDIE
                 )
-                console.log(images)
                 let certificates = offer.images.filter(image=>
                     image.type === offerConsts.IMAGE_TYPE_CERTIFICATE
                 )

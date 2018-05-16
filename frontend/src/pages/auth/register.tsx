@@ -40,18 +40,8 @@ class RegisterPage extends React.Component < RegisterProps,RegisterState > {
             submitted: false,
             confirmFocused: false
         };
-
-        this.handleChange = this
-            .handleChange
-            .bind(this);
-        this.handleSubmit = this
-            .handleSubmit
-            .bind(this);
-        this.onFocusConfirm = this
-            .onFocusConfirm
-            .bind(this);
     }
-    handleChange(event : React.FormEvent < HTMLInputElement >) {
+    handleChange = (event : React.FormEvent < HTMLInputElement >) => {
         const {name, value} = event.currentTarget;
         const {user} = this.state;
         this.setState({
@@ -71,10 +61,10 @@ class RegisterPage extends React.Component < RegisterProps,RegisterState > {
             }
         });
     }
-    onFocusConfirm() {
+    onFocusConfirm = () => {
         this.setState({confirmFocused: true});
     }
-    handleSubmit(event : React.FormEvent < HTMLFormElement >) {
+    handleSubmit = (event : React.FormEvent < HTMLFormElement >) => {
         event.preventDefault();
 
         this.setState({submitted: true});

@@ -96,7 +96,6 @@ router.post('/comment/:offerId', async (req: IRequest, res: express.Response) =>
       return res.status(500).send({error: 'Offer does not exist'})
     }
     offer.comment = req.body.comment
-    console.log(req.body)
     offer.save()
     return res.send({success: true})
   } catch (e) {
