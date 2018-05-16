@@ -15,7 +15,7 @@ class PrivateRoute extends React.Component < PrivateRouteProps > {
     }
     componentDidMount() {
         let params
-        if (this.props.location) 
+        if (this.props.location)
             params = QS.parse(this.props.location.search)
 
         if (params && params.token) {
@@ -27,10 +27,8 @@ class PrivateRoute extends React.Component < PrivateRouteProps > {
                 .props
                 .dispatch(authActionCreators.setAuth(authInfo))
 
-            if (params.route && params.route == 'resetPass') 
+            if (params.route && params.route == 'resetPass')
                 history.replace('/reset/pass')
-            else 
-                history.replace('/')
         }
     }
     render() {
@@ -58,6 +56,7 @@ class PrivateRoute extends React.Component < PrivateRouteProps > {
 function mapStateToProps(state : RootState) {
     const {auth} = state;
     const {loggedIn} = auth;
+    console.log(loggedIn);
     return {loggedIn};
 }
 

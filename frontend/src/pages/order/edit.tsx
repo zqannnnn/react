@@ -80,16 +80,18 @@ class EditPage extends React.Component < OrderProps, OrderState > {
                 [name]: value
             }
         });
-        
+
     }
     handleSubmit = (event : React.FormEvent < HTMLFormElement >) => {
+
         event.preventDefault();
         const {order, orderId} = this.state;
         const {dispatch} = this.props;
+        console.log(this.state);
         if (order.type) {
-            if (orderId) 
+            if (orderId)
                 dispatch(orderActionCreators.edit(order, orderId));
-            else 
+            else
                 dispatch(orderActionCreators.new(order));
         }else{
             //dispatch(alertActionCreators.error(""));
@@ -105,7 +107,7 @@ class EditPage extends React.Component < OrderProps, OrderState > {
                 value={String(this.state.order[field])}
                 onChange={this.handleSelectChange}>
                 <option></option>
-                {optionItems.map((item, index) => 
+                {optionItems.map((item, index) =>
                     <option key={index} value={item}>{item}</option>)}
             </select>
         );
@@ -120,7 +122,7 @@ class EditPage extends React.Component < OrderProps, OrderState > {
 
         return (
             <div className="col-md-10 offset-md-1 edit-page page">
-                <h2 className="header">{id? 
+                <h2 className="header">{id?
                     <FormattedMessage id="pages.editOrderPage" defaultMessage="Edit Order Page"/>:
                     <FormattedMessage id="pages.createOrderPage" defaultMessage="Create Order Page"/>}
                 </h2>
@@ -317,7 +319,7 @@ class EditPage extends React.Component < OrderProps, OrderState > {
                                         onChange={this.handleSelectChange}>
                                         <option>
                                         <FormattedMessage id="itemFields.currency" defaultMessage="Currency"/></option>
-                                        {currencys.map((item, index) => 
+                                        {currencys.map((item, index) =>
                                             <option key={index} value={item.code}>{item.code}</option>)}
                                     </select>
                                     <span className="label-right">/KG</span>
@@ -336,11 +338,11 @@ class EditPage extends React.Component < OrderProps, OrderState > {
                     </div>
                 </form>
             </div>
-            ); } } 
+            ); } }
 function mapStateToProps(state:RootState) {
     const {order, category, currency} = state;
     const {editing, loading, orderData} = order;
     return {editing, categorys: category.items,currencys: currency.items, orderData};
 }
-const connectedEditPage = connect(mapStateToProps)(EditPage); 
+const connectedEditPage = connect(mapStateToProps)(EditPage);
 export {connectedEditPage as EditPage}

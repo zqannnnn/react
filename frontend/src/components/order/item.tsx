@@ -17,7 +17,7 @@ interface ItemState {
 class Item extends React.Component<ItemProps,ItemState> {
     constructor(props:ItemProps) {
         super(props);
-        this.state = {   
+        this.state = {
             commentInputShowing:false,
             comment: props.order.comment||''
         }
@@ -49,7 +49,8 @@ class Item extends React.Component<ItemProps,ItemState> {
         const {order,authInfo} = this.props;
         const {commentInputShowing,comment} = this.state
         return (
-            <div key={order.id} className="block">
+            <div key={order.id} className="block col-sm-6 col-md-4 col-lg-3 ">
+                <div className="boxmain">
                 <div className="header">{order.type}</div>
                 <div className="desc">
                     <span>{order.storage&&"Storage:"+order.storage+","}</span>
@@ -59,7 +60,7 @@ class Item extends React.Component<ItemProps,ItemState> {
                     <span>{order.primalCuts&&"Primal Cut:"+order.primalCuts}</span>
                 </div>
                 <div className="space-between content">
-                    <div className="status">{order.status!=orderConsts.ORDER_STATUS_FINISHED?'On Sale':'Sold'}</div>
+                    <div className="status">{order.status == 0?"Canceled":order.status!=orderConsts.ORDER_STATUS_FINISHED?'On Sale':'Sold'}</div>
                     {authInfo.isAdmin&&order.status!=orderConsts.ORDER_STATUS_FINISHED?<div className="control-btn" onClick = {()=>{
                             if(order.id)
                                 this.handleFinish(order.id)
@@ -103,6 +104,7 @@ class Item extends React.Component<ItemProps,ItemState> {
                 </div>:<div className="comment content">
                     {order.comment}
                 </div>}
+              </div>
             </div>
         )
     }

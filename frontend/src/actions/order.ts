@@ -8,6 +8,7 @@ import {Dispatch} from 'react-redux'
 import {ActionCreator} from 'redux'
 import {ThunkAction} from 'redux-thunk'
 import {RootState} from '../reducers'
+import {Route, Redirect, RouteProps} from 'react-router-dom'
 
 export type Action = {
     type: string;
@@ -29,6 +30,10 @@ const _new : ActionCreator < ThunkAction < void, RootState, void >> = (order : O
             .then((order : Order) => {
                 dispatch(success());
                 dispatch(alertActionCreators.success('Create order successful'));
+                setTimeout(function(){
+                  history.replace('/orders/my')
+                },1000)
+
             }, (error : string) => {
                 dispatch(failure(error));
                 dispatch(alertActionCreators.error(error));
@@ -53,6 +58,9 @@ const edit : ActionCreator < ThunkAction < void, RootState, void >> = (order : O
             .then(() => {
                 dispatch(success());
                 dispatch(alertActionCreators.success('Edit order successful'));
+                setTimeout(function(){
+                  history.replace('/orders/my')
+                },1000)
             }, (error : string) => {
                 dispatch(failure(error));
                 dispatch(alertActionCreators.error(error));
@@ -130,7 +138,7 @@ function addComment(id : string,comment:string) {
 
         orderService
             .addComment(id,comment)
-            .then(() => dispatch(success(id,comment)), 
+            .then(() => dispatch(success(id,comment)),
             (error:string) => {
                 dispatch(failure(id,error))
                 dispatch(alertActionCreators.error(error));

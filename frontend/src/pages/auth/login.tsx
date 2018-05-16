@@ -96,10 +96,10 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
                         <FormattedMessage id="authButtons.register" defaultMessage="Register"/>
                     </Link>
                 </div>
-                
+
             </form>
         </div>)
-            
+
         );
     }
 }
@@ -112,4 +112,4 @@ function mapStateToProps(state:RootState) {
 }
 
 const connectedLoginPage = connect(mapStateToProps)(LoginPage);
-export { connectedLoginPage as LoginPage }; 
+export { connectedLoginPage as LoginPage };

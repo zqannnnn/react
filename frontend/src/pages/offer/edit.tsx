@@ -124,7 +124,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                 [name]: value
             }
         });
-        
+
     }
     handleUpload = (files:FileList|null, isCertificate?:boolean) => {
         let image = files
@@ -142,17 +142,17 @@ class EditPage extends React.Component < OfferProps, OfferState > {
     handleSubmit = (event : React.FormEvent < HTMLFormElement >) => {
         event.preventDefault();
         this.setState({submitted:true})
-        if(this.props.authInfo.licenseStatus!==userConsts.LICENSE_STATUS_CONFIRMED){
-            this.props.dispatch(alertActionCreators.error("You are not allowed to add offer, please fullfill company info first."))
-            window.scrollTo(0, 0);
-            return
-        }
+        // if(this.props.authInfo.licenseStatus!==userConsts.LICENSE_STATUS_CONFIRMED){
+        //     this.props.dispatch(alertActionCreators.error("You are not allowed to add offer, please fullfill company info first."))
+        //     window.scrollTo(0, 0);
+        //     return
+        // }
         const {offer, offerId} = this.state;
         const {dispatch} = this.props;
         if (offer.type&&offer.title) {
-            if (offerId) 
+            if (offerId)
                 dispatch(offerActionCreators.edit(offer, offerId));
-            else 
+            else
                 dispatch(offerActionCreators.new(offer));
         }else{
             //dispatch(alertActionCreators.error(""));
@@ -191,7 +191,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                 value={String(this.state.offer[field])}
                 onChange={this.handleSelectChange}>
                 <option></option>
-                {optionItems.map((item, index) => 
+                {optionItems.map((item, index) =>
                     <option key={index} value={item}>{item}</option>)}
             </select>
         );
@@ -218,7 +218,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
         }
         return (
             <div className="col-md-10 offset-md-1 edit-page page">
-                <h2 className="header">{id? 
+                <h2 className="header">{id?
                     <FormattedMessage id="pages.editOfferPage" defaultMessage="Edit Offer Page"/>:
                     <FormattedMessage id="pages.createOfferPage" defaultMessage="Create Offer Page"/>}
                 </h2>
@@ -251,7 +251,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                 name="title"
                                 value={title}
                                 onChange={this.handleInputChange}/>
-                                {submitted && !title && 
+                                {submitted && !title &&
                                 <div className="invalid-feedback">
                                     <FormattedMessage id="itemErrors.missingTitle" defaultMessage="Title is required"/>
                                 </div>}
@@ -422,7 +422,7 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                                         <option>
                                             <FormattedMessage id="itemFields.currency" defaultMessage="Currency"/>
                                         </option>
-                                        {currencys.map((item, index) => 
+                                        {currencys.map((item, index) =>
                                             <option key={index} value={item.code}>{item.code}</option>)}
                                     </select>
                                     <span className="label-right">/KG</span>
@@ -479,11 +479,11 @@ class EditPage extends React.Component < OfferProps, OfferState > {
                     </div>
                 </form>
             </div>
-            ); } } 
+            ); } }
 function mapStateToProps(state:RootState) {
     const {offer, category,currency,upload,auth} = state;
     const {editing, loading, offerData} = offer;
     return {editing, categorys: category.items,currencys: currency.items, offerData, image:upload.image,authInfo:auth.authInfo};
 }
-const connectedEditPage = connect(mapStateToProps)(EditPage); 
+const connectedEditPage = connect(mapStateToProps)(EditPage);
 export {connectedEditPage as EditPage}

@@ -29,6 +29,9 @@ const _new : ActionCreator < ThunkAction < void, RootState, void >> = (offer : O
             .then((offer : Offer) => {
                 dispatch(success());
                 dispatch(alertActionCreators.success('Create offer successful'));
+                setTimeout(function(){
+                  history.replace('/offers/my')
+                },1000)
             }, (error : string) => {
                 dispatch(failure(error));
                 dispatch(alertActionCreators.error(error));
@@ -53,6 +56,9 @@ const edit : ActionCreator < ThunkAction < void, RootState, void >> = (offer : O
             .then(() => {
                 dispatch(success());
                 dispatch(alertActionCreators.success('Edit offer successful'));
+                setTimeout(function(){
+                  history.replace('/offers/my')
+                },1000)
             }, (error : string) => {
                 dispatch(failure(error));
                 dispatch(alertActionCreators.error(error));
@@ -85,7 +91,7 @@ function getById(id : string) {
             let images = offer.images.filter(image=>
                 image.type === offerConsts.IMAGE_TYPE_MEDIE
             )
-            
+
             let certificates = offer.images.filter(image=>
                 image.type === offerConsts.IMAGE_TYPE_CERTIFICATE
             )
@@ -145,7 +151,7 @@ const getAll : ActionCreator < ThunkAction < void,RootState,void >> = (option:{s
     });
 
     function request() : Action {
-        
+
         return {type: offerConsts.GETALL_REQUEST}
     }
     function success(offers : Array < Offer >) : Action {
@@ -163,7 +169,7 @@ const getAll : ActionCreator < ThunkAction < void,RootState,void >> = (option:{s
                 offer.images = images
             }
           })
-          
+
         return {type: offerConsts.GETALL_SUCCESS, offers}
     }
     function failure(error : string) : Action {
@@ -176,7 +182,7 @@ function addComment(id : string,comment:string) {
 
         offerService
             .addComment(id,comment)
-            .then(() => dispatch(success(id,comment)), 
+            .then(() => dispatch(success(id,comment)),
             (error:string) => {
                 dispatch(failure(id,error))
                 dispatch(alertActionCreators.error(error));

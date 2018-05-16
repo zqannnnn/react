@@ -17,7 +17,7 @@ interface ItemState {
 class Item extends React.Component<ItemProps,ItemState> {
     constructor(props:ItemProps) {
         super(props);
-        this.state = {   
+        this.state = {
             commentInputShowing:false,
             comment: props.offer.comment||''
         }
@@ -50,7 +50,8 @@ class Item extends React.Component<ItemProps,ItemState> {
         const {offer,authInfo} = this.props;
         const {commentInputShowing,comment} = this.state;
         return (
-            <div key={offer.id} className="block">
+            <div key={offer.id} className="block col-sm-6 col-md-4 col-lg-3">
+                <div className="boxmain">
                 <div className="header">{offer.type}</div>
                 <div className="title content">
                     {offer.title}
@@ -62,7 +63,11 @@ class Item extends React.Component<ItemProps,ItemState> {
                     <span>{offer.slaughterSpec&&"Slaughter Specificatin:"+offer.slaughterSpec+","}</span>
                     <span>{offer.primalCuts&&"Primal Cut:"+offer.primalCuts}</span>
                 </div>
-                <Link to={'/offer/' + offer.id}><div className="image-wr">{offer.images&&offer.images[0]?<img src={offer.images[0].path}></img>:<img src="/asset/no-image.jpg"></img>}</div></Link>
+                <Link to={'/offer/' + offer.id}>
+                  <div className="image-wr">
+                    {offer.images&&offer.images[0]?<img src={offer.images[0].path}></img>:<img src="/asset/no-image.jpg"></img>}
+                  </div>
+                </Link>
                 <div className="space-between content">
                     <div className="status" >{offer.status!=offerConsts.OFFER_STATUS_FINISHED?'On Sale':'Sold'}</div>
                     {authInfo.isAdmin&&offer.status!=offerConsts.OFFER_STATUS_FINISHED?<div className="control-btn" onClick = {()=>{
@@ -108,6 +113,7 @@ class Item extends React.Component<ItemProps,ItemState> {
                 </div>:<div className="comment content">
                     {offer.comment}
                 </div>}
+              </div>
             </div>
         )
     }
