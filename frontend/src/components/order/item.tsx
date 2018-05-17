@@ -68,7 +68,7 @@ class Item extends React.Component<ItemProps,ItemState> {
                     }>Set Sold</div>:
                    ''}
                 </div>
-                {order.price&&<div className="content">${order.price}</div>}
+                <div className="content">${order.price}</div>
                 <div className="menu content">
                     <Link className="control-btn" to={'/order/' + order.id}>Read More</Link>
                     {(authInfo.id==order.userId||authInfo.isAdmin)?

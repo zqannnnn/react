@@ -15,9 +15,6 @@
     .page-container {
         padding-top: 2rem
     }
-    .block-container {
-        /* display: flex; */
-    }
     .block {
         flex: 1 1 33.33%;
         box-sizing: border-box;
@@ -101,6 +98,9 @@ ul.nav li {
     font-weight: bold;
     font-size: 25px;
     text-align: center;
+}
+.control-btn {
+    cursor: pointer;
 }
 
 .list-container {
@@ -192,7 +192,8 @@ ul.nav li {
 }
 
 .block .content {
-    padding: 0 10px
+    padding: 0 10px;
+    min-height: 1rem;
 }
 
 .block .header {
@@ -211,15 +212,14 @@ ul.nav li {
     border-top: solid 1px #ccc;
     display: flex;
     justify-content: space-between;
+    font-size: 12px;
 }
 .block .status{
     padding: 5px 0
 }
 .block .control-btn {
-    cursor: pointer;
     color: #007bff;
     padding: 5px 0;
-    font-size:14px;
 }
 .block .control-btn:hover{
     text-decoration: underline;
@@ -297,6 +297,9 @@ ul.nav li {
 }
 .relative{
     position: relative;
+}
+.main-blue{
+    color: #007bff;
 }
 .icon-active{
     color: #007bff;

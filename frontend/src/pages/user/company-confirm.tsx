@@ -84,12 +84,12 @@ class ConfirmPage extends React.Component < ConfirmProps > {
 
                         </div>
                         <div className="form-group col-md-12 space-between">
-                            {<div className="control-btn" onClick={()=>this.handleDisconfirm(id)}>
+                            {<div className="control-btn main-blue" onClick={()=>this.handleDisconfirm(id)}>
                                 <i className="fa fa-times" aria-hidden="true"></i>
                             </div>}
                             {processing && <i className="fa fa-plus-circle" aria-hidden="true"></i>
                             }
-                            <div className="control-btn" onClick={()=>this.handleConfirm(id)}>
+                            <div className="control-btn main-blue" onClick={()=>this.handleConfirm(id)}>
                                 <i className="fa fa-check" aria-hidden="true"></i>
                             </div>
                         </div>
