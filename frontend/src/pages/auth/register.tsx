@@ -106,7 +106,7 @@ class RegisterPage extends React.Component < RegisterProps,RegisterState > {
                         : '')}>
                         <label htmlFor="firstName">
                         <FormattedMessage id="authFields.firstName" defaultMessage="First Name"/>
-                        Username</label>
+                        </label>
                         <input
                             type="text"
                             className="form-control"

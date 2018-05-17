@@ -114,9 +114,12 @@ router.route('/:offerId')
     }
     return res.send(offer)
   })
-  .put(async (req: express.Request, res: express.Response) => {
+  .put(async (req: IRequest, res: express.Response) => {
     try {
       const offer = await Offer.find({ where: { id: req.params.offerId } })
+      if (offer && offer.userId !== req.userId && !req.isAdmin) {
+        return res.status(500).send({error: 'Permission denied'})
+      }
       if (!offer) {
         return res.status(500).send({error: 'Offer does not exist'})
       }
@@ -148,9 +151,12 @@ router.route('/:offerId')
       return res.status(500).send({error: e.message})
     }
   })
-  .delete(async (req: express.Request, res: express.Response) => {
+  .delete(async (req: IRequest, res: express.Response) => {
     try {
       const offer = await Offer.find({ where: { id: req.params.offerId } })
+      if (offer && offer.userId !== req.userId && !req.isAdmin) {
+        return res.status(500).send({error: 'Permission denied'})
+      }
       if (!offer) {
         return res.status(500).send({error: 'Offer does not exist'})
       }

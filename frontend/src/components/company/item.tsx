@@ -26,18 +26,20 @@ class Item extends React.Component<ItemProps> {
     render() {
         const {company,authInfo} = this.props;
         return (
-            <div key={company.id} className="block">
-                <div className="title">
-                    {company.companyName}
-                </div>
-                <div className="desc">
-                    <span>{company.companyAddress&&"Address:"+company.companyAddress}</span>
-                </div>
-                <div className="image-wr">{company.businessLicenses&&company.businessLicenses[0]?<img src={company.businessLicenses[0].path}></img>:<img src="/asset/no-image.jpg"></img>}</div>
+            <div className="block col-sm-6 col-md-4 col-lg-3">
+                <div className="boxmain">
+                    <div className="title">
+                        {company.companyName}
+                    </div>
+                    <div className="desc">
+                        <span>{company.companyAddress&&"Address:"+company.companyAddress}</span>
+                    </div>
+                    <div className="image-wr">{company.businessLicenses&&company.businessLicenses[0]?<img src={company.businessLicenses[0].path}></img>:<img src="/asset/no-image.jpg"></img>}</div>
 
-                <div className="footer">
-                    <Link className="" to={'/company/confirm/' + company.id}>Read More</Link>
-                </div> 
+                    <div className="footer">
+                        <Link className="" to={'/company/confirm/' + company.id}>Read More</Link>
+                    </div> 
+                </div>
             </div>
         )
     }

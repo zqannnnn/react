@@ -54,6 +54,9 @@ function refresh() {
                 authInfo.token = oldAuth.token
                 dispatch(success(authInfo));
                 dispatch(setAuth(authInfo))
+                if(authInfo.licenseStatus===userConsts.LICENSE_STATUS_DENIED){
+                    dispatch(alertActionCreators.warning("Company information has been denied by admin, please refill it."))
+                }
             }, (error : string) => {
                 dispatch(failure(error));
                 dispatch(alertActionCreators.error(error));

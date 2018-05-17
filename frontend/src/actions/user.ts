@@ -30,10 +30,10 @@ function getById(id : string) {
             .getById(id)
             .then((user:User) =>{ 
                 dispatch(success(user))
-                if(user.licenseStatus===userConsts.LICENSE_STATUS_DENIED){
-                    dispatch(alertActionCreators.warning("Company information has beed denied by admin, please refill it."))
-                }
-            }, (error:any) => dispatch(failure(error)));
+            }, (error:any) =>{ 
+                dispatch(failure(error));
+                dispatch(alertActionCreators.error(error));
+            });
     };
     function request() {
         return {type: userConsts.GET_REQUEST}
@@ -53,7 +53,7 @@ function update(user:User) {
             .update(user)
             .then((user:User) => {
                 dispatch(success(user));
-                dispatch(alertActionCreators.success('Submit user successful'));
+                dispatch(alertActionCreators.success('Submit user succeed'));
             }, (error:any) => {
                 dispatch(failure(error));
                 dispatch(alertActionCreators.error(error));
@@ -79,7 +79,7 @@ function _new(user : User) {
             .new(user)
             .then((user:User) => {
                 dispatch(success());
-                dispatch(alertActionCreators.success('Create user successful'));
+                dispatch(alertActionCreators.success('Create user succeed'));
             }, (error:any) => {
                 dispatch(failure(error));
                 dispatch(alertActionCreators.error(error));
@@ -129,7 +129,7 @@ function resetPass(pass:string) {
         userService
             .resetPass(pass)
             .then(() => {
-                dispatch(alertActionCreators.success("Reset password successful."));
+                dispatch(alertActionCreators.success("Reset password succeed."));
                 dispatch(success());
             }, (error:any) => {
                 dispatch(alertActionCreators.error(error));

@@ -11,7 +11,8 @@ router.post('/new', async (req, res) => {
     const user = new User({
       email: req.body.email,
       password: req.body.password,
-      userName: req.body.userName,
+      firstName: req.body.firstName,
+      lastName:req.body.lastName,
       userType: req.body.userType
     })
     await user.save()
@@ -95,7 +96,7 @@ router.get('/denie/:id', async (req: IRequest, res: express.Response) => {
 })
 router.route('/:userId')
   .get(async (req: IRequest, res: express.Response) => {
-    if (req.params.userId !== req.userId || !req.isAdmin) {
+    if (req.params.userId !== req.userId && !req.isAdmin) {
       return res.status(500).send({error: 'Permission denied'})
     }
     const user = await User.find({ where: { id: req.params.userId }, attributes: { exclude: ['password'] },
@@ -107,7 +108,7 @@ router.route('/:userId')
     return res.send(user)
   })
   .put(async (req: IRequest, res: express.Response) => {
-    if (req.params.userId !== req.userId || !req.isAdmin) {
+    if (req.params.userId !== req.userId && !req.isAdmin) {
       return res.status(500).send({error: 'Permission denied'})
     }
     try {
@@ -133,7 +134,7 @@ router.route('/:userId')
     }
   })
   .delete(async (req: IRequest, res: express.Response) => {
-    if (req.params.userId !== req.userId || !req.isAdmin) {
+    if (req.params.userId !== req.userId && !req.isAdmin) {
       return res.status(500).send({error: 'Permission denied'})
     }
     try {

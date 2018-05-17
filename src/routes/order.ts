@@ -91,7 +91,7 @@ router.route('/:orderId')
   .put(async (req: IRequest, res: express.Response) => {
     try {
       const order = await Order.find({ where: { id: req.params.orderId } })
-      if (order && order.userId !== req.userId) {
+      if (order && order.userId !== req.userId && !req.isAdmin) {
         return res.status(500).send({error: 'Permission denied'})
       }
       if (!order) {
@@ -107,7 +107,7 @@ router.route('/:orderId')
   .delete(async (req: IRequest, res: express.Response) => {
     try {
       const order = await Order.find({ where: { id: req.params.orderId } })
-      if (order && order.userId !== req.userId) {
+      if (order && order.userId !== req.userId && !req.isAdmin) {
         return res.status(500).send({error: 'Permission denied'})
       }
       if (!order) {
