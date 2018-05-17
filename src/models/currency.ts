@@ -16,7 +16,6 @@ import { Offer } from '.'
   })
   export class Currency extends Model<Currency> {
 
-    @IsUUID(4)
     @PrimaryKey
     @Column({field: 'code'})
     public code: string
@@ -24,6 +23,9 @@ import { Offer } from '.'
     @Column({field: 'symbol'})
     public symbol: string
 
-    @Column({field: 'rate'})
+    @Column({type: DataType.DOUBLE})
     public rate: number
+
+    @Column
+    public description:string
   }

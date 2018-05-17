@@ -13,6 +13,10 @@ require('./middleware/webpack')(app);
 
 models.setupDatabase();
 
+//Get the exchange rate API
+const currencyApi  = require('./api/currency');
+currencyApi.getApi();
+
 app.set('secretKey', 'justatest')
 
 require('./passport')(passport); // pass passport for configuration
