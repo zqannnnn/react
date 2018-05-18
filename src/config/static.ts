@@ -79,5 +79,5 @@ export const sheepOptions = {
   'Marble Score': ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
   'Bone': ['Bone In', 'Bone Out']
 }
-export const access_key = "db7b00b340d9275681a88e2398428a37"
-export const symbols = ['CNY','EUR','USD','GBP','JPY','KRW','FRF'];
+export const accessKey = 'db7b00b340d9275681a88e2398428a37'
+export const symbols = ['CNY', 'EUR', 'USD', 'GBP', 'JPY', 'KRW', 'FRF']

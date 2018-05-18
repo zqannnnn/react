@@ -27,5 +27,5 @@ import { Offer } from '.'
     public rate: number
 
     @Column
-    public description:string
+    public description: string
   }

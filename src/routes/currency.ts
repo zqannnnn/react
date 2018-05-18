@@ -1,14 +1,14 @@
 import * as express from 'express'
 import { Currency } from '../models/'
-const cronJob = require("cron").CronJob;
+const cronJob = require('cron').CronJob
 
 const router = express.Router()
 
 router.get('/list', async (req: express.Request, res: express.Response) => {
-  try{
+  try {
     const currencys = await Currency.findAll({})
     return res.send(currencys)
-  }catch(e){
+  } catch (e) {
     return res.status(500).send({error: e.message})
   }
 

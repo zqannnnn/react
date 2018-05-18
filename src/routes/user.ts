@@ -12,7 +12,7 @@ router.post('/new', async (req, res) => {
       email: req.body.email,
       password: req.body.password,
       firstName: req.body.firstName,
-      lastName:req.body.lastName,
+      lastName: req.body.lastName,
       userType: req.body.userType
     })
     await user.save()

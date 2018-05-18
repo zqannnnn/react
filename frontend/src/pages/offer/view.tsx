@@ -6,6 +6,7 @@ import {Offer} from '../../models'
 import {Category, CategoryDetails} from '../../models'
 import {RootState} from '../../reducers'
 import {FormattedMessage} from 'react-intl';
+import {Exchange} from '../../components/exchange'
 interface OfferProps extends RouteComponentProps < { id: string } > {
     dispatch: Dispatch < RootState >;
     offer: Offer;
@@ -111,7 +112,7 @@ class ViewPage extends React.Component < OfferProps, OfferState > {
                     <div className="label">
                         <FormattedMessage id="itemFeilds.price" defaultMessage="Price"/>
                     </div>
-                    <div className="detail">{offer.price&&offer.currencyCode?offer.price+offer.currencyCode+"/KG":""}</div>
+                    <div className="detail">{offer.price&&offer.currencyCode?<Exchange price={offer.price} currencyCode = {offer.currencyCode}/>+"/KG":""}</div>
                 </div>
                 <div className="group">
                     <div className="label">

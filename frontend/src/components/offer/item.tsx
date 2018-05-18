@@ -5,6 +5,7 @@ import {offerActionCreators,AuthInfo} from '../../actions';
 import {RootState,OfferState} from '../../reducers'
 import {Offer,ListItem} from '../../models'
 import {offerConsts} from '../../constants'
+import {Exchange} from '../exchange'
 interface ItemProps  {
     dispatch: Dispatch<RootState>;
     offer: Offer;
@@ -77,7 +78,7 @@ class Item extends React.Component<ItemProps,ItemState> {
                         }>Set Sold</div>:
                     ''}
                     </div>
-                    <div className="content">${offer.price}</div>
+                    <div className="content">{offer.price&&offer.currencyCode&&<Exchange price={offer.price} currencyCode = {offer.currencyCode}/>}</div>
                     <div className="menu content">
                         <Link className="control-btn" to={'/offer/' + offer.id}>Read More</Link>
                         {(authInfo.id==offer.userId||authInfo.isAdmin)?
