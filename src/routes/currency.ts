@@ -1,7 +1,5 @@
 import * as express from 'express'
 import { Currency } from '../models/'
-const cronJob = require('cron').CronJob
-
 const router = express.Router()
 
 router.get('/list', async (req: express.Request, res: express.Response) => {
@@ -13,5 +11,4 @@ router.get('/list', async (req: express.Request, res: express.Response) => {
   }
 
 })
-
 export = router
