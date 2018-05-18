@@ -11,7 +11,8 @@ import {RootState} from '../reducers'
 export type Action = {
     type: string;
     error?: string;
-    currencys?:Array < Currency >
+    currencys?:Array < Currency >;
+    currencyState?:string;
 }
 type Thunk = ThunkAction<void, RootState, void>;
 
@@ -33,6 +34,16 @@ const getAll: ActionCreator<ThunkAction<void, RootState, void>> = () => {
         return {type: currencyConsts.GET_FAILURE, error}
     }
 }
+function upCurrencystatus(currencyState : string) {
+  return (dispatch : (action : Action) => void) => {
+      dispatch(update(currencyState));
+  };
+
+  function update(state:string) {
+      return {type: currencyConsts.UPDATE_CURRENCY_STATE,currencyState:state}
+  }
+}
 export const actionCreators = {
-    getAll
+    getAll,
+    upCurrencystatus
 };

@@ -5,7 +5,7 @@ function getAll() {
     const requestOptions = {
         method: 'GET'
     };
-    return fetch('/currency', requestOptions).then(handleResponse);
+    return fetch('/currency/list', requestOptions).then(handleResponse);
 }
 
 function handleResponse(response:Response) {

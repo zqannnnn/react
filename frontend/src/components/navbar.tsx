@@ -2,12 +2,17 @@ import * as React from 'react';
 import {NavLink, Link, withRouter, RouteComponentProps} from 'react-router-dom';
 import {connect,Dispatch} from 'react-redux';
 import {FormattedMessage} from 'react-intl';
-import {authActionCreators, AuthInfo} from '../actions';
-import {RootState} from '../reducers';
+import {authActionCreators, AuthInfo , currencyActionCreators} from '../actions';
+import {RootState,CurrencyState} from '../reducers';
+// import {Currency} from '../models';
+
 interface NavProps extends RouteComponentProps <{}> {
     dispatch: Dispatch<RootState>;
     authInfo: AuthInfo;
+    currency: CurrencyState;
 }
+
+
 class NavBar extends React.Component <NavProps> {
     constructor(props : NavProps) {
         super(props);
@@ -17,8 +22,16 @@ class NavBar extends React.Component <NavProps> {
             .props
             .dispatch(authActionCreators.logout());
     }
+    componentDidMount(){
+      this.props.dispatch(currencyActionCreators.getAll());
+    }
+    handleSelectChange = (e : React.FormEvent < HTMLSelectElement >) =>{
+      const {name, value} = e.currentTarget;
+      console.log(value);
+      this.props.dispatch(currencyActionCreators.upCurrencystatus(value));
+    }
     render() {
-        const {authInfo} = this.props
+        let {authInfo,currency} = this.props;
         return (
             <nav className="navbar navbar-expand-lg justify-content-between" role="navigation">
             <NavLink exact to="/" className="navbar-brand" activeClassName="active">Home</NavLink>
@@ -55,16 +68,26 @@ class NavBar extends React.Component <NavProps> {
                     <li className="nav-item">
                         <NavLink to="/login" className="nav-link" activeClassName="active" onClick={this.logout()}>{authInfo?<FormattedMessage id="navbar.logout" defaultMessage="Logout"/>:<FormattedMessage id="navbar.login" defaultMessage="Login"/>}</NavLink>
                     </li>
-                   
+                    <li className="nav-item">
+                      <select
+                          className="form-control"
+                          name="currency"
+                          value={currency.currentCurrency}
+                          onChange={this.handleSelectChange}>
+                          {currency.items?currency.items.map((item, index) =>
+                              <option key={index} value={item.code}>{item.code}({item.description})</option>):""}
+                      </select>
+                    </li>
+
                 </ul>
             </nav>
         );
     }
 }
 function mapStateToProps(state : RootState) {
-    const {auth} = state;
+    const {auth,currency} = state;
     const {authInfo} = auth;
-    return {authInfo};
+    return {authInfo,currency};
 }
 const connectedNavBar = withRouter(connect(mapStateToProps)(NavBar));
 export {connectedNavBar as NavBar};
