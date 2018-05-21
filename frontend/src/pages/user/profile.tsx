@@ -92,6 +92,7 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
                 [name]: value
             }
         });
+      
     }
     handleSelect = (e : React.FormEvent < HTMLSelectElement >) => {
         const {name, value} = e.currentTarget;
@@ -102,6 +103,7 @@ class ProfilePage extends React.Component < ProfileProps,ProfileState > {
                 [name]: value
             }
         });
+        this.props.dispatch(currencyActionCreators.upCurrencystatus(value));
     }
     handleSubmit = (event : React.FormEvent < HTMLFormElement >) => {
         event.preventDefault();

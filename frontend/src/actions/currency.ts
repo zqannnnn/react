@@ -35,13 +35,7 @@ const getAll: ActionCreator<ThunkAction<void, RootState, void>> = () => {
     }
 }
 function upCurrencystatus(currencyState : string) {
-  return (dispatch : (action : Action) => void) => {
-      dispatch(update(currencyState));
-  };
-
-  function update(state:string) {
-      return {type: currencyConsts.UPDATE_CURRENCY_STATE,currencyState:state}
-  }
+      return {type: currencyConsts.UPDATE_CURRENCY_STATE,currencyState}
 }
 export const actionCreators = {
     getAll,
