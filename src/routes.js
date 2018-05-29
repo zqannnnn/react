@@ -61,7 +61,7 @@ module.exports = (app, passport) => {
             { expiresIn }
           ),
           id: user.id,
-          route: 'resetPass'
+          route: 'resetPass',
         }
         if (user.userType == 1) {
           data.isAdmin = true

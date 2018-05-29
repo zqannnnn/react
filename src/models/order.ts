@@ -6,7 +6,6 @@ import {
   DataType,
   Default,
   ForeignKey,
-  HasMany,
   HasOne,
   IsEmail,
   IsUUID,
@@ -17,12 +16,9 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript'
 import { consts } from '../config/static'
-import { Currency, Image, User } from './'
-@Table({
-  tableName: 'transaction',
-  underscored: true
-})
-export class Transaction extends Model<Transaction> {
+import { Currency, Offer, User } from './'
+@Table({ tableName: 'order', underscored: true })
+export class Order extends Model<Order> {
   // only allow string keys to do some iteration :)
   [key: string]: any
 
@@ -36,20 +32,19 @@ export class Transaction extends Model<Transaction> {
   @Column({ field: 'user_id' })
   public userId: string
 
-  @BelongsTo(() => User)
-  public user: User
+  @ForeignKey(() => Offer)
+  @Column({ field: 'offer_id' })
+  public offerId: string
 
   @Column public type: string
 
-  @Column public category: string
+  @Default(consts.ORDER_STATUS_CREATED)
+  @Column
+  public status: number
 
   @Column public title: string
 
   @Column public desc: string
-
-  @Default(consts.TRANSACTION_STATUS_CREATED)
-  @Column
-  public status: number
 
   @Column public storage: string
 
@@ -58,8 +53,6 @@ export class Transaction extends Model<Transaction> {
   @Column public grade: string
 
   @Column public fed: string
-
-  @Column public brand: string
 
   @Column({ field: 'grain_fed_days' })
   public grainFedDays: number
@@ -99,9 +92,6 @@ export class Transaction extends Model<Transaction> {
 
   @BelongsTo(() => Currency)
   public currency: Currency
-
-  @HasMany(() => Image, 'transaction_id')
-  public images: Image[]
 
   @CreatedAt
   @Column({ field: 'created_at' })

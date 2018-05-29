@@ -28,7 +28,7 @@ export const beefOptions = {
     'Buffalo',
     'Wagyu',
     'Mixed Breed',
-    'Cross Cattle'
+    'Cross Cattle',
   ],
   Fed: ['Grass fed', 'Grain fed'],
   Grade: [
@@ -49,7 +49,7 @@ export const beefOptions = {
     'YE',
     'YGE',
     'BYG',
-    'Other'
+    'Other',
   ],
   'Slaughter Specification': [
     'Full Set',
@@ -57,7 +57,7 @@ export const beefOptions = {
     'Full Set ex Trim ex Neckbone',
     '1/4 cuts (quarter cut carcasses)',
     '1/8 cuts (eight way cuts)',
-    'Selected Beef Cuts (Primals)'
+    'Selected Beef Cuts (Primals)',
   ],
   'Marble Score': ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
   Bone: ['Bone In', 'Bone Out']
@@ -73,7 +73,7 @@ export const vealOptions = {
     'Buffalo',
     'Wagyu',
     'Mixed Breed',
-    'Cross Cattle'
+    'Cross Cattle',
   ],
   Grade: ['V'],
   'Slaughter Specification': [
@@ -82,7 +82,7 @@ export const vealOptions = {
     'Full Set ex Trim ex Neckbone',
     '1/4 cuts (quarter cut carcasses)',
     '1/8 cuts (eight way cuts)',
-    'Selected Beef Cuts (Primals)'
+    'Selected Beef Cuts (Primals)',
   ],
   'Marble Score': ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
   Bone: ['Bone In', 'Bone Out']

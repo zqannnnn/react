@@ -16,13 +16,13 @@ import {
   PrimaryKey,
   Table,
   Unique,
-  UpdatedAt
+  UpdatedAt,
 } from 'sequelize-typescript'
 import { consts } from '../config/static'
 import { Currency, Image, Transaction } from './'
 @Table({
   tableName: 'user',
-  underscored: true
+  underscored: true,
 })
 export class User extends Model<User> {
   // only allow string keys to do some iteration :)
