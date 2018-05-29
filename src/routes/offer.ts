@@ -11,7 +11,7 @@ router.post('/new', async (req: IRequest, res: express.Response) => {
   try {
     const offer = new Offer({
       userId: req.userId,
-      ...req.body,
+      ...req.body
     })
     await offer.save()
     if (req.body.images) {
@@ -19,7 +19,7 @@ router.post('/new', async (req: IRequest, res: express.Response) => {
         const imageDb = new Image({
           path: image.path,
           offerId: offer.id,
-          type: consts.IMAGE_TYPE_MEDIE,
+          type: consts.IMAGE_TYPE_MEDIE
         })
         imageDb.save()
       })
@@ -29,7 +29,7 @@ router.post('/new', async (req: IRequest, res: express.Response) => {
         const imageDb = new Image({
           path: certificate.path,
           offerId: offer.id,
-          type: consts.IMAGE_TYPE_CERTIFICATE,
+          type: consts.IMAGE_TYPE_CERTIFICATE
         })
         imageDb.save()
       })
@@ -46,23 +46,23 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
     if (selectType === 'mine') {
       offers = await Offer.findAll({
         where: {
-          userId: req.userId,
+          userId: req.userId
         },
-        include: [{ model: Image, attributes: ['path', 'type'] }],
+        include: [{ model: Image, attributes: ['path', 'type'] }]
       })
     } else if (selectType === 'finished') {
       offers = await Offer.findAll({
         where: {
-          status: consts.OFFER_STATUS_FINISHED,
+          status: consts.OFFER_STATUS_FINISHED
         },
-        include: [{ model: Image, attributes: ['path', 'type'] }],
+        include: [{ model: Image, attributes: ['path', 'type'] }]
       })
     } else {
       offers = await Offer.findAll({
         where: {
-          status: consts.OFFER_STATUS_CREATED,
+          status: consts.OFFER_STATUS_CREATED
         },
-        include: [{ model: Image, attributes: ['path', 'type'] }],
+        include: [{ model: Image, attributes: ['path', 'type'] }]
       })
     }
     return res.send(offers)
@@ -112,8 +112,8 @@ router
       where: { id: req.params.offerId },
       include: [
         { model: Image, attributes: ['path', 'type'] },
-        { model: Currency, attributes: ['code'] },
-      ],
+        { model: Currency, attributes: ['code'] }
+      ]
     })
     if (!offer) {
       return res.status(403).send({ error: 'Offer does not exist' })
@@ -139,7 +139,7 @@ router
           const imageDb = new Image({
             path: image.path,
             offerId: offer.id,
-            type: consts.IMAGE_TYPE_MEDIE,
+            type: consts.IMAGE_TYPE_MEDIE
           })
           imageDb.save()
         })
@@ -149,7 +149,7 @@ router
           const imageDb = new Image({
             path: certificate.path,
             offerId: offer.id,
-            type: consts.IMAGE_TYPE_CERTIFICATE,
+            type: consts.IMAGE_TYPE_CERTIFICATE
           })
           imageDb.save()
         })

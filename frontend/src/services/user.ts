@@ -66,7 +66,6 @@ function _delete(id: string) {
 
   return fetch('/user/' + id, requestOptions).then(handleResponse)
 }
-
 function handleResponse(response: Response) {
   if (!response.ok) {
     return response.json().then(result => Promise.reject(result.error))

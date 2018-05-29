@@ -11,7 +11,7 @@ router.post('/new', async (req: IRequest, res: express.Response) => {
   try {
     const order = new Order({
       userId: req.userId,
-      ...req.body,
+      ...req.body
     })
     await order.save()
     return res.send({ success: true })
@@ -26,20 +26,20 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
     if (selectType === 'mine') {
       orders = await Order.findAll({
         where: {
-          userId: req.userId,
-        },
+          userId: req.userId
+        }
       })
     } else if (selectType === 'finished') {
       orders = await Order.findAll({
         where: {
-          status: consts.ORDER_STATUS_FINISHED,
-        },
+          status: consts.ORDER_STATUS_FINISHED
+        }
       })
     } else {
       orders = await Order.findAll({
         where: {
-          status: consts.ORDER_STATUS_CREATED,
-        },
+          status: consts.ORDER_STATUS_CREATED
+        }
       })
     }
     return res.send(orders)
@@ -87,7 +87,7 @@ router
   .get(async (req: IRequest, res: express.Response) => {
     const order = await Order.find({
       where: { id: req.params.orderId },
-      include: [{ model: Currency, attributes: ['code'] }],
+      include: [{ model: Currency, attributes: ['code'] }]
     })
     if (!order) {
       return res.status(403).send({ error: 'Order does not exist' })

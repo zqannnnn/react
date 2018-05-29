@@ -15,7 +15,7 @@ router.post('/new', async (req, res) => {
       password: req.body.password,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      userType: req.body.userType,
+      userType: req.body.userType
     })
     await user.save()
     const token = jwt.sign(
@@ -141,7 +141,7 @@ router
         req.body.businessLicenses.forEach((image: { path: string }) => {
           const imageDb = new Image({
             path: image.path,
-            userId: user.id,
+            userId: user.id
           })
           imageDb.save()
         })

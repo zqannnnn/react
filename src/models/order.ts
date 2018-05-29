@@ -13,7 +13,7 @@ import {
   PrimaryKey,
   Table,
   Unique,
-  UpdatedAt,
+  UpdatedAt
 } from 'sequelize-typescript'
 import { consts } from '../config/static'
 import { Currency, Offer, User } from './'

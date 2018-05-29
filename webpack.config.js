@@ -8,7 +8,7 @@ module.exports = {
   output: {
     path: dist,
     publicPath: '/',
-    filename: 'main.js',
+    filename: 'main.js'
   },
 
   resolve: {
@@ -20,7 +20,7 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'awesome-typescript-loader',
+        loader: 'awesome-typescript-loader'
       },
       {
         test: /\.css$/,
@@ -33,7 +33,7 @@ module.exports = {
     historyApiFallback: true,
     inline: true,
     stats: {
-      colors: true,
-    },
-  },
+      colors: true
+    }
+  }
 }

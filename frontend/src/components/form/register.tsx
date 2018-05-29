@@ -43,7 +43,7 @@ class RegisterForm extends React.Component<
   handleConfirmBlur = (e: React.FormEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value
     this.setState({
-      confirmDirty: this.state.confirmDirty || !!value,
+      confirmDirty: this.state.confirmDirty || !!value
     })
   }
   compareToFirstPassword = (
@@ -68,7 +68,7 @@ class RegisterForm extends React.Component<
       form.validateFields(
         ['confirm'],
         {
-          force: true,
+          force: true
         },
         callback
       )
@@ -80,32 +80,32 @@ class RegisterForm extends React.Component<
     const formItemLayout = {
       labelCol: {
         xs: {
-          span: 24,
+          span: 24
         },
         sm: {
-          span: 8,
-        },
+          span: 8
+        }
       },
       wrapperCol: {
         xs: {
-          span: 24,
+          span: 24
         },
         sm: {
-          span: 16,
-        },
-      },
+          span: 16
+        }
+      }
     }
     const tailFormItemLayout = {
       wrapperCol: {
         xs: {
           span: 24,
-          offset: 0,
+          offset: 0
         },
         sm: {
           span: 16,
-          offset: 8,
-        },
-      },
+          offset: 8
+        }
+      }
     }
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
@@ -151,9 +151,9 @@ class RegisterForm extends React.Component<
                 message: i18n.t('Please input your password!')
               },
               {
-                validator: this.validateToNextPassword,
-              },
-            ],
+                validator: this.validateToNextPassword
+              }
+            ]
           })(<Input type="password" />)}
         </FormItem>
         <FormItem {...formItemLayout} label="Confirm Password">
@@ -164,9 +164,9 @@ class RegisterForm extends React.Component<
                 message: i18n.t('Please confirm your password!')
               },
               {
-                validator: this.compareToFirstPassword,
-              },
-            ],
+                validator: this.compareToFirstPassword
+              }
+            ]
           })(<Input type="password" onBlur={this.handleConfirmBlur} />)}
         </FormItem>
         <FormItem {...tailFormItemLayout}>
