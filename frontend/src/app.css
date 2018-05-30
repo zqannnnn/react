@@ -539,3 +539,10 @@ ul.nav li {
 .confirm-btn-right {
   float: right;
 }
+.edits-container-wrap{
+  margin: 0 auto;
+  width: 80%;
+}
+.edits-container-wrap h3{
+  margin-top:15px;
+}
