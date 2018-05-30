@@ -14,7 +14,7 @@ class Lightbox extends React.Component<LightboxProps> {
     super(props)
   }
   close = (event: React.MouseEvent<HTMLElement>) => {
-    this.props.dispatch(lightboxActionCreators.close())
+    this.props.dispatch(lightboxActionCreators.close()) //get new props
   }
 
   prev = (event: React.MouseEvent<HTMLElement>) => {
