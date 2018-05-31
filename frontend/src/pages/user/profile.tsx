@@ -30,7 +30,9 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   constructor(props: ProfileProps) {
     super(props)
     this.state = {
-      user: {},
+      user: {
+        preferredCurrencyCode: ''
+      },
       submitted: false
     }
   }

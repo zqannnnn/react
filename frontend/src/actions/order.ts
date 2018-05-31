@@ -8,7 +8,6 @@ import { Dispatch } from 'react-redux'
 import { ActionCreator } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 import { RootState } from '../reducers'
-import { Route, Redirect, RouteProps } from 'react-router-dom'
 
 export type Action = {
   type: string

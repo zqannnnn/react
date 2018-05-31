@@ -539,10 +539,29 @@ ul.nav li {
 .confirm-btn-right {
   float: right;
 }
-.edits-container-wrap{
-  margin: 0 auto;
-  width: 80%;
+.icon-menu {
+  display: block;
+  position: absolute;
+  z-index: 1000;
+  width: 50px;
+  margin-top: 7px;
+  height: 50px;
+  cursor: pointer;
 }
-.edits-container-wrap h3{
-  margin-top:15px;
+
+.icon-menu:before {
+  background: #777;
+  border-radius: 2px;
+  box-shadow: 0 6px 0 0 #777, 0 12px 0 0 #777;
+  content: '';
+  display: block;
+  height: 2px;
+  position: absolute;
+  width: 24px;
+  top: 18px;
+  right: 13px;
+}
+
+.mobile-navigation {
+  border-right: 0;
 }
