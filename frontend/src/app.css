@@ -396,6 +396,16 @@ ul.nav li {
   width: 90%;
   height: 80%;
   max-width: 1200px;
+  animation: PicMove 0.5s;
+}
+
+@keyframes PicMove {
+  0% {
+    transform: translateX(-100%) scale(0);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
 }
 
 /* The Close Button */
