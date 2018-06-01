@@ -398,7 +398,7 @@ class EditPage extends React.Component<OrderProps, OrderState> {
                   type="text"
                   name="primalCuts"
                   value={primalCuts}
-                  onChange={value => this.handleInputChange}
+                  onChange={this.handleInputChange}
                 />
               </Col>
               <Col sm={8} md={8} lg={8} className="edits-select" offset={2}>

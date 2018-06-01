@@ -62,7 +62,6 @@ class App extends React.Component<AppProps, any> {
               <Switch>
                 <Route exact path="/" component={HomePage} />
                 <PrivateRoute path="/reset/pass" component={ResetPassPage} />
-
                 <PrivateRoute
                   path="/transactions/my"
                   component={() => (
