@@ -256,7 +256,7 @@ ul.nav li {
 }
 .block .desc {
   word-break: break-word;
-  min-height: 70px;
+  min-height: 50px;
   overflow: hidden;
   font-size: 13px;
   padding: 0 10px;
@@ -343,10 +343,10 @@ ul.nav li {
 
 .edit-page .label-right {
   line-height: 38px;
-  padding: 0 5px;
   font-size: 16px;
   height: 38px;
   display: inline-block;
+  margin-left: 5px;
 }
 
 .page .subtitle {
@@ -491,9 +491,6 @@ ul.nav li {
 .steps-action {
   margin-top: 24px;
 }
-.container-wrap {
-  margin: 0 auto;
-}
 .edits-title {
   font-size: 20px;
   font-weight: bold;
@@ -526,13 +523,10 @@ ul.nav li {
   font: 17px bold;
   margin: 6px 0;
   color: black;
+  margin-top: 20px;
 }
 .button-margin {
   margin-right: 10px;
-}
-.wrap {
-  margin: 0 auto;
-  width: 60%;
 }
 .lost-title {
   width: 100%;
@@ -582,13 +576,11 @@ ul.nav li {
   margin-bottom: 30px;
 }
 .uploadCls-profile {
-  width: 90%;
   padding: 10px;
   background: #fff;
   border: 1px solid #eee;
 }
 .uploadCls-offers-edit {
-  width: 90%;
   padding: 10px;
   margin-bottom: 15px;
   border-radius: 10px;

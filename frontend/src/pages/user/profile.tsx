@@ -50,8 +50,8 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     if (userData && !submitted) {
       this.setState({
         user: {
-          ...userData,
-          ...user
+          ...user,
+          ...userData
         }
       })
     }
