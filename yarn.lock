@@ -128,13 +128,6 @@
   dependencies:
     "@types/i18next" "*"
     "@types/react" "*"
-<<<<<<< 0b7efb46a332255a91cae211d0f8835bbc4ac058
-=======
-
-"@types/react-intl@^2.3.5":
-  version "2.3.8"
-  resolved "https://registry.yarnpkg.com/@types/react-intl/-/react-intl-2.3.8.tgz#de56b21b67e39df24bc0fc7e67b437976b666919"
->>>>>>> get i18n works
 
 "@types/react-redux@^5.0.5":
   version "5.0.20"
@@ -2134,7 +2127,10 @@ html-parse-stringify2@2.0.1:
   dependencies:
     void-elements "^2.0.1"
 
+<<<<<<< 5b40d336f6ce906311a3649fc746a747eba4da94
 <<<<<<< 0b7efb46a332255a91cae211d0f8835bbc4ac058
+=======
+>>>>>>> extracting translations keys
 htmlparser2@^3.9.2:
   version "3.9.2"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-3.9.2.tgz#1bdf87acca0f3f9e53fa4fcceb0f4b4cbb00b338"
@@ -2146,8 +2142,11 @@ htmlparser2@^3.9.2:
     inherits "^2.0.1"
     readable-stream "^2.0.2"
 
+<<<<<<< 5b40d336f6ce906311a3649fc746a747eba4da94
 =======
 >>>>>>> get i18n works
+=======
+>>>>>>> extracting translations keys
 http-errors@1.6.2:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.6.2.tgz#0a002cc85707192a7e7946ceedc11155f60ec736"
@@ -2182,7 +2181,10 @@ i18next-browser-languagedetector@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/i18next-browser-languagedetector/-/i18next-browser-languagedetector-2.2.0.tgz#5f41abe61964a56dce70102ab31c3ed5d5866edc"
 
+<<<<<<< 5b40d336f6ce906311a3649fc746a747eba4da94
 <<<<<<< 0b7efb46a332255a91cae211d0f8835bbc4ac058
+=======
+>>>>>>> extracting translations keys
 i18next-parser@^1.0.0-beta17:
   version "1.0.0-beta9"
   resolved "https://registry.yarnpkg.com/i18next-parser/-/i18next-parser-1.0.0-beta9.tgz#9e0fff4eea55850ab3be6ee85fa5dcdc0ab379a3"
@@ -2219,8 +2221,11 @@ i18next-scanner@^2.4.6:
     vinyl "^2.1.0"
     vinyl-fs "^3.0.1"
 
+<<<<<<< 5b40d336f6ce906311a3649fc746a747eba4da94
 =======
 >>>>>>> get i18n works
+=======
+>>>>>>> extracting translations keys
 i18next@^11.3.2:
   version "11.3.2"
   resolved "https://registry.yarnpkg.com/i18next/-/i18next-11.3.2.tgz#4a1a7bb14383ba6aed4abca139b03681fc96e023"
