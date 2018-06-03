@@ -45,7 +45,6 @@ class App extends React.Component<AppProps, any> {
       i18n.changeLanguage(lng);
     };
     */
-
     const { alert, lightbox } = this.props
     return (
       <Layout>
@@ -111,5 +110,4 @@ function mapStateToProps(state: RootState) {
   const { alert, lightbox, auth } = state
   return { alert, lightbox, auth: auth }
 }
-
 export default connect(mapStateToProps)(App)
