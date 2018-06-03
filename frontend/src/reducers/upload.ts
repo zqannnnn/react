@@ -1,24 +1,25 @@
-import {uploadConsts} from '../constants';
-import {UploadAction} from '../actions'
-import {Offer} from '../models'
+import { uploadConsts } from '../constants'
+import { UploadAction } from '../actions'
+import { Offer } from '../models'
 export type State = {
-  uploading?:boolean;
-  image?:string;
-  error?:string;
-};
-export function upload(state:State ={} , action:UploadAction):State {
+  uploading?: boolean
+  image?: string
+  error?: string
+}
+export function upload(state: State = {}, action: UploadAction): State {
   switch (action.type) {
     case uploadConsts.UPLOAD_IMAGE_REQUEST:
-      return { uploading: true };
+      return { uploading: true }
     case uploadConsts.UPLOAD_IMAGE_SUCCESS:
-      return {...state,
+      return {
+        ...state,
         uploading: false,
-        image:action.imagePath
-      };
+        image: action.imagePath
+      }
     case uploadConsts.UPLOAD_IMAGE_FAILURE:
-      return {error: action.error, uploading: false};
+      return { error: action.error, uploading: false }
     case uploadConsts.UPLOAD_CLEAR_IMAGE:
-      return {};
+      return {}
     default:
       return state
   }

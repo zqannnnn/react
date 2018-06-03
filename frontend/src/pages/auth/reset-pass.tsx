@@ -1,96 +1,75 @@
-import * as React from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { connect,Dispatch } from 'react-redux';
+import * as React from 'react'
+import { Link, Redirect } from 'react-router-dom'
+import { connect, Dispatch } from 'react-redux'
+import { ResetPassForm } from '../../components/form'
+import { userActionCreators } from '../../actions'
+import { RootState } from '../../reducers'
+import { Row, Col } from 'antd'
+import i18n from 'i18next'
 
-import {userActionCreators} from '../../actions';
-import { RootState } from '../../reducers';
-interface ResetPassProps{
-    dispatch: Dispatch<RootState>;
-    processing:boolean;
+interface ResetPassProps {
+  dispatch: Dispatch<RootState>
+  processing: boolean
 }
-interface ResetPassState  {
-    password: string
-    rePassword: string,
-    submitted:boolean;
+interface ResetPassState {
+  password: string
+  rePassword: string
+  submitted: boolean
 }
-class ResetPassPage extends React.Component<ResetPassProps,ResetPassState> {
-    constructor(props:ResetPassProps) {
-        super(props);
+class ResetPassPage extends React.Component<ResetPassProps, ResetPassState> {
+  constructor(props: ResetPassProps) {
+    super(props)
 
-        this.state = {
-            password: '',
-            rePassword: '',
-            submitted: false
-        };
+    this.state = {
+      password: '',
+      rePassword: '',
+      submitted: false
     }
-    handleChange = (e:React.FormEvent<HTMLInputElement>) => {
-        const { name, value } = e.currentTarget;
-        this.setState({...this.state, [name]: value });
-    }
+  }
+  handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const { name, value } = e.currentTarget
+    this.setState({ ...this.state, [name]: value })
+  }
 
-    handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-        this.setState({ submitted: true });
-        const { password,rePassword } = this.state;
-        const { dispatch } = this.props;
-        if (password&&password==rePassword) {
-            dispatch(userActionCreators.resetPass(password));
-        }
+    this.setState({ submitted: true })
+    const { password, rePassword } = this.state
+    const { dispatch } = this.props
+    if (password && password == rePassword) {
+      dispatch(userActionCreators.resetPass(password))
     }
+  }
 
-    render() {
-        const { processing } = this.props;
-        const { password,rePassword, submitted } = this.state;
-        return (
-            <div className="page col-md-8 offset-md-2 without-nav">
-            <h4 className="header">Reset Password</h4>
-            <form name="form" onSubmit={this.handleSubmit}>
-            <div
-            className={'form-group' + (submitted && !password
-            ? ' has-error'
-            : '')}>
-            <label htmlFor="password">Password</label>
-            <input
-                type="password"
-                className="form-control"
-                name="password"
-                value={password}
-                onChange={this.handleChange}/> {submitted && !password && <div className="help-block">Password is required</div>
-}
-        </div>
-        <div
-            className={'form-group' + (submitted && !rePassword || rePassword != password || submitted && rePassword != password
-            ? ' has-error'
-            : '')}>
-            <label htmlFor="rePassword">Confirm Password</label>
-            <input
-                type="password"
-                className="form-control"
-                name="rePassword"
-                value={rePassword}
-                onChange={this.handleChange}/> {password != rePassword && <div className="help-block">Password does not match the confirm password.</div>}
-            {submitted && !rePassword && <div className="help-block">Comfirm Password is required</div>}
-        </div>
-                <div className="form-group">
-                    <button className="btn btn-primary">Reset Password</button>
-                    {processing &&
-                        <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                    }
-                    <Link to="/" className="btn btn-link">Back to Home</Link>
-                </div>
-               
-            </form>
-        </div>);
-    }
+  render() {
+    const { processing } = this.props
+    const { password, rePassword, submitted } = this.state
+    return (
+      <Row className="page">
+        <div className="header">{i18n.t('Reset')}</div>
+        <Col
+          xs={{ span: 22, offset: 1 }}
+          sm={{ span: 18, offset: 3 }}
+          md={{ span: 14, offset: 5 }}
+          lg={{ span: 10, offset: 7 }}
+        >
+          <ResetPassForm
+            handleSubmit={this.handleSubmit}
+            processing={processing}
+          />
+        </Col>
+      </Row>
+    )
+  }
 }
 
-function mapStateToProps(state:RootState) {
-    const { processing } = state.user;
-    return {
-        processing
-    };
+function mapStateToProps(state: RootState) {
+  const { processing } = state.user
+  return {
+    processing
+  }
 }
 
-const connectedResetPassPage = connect(mapStateToProps)(ResetPassPage);
-export { connectedResetPassPage as ResetPassPage }; 
+const connectedResetPassPage = connect(mapStateToProps)(ResetPassPage)
+export { connectedResetPassPage as ResetPassPage }

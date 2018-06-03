@@ -21,32 +21,31 @@ const handleSequelizeError = (res, error) => {
   res.status(500).send({ error: error.message })
 }
 
-const handleSuccess = (res) => {
+const handleSuccess = res => {
   res.json({ success: true })
 }
 
 module.exports = (app, passport) => {
-
   app.post('/login', (req, res, next) => {
     passport.authenticate('local-login', (err, user, info) => {
       if (err) {
-        return next(err); // will generate a 500 error
+        return next(err) // will generate a 500 error
       }
       // Generate a JSON response reflecting authentication status
       if (!user) {
-        return res.status(401).send({ error: 'Incorrect email or password.' });
+        return res.status(401).send({ error: 'Incorrect email or password.' })
       }
       const data = {
         token: jwt.sign(user, app.get('secretKey'), { expiresIn }),
-        id: user.id,
+        id: user.id
       }
       if (user.userType == 1) {
         data.isAdmin = true
       }
       data.licenseStatus = user.licenseStatus
       res.send(data)
-    })(req, res, next);
-  });
+    })(req, res, next)
+  })
 
   app.get('/pass/reset', async (req, res) => {
     const email = req.param('email')
@@ -55,9 +54,13 @@ module.exports = (app, passport) => {
       const user = await User.findOne({ where: { email: email } })
       if (user != null && user.resetKey == key) {
         const data = {
-          token: jwt.sign(user.get({
-            plain: true
-          }), app.get('secretKey'), { expiresIn }),
+          token: jwt.sign(
+            user.get({
+              plain: true
+            }),
+            app.get('secretKey'),
+            { expiresIn }
+          ),
           id: user.id,
           route: 'resetPass'
         }
@@ -70,10 +73,10 @@ module.exports = (app, passport) => {
     }
   })
   app.use('/pass', passRouter)
-  app.use('/user', userRouter);
-  app.use('/category', categoryRouter);
-  app.use('/offer', offerRouter);
-  app.use('/order', orderRouter);
-  app.use('/upload', uploadRouter);
-  app.use('/currency', currencyRouter);
+  app.use('/user', userRouter)
+  app.use('/category', categoryRouter)
+  app.use('/offer', offerRouter)
+  app.use('/order', orderRouter)
+  app.use('/upload', uploadRouter)
+  app.use('/currency', currencyRouter)
 }

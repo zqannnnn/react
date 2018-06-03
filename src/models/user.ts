@@ -25,7 +25,6 @@ import { Currency, Image, Offer, Order } from './'
   underscored: true
 })
 export class User extends Model<User> {
-
   // only allow string keys to do some iteration :)
   [key: string]: any
 
@@ -53,8 +52,7 @@ export class User extends Model<User> {
   @Column({ field: 'last_name' })
   public lastName: string
 
-  @Column
-  public password: string
+  @Column public password: string
 
   @Column({ field: 'reset_key' })
   public resetKey: string
@@ -74,20 +72,19 @@ export class User extends Model<User> {
   public offers: Offer[]
 
   @ForeignKey(() => Currency)
-  @Column({field: 'prefered_currency_code'})
-  public preferedCurrencyCode: string
+  @Column({ field: 'preferred_currency_code' })
+  public preferredCurrencyCode: string
 
-  @BelongsTo(() => Currency, 'prefered_currency')
-  public preferedCurrency: Currency
+  @BelongsTo(() => Currency, 'preferred_currency')
+  public preferredCurrency: Currency
 
-  @Column
-  public desc: string
+  @Column public desc: string
 
-  // feilds for company
+  // fields for company
   @Column({ field: 'company_name' })
   public companyName: string
 
-  @Column({ field: 'company_adress' })
+  @Column({ field: 'company_address' })
   public companyAddress: string
 
   @HasMany(() => Image, 'user_id')
@@ -97,7 +94,6 @@ export class User extends Model<User> {
   public licenseStatus: number
 
   // class methods
-  @BeforeUpdate
   @BeforeCreate
   public static hashPassword = async (instance: User) => {
     if (instance.password) {

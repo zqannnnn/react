@@ -1,28 +1,28 @@
-import {alertConsts} from '../constants';
-import {AlertAction} from '../actions'
+import { alertConsts } from '../constants'
+import { AlertAction } from '../actions'
 export type State = {
-  type?: string;
-  message?: string;
-};
-export function alert(state = {}, action : AlertAction):State {
+  type?: 'success' | 'error' | 'warning' | 'info'
+  message?: string
+}
+export function alert(state = {}, action: AlertAction): State {
   switch (action.type) {
     case alertConsts.SUCCESS:
       return {
-        type: 'alert-success',
+        type: 'success',
         message: action.message
-      };
+      }
     case alertConsts.ERROR:
       return {
-        type: 'alert-danger',
+        type: 'error',
         message: action.message
-      };
+      }
     case alertConsts.WARNING:
       return {
-        type: 'alert-warning',
+        type: 'warning',
         message: action.message
-      };
+      }
     case alertConsts.CLEAR:
-      return {};
+      return {}
     default:
       return state
   }

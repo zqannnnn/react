@@ -9,23 +9,25 @@ router.use(authMiddleware)
 const upload = multer({ dest: 'uploads/' })
 
 function makeRandomName(originalname: string) {
-    let name = makeRandomString(8)
-    const arry = originalname.split('.')
-    name += '.' + arry[arry.length - 1]
-    return name
-  }
+  let name = makeRandomString(8)
+  const arry = originalname.split('.')
+  name += '.' + arry[arry.length - 1]
+  return name
+}
 
-router.post('/image', upload.single('image'),
-    async (req: express.Request, res: express.Response) => {
+router.post(
+  '/image',
+  upload.single('image'),
+  async (req: express.Request, res: express.Response) => {
     const fileName = makeRandomName(req.file.originalname)
     fs.rename(req.file.path, 'uploads/' + fileName, err => {
-        if (err) {
-            return res.status(500).send({error: err})
-        } else {
-            return res.send({path: '/static/' + fileName})
-        }
-        }
-    )
-})
+      if (err) {
+        return res.status(500).send({ error: err })
+      } else {
+        return res.send({ path: '/static/' + fileName })
+      }
+    })
+  }
+)
 
 export = router

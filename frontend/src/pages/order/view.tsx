@@ -1,155 +1,116 @@
-import * as React from 'react';
-import {Link, RouteComponentProps} from 'react-router-dom';
-import {connect, Dispatch} from 'react-redux';
-import {orderActionCreators} from '../../actions'
-import {Order} from '../../models'
-import {Category, CategoryDetails} from '../../models'
-import {RootState} from '../../reducers'
-import {FormattedMessage} from 'react-intl';
-interface OrderProps extends RouteComponentProps < { id: string } > {
-    dispatch: Dispatch < RootState >;
-    order: Order;
+import * as React from 'react'
+import { Link, RouteComponentProps } from 'react-router-dom'
+import { connect, Dispatch } from 'react-redux'
+import { orderActionCreators } from '../../actions'
+import { Order } from '../../models'
+import { Category, CategoryDetails } from '../../models'
+import { RootState } from '../../reducers'
+import i18n from 'i18next'
+import { Icon, Row, Col } from 'antd'
+interface OrderProps extends RouteComponentProps<{ id: string }> {
+  dispatch: Dispatch<RootState>
+  order: Order
 }
 interface OrderState {
-    orderId?: string;
-    loading:boolean;
+  orderId?: string
+  loading: boolean
 }
-class ViewPage extends React.Component < OrderProps, OrderState > {
-    constructor(props : OrderProps) {
-        super(props);
-        this.state={
-            loading:true
-        }
+class ViewPage extends React.Component<OrderProps, OrderState> {
+  constructor(props: OrderProps) {
+    super(props)
+    this.state = {
+      loading: true
     }
-    componentDidMount() {
-        let orderId = this.props.match.params.id
-        orderId && this.setState({
-            ...this.state,
-            orderId
-        })
-        orderId && this.props.dispatch(orderActionCreators.getById(orderId))
+  }
+  componentDidMount() {
+    let orderId = this.props.match.params.id
+    orderId &&
+      this.setState({
+        ...this.state,
+        orderId
+      })
+    orderId && this.props.dispatch(orderActionCreators.getById(orderId))
+  }
+  componentWillReceiveProps(nextProps: OrderProps) {
+    const { order } = nextProps
+    if (order) {
+      this.setState({ loading: false })
     }
-    componentWillReceiveProps(nextProps : OrderProps) {
-        const {order} = nextProps;
-        if (order){
-            this.setState({loading:false});
-        }
-    }
-    render() {
-        const {order} = this.props
-        const {loading} = this.state
-        return (
-            <div className="col-md-8 offset-md-2 view-page page">
-                <h2 className="header">
-                    <FormattedMessage id="pages.orderViewPage" defaultMessage="Order View Page"/>
-                </h2>
-                {loading?<i className="fa fa-spinner" aria-hidden="true"></i>:<div className="content">
-                <div className="group">
-                        <div className="label">
-                            <FormattedMessage id="itemFeilds.title" defaultMessage="Title"/>
-                        </div>
-                        <div className="detail">{order.title}</div>
-                    </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.storage" defaultMessage="Storage"/>
-                    </div>
-                    <div className="detail">{order.storage}</div>
-                </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.breed" defaultMessage="Breed"/>
-                    </div>
-                    <div className="detail">{order.breed}</div>
-                </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.grade" defaultMessage="Grade"/>
-                    </div>
-                    <div className="detail">{order.grade}</div>
-                </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.marbleScore" defaultMessage="MarbleScore"/>
-                    </div>
-                    <div className="detail">{order.marbleScore}</div>
-                </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.slaughterSpec" defaultMessage="Slaughter Specification"/>
-                    </div>
-                    <div className="detail">{order.slaughterSpec}</div>
-                </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.bone" defaultMessage="Bone"/>
-                    </div>
-                    <div className="detail">{order.bone}</div>
-                </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.primalCuts" defaultMessage="Primal Cuts"/>
-                    </div>
-                    <div className="detail">{order.primalCuts}</div>
-                </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.trimmings" defaultMessage="Trimmings"/>
-                    </div>
-                    <div className="detail">{order.trimmings}CL</div>
-                </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.fed" defaultMessage="Fed"/>
-                    </div>
-                    <div className="detail">{order.fed}{order.grainFedDays?<span><br/>
-                        {order.grainFedDays} Day
-                        </span>:''}
-                    </div>
-                </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.price" defaultMessage="Price"/>
-                    </div>
-                    <div className="detail">{order.price}{order.currencyCode}</div>
-                </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.quantity" defaultMessage="Quantity"/>
-                    </div>
-                    <div className="detail">{order.quantity}KG</div>
-                </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.brand" defaultMessage="Brand"/>
-                    </div>
-                    <div className="detail">{order.brand}</div>
-                </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.factoryNum" defaultMessage="Factory Number"/>
-                    </div>
-                    <div className="detail">{order.factoryNum}</div>
-                </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.deliveryTerm" defaultMessage="Delivery Term"/>
-                    </div>
-                    <div className="detail">{order.deliveryTerm}</div>
-                </div>
-                <div className="group">
-                    <div className="label">
-                        <FormattedMessage id="itemFeilds.placeOfOrigin" defaultMessage="Place Of Origin"/>
-                    </div>
-                    <div className="detail">{order.placeOfOrigin}</div>
-                </div>
-            </div>}
-        </div>); 
-    } 
-} 
-            
-function mapStateToProps(state:RootState) {const {order} = state;
-    const {orderData} = order;
-    return { order:orderData};
+  }
+  render() {
+    const { order } = this.props
+    const { loading } = this.state
+    return (
+      <Row>
+        <Col
+          xs={{ span: 22, offset: 1 }}
+          sm={{ span: 16, offset: 4 }}
+          md={{ span: 12, offset: 6 }}
+          lg={{ span: 10, offset: 7 }}
+        >
+          <h3 className="header-center">{i18n.t('Order View Page')}</h3>
+          {loading ? (
+            <Icon type="loading" />
+          ) : (
+            <div>
+              <h3>{i18n.t('Title:')}</h3>
+              <div>{order.title}</div>
+              <h3>{i18n.t('Storage:')}</h3>
+              <div>{order.storage}</div>
+              <h3 className="label">{i18n.t('Breed:')}</h3>
+              <div>{order.breed}</div>
+              <h3 className="label">{i18n.t('Grade:')}</h3>
+              <div>{order.grade}</div>
+              <h3>{i18n.t('MarbleScore:')}</h3>
+              <div>{order.marbleScore}</div>
+              <h3>{i18n.t('Slaughter Specification:')}</h3>
+              <div>{order.slaughterSpec}</div>
+              <h3>{i18n.t('Bone:')}</h3>
+              <div>{order.bone}</div>
+              <h3>{i18n.t('Primal Cuts:')}</h3>
+              <div>{order.primalCuts}</div>
+              <h3>{i18n.t('Trimmings:')}</h3>
+              <div>{order.trimmings && order.trimmings + 'CL'}</div>
+              <h3>{i18n.t('Fed:')}</h3>
+              <div>
+                {order.fed}
+                {order.grainFedDays ? (
+                  <span>
+                    <br />
+                    {order.grainFedDays} Day
+                  </span>
+                ) : (
+                  ''
+                )}
+              </div>
+              <h3>{i18n.t('Price:')}</h3>
+              <div>
+                <span>
+                  {order.price && `${order.price} ${order.currencyCode}/KG`}
+                </span>
+              </div>
+              <h3>{i18n.t('Quantity:')}</h3>
+              <div>{order.quantity && order.quantity + 'KG'}</div>
+              <h3>{i18n.t('Brand:')}</h3>
+              <div>{order.brand}</div>
+              <h3>{i18n.t('Factory Number:')}</h3>
+              <div>{order.factoryNum}</div>
+              <h3>{i18n.t('Delivery Term:')}</h3>
+              <div>{order.deliveryTerm}</div>
+              <h3>{i18n.t('Place Of Origin:')}</h3>
+              <div>{order.placeOfOrigin}</div>
+            </div>
+          )}
+        </Col>
+      </Row>
+    )
+  }
 }
-const connectedViewPage = connect(mapStateToProps)(ViewPage); export {connectedViewPage as ViewPage}
+
+function mapStateToProps(state: RootState) {
+  const { order } = state
+  const { orderData } = order
+  return { order: orderData }
+}
+const connectedViewPage = connect(mapStateToProps)(ViewPage)
+export { connectedViewPage as ViewPage }

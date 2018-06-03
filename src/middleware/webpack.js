@@ -19,5 +19,4 @@ module.exports = app => {
 
   app.use(middleware)
   app.use(webpackHotMiddleware(compiler))
-
 }

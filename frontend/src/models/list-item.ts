@@ -1,5 +1,5 @@
-import { Currency } from ".";
+import { Currency } from '.'
 export interface ListItem {
-    id?:string;
-    itemType?:string;
-  }
+  id?: string
+  itemType?: string
+}

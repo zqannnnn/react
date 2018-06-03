@@ -1,17 +1,17 @@
 export const currencyService = {
-    getAll
-};
+  getAll
+}
 function getAll() {
-    const requestOptions = {
-        method: 'GET'
-    };
-    return fetch('/currency', requestOptions).then(handleResponse);
+  const requestOptions = {
+    method: 'GET'
+  }
+  return fetch('/currency/list', requestOptions).then(handleResponse)
 }
 
-function handleResponse(response:Response) {
-    if (!response.ok) {
-        return response.json().then(result=> Promise.reject(result.error))
-    }
+function handleResponse(response: Response) {
+  if (!response.ok) {
+    return response.json().then(result => Promise.reject(result.error))
+  }
 
-    return response.json();
+  return response.json()
 }

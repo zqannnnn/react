@@ -1,28 +1,28 @@
-import { alertConsts } from '../constants';
+import { alertConsts } from '../constants'
 
 export const actionCreators = {
-    success,
-    error,
-    warning,
-    clear
-};
-
-function success(message : string) : Action {
-    return {type: alertConsts.SUCCESS, message};
+  success,
+  error,
+  warning,
+  clear
 }
 
-function error(message : string) : Action {
-    return {type: alertConsts.ERROR, message};
+function success(message: string): Action {
+  return { type: alertConsts.SUCCESS, message }
 }
 
-function warning(message : string) : Action {
-    return {type: alertConsts.WARNING, message};
+function error(message: string): Action {
+  return { type: alertConsts.ERROR, message }
 }
 
-function clear() : Action {
-    return {type: alertConsts.CLEAR};
+function warning(message: string): Action {
+  return { type: alertConsts.WARNING, message }
+}
+
+function clear(): Action {
+  return { type: alertConsts.CLEAR }
 }
 export type Action = {
-    type: string;
-    message?: string;
+  type: string
+  message?: string
 }
