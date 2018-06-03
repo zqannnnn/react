@@ -50,7 +50,6 @@ class List extends React.Component<ListProps> {
         {transaction.error && (
           <span className="text-danger">ERROR: {transaction.error}</span>
         )}
-
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 20, offset: 2 }}

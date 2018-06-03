@@ -228,10 +228,6 @@ ul.nav li {
   transform: rotate(135deg);
 }
 
-.ant-card-head-wrapper {
-  height: 50px;
-}
-
 .block .title {
   text-align: center;
   padding: 5px 10px;
@@ -513,11 +509,6 @@ ul.nav li {
   margin: 10px;
   color: black;
   text-align: center;
-}
-.info-profile {
-  font: 20px bold;
-  margin: 10px 0;
-  color: black;
 }
 .profile-subtitle {
   font: 17px bold;
