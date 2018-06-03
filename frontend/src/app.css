@@ -132,6 +132,7 @@ ul.nav li {
   overflow: auto;
   width: 100%;
   margin-bottom: 20px;
+  padding: 10px;
 }
 
 .images-container .image-add {
@@ -504,7 +505,7 @@ ul.nav li {
   margin-top: 10px;
 }
 .container-wrap-profile {
-  width: 80%;
+  width: 70%;
   margin: 0 auto;
 }
 .container-wrap-profile div {
@@ -562,7 +563,6 @@ ul.nav li {
   height: 50px;
   cursor: pointer;
 }
-
 .icon-menu:before {
   background: #777;
   border-radius: 2px;
@@ -575,7 +575,23 @@ ul.nav li {
   top: 18px;
   right: 13px;
 }
-
 .mobile-navigation {
   border-right: 0;
+}
+.container-upload {
+  margin-bottom: 30px;
+}
+.uploadCls-profile {
+  width: 90%;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #eee;
+}
+.uploadCls-offers-edit {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid #fff;
+  background: #e9ecef;
 }
