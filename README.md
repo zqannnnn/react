@@ -80,23 +80,69 @@ Also try to automagically fix them like so:
 ./bin/tslint --fix
 ```
 
+### Format code
+
+To format code use:
+```sh
+./bin/yarn run format
+```
+
+
 ### i18n solution
 
-First,extract pot file,use:
+You can add translation like this:
 
 ```sh
-./bin/yarn run extract-translation
-./bin/yarn run json2pot
+import { Trans } from "react-i18next"
+...
+...
+...
+<Trans>
+    Some key text
+</Trans>
 ```
-Then translate pot file get po file
 
-Then resolve po file,use:
+or like this:
 
 ```sh
-./bin/yarn run pot2json
+import { translate } from "react-i18next"
+...
+...
+...
+var t = (this.props as any).t
+{t("Some key text")}
+...
+...
+...
+export default translate("translations")(connect(mapStateToProps)(Component))
 ```
-Then set json files in /frontend/src/index/tsx
 
+or like this:
+
+```sh
+import i18n from "i18next"
+...
+...
+...
+{i18n.t('Some key text')}
+```
+
+after adding translations to components run
+
+```sh
+i18next-scanner --config i18next-scanner.config.js "frontend/**/*.{ts,tsx}"
+```
+
+it will add missing translation keys to locale .json files
+
+To manage translation is convinient to use https://poeditor.com/, 
+we don't need generate .po files, we can just use json files for that.
+Anyway i18next provide easy way to generate .po files if we'll need it in feature.
+
+to change languge programmatically use: i18n.changeLanguage(lng)
+
+here some example of using i18next:
+https://codesandbox.io/s/8n252n822
 ### Import Currency
 
 ```sh

@@ -13,7 +13,7 @@ module.exports = {
 
   resolve: {
     modules: [base, path.join(__dirname, 'node_modules')],
-    extensions: ['.js','.ts', '.tsx']
+    extensions: ['.js', '.ts', '.tsx']
   },
 
   module: {
@@ -23,14 +23,14 @@ module.exports = {
         loader: 'awesome-typescript-loader'
       },
       {
-				test: /\.css$/,
-				loader: "style-loader!css-loader",
+        test: /\.css$/,
+        loader: 'style-loader!css-loader'
       }
     ]
   },
-  devtool: "source-map",
+  devtool: 'source-map',
   devServer: {
-    historyApiFallback:true,
+    historyApiFallback: true,
     inline: true,
     stats: {
       colors: true

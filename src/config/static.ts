@@ -18,8 +18,8 @@ export const consts = {
   IMAGE_TYPE_CERTIFICATE: 2
 }
 export const beefOptions = {
-  'Storage': ['Frozen', 'Chilled'],
-  'Breed': [
+  Storage: ['Frozen', 'Chilled'],
+  Breed: [
     'Angus',
     'Hereford',
     'Brahman',
@@ -29,9 +29,27 @@ export const beefOptions = {
     'Mixed Breed',
     'Cross Cattle'
   ],
-  'Fed': ['Grass fed', 'Grain fed'],
-  'Grade': ['A', 'B', 'V', 'C', 'PR', 'PRS', 'S', 'SS', 'Y', 'YG', 'YGS', 'YP',
-    'YPS', 'YS', 'YE', 'YGE', 'BYG', 'Other'],
+  Fed: ['Grass fed', 'Grain fed'],
+  Grade: [
+    'A',
+    'B',
+    'V',
+    'C',
+    'PR',
+    'PRS',
+    'S',
+    'SS',
+    'Y',
+    'YG',
+    'YGS',
+    'YP',
+    'YPS',
+    'YS',
+    'YE',
+    'YGE',
+    'BYG',
+    'Other'
+  ],
   'Slaughter Specification': [
     'Full Set',
     'Full set ex Trim',
@@ -41,14 +59,12 @@ export const beefOptions = {
     'Selected Beef Cuts (Primals)'
   ],
   'Marble Score': ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
-  'Bone': ['Bone In', 'Bone Out']
+  Bone: ['Bone In', 'Bone Out']
 }
 
 export const vealOptions = {
-  'Storage': [
-    'Frozen', 'Chilled'
-  ],
-  'Breed': [
+  Storage: ['Frozen', 'Chilled'],
+  Breed: [
     'Angus',
     'Hereford',
     'Brahman',
@@ -58,7 +74,7 @@ export const vealOptions = {
     'Mixed Breed',
     'Cross Cattle'
   ],
-  'Grade': ['V'],
+  Grade: ['V'],
   'Slaughter Specification': [
     'Full Set',
     'Full set ex Trim',
@@ -68,16 +84,19 @@ export const vealOptions = {
     'Selected Beef Cuts (Primals)'
   ],
   'Marble Score': ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
-  'Bone': ['Bone In', 'Bone Out']
+  Bone: ['Bone In', 'Bone Out']
 }
 export const sheepOptions = {
-  'Storage': ['Frozen', 'Chilled'],
-  'Grade': ['L', 'M', 'R', 'YL', 'H', 'E', 'W'],
+  Storage: ['Frozen', 'Chilled'],
+  Grade: ['L', 'M', 'R', 'YL', 'H', 'E', 'W'],
   'Slaughter Specification': [
-    'Whole', '1/4 cuts', 'Six way cut', 'Slected Primals'
+    'Whole',
+    '1/4 cuts',
+    'Six way cut',
+    'Slected Primals'
   ],
   'Marble Score': ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
-  'Bone': ['Bone In', 'Bone Out']
+  Bone: ['Bone In', 'Bone Out']
 }
 export const accessKey = 'db7b00b340d9275681a88e2398428a37'
 export const symbols = ['CNY', 'EUR', 'USD', 'GBP', 'JPY', 'KRW', 'FRF']

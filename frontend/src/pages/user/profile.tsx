@@ -1,275 +1,303 @@
-import * as React from 'react';
-import {Link} from 'react-router-dom';
-import {connect, Dispatch} from 'react-redux';
+import * as React from 'react'
+import { Link } from 'react-router-dom'
+import { connect, Dispatch } from 'react-redux'
+import {
+  userActionCreators,
+  AuthInfo,
+  currencyActionCreators,
+  uploadActionCreators,
+  lightboxActionCreators
+} from '../../actions'
+import { RootState, UserState, UploadState } from '../../reducers'
+import { User, Currency, Image } from '../../models'
+import { userConsts } from '../../constants'
+import { Row, Col, Input, Select, Button, Icon, Upload } from 'antd'
+import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface'
+import i18n from 'i18next'
 
-import {userActionCreators,AuthInfo,currencyActionCreators,uploadActionCreators,lightboxActionCreators} from '../../actions';
-import {RootState,UserState,UploadState} from '../../reducers';
-import {User,Currency,Image} from '../../models'
-import {userConsts} from '../../constants'
-import {FormattedMessage} from 'react-intl';
-interface ProfileProps{
-    dispatch: Dispatch<RootState>;
-    userState:UserState;
-    authInfo:AuthInfo;
-    currencys:Currency[];
-    upload:UploadState;
+interface ProfileProps {
+  dispatch: Dispatch<RootState>
+  userState: UserState
+  authInfo: AuthInfo
+  currencys: Currency[]
+  upload: UploadState
 }
 interface ProfileState {
-    user : User;
-    submitted : boolean;
+  user: User
+  submitted: boolean
 }
-class ProfilePage extends React.Component < ProfileProps,ProfileState > {
-    constructor(props : ProfileProps) {
-        super(props);
-
-        this.state = {
-            user:{},
-            submitted: false,
-        };
+class ProfilePage extends React.Component<ProfileProps, ProfileState> {
+  constructor(props: ProfileProps) {
+    super(props)
+    this.state = {
+      user: {
+        preferredCurrencyCode: ''
+      },
+      submitted: false
     }
-    componentDidMount() {
-        this.props.authInfo.id&&this.props.dispatch(userActionCreators.getById(this.props.authInfo.id));
-        if(!this.props.currencys)
-            this.props.dispatch(currencyActionCreators.getAll());
-    }
-    componentWillReceiveProps(nextProps : ProfileProps) {
-        const {userState,upload} = nextProps;
-        const {userData} = userState;
-        const {image} = upload
-        const {submitted,user} = this.state;
-        if (userData && !submitted) {
-            this.setState({
-                user: {
-                    ...userData,
-                    ...user
-                }
-            });
+  }
+  componentDidMount() {
+    this.props.authInfo.id &&
+      this.props.dispatch(userActionCreators.getById(this.props.authInfo.id))
+    if (!this.props.currencys)
+      this.props.dispatch(currencyActionCreators.getAll())
+  }
+  componentWillReceiveProps(nextProps: ProfileProps) {
+    const { userState, upload } = nextProps
+    const { userData } = userState
+    const { image } = upload
+    const { submitted, user } = this.state
+    if (userData && !submitted) {
+      this.setState({
+        user: {
+          ...user,
+          ...userData
         }
-        if (image) {
-            if (user.businessLicenses){
-                this.setState({
-                    user: {
-                        ...user,
-                        businessLicenses: [...user.businessLicenses,{path:image}]
-                    }
-                });
-            }else{
-                this.setState({
-                    user: {
-                        ...user,
-                        businessLicenses: [{path:image}]
-                    }
-                });
-            }
-            this.props.dispatch(uploadActionCreators.clear());
-        }
+      })
     }
-    handleUpload = (e : React.FormEvent < HTMLInputElement >) => {
-        const {files} = e.currentTarget
-        let license = files
-            ? files[0]
-            : null
-        this
-            .props
-            .dispatch(uploadActionCreators.uploadImage(license))
-    }
-    handleDeltetImage = (imageIndex:number) => {
-        const {user} = this.state
-        const {businessLicenses} = user
-        if (businessLicenses){
-            let newBusinessLicenses = businessLicenses.filter((image:Image,index:number)=>{
-                return index!=imageIndex
-            })
-            this.setState({user:{...user,businessLicenses:newBusinessLicenses}})
-        }
-    }
-    handleChange = (event : React.FormEvent < HTMLInputElement >) => {
-        const {name, value} = event.currentTarget;
-        const {user} = this.state;
+    if (image) {
+      if (user.businessLicenses) {
         this.setState({
-            user: {
-                ...user,
-                [name]: value
-            }
-        });
-      
-    }
-    handleSelect = (e : React.FormEvent < HTMLSelectElement >) => {
-        const {name, value} = e.currentTarget;
-        const {user} = this.state;
+          user: {
+            ...user,
+            businessLicenses: [...user.businessLicenses, { path: image }]
+          }
+        })
+      } else {
         this.setState({
-            user: {
-                ...user,
-                [name]: value
-            }
-        });
-        this.props.dispatch(currencyActionCreators.upCurrencystatus(value));
+          user: {
+            ...user,
+            businessLicenses: [{ path: image }]
+          }
+        })
+      }
+      this.props.dispatch(uploadActionCreators.clear())
     }
-    handleSubmit = (event : React.FormEvent < HTMLFormElement >) => {
-        event.preventDefault();
+  }
+  handleUpload = (uploadFile: UploadFile) => {
+    let liecnese = uploadFile.originFileObj
+    this.props.dispatch(uploadActionCreators.uploadImage(liecnese))
+  }
+  handleDeleteImage = (uploadFile: UploadFile) => {
+    const { user } = this.state
+    const { businessLicenses } = user
+    const uid = uploadFile.uid
+    if (businessLicenses) {
+      let newBusinessLicenses = businessLicenses.filter(
+        (image: Image, index: number) => {
+          return uid != index
+        }
+      )
+      this.setState({
+        user: { ...user, businessLicenses: newBusinessLicenses }
+      })
+      return true
+    }
+  }
+  handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const { name, value } = event.currentTarget
+    const { user } = this.state
+    this.setState({
+      user: {
+        ...user,
+        [name]: value
+      }
+    })
+  }
+  handleSelect = (value: string, name: string) => {
+    const { user } = this.state
+    this.setState({
+      user: {
+        ...user,
+        [name]: value
+      }
+    })
+    this.props.dispatch(currencyActionCreators.upCurrencystatus(value))
+  }
+  handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
 
-        this.setState({submitted: true});
-        let user = this.state.user
-        if(user.firstName&&user.lastName&&user.email){
-            if(user.companyName){
-                user.licenseStatus = userConsts.LICENSE_STATUS_UNCONFIRMED
-            }
-            this.props.dispatch(userActionCreators.update(user));
+    this.setState({ submitted: true })
+    let user = this.state.user
+    if (user.firstName && user.lastName && user.email) {
+      if (user.companyName) {
+        user.licenseStatus = userConsts.LICENSE_STATUS_UNCONFIRMED
+      }
+      this.props.dispatch(userActionCreators.update(user))
+    }
+    window.scrollTo(0, 0)
+  }
+  //for render select input
+  renderCurrencySelect = (optionItems: Currency[]) => {
+    return (
+      <Select
+        value={String(this.state.user.preferredCurrencyCode)}
+        onSelect={(value: string) =>
+          this.handleSelect(value, 'preferredCurrencyCode')
         }
-        window.scrollTo(0, 0);
+      >
+        {optionItems.map((item, index) => (
+          <Select.Option key={index} value={item.code}>
+            {item.code}({item.description})
+          </Select.Option>
+        ))}
+      </Select>
+    )
+  }
+  handlePreview = (file: UploadFile) => {
+    file.url && this.openLightbox([file.url], 0)
+  }
+
+  openLightbox = (images: string[], index: number) => {
+    this.props.dispatch(lightboxActionCreators.open(images, index))
+  }
+  render() {
+    const { userState, currencys } = this.props
+    const { processing } = userState
+    const { user, submitted } = this.state
+    let licenseList: UploadFile[]
+    if (user.businessLicenses) {
+      licenseList = user.businessLicenses.map(
+        (license, index): UploadFile => ({
+          url: license.path,
+          name: '',
+          uid: index,
+          size: 200,
+          type: 'done'
+        })
+      )
+    } else {
+      licenseList = []
     }
-    //for render select input
-    renderCurrencySelect = (optionItems :  Currency[]) => {
-        return (
-            <select
-                className="form-control"
-                name="preferedCurrencyCode"
-                value={String(this.state.user.preferedCurrencyCode)}
-                onChange={this.handleSelect}>
-                <option></option>
-                {optionItems.map((item, index) => 
-                    <option key={index} value={item.code}>{item.code}</option>)}
-            </select>
-        );
-    }
-    openLightbox = (images:string[],index:number)=>{
-        this.props.dispatch(lightboxActionCreators.open(images,index))
-    }
-    render() {
-        const {userState,currencys} = this.props;
-        const {processing} = userState;
-        const {user, submitted} = this.state;
-        let licensePaths: string []
-        if(user.businessLicenses){
-            licensePaths = user.businessLicenses.map(license=>license.path)
-        }else{
-            licensePaths = []
-        }
-        return (
-            <div className="page col-md-8 offset-md-2">
-                <div className="header">
-                    <FormattedMessage id="pages.userProfile" defaultMessage="User Profile"/>
-                </div>
-                <div className="subtitle">
-                    <FormattedMessage id="profile.personalInfo" defaultMessage="Personal Information"/>
-                </div>
-                <form name="form" onSubmit={this.handleSubmit}>
-                    <div className={'form-group'+ (submitted && !user.firstName
-                        ? ' has-error'
-                        : '')}>
-                        <label htmlFor="fristName">
-                            <FormattedMessage id="userFields.firstName" defaultMessage="First Name"/>
-                        </label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="firstName"
-                            value={user.firstName||''}
-                            onChange={this.handleChange}/> {submitted && !user.firstName && <div className="invalid-feedback">First Name is required</div>
-                        }
-                    </div>
-                    <div className={'form-group'+ (submitted && !user.lastName
-                        ? ' has-error'
-                        : '')}>
-                        <label htmlFor="lastName">
-                            <FormattedMessage id="userFields.lastName" defaultMessage="Last Name"/>
-                        </label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="lastName"
-                            value={user.lastName||''}
-                            onChange={this.handleChange}/> {submitted && !user.lastName && <div className="invalid-feedback">Last Name is required</div>
-                        }
-                    </div>
-                    <div className='form-group'>
-                        <label htmlFor="email">
-                            <FormattedMessage id="userFields.email" defaultMessage="Email"/>
-                        </label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="email"
-                            value={user.email||''}
-                            disabled={true}
-                            /> 
-                    </div>
-                    <div className="form-group">
-                        <label>
-                            <FormattedMessage id="userFields.preferedCurrency" defaultMessage="Prefered Currency"/>
-                        </label>
-                        {currencys&&this.renderCurrencySelect(currencys)}
-                    </div>
-                    <div className="subtitle">
-                        <FormattedMessage id="profile.companyInfo" defaultMessage="Company Information"/>
-                    </div>
-                    <div className='form-group'>
-                        <label htmlFor="companyName">
-                            <FormattedMessage id="userFields.companyName" defaultMessage="Company Name"/>
-                        </label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="companyName"
-                            value={user.companyName||''}
-                            onChange={this.handleChange}/> 
-                    </div>
-                    <div className='form-group'>
-                        <label htmlFor="companyAddress">
-                            <FormattedMessage id="userFields.companyAddress" defaultMessage="Company Address"/>
-                        </label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="companyAddress"
-                            value={user.companyAddress||''}
-                            onChange={this.handleChange}
-                        /> 
-                    </div>
-                    <div className="row">
-                        <div className="form-group col-md-8">
-                            <label>
-                                <FormattedMessage id="userFields.businessLicense" defaultMessage="Business License"/>
-                            </label>
-                            <div className="images-container">
-                                {licensePaths.map((image, index) => <div key={index} className="image-wrapper">
-                                    <i className="fa fa-times-circle remove-icon"  aria-hidden="true" onClick = {()=>{
-                                            this.handleDeltetImage(index)
-                                        }}></i>
-                                    <img className="image cursor-pointer" onClick={()=>this.openLightbox(licensePaths,index)}  src={image}/>
-                                </div>)}
-                                <div className="image-add">
-                                    <i className="fa fa-plus-circle add-icon" aria-hidden="true"></i>
-                                    <input type="file" onChange={this.handleUpload}/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {user.licenseStatus!==userConsts.LICENSE_STATUS_CONFIRMED&&<div className="row">
-                        <FormattedMessage id="userTips.companyInfo" defaultMessage="Please fullfill company information for adding offer"/>
-                    </div>}
-                    <div className="form-group">
-                        <button className="btn btn-primary">Submit</button>
-                        {processing && 
-                            <i className="fa fa-spinner" aria-hidden="true"></i>
-                        }
-                        <Link to="/" className="btn btn-link">Cancel</Link>
-                    </div>
-                </form>
+    return (
+      <Row>
+        <Col
+          xs={{ span: 22, offset: 1 }}
+          sm={{ span: 16, offset: 4 }}
+          md={{ span: 12, offset: 6 }}
+          lg={{ span: 10, offset: 7 }}
+        >
+          <div className="header-center">{i18n.t('User Profile')}</div>
+          <div className="profile-subtitle">
+            {i18n.t('Personal Information')}
+          </div>
+          <form name="form" onSubmit={this.handleSubmit}>
+            <div className={submitted && !user.firstName ? ' has-error' : ''}>
+              <label>{i18n.t('First Name')}</label>
+              <Input
+                type="text"
+                name="firstName"
+                value={user.firstName || ''}
+                onChange={this.handleChange}
+              />{' '}
+              {submitted &&
+                !user.firstName && (
+                  <div className="invalid-feedback">First Name is required</div>
+                )}
             </div>
-        );
-    }
+            <div className={submitted && !user.lastName ? ' has-error' : ''}>
+              <label>{i18n.t('Last Name')}</label>
+              <Input
+                type="text"
+                name="lastName"
+                value={user.lastName || ''}
+                onChange={this.handleChange}
+              />{' '}
+              {submitted &&
+                !user.lastName && (
+                  <div className="invalid-feedback">Last Name is required</div>
+                )}
+            </div>
+            <div>
+              <label>{i18n.t('Email')}</label>
+              <Input
+                type="text"
+                name="email"
+                value={user.email || ''}
+                disabled={true}
+              />
+            </div>
+            <div>
+              <label>{i18n.t('Preferred Currency')}</label>
+              {currencys && this.renderCurrencySelect(currencys)}
+            </div>
+            <div className="subtitle profile-subtitle">
+              {i18n.t('Company Information')}
+            </div>
+            <div>
+              <label>{i18n.t('Company Name')}</label>
+              <Input
+                type="text"
+                name="companyName"
+                value={user.companyName || ''}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div>
+              <label>{i18n.t('Company Address')}</label>
+              <Input
+                type="text"
+                name="companyAddress"
+                value={user.companyAddress || ''}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div>
+              <div>
+                <label>{i18n.t('Business License')}</label>
+                <div className="uploadCls-profile clearfix">
+                  <Upload
+                    listType="picture-card"
+                    fileList={licenseList}
+                    accept="image/*"
+                    onChange={(file: UploadChangeParam) =>
+                      this.handleUpload(file.file)
+                    }
+                    onPreview={this.handlePreview}
+                    onRemove={this.handleDeleteImage}
+                  >
+                    <div>
+                      <Icon type="plus" />
+                      <div className="ant-upload-text">Upload</div>
+                    </div>
+                  </Upload>
+                </div>
+              </div>
+            </div>
+            {user.licenseStatus !== userConsts.LICENSE_STATUS_CONFIRMED && (
+              <div>
+                {i18n.t('Please fulfill company information for adding offer')}
+              </div>
+            )}
+            <div>
+              <Button
+                htmlType="submit"
+                type="primary"
+                className="button-margin"
+              >
+                {i18n.t('Submit')}
+              </Button>
+              {processing && <Icon type="loading" />}
+              <Button>
+                <Link to="/">{i18n.t('Cancel')}</Link>
+              </Button>
+            </div>
+          </form>
+        </Col>
+      </Row>
+    )
+  }
 }
 
-function mapStateToProps(state : RootState) {
-    const {user,auth,currency,upload} = state
-    return {
-        userState:user,
-        authInfo:auth.authInfo,
-        currencys:currency.items,
-        upload
-    };
+function mapStateToProps(state: RootState) {
+  const { user, auth, currency, upload } = state
+  return {
+    userState: user,
+    authInfo: auth.authInfo,
+    currencys: currency.items,
+    upload
+  }
 }
 
-const connectedProfilePage = connect(mapStateToProps)(ProfilePage);
-export {connectedProfilePage as ProfilePage};
+const connectedProfilePage = connect(mapStateToProps)(ProfilePage)
+export { connectedProfilePage as ProfilePage }

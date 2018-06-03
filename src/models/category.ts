@@ -21,7 +21,6 @@ import { User } from './user'
   underscored: true
 })
 export class Category extends Model<Category> {
-
   // only allow string keys to do some iteration :)
   [key: string]: any
 
@@ -32,7 +31,7 @@ export class Category extends Model<Category> {
   public id: string
 
   @Unique
-  @Column({field: 'type'})
+  @Column({ field: 'type' })
   public type: string
 
   @Column({
@@ -40,5 +39,4 @@ export class Category extends Model<Category> {
     type: DataType.JSONB
   })
   public details: object
-
 }

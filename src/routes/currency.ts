@@ -7,8 +7,7 @@ router.get('/list', async (req: express.Request, res: express.Response) => {
     const currencys = await Currency.findAll({})
     return res.send(currencys)
   } catch (e) {
-    return res.status(500).send({error: e.message})
+    return res.status(500).send({ error: e.message })
   }
-
 })
 export = router
