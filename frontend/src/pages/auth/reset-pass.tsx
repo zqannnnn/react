@@ -11,40 +11,17 @@ interface ResetPassProps {
   dispatch: Dispatch<RootState>
   processing: boolean
 }
-interface ResetPassState {
-  password: string
-  rePassword: string
-  submitted: boolean
-}
-class ResetPassPage extends React.Component<ResetPassProps, ResetPassState> {
+class ResetPassPage extends React.Component<ResetPassProps> {
   constructor(props: ResetPassProps) {
     super(props)
-
-    this.state = {
-      password: '',
-      rePassword: '',
-      submitted: false
-    }
-  }
-  handleChange = (e: React.FormEvent<HTMLInputElement>) => {
-    const { name, value } = e.currentTarget
-    this.setState({ ...this.state, [name]: value })
   }
 
-  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    this.setState({ submitted: true })
-    const { password, rePassword } = this.state
-    const { dispatch } = this.props
-    if (password && password == rePassword) {
-      dispatch(userActionCreators.resetPass(password))
-    }
+  handleSubmit = (pass:string) => {
+    this.props.dispatch(userActionCreators.resetPass(pass))
   }
 
   render() {
     const { processing } = this.props
-    const { password, rePassword, submitted } = this.state
     return (
       <Row className="page">
         <div className="header">{i18n.t('Reset')}</div>
