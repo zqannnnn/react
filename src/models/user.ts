@@ -66,7 +66,7 @@ export class User extends Model<User> {
   public updatedAt: Date
 
   @HasMany(() => Transaction, 'user_id')
-  public offers: Transaction[]
+  public transactions: Transaction[]
 
   @ForeignKey(() => Currency)
   @Column({ field: 'preferred_currency_code' })

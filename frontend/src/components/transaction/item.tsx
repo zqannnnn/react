@@ -1,16 +1,16 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
-import { offerActionCreators, AuthInfo } from '../../actions'
-import { RootState, OfferState } from '../../reducers'
-import { Offer, ListItem } from '../../models'
-import { offerConsts } from '../../constants'
+import { transactionActionCreators, AuthInfo } from '../../actions'
+import { RootState, TransactionState } from '../../reducers'
+import { Transaction, ListItem } from '../../models'
+import { transactionConsts } from '../../constants'
 import { Exchange } from '../exchange'
 import { Col } from 'antd'
 
 interface ItemProps {
   dispatch: Dispatch<RootState>
-  offer: Offer
+  transaction: Transaction
   authInfo: AuthInfo
 }
 interface ItemState {
@@ -22,16 +22,16 @@ class Item extends React.Component<ItemProps, ItemState> {
     super(props)
     this.state = {
       commentInputShowing: false,
-      comment: props.offer.comment || ''
+      comment: props.transaction.comment || ''
     }
   }
 
   handleCancell = (id: string) => {
-    this.props.dispatch(offerActionCreators.cancell(id))
+    this.props.dispatch(transactionActionCreators.cancell(id))
   }
   handleFinish = (id: string) => {
     let r = confirm('Are you sure?')
-    if (r) this.props.dispatch(offerActionCreators.finish(id))
+    if (r) this.props.dispatch(transactionActionCreators.finish(id))
   }
   triggerCommentInput = () => {
     let value = this.state.commentInputShowing
@@ -45,31 +45,48 @@ class Item extends React.Component<ItemProps, ItemState> {
     })
   }
   sendComment = (id: string) => {
-    this.props.dispatch(offerActionCreators.addComment(id, this.state.comment))
+    this.props.dispatch(
+      transactionActionCreators.addComment(id, this.state.comment)
+    )
     this.setState({ commentInputShowing: false })
   }
   render() {
-    const { offer, authInfo } = this.props
+    const { transaction, authInfo } = this.props
     const { commentInputShowing, comment } = this.state
     return (
-      <Col key={offer.id} xs={12} sm={11} md={10} lg={9} className="block">
+      <Col
+        key={transaction.id}
+        xs={12}
+        sm={11}
+        md={10}
+        lg={9}
+        className="block"
+      >
         <div className="boxmain">
-          <div className="header">{offer.type}</div>
-          <div className="title content">{offer.title}</div>
+          <div className="header">{transaction.type}</div>
+          <div className="title content">{transaction.title}</div>
           <div className="desc content">
-            <span>{offer.storage && 'Storage:' + offer.storage + ','}</span>
-            <span>{offer.breed && 'Breed:' + offer.breed + ','}</span>
-            <span>{offer.grade && 'Grade:' + offer.grade + ','}</span>
             <span>
-              {offer.slaughterSpec &&
-                'Slaughter Specificatin:' + offer.slaughterSpec + ','}
+              {transaction.storage && 'Storage:' + transaction.storage + ','}
             </span>
-            <span>{offer.primalCuts && 'Primal Cut:' + offer.primalCuts}</span>
+            <span>
+              {transaction.breed && 'Breed:' + transaction.breed + ','}
+            </span>
+            <span>
+              {transaction.grade && 'Grade:' + transaction.grade + ','}
+            </span>
+            <span>
+              {transaction.slaughterSpec &&
+                'Slaughter Specificatin:' + transaction.slaughterSpec + ','}
+            </span>
+            <span>
+              {transaction.primalCuts && 'Primal Cut:' + transaction.primalCuts}
+            </span>
           </div>
-          <Link to={'/offer/' + offer.id}>
+          <Link to={'/transaction/' + transaction.id}>
             <div className="image-wr">
-              {offer.images && offer.images[0] ? (
-                <img src={offer.images[0].path} />
+              {transaction.images && transaction.images[0] ? (
+                <img src={transaction.images[0].path} />
               ) : (
                 <img src="/asset/no-image.jpg" />
               )}
@@ -77,16 +94,18 @@ class Item extends React.Component<ItemProps, ItemState> {
           </Link>
           <div className="space-between content">
             <div className="status">
-              {offer.status != offerConsts.OFFER_STATUS_FINISHED
+              {transaction.status !=
+              transactionConsts.TRANSACTION_STATUS_FINISHED
                 ? 'On Sale'
                 : 'Sold'}
             </div>
             {authInfo.isAdmin &&
-            offer.status != offerConsts.OFFER_STATUS_FINISHED ? (
+            transaction.status !=
+              transactionConsts.TRANSACTION_STATUS_FINISHED ? (
               <div
                 className="control-btn"
                 onClick={() => {
-                  if (offer.id) this.handleFinish(offer.id)
+                  if (transaction.id) this.handleFinish(transaction.id)
                 }}
               >
                 Set Sold
@@ -96,24 +115,25 @@ class Item extends React.Component<ItemProps, ItemState> {
             )}
           </div>
           <div className="content">
-            {offer.price &&
-              offer.currencyCode && (
+            {transaction.price &&
+              transaction.currencyCode && (
                 <Exchange
-                  price={offer.price}
-                  currencyCode={offer.currencyCode}
+                  price={transaction.price}
+                  currencyCode={transaction.currencyCode}
                 />
               )}
           </div>
           <div className="menu content">
-            <Link className="control-btn" to={'/offer/' + offer.id}>
+            <Link className="control-btn" to={'/transaction/' + transaction.id}>
               Read More
             </Link>
-            {authInfo.id == offer.userId || authInfo.isAdmin ? (
+            {authInfo.id == transaction.userId || authInfo.isAdmin ? (
               <>
-                {offer.status === offerConsts.OFFER_STATUS_CREATED && (
+                {transaction.status ===
+                  transactionConsts.TRANSACTION_STATUS_CREATED && (
                   <>
                     <Link
-                      to={'/offer/edit/' + offer.id}
+                      to={'/transaction/edit/' + transaction.id}
                       className="control-btn"
                     >
                       Edit ✎
@@ -152,7 +172,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                     <div
                       className="control-btn"
                       onClick={() => {
-                        if (offer.id) this.handleCancell(offer.id)
+                        if (transaction.id) this.handleCancell(transaction.id)
                       }}
                     >
                       Cancel{' '}
@@ -162,7 +182,8 @@ class Item extends React.Component<ItemProps, ItemState> {
                   </>
                 )}
                 {authInfo.isAdmin &&
-                offer.status == offerConsts.OFFER_STATUS_FINISHED ? (
+                transaction.status ==
+                  transactionConsts.TRANSACTION_STATUS_FINISHED ? (
                   <div
                     className="control-btn"
                     onClick={() => {
@@ -199,13 +220,13 @@ class Item extends React.Component<ItemProps, ItemState> {
                   className="fa fa-share-square-o input-btn"
                   aria-hidden="true"
                   onClick={() => {
-                    if (offer.id) this.sendComment(offer.id)
+                    if (transaction.id) this.sendComment(transaction.id)
                   }}
                 />
               </div>
             </div>
           ) : (
-            <div className="comment content">{offer.comment}</div>
+            <div className="comment content">{transaction.comment}</div>
           )}
         </div>
       </Col>

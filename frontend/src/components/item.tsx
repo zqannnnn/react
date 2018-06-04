@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { offerActionCreators, orderActionCreators } from '../actions'
-import { RootState, OfferState, OrderState } from '../reducers'
+import { transactionActionCreators, orderActionCreators } from '../actions'
+import { RootState, TransactionState, OrderState } from '../reducers'
 import { AuthInfo } from '../actions'
-import { Offer, Order, ListItem } from '../models'
-import { Item as OfferItem } from './offer/item'
+import { Transaction, Order, ListItem } from '../models'
+import { Item as TransactionItem } from './transaction/item'
 import { Item as OrderItem } from './order/item'
 import { Item as CompanyItem } from './company/item'
 interface ItemProps {
@@ -19,8 +19,8 @@ class Item extends React.Component<ItemProps> {
   renderItem = (type: string) => {
     const item = this.props.item
     switch (type) {
-      case 'Offer':
-        return <OfferItem offer={item} />
+      case 'Transaction':
+        return <TransactionItem transaction={item} />
       case 'Order':
         return <OrderItem order={item} />
       case 'Company':

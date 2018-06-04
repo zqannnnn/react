@@ -70,22 +70,27 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
     return res.status(500).send({ error: e.message })
   }
 })
-router.get('/finish/:transactionId', async (req: IRequest, res: express.Response) => {
-  try {
-    if (!req.isAdmin) {
-      return res.status(500).send({ error: 'Permission denied.' })
+router.get(
+  '/finish/:transactionId',
+  async (req: IRequest, res: express.Response) => {
+    try {
+      if (!req.isAdmin) {
+        return res.status(500).send({ error: 'Permission denied.' })
+      }
+      const transaction = await Transaction.find({
+        where: { id: req.params.transactionId }
+      })
+      if (!transaction) {
+        return res.status(500).send({ error: 'Transaction does not exist' })
+      }
+      transaction.status = consts.TRANSACTION_STATUS_FINISHED
+      transaction.save()
+      return res.send({ success: true })
+    } catch (e) {
+      return res.status(500).send({ error: e.message })
     }
-    const transaction = await Transaction.find({ where: { id: req.params.transactionId } })
-    if (!transaction) {
-      return res.status(500).send({ error: 'Transaction does not exist' })
-    }
-    transaction.status = consts.TRANSACTION_STATUS_FINISHED
-    transaction.save()
-    return res.send({ success: true })
-  } catch (e) {
-    return res.status(500).send({ error: e.message })
   }
-})
+)
 router.post(
   '/comment/:transactionId',
   async (req: IRequest, res: express.Response) => {
@@ -93,7 +98,9 @@ router.post(
       if (!req.isAdmin) {
         return res.status(500).send({ error: 'Permission denied.' })
       }
-      const transaction = await Transaction.find({ where: { id: req.params.transactionId } })
+      const transaction = await Transaction.find({
+        where: { id: req.params.transactionId }
+      })
       if (!transaction) {
         return res.status(500).send({ error: 'Transaction does not exist' })
       }
@@ -122,7 +129,9 @@ router
   })
   .put(async (req: IRequest, res: express.Response) => {
     try {
-      const transaction = await Transaction.find({ where: { id: req.params.transactionId } })
+      const transaction = await Transaction.find({
+        where: { id: req.params.transactionId }
+      })
       if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
         return res.status(500).send({ error: 'Permission denied' })
       }
@@ -133,7 +142,9 @@ router
         (key: string) => (transaction[key] = req.body[key])
       )
       transaction.save()
-      await Image.destroy({ where: { transactionId: req.params.transactionId } })
+      await Image.destroy({
+        where: { transactionId: req.params.transactionId }
+      })
       if (req.body.images) {
         req.body.images.forEach((image: { path: string }) => {
           const imageDb = new Image({
@@ -161,7 +172,9 @@ router
   })
   .delete(async (req: IRequest, res: express.Response) => {
     try {
-      const transaction = await Transaction.find({ where: { id: req.params.transactionId } })
+      const transaction = await Transaction.find({
+        where: { id: req.params.transactionId }
+      })
       if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
         return res.status(500).send({ error: 'Permission denied' })
       }

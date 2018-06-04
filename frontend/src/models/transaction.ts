@@ -1,6 +1,7 @@
 import { Currency, ListItem, Image } from '.'
+import { category } from '../reducers/category'
 
-export class Offer implements ListItem {
+export class Transaction implements ListItem {
   id?: string
   userId?: string
   status?: number
@@ -31,4 +32,5 @@ export class Offer implements ListItem {
   certificates?: Image[]
   processing?: boolean
   error?: string
+  category?: string
 }

@@ -240,7 +240,7 @@ ul.nav li {
   height: 140px;
 }
 
-.block .offer {
+.block .transaction {
   flex: 1 1 100%;
   box-sizing: border-box;
   max-width: 100%;
@@ -549,7 +549,7 @@ ul.nav li {
   background: #fff;
   border: 1px solid #eee;
 }
-.uploadCls-offers-edit {
+.uploadCls-transactions-edit {
   padding: 10px;
   margin-bottom: 15px;
   border-radius: 10px;

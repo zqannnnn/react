@@ -18,9 +18,9 @@ import {
   ViewPage as OrderViewPage
 } from './pages/order'
 import {
-  EditPage as OfferEditPage,
-  ViewPage as OfferViewPage
-} from './pages/offer'
+  EditPage as TransactionEditPage,
+  ViewPage as TransactionViewPage
+} from './pages/transaction'
 import { ProfilePage, CompanyConfirmPage } from './pages/user'
 import { AdminPage, HomePage, ListPage } from './pages'
 import { RootState, LightboxState, AuthState, AlertState } from './reducers'
@@ -85,23 +85,29 @@ class App extends React.Component<AppProps, any> {
                   component={OrderEditPage}
                 />
                 <PrivateRoute
-                  path="/offers/my"
+                  path="/transactions/my"
                   component={() => (
-                    <ListPage selectType="mine" listType="offer" />
+                    <ListPage selectType="mine" listType="transaction" />
                   )}
                 />
                 <PrivateRoute
-                  path="/offers"
+                  path="/transactions"
                   component={() => (
-                    <ListPage selectType="all" listType="offer" />
+                    <ListPage selectType="all" listType="transaction" />
                   )}
                 />
-                <PrivateRoute path="/offer/new" component={OfferEditPage} />
                 <PrivateRoute
-                  path="/offer/edit/:id"
-                  component={OfferEditPage}
+                  path="/transaction/new"
+                  component={TransactionEditPage}
                 />
-                <PrivateRoute path="/offer/:id" component={OfferViewPage} />
+                <PrivateRoute
+                  path="/transaction/edit/:id"
+                  component={TransactionEditPage}
+                />
+                <PrivateRoute
+                  path="/transaction/:id"
+                  component={TransactionViewPage}
+                />
                 <PrivateRoute path="/profile" component={ProfilePage} />
                 <AdminRoute path="/admin" component={AdminPage} />
                 <AdminRoute

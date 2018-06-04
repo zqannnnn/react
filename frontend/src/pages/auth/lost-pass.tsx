@@ -15,7 +15,7 @@ class LostPassPage extends React.Component<LostPassProps> {
   constructor(props: LostPassProps) {
     super(props)
   }
-  handleSubmit = (email:string) => {
+  handleSubmit = (email: string) => {
     this.props.dispatch(userActionCreators.lostPass(email))
   }
 

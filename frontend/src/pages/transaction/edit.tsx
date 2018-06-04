@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import {
-  offerActionCreators,
+  transactionActionCreators,
   categoryActionCreators,
   currencyActionCreators,
   uploadActionCreators,
@@ -10,10 +10,10 @@ import {
   alertActionCreators,
   AuthInfo
 } from '../../actions'
-import { Offer, Image } from '../../models'
+import { Transaction, Image } from '../../models'
 import { Category, CategoryDetails, Currency } from '../../models'
 import { RootState } from '../../reducers'
-import { offerConsts, userConsts } from '../../constants'
+import { transactionConsts, userConsts } from '../../constants'
 import {
   Steps,
   Button,
@@ -31,31 +31,31 @@ import i18n from 'i18next'
 
 const Step = Steps.Step
 
-interface OfferProps extends RouteComponentProps<{ id: string }> {
+interface TransProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
   loading: boolean
   editing: boolean
-  offerData: Offer
+  transData: Transaction
   categorys: Category[]
   currencys: Currency[]
   image: string
   authInfo: AuthInfo
 }
-interface OfferState {
-  offer: Offer
-  offerId?: string
+interface TransState {
+  transaction: Transaction
+  transactionId?: string
   submitted: boolean
   imageUploading: boolean
   certificateUploading: boolean
   current: number
 }
 
-class EditPage extends React.Component<OfferProps, OfferState> {
-  constructor(props: OfferProps) {
+class EditPage extends React.Component<TransProps, TransState> {
+  constructor(props: TransProps) {
     super(props)
     this.state = {
       submitted: false,
-      offer: {
+      transaction: {
         type: 'Beef'
       },
       imageUploading: false,
@@ -73,54 +73,55 @@ class EditPage extends React.Component<OfferProps, OfferState> {
   }
 
   componentDidMount() {
-    let offerId = this.props.match.params.id
-    offerId &&
+    let transactionId = this.props.match.params.id
+    transactionId &&
       this.setState({
         ...this.state,
-        offerId
+        transactionId
       })
     if (!this.props.categorys)
       this.props.dispatch(categoryActionCreators.getAll())
     if (!this.props.currencys)
       this.props.dispatch(currencyActionCreators.getAll())
-    offerId && this.props.dispatch(offerActionCreators.getById(offerId))
+    transactionId &&
+      this.props.dispatch(transactionActionCreators.getById(transactionId))
   }
-  componentWillReceiveProps(nextProps: OfferProps) {
-    const { offerData, image, categorys } = nextProps
+  componentWillReceiveProps(nextProps: TransProps) {
+    const { transData, image, categorys } = nextProps
     const {
       submitted,
-      offerId,
-      offer,
+      transactionId,
+      transaction,
       imageUploading,
       certificateUploading
     } = this.state
-    if (offerId && offerData && !submitted) {
+    if (transactionId && transData && !submitted) {
       this.setState({
-        offer: {
-          ...offerData,
-          ...offer
+        transaction: {
+          ...transData,
+          ...transaction
         }
       })
     }
-    if (!offerId && categorys) {
+    if (!transactionId && categorys) {
       this.setState({
-        offer: {
-          ...offer
+        transaction: {
+          ...transaction
         }
       })
     }
     if (image && imageUploading) {
-      if (offer.images) {
+      if (transaction.images) {
         this.setState({
-          offer: {
-            ...offer,
-            images: [...offer.images, { path: image }]
+          transaction: {
+            ...transaction,
+            images: [...transaction.images, { path: image }]
           }
         })
       } else {
         this.setState({
-          offer: {
-            ...offer,
+          transaction: {
+            ...transaction,
             images: [{ path: image }]
           }
         })
@@ -129,17 +130,17 @@ class EditPage extends React.Component<OfferProps, OfferState> {
       this.setState({ imageUploading: false })
     }
     if (image && certificateUploading) {
-      if (offer.certificates) {
+      if (transaction.certificates) {
         this.setState({
-          offer: {
-            ...offer,
-            certificates: [...offer.certificates, { path: image }]
+          transaction: {
+            ...transaction,
+            certificates: [...transaction.certificates, { path: image }]
           }
         })
       } else {
         this.setState({
-          offer: {
-            ...offer,
+          transaction: {
+            ...transaction,
             certificates: [{ path: image }]
           }
         })
@@ -149,30 +150,30 @@ class EditPage extends React.Component<OfferProps, OfferState> {
     }
   }
   handleSelectChange = (value: string, name: string) => {
-    const { offer } = this.state
+    const { transaction } = this.state
     this.setState({
-      offer: {
-        ...offer,
+      transaction: {
+        ...transaction,
         [name]: value
       }
     })
   }
   handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { value, name } = e.currentTarget
-    const { offer } = this.state
+    const { transaction } = this.state
     this.setState({
-      offer: {
-        ...offer,
+      transaction: {
+        ...transaction,
         [name]: value
       }
     })
   }
 
   handleInputNumber = (value: string | number, name: string | number) => {
-    const { offer } = this.state
+    const { transaction } = this.state
     this.setState({
-      offer: {
-        ...offer,
+      transaction: {
+        ...transaction,
         [name]: value
       }
     })
@@ -190,45 +191,46 @@ class EditPage extends React.Component<OfferProps, OfferState> {
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     this.setState({ submitted: true })
-    if (
-      this.props.authInfo.licenseStatus !== userConsts.LICENSE_STATUS_CONFIRMED
-    ) {
-      this.props.dispatch(
-        alertActionCreators.error(
-          'You are not allowed to add offer, please fullfill company info first.'
-        )
-      )
-      window.scrollTo(0, 0)
-      return
-    }
-    const { offer, offerId } = this.state
+    // if (
+    //   this.props.authInfo.licenseStatus !== userConsts.LICENSE_STATUS_CONFIRMED
+    // ) {
+    //   this.props.dispatch(
+    //     alertActionCreators.error(
+    //       'You are not allowed to add transaction, please fullfill company info first.'
+    //     )
+    //   )
+    //   window.scrollTo(0, 0)
+    //   return
+    // }
+    const { transaction, transactionId } = this.state
     const { dispatch } = this.props
-    if (offer.type && offer.title) {
-      if (offerId) dispatch(offerActionCreators.edit(offer, offerId))
-      else dispatch(offerActionCreators.new(offer))
+    if (transaction.type && transaction.title) {
+      if (transactionId)
+        dispatch(transactionActionCreators.edit(transaction, transactionId))
+      else dispatch(transactionActionCreators.new(transaction))
     } else {
       //dispatch(alertActionCreators.error(""));
     }
     window.scrollTo(0, 0)
   }
   handleDeleteImage = (uploadFile: UploadFile) => {
-    const { offer } = this.state
-    const { images } = offer
+    const { transaction } = this.state
+    const { images } = transaction
     const uid = uploadFile.uid
     if (images) {
       let newImages = images.filter((image: Image, index: number) => {
         return uid != index
       })
       this.setState({
-        offer: { ...offer, images: newImages }
+        transaction: { ...transaction, images: newImages }
       })
       return true
     }
   }
 
   handleDeleteCertificate = (uploadFile: UploadFile) => {
-    const { offer } = this.state
-    const { certificates } = offer
+    const { transaction } = this.state
+    const { certificates } = transaction
     const uid = uploadFile.uid
     if (certificates) {
       let newCertificates = certificates.filter(
@@ -236,7 +238,9 @@ class EditPage extends React.Component<OfferProps, OfferState> {
           return uid != index
         }
       )
-      this.setState({ offer: { ...offer, certificates: newCertificates } })
+      this.setState({
+        transaction: { ...transaction, certificates: newCertificates }
+      })
       return true
     }
   }
@@ -248,8 +252,8 @@ class EditPage extends React.Component<OfferProps, OfferState> {
     file.url && this.openLightbox([file.url], 0)
   }
   //for render select input
-  renderSelect(optionItems: Array<string>, field: keyof Offer) {
-    let selectValue = this.state.offer[field] || ' '
+  renderSelect(optionItems: Array<string>, field: keyof Transaction) {
+    let selectValue = this.state.transaction[field] || ' '
     return (
       <Select
         value={String(selectValue)}
@@ -262,6 +266,10 @@ class EditPage extends React.Component<OfferProps, OfferState> {
         ))}
       </Select>
     )
+  }
+
+  customRequest = () => {
+    return false
   }
 
   renderItem = (current: number) => {
@@ -282,7 +290,7 @@ class EditPage extends React.Component<OfferProps, OfferState> {
       fed,
       grainFedDays,
       trimmings
-    } = this.state.offer
+    } = this.state.transaction
     let { submitted } = this.state
     let { editing, categorys, currencys } = this.props
     let options = null
@@ -293,8 +301,8 @@ class EditPage extends React.Component<OfferProps, OfferState> {
       })[0]
 
     let imageList: UploadFile[]
-    if (this.state.offer.images) {
-      imageList = this.state.offer.images.map(
+    if (this.state.transaction.images) {
+      imageList = this.state.transaction.images.map(
         (image, index): UploadFile => ({
           url: image.path,
           name: '',
@@ -307,8 +315,8 @@ class EditPage extends React.Component<OfferProps, OfferState> {
       imageList = []
     }
     let certificateList: UploadFile[]
-    if (this.state.offer.certificates) {
-      certificateList = this.state.offer.certificates.map(
+    if (this.state.transaction.certificates) {
+      certificateList = this.state.transaction.certificates.map(
         (image, index): UploadFile => ({
           url: image.path,
           name: '',
@@ -325,7 +333,7 @@ class EditPage extends React.Component<OfferProps, OfferState> {
         return (
           <Row>
             <Col xs={20} sm={18} md={12} lg={8} offset={1}>
-              <label>{i18n.t('Offer Type')}</label>
+              <label>{i18n.t('Transaction Type')}</label>
               <Select
                 size="large"
                 value={type}
@@ -333,7 +341,7 @@ class EditPage extends React.Component<OfferProps, OfferState> {
                   this.handleSelectChange(value, 'type')
                 }
               >
-                {offerConsts.OFFER_TYPE.map((item, index) => (
+                {transactionConsts.TRANSACTION_TYPE.map((item, index) => (
                   <Select.Option key={index} value={item}>
                     {item}
                   </Select.Option>
@@ -347,12 +355,13 @@ class EditPage extends React.Component<OfferProps, OfferState> {
           <Row>
             <Col className="container-upload" span={22} offset={1}>
               <label>{i18n.t('Images')}</label>
-              <div className="uploadCls-offers-edit">
+              <div className="uploadCls-transactions-edit">
                 <div className="clearfix">
                   <Upload
                     accept="image/*"
                     listType="picture-card"
                     fileList={imageList}
+                    customRequest={this.customRequest}
                     onChange={(file: UploadChangeParam) =>
                       this.handleUpload(file.file)
                     }
@@ -367,9 +376,10 @@ class EditPage extends React.Component<OfferProps, OfferState> {
                 </div>
               </div>
               <label>{i18n.t('Certificates')}</label>
-              <div className="uploadCls-offers-edit">
+              <div className="uploadCls-transactions-edit">
                 <div className="clearfix">
                   <Upload
+                    customRequest={this.customRequest}
                     accept="image/*"
                     listType="picture-card"
                     fileList={certificateList}
@@ -683,7 +693,7 @@ class EditPage extends React.Component<OfferProps, OfferState> {
                     <Select
                       className="label-right"
                       placeholder="currencys"
-                      value={this.state.offer['currencyCode']}
+                      value={this.state.transaction['currencyCode']}
                       onSelect={(value: string) =>
                         this.handleSelectChange(value, 'currencyCode')
                       }
@@ -742,9 +752,9 @@ class EditPage extends React.Component<OfferProps, OfferState> {
           lg={{ span: 20, offset: 2 }}
         >
           <h2 className="header-center">
-            {this.state.offer.id
-              ? i18n.t('Edit Offer Page')
-              : i18n.t('Create Offer Page')}
+            {this.state.transaction.id
+              ? i18n.t('Edit Transaction Page')
+              : i18n.t('Create Transaction Page')}
           </h2>
           <form name="form" onSubmit={this.handleSubmit}>
             <Steps current={current}>
@@ -773,13 +783,13 @@ class EditPage extends React.Component<OfferProps, OfferState> {
   }
 }
 function mapStateToProps(state: RootState) {
-  const { offer, category, currency, upload, auth } = state
-  const { editing, loading, offerData } = offer
+  const { transaction, category, currency, upload, auth } = state
+  const { editing, loading, transData } = transaction
   return {
     editing,
     categorys: category.items,
     currencys: currency.items,
-    offerData,
+    transData,
     image: upload.image,
     authInfo: auth.authInfo
   }

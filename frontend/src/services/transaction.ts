@@ -1,6 +1,6 @@
 import { authHeader } from '../helpers/auth'
-import { Offer } from '../models'
-export const offerService = {
+import { Transaction } from '../models'
+export const transService = {
   new: _new,
   edit,
   getById,
@@ -9,27 +9,29 @@ export const offerService = {
   finish,
   addComment
 }
-function _new(offer: Offer) {
+function _new(transaction: Transaction) {
   const requestOptions = {
     method: 'POST',
     headers: {
       ...authHeader(),
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(offer)
+    body: JSON.stringify(transaction)
   }
-  return fetch('/offer/new', requestOptions).then(handleResponse)
+  return fetch('/transaction/new', requestOptions).then(handleResponse)
 }
-function edit(offer: Offer, offerId: string) {
+function edit(transaction: Transaction, transactionId: string) {
   const requestOptions = {
     method: 'PUT',
     headers: {
       ...authHeader(),
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(offer)
+    body: JSON.stringify(transaction)
   }
-  return fetch('/offer/' + offerId, requestOptions).then(handleResponse)
+  return fetch('/transaction/' + transactionId, requestOptions).then(
+    handleResponse
+  )
 }
 function getById(id: string) {
   const requestOptions = {
@@ -37,7 +39,7 @@ function getById(id: string) {
     headers: authHeader()
   }
 
-  return fetch('/offer/' + id, requestOptions).then(handleResponse)
+  return fetch('/transaction/' + id, requestOptions).then(handleResponse)
 }
 function cancell(id: string) {
   const requestOptions = {
@@ -45,7 +47,7 @@ function cancell(id: string) {
     headers: authHeader()
   }
 
-  return fetch('/offer/' + id, requestOptions).then(handleResponse)
+  return fetch('/transaction/' + id, requestOptions).then(handleResponse)
 }
 function finish(id: string) {
   const requestOptions = {
@@ -53,7 +55,7 @@ function finish(id: string) {
     headers: authHeader()
   }
 
-  return fetch('/offer/finish/' + id, requestOptions).then(handleResponse)
+  return fetch('/transaction/finish/' + id, requestOptions).then(handleResponse)
 }
 function addComment(id: string, comment: string) {
   const requestOptions = {
@@ -65,7 +67,9 @@ function addComment(id: string, comment: string) {
     body: JSON.stringify({ comment })
   }
 
-  return fetch('/offer/comment/' + id, requestOptions).then(handleResponse)
+  return fetch('/transaction/comment/' + id, requestOptions).then(
+    handleResponse
+  )
 }
 function getAll(option: { selectType: string }) {
   const requestOptions = {
@@ -73,7 +77,7 @@ function getAll(option: { selectType: string }) {
     headers: authHeader()
   }
   return fetch(
-    '/offer/list?selectType=' + option.selectType,
+    '/transaction/list?selectType=' + option.selectType,
     requestOptions
   ).then(handleResponse)
 }

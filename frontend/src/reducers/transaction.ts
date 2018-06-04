@@ -1,6 +1,6 @@
-import { offerConsts } from '../constants'
-import { OfferAction } from '../actions'
-import { Offer } from '../models'
+import { transactionConsts } from '../constants'
+import { TransactionAction } from '../actions'
+import { Transaction } from '../models'
 export type State = {
   editing?: boolean
   cancelling?: boolean
@@ -9,24 +9,27 @@ export type State = {
   finishError?: string
   loading?: boolean
   error?: string
-  offerData?: Offer
-  items?: Array<Offer>
+  transData?: Transaction
+  items?: Array<Transaction>
 }
-export function offer(state: State = {}, action: OfferAction): State {
+export function transaction(
+  state: State = {},
+  action: TransactionAction
+): State {
   switch (action.type) {
-    case offerConsts.CREATE_REQUEST:
+    case transactionConsts.CREATE_REQUEST:
       return { editing: true }
-    case offerConsts.CREATE_SUCCESS:
+    case transactionConsts.CREATE_SUCCESS:
       return {}
-    case offerConsts.CREATE_FAILURE:
+    case transactionConsts.CREATE_FAILURE:
       return { error: action.error }
-    case offerConsts.EDIT_REQUEST:
+    case transactionConsts.EDIT_REQUEST:
       return { editing: true }
-    case offerConsts.EDIT_SUCCESS:
+    case transactionConsts.EDIT_SUCCESS:
       return {}
-    case offerConsts.EDIT_FAILURE:
+    case transactionConsts.EDIT_FAILURE:
       return { error: action.error }
-    case offerConsts.CANCELL_REQUEST:
+    case transactionConsts.CANCELL_REQUEST:
       if (state.items)
         return {
           ...state,
@@ -40,13 +43,13 @@ export function offer(state: State = {}, action: OfferAction): State {
                 : item
           )
         }
-    case offerConsts.CANCELL_SUCCESS:
+    case transactionConsts.CANCELL_SUCCESS:
       if (state.items)
         return {
           ...state,
           items: state.items.filter(item => item.id !== action.id)
         }
-    case offerConsts.CANCELL_FAILURE:
+    case transactionConsts.CANCELL_FAILURE:
       if (state.items)
         return {
           ...state,
@@ -61,7 +64,7 @@ export function offer(state: State = {}, action: OfferAction): State {
                 : item
           )
         }
-    case offerConsts.FINISH_REQUEST:
+    case transactionConsts.FINISH_REQUEST:
       if (state.items)
         return {
           ...state,
@@ -75,7 +78,7 @@ export function offer(state: State = {}, action: OfferAction): State {
                 : item
           )
         }
-    case offerConsts.FINISH_SUCCESS:
+    case transactionConsts.FINISH_SUCCESS:
       if (state.items)
         return {
           ...state,
@@ -84,13 +87,13 @@ export function offer(state: State = {}, action: OfferAction): State {
               item.id === action.id
                 ? {
                     ...item,
-                    status: offerConsts.OFFER_STATUS_FINISHED
+                    status: transactionConsts.TRANSACTION_STATUS_FINISHED
                   }
                 : item
           )
         }
 
-    case offerConsts.FINISH_FAILURE:
+    case transactionConsts.FINISH_FAILURE:
       if (state.items)
         return {
           ...state,
@@ -105,7 +108,7 @@ export function offer(state: State = {}, action: OfferAction): State {
                 : item
           )
         }
-    case offerConsts.COMMENT_REQUEST:
+    case transactionConsts.COMMENT_REQUEST:
       if (state.items)
         return {
           ...state,
@@ -119,7 +122,7 @@ export function offer(state: State = {}, action: OfferAction): State {
                 : item
           )
         }
-    case offerConsts.COMMENT_SUCCESS:
+    case transactionConsts.COMMENT_SUCCESS:
       if (state.items)
         return {
           ...state,
@@ -134,7 +137,7 @@ export function offer(state: State = {}, action: OfferAction): State {
           )
         }
 
-    case offerConsts.COMMENT_FAILURE:
+    case transactionConsts.COMMENT_FAILURE:
       if (state.items)
         return {
           ...state,
@@ -149,17 +152,17 @@ export function offer(state: State = {}, action: OfferAction): State {
                 : item
           )
         }
-    case offerConsts.GET_REQUEST:
+    case transactionConsts.GET_REQUEST:
       return { loading: true }
-    case offerConsts.GET_SUCCESS:
-      return { offerData: action.data }
-    case offerConsts.GET_FAILURE:
+    case transactionConsts.GET_SUCCESS:
+      return { transData: action.data }
+    case transactionConsts.GET_FAILURE:
       return { error: action.error }
-    case offerConsts.GETALL_REQUEST:
+    case transactionConsts.GETALL_REQUEST:
       return { loading: true }
-    case offerConsts.GETALL_SUCCESS:
-      return { items: action.offers }
-    case offerConsts.GETALL_FAILURE:
+    case transactionConsts.GETALL_SUCCESS:
+      return { items: action.transactions }
+    case transactionConsts.GETALL_FAILURE:
       return { error: action.error }
     default:
       return state

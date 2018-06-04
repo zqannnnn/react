@@ -24,7 +24,7 @@ class PrivateRoute extends React.Component<PrivateRouteProps> {
       }
       this.props.dispatch(authActionCreators.setAuth(authInfo))
     }
-    if (params.route && params.route == 'resetPass'){
+    if (params.route && params.route == 'resetPass') {
       history.replace('/reset/pass')
     }
   }

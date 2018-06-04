@@ -4,7 +4,7 @@ import { auth, State as AuthState } from './auth'
 import { user, State as UserState } from './user'
 import { alert, State as AlertState } from './alert'
 import { order, State as OrderState } from './order'
-import { offer, State as OfferState } from './offer'
+import { transaction, State as TransactionState } from './transaction'
 import { category, State as CategoryState } from './category'
 import { currency, State as CurrencyState } from './currency'
 import { upload, State as UploadState } from './upload'
@@ -15,7 +15,7 @@ export const rootReducer = combineReducers({
   user,
   alert,
   order,
-  offer,
+  transaction,
   category,
   currency,
   upload,
@@ -28,7 +28,7 @@ export type RootState = {
   user: UserState
   alert: AlertState
   order: OrderState
-  offer: OfferState
+  transaction: TransactionState
   category: CategoryState
   currency: CurrencyState
   upload: UploadState
@@ -41,7 +41,7 @@ export {
   UserState,
   AlertState,
   OrderState,
-  OfferState,
+  TransactionState,
   CategoryState,
   CurrencyState,
   UploadState,

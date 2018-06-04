@@ -77,9 +77,9 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
             defaultMessage: 'My Orders'
           })}
           {this.renderItem({
-            to: '/offers/my',
-            id: 'navbar.myOffers',
-            defaultMessage: 'My Offers'
+            to: '/transactions/my',
+            id: 'navbar.myTransactions',
+            defaultMessage: 'My Transactions'
           })}
           {this.renderItem({
             to: '/order/new',
@@ -87,9 +87,9 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
             defaultMessage: 'Add Order'
           })}
           {this.renderItem({
-            to: '/offer/new',
-            id: 'navbar.addOffer',
-            defaultMessage: 'Add Offer'
+            to: '/transaction/new',
+            id: 'navbar.addTransaction',
+            defaultMessage: 'Add Transaction'
           })}
           {this.renderItem({
             to: '/profile',

@@ -16,7 +16,7 @@ class ResetPassPage extends React.Component<ResetPassProps> {
     super(props)
   }
 
-  handleSubmit = (pass:string) => {
+  handleSubmit = (pass: string) => {
     this.props.dispatch(userActionCreators.resetPass(pass))
   }
 

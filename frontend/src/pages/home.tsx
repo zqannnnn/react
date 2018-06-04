@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
-import { offerActionCreators, orderActionCreators } from '../actions'
-import { RootState, OfferState, OrderState } from '../reducers'
+import { transactionActionCreators, orderActionCreators } from '../actions'
+import { RootState, TransactionState, OrderState } from '../reducers'
 import { AuthInfo } from '../actions'
 import { List as ListC } from '../components'
 import { Row, Col } from 'antd'
 interface HomeProps {
   dispatch: Dispatch<RootState>
-  offer: OfferState
+  transaction: TransactionState
   order: OrderState
   authInfo: AuthInfo
 }
@@ -18,16 +18,16 @@ class HomePage extends React.Component<HomeProps> {
     super(props)
   }
   componentDidMount() {
-    this.props.dispatch(offerActionCreators.getAll({ selectType: 'all' }))
+    this.props.dispatch(transactionActionCreators.getAll({ selectType: 'all' }))
     this.props.dispatch(orderActionCreators.getAll({ selectType: 'all' }))
   }
   render() {
-    const { authInfo, offer, order } = this.props
+    const { authInfo, transaction, order } = this.props
     return (
       <div className="page">
         <div className="banner">
           <div className="banner-bg" />
-          <div className="title">All Offer</div>
+          <div className="title">All Transaction</div>
         </div>
         <Row>
           <Col
@@ -41,12 +41,12 @@ class HomePage extends React.Component<HomeProps> {
                 <div className="title">Home</div>
                 <div className="subtitle">
                   <div className="des">People looking for sell</div>
-                  <Link className="link" to={'/offers'}>
-                    👁 view all offers
+                  <Link className="link" to={'/transactions'}>
+                    👁 view all transactions
                   </Link>
                 </div>
               </div>
-              {offer.items && <ListC items={offer.items} />}
+              {transaction.items && <ListC items={transaction.items} />}
             </div>
             <div className="list-container">
               <div className="header">
@@ -68,8 +68,8 @@ class HomePage extends React.Component<HomeProps> {
 }
 
 function mapStateToProps(state: RootState) {
-  const { auth, offer, order } = state
-  return { authInfo: auth.authInfo, offer, order }
+  const { auth, transaction, order } = state
+  return { authInfo: auth.authInfo, transaction, order }
 }
 
 const connectedHomePage = connect(mapStateToProps)(HomePage)

@@ -151,6 +151,11 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   openLightbox = (images: string[], index: number) => {
     this.props.dispatch(lightboxActionCreators.open(images, index))
   }
+
+  customRequest = () => {
+    return false
+  }
+
   render() {
     const { userState, currencys } = this.props
     const { processing } = userState
@@ -253,6 +258,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                     onChange={(file: UploadChangeParam) =>
                       this.handleUpload(file.file)
                     }
+                    customRequest={this.customRequest}
                     onPreview={this.handlePreview}
                     onRemove={this.handleDeleteImage}
                   >
@@ -266,7 +272,9 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
             </div>
             {user.licenseStatus !== userConsts.LICENSE_STATUS_CONFIRMED && (
               <div>
-                {i18n.t('Please fulfill company information for adding offer')}
+                {i18n.t(
+                  'Please fulfill company information for adding transaction'
+                )}
               </div>
             )}
             <div>

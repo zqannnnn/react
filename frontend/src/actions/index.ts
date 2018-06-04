@@ -7,9 +7,9 @@ export {
   Action as CategoryAction
 } from './category'
 export {
-  actionCreators as offerActionCreators,
-  Action as OfferAction
-} from './offer'
+  actionCreators as transactionActionCreators,
+  Action as TransactionAction
+} from './transaction'
 export {
   actionCreators as orderActionCreators,
   Action as OrderAction

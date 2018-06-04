@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
-import { offerActionCreators, AuthInfo } from '../../actions'
-import { RootState, OfferState } from '../../reducers'
-import { Offer, ListItem } from '../../models'
+import { transactionActionCreators, AuthInfo } from '../../actions'
+import { RootState, TransactionState } from '../../reducers'
+import { Transaction, ListItem } from '../../models'
 import { Form, Icon, Input, Button, Checkbox } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 const FormItem = Form.Item

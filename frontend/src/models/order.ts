@@ -27,7 +27,7 @@ export class Order implements ListItem {
   currency?: Currency
   trimmings?: number
   comment?: string
-  offerId?: string
+  transactionId?: string
   cancelling?: boolean
   cancellError?: string
 }
