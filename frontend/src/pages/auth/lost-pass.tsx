@@ -11,46 +11,16 @@ interface LostPassProps extends RouteComponentProps<{}> {
   dispatch: Dispatch<RootState>
   processing: boolean
 }
-interface LostPassState {
-  values: {
-    email: string
-  }
-  submitted?: boolean
-}
-class LostPassPage extends React.Component<LostPassProps, LostPassState> {
+class LostPassPage extends React.Component<LostPassProps> {
   constructor(props: LostPassProps) {
     super(props)
-
-    this.state = {
-      values: {
-        email: ''
-      },
-      submitted: false
-    }
   }
-  handleChange = (e: React.FormEvent<HTMLInputElement>) => {
-    const { name, value } = e.currentTarget
-    this.setState({
-      ...this.state,
-      [name]: value
-    })
-  }
-
-  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    this.setState({ submitted: true })
-    const { email } = this.state.values
-    const { dispatch } = this.props
-    if (email) {
-      dispatch(userActionCreators.lostPass(email))
-    }
+  handleSubmit = (email:string) => {
+    this.props.dispatch(userActionCreators.lostPass(email))
   }
 
   render() {
     const { processing } = this.props
-    const { email } = this.state.values
-    const { submitted } = this.state
     return (
       <Row className="page margin-lostPas">
         <div className="header">{i18n.t('Lost Password')}</div>

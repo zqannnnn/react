@@ -55,9 +55,9 @@ router.post('/lost', async (req: express.Request, res: express.Response) => {
           if (error) {
             return res.status(500).send({ error: error.message })
           }
+          return res.send({ success: true })
         }
       )
-      return res.send({ success: true })
     }
     return res.status(500).send({ error: "Can't find this email address." })
   } catch (e) {
@@ -72,6 +72,7 @@ router.post('/reset', async (req: IRequest, res: express.Response) => {
     const user = await User.findOne({ where: { id: req.userId } })
     if (user != null) {
       user.password = req.body.password
+      User.hashPassword(user)
       await user.save()
       return res.send({ success: true })
     }
