@@ -19,10 +19,10 @@ import {
 import { consts } from '../config/static'
 import { Currency, Image, User } from './'
 @Table({
-  tableName: 'offer',
+  tableName: 'transaction',
   underscored: true
 })
-export class Offer extends Model<Offer> {
+export class Transaction extends Model<Transaction> {
   // only allow string keys to do some iteration :)
   [key: string]: any
 
@@ -41,11 +41,13 @@ export class Offer extends Model<Offer> {
 
   @Column public type: string
 
+  @Column public category: string
+
   @Column public title: string
 
   @Column public desc: string
 
-  @Default(consts.OFFER_STATUS_CREATED)
+  @Default(consts.TRANSACTION_STATUS_CREATED)
   @Column
   public status: number
 
@@ -96,7 +98,7 @@ export class Offer extends Model<Offer> {
   @BelongsTo(() => Currency)
   public currency: Currency
 
-  @HasMany(() => Image, 'offer_id')
+  @HasMany(() => Image, 'product_id')
   public images: Image[]
 
   @CreatedAt

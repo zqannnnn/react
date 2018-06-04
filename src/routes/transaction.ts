@@ -2,23 +2,23 @@ import * as express from 'express'
 import { consts } from '../config/static'
 import { authMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
-import { Currency, Image, Offer } from '../models/'
+import { Currency, Image, Transaction } from '../models/'
 const router = express.Router()
 
 router.use(authMiddleware)
 
 router.post('/new', async (req: IRequest, res: express.Response) => {
   try {
-    const offer = new Offer({
+    const transaction = new Transaction({
       userId: req.userId,
       ...req.body
     })
-    await offer.save()
+    await transaction.save()
     if (req.body.images) {
       req.body.images.forEach((image: { path: string }) => {
         const imageDb = new Image({
           path: image.path,
-          offerId: offer.id,
+          transactionId: transaction.id,
           type: consts.IMAGE_TYPE_MEDIE
         })
         imageDb.save()
@@ -28,7 +28,7 @@ router.post('/new', async (req: IRequest, res: express.Response) => {
       req.body.certificates.forEach((certificate: { path: string }) => {
         const imageDb = new Image({
           path: certificate.path,
-          offerId: offer.id,
+          transactionId: transaction.id,
           type: consts.IMAGE_TYPE_CERTIFICATE
         })
         imageDb.save()
@@ -40,65 +40,65 @@ router.post('/new', async (req: IRequest, res: express.Response) => {
   }
 })
 router.get('/list', async (req: IRequest, res: express.Response) => {
-  let offers
+  let transactions
   const selectType = req.query.selectType
   try {
     if (selectType === 'mine') {
-      offers = await Offer.findAll({
+      transactions = await Transaction.findAll({
         where: {
           userId: req.userId
         },
         include: [{ model: Image, attributes: ['path', 'type'] }]
       })
     } else if (selectType === 'finished') {
-      offers = await Offer.findAll({
+      transactions = await Transaction.findAll({
         where: {
-          status: consts.OFFER_STATUS_FINISHED
+          status: consts.TRANSACTION_STATUS_FINISHED
         },
         include: [{ model: Image, attributes: ['path', 'type'] }]
       })
     } else {
-      offers = await Offer.findAll({
+      transactions = await Transaction.findAll({
         where: {
-          status: consts.OFFER_STATUS_CREATED
+          status: consts.TRANSACTION_STATUS_CREATED
         },
         include: [{ model: Image, attributes: ['path', 'type'] }]
       })
     }
-    return res.send(offers)
+    return res.send(transactions)
   } catch (e) {
     return res.status(500).send({ error: e.message })
   }
 })
-router.get('/finish/:offerId', async (req: IRequest, res: express.Response) => {
+router.get('/finish/:transactionId', async (req: IRequest, res: express.Response) => {
   try {
     if (!req.isAdmin) {
       return res.status(500).send({ error: 'Permission denied.' })
     }
-    const offer = await Offer.find({ where: { id: req.params.offerId } })
-    if (!offer) {
-      return res.status(500).send({ error: 'Offer does not exist' })
+    const transaction = await Transaction.find({ where: { id: req.params.transactionId } })
+    if (!transaction) {
+      return res.status(500).send({ error: 'Transaction does not exist' })
     }
-    offer.status = consts.OFFER_STATUS_FINISHED
-    offer.save()
+    transaction.status = consts.TRANSACTION_STATUS_FINISHED
+    transaction.save()
     return res.send({ success: true })
   } catch (e) {
     return res.status(500).send({ error: e.message })
   }
 })
 router.post(
-  '/comment/:offerId',
+  '/comment/:transactionId',
   async (req: IRequest, res: express.Response) => {
     try {
       if (!req.isAdmin) {
         return res.status(500).send({ error: 'Permission denied.' })
       }
-      const offer = await Offer.find({ where: { id: req.params.offerId } })
-      if (!offer) {
-        return res.status(500).send({ error: 'Offer does not exist' })
+      const transaction = await Transaction.find({ where: { id: req.params.transactionId } })
+      if (!transaction) {
+        return res.status(500).send({ error: 'Transaction does not exist' })
       }
-      offer.comment = req.body.comment
-      offer.save()
+      transaction.comment = req.body.comment
+      transaction.save()
       return res.send({ success: true })
     } catch (e) {
       return res.status(500).send({ error: e.message })
@@ -106,39 +106,39 @@ router.post(
   }
 )
 router
-  .route('/:offerId')
+  .route('/:transactionId')
   .get(async (req: express.Request, res: express.Response) => {
-    const offer = await Offer.find({
-      where: { id: req.params.offerId },
+    const transaction = await Transaction.find({
+      where: { id: req.params.transactionId },
       include: [
         { model: Image, attributes: ['path', 'type'] },
         { model: Currency, attributes: ['code'] }
       ]
     })
-    if (!offer) {
-      return res.status(403).send({ error: 'Offer does not exist' })
+    if (!transaction) {
+      return res.status(403).send({ error: 'Transaction does not exist' })
     }
-    return res.send(offer)
+    return res.send(transaction)
   })
   .put(async (req: IRequest, res: express.Response) => {
     try {
-      const offer = await Offer.find({ where: { id: req.params.offerId } })
-      if (offer && offer.userId !== req.userId && !req.isAdmin) {
+      const transaction = await Transaction.find({ where: { id: req.params.transactionId } })
+      if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
         return res.status(500).send({ error: 'Permission denied' })
       }
-      if (!offer) {
-        return res.status(500).send({ error: 'Offer does not exist' })
+      if (!transaction) {
+        return res.status(500).send({ error: 'Transaction does not exist' })
       }
       Object.keys(req.body).forEach(
-        (key: string) => (offer[key] = req.body[key])
+        (key: string) => (transaction[key] = req.body[key])
       )
-      offer.save()
-      await Image.destroy({ where: { offerId: req.params.offerId } })
+      transaction.save()
+      await Image.destroy({ where: { transactionId: req.params.transactionId } })
       if (req.body.images) {
         req.body.images.forEach((image: { path: string }) => {
           const imageDb = new Image({
             path: image.path,
-            offerId: offer.id,
+            transactionId: transaction.id,
             type: consts.IMAGE_TYPE_MEDIE
           })
           imageDb.save()
@@ -148,7 +148,7 @@ router
         req.body.certificates.forEach((certificate: { path: string }) => {
           const imageDb = new Image({
             path: certificate.path,
-            offerId: offer.id,
+            transactionId: transaction.id,
             type: consts.IMAGE_TYPE_CERTIFICATE
           })
           imageDb.save()
@@ -161,15 +161,15 @@ router
   })
   .delete(async (req: IRequest, res: express.Response) => {
     try {
-      const offer = await Offer.find({ where: { id: req.params.offerId } })
-      if (offer && offer.userId !== req.userId && !req.isAdmin) {
+      const transaction = await Transaction.find({ where: { id: req.params.transactionId } })
+      if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
         return res.status(500).send({ error: 'Permission denied' })
       }
-      if (!offer) {
-        return res.status(500).send({ error: 'Offer does not exist' })
+      if (!transaction) {
+        return res.status(500).send({ error: 'Transaction does not exist' })
       }
-      offer.status = consts.OFFER_STATUS_CANCELLED
-      offer.save()
+      transaction.status = consts.TRANSACTION_STATUS_CANCELLED
+      transaction.save()
       return res.send({ success: true })
     } catch (e) {
       return res.status(500).send({ error: e.message })

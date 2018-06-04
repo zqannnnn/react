@@ -1,6 +1,5 @@
 export { Category } from './category'
-export { Offer } from './offer'
-export { Order } from './order'
+export { Transaction } from './transaction'
 export { User } from './user'
 export { Image } from './image'
 export { Currency } from './currency'

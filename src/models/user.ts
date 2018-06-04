@@ -19,7 +19,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { consts } from '../config/static'
-import { Currency, Image, Offer, Order } from './'
+import { Currency, Image, Transaction } from './'
 @Table({
   tableName: 'user',
   underscored: true
@@ -65,11 +65,8 @@ export class User extends Model<User> {
   @Column({ field: 'updated_at' })
   public updatedAt: Date
 
-  @HasMany(() => Order, 'user_id')
-  public orders: Order[]
-
-  @HasMany(() => Offer, 'user_id')
-  public offers: Offer[]
+  @HasMany(() => Transaction, 'user_id')
+  public offers: Transaction[]
 
   @ForeignKey(() => Currency)
   @Column({ field: 'preferred_currency_code' })

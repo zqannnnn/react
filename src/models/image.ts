@@ -11,7 +11,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { Offer, User } from '.'
+import { Transaction, User } from '.'
 @Table({
   tableName: 'image',
   underscored: true
@@ -40,9 +40,9 @@ export class Image extends Model<Image> {
   @Column({ field: 'updated_at' })
   public updatedAt: Date
 
-  @ForeignKey(() => Offer)
-  @Column({ field: 'offer_id' })
-  public offerId: string
+  @ForeignKey(() => Transaction)
+  @Column({ field: 'transaction_id' })
+  public transactionId: string
 
   @ForeignKey(() => User)
   @Column({ field: 'user_id' })

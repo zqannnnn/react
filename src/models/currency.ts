@@ -9,7 +9,6 @@ import {
   Table,
   Unique
 } from 'sequelize-typescript'
-import { Offer } from '.'
 @Table({
   tableName: 'currency',
   underscored: true
