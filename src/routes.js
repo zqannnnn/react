@@ -46,7 +46,7 @@ module.exports = (app, passport) => {
     })(req, res, next)
   })
 
-  app.get('/pass/reset', async (req, res) => {
+  app.get('/reset/pass', async (req, res) => {
     const email = req.param('email')
     const key = req.param('key')
     if (email) {
@@ -66,7 +66,7 @@ module.exports = (app, passport) => {
         if (user.userType == 1) {
           data.isAdmin = true
         }
-        return res.redirect('/#/?' + qs.stringify(data))
+        return res.redirect('/#/reset/pass/?' + qs.stringify(data))
       }
       return res.redirect('/')
     }

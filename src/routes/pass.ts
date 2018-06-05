@@ -43,7 +43,7 @@ router.post('/lost', async (req: express.Request, res: express.Response) => {
       const resetUrl =
         'http://' +
         req.headers.host +
-        '/#/reset/pass?key=' +
+        '/reset/pass?key=' +
         randomKey +
         '&email=' +
         req.body.email
@@ -60,7 +60,7 @@ router.post('/lost', async (req: express.Request, res: express.Response) => {
       )
     }
     return res.status(500).send({ error: "Can't find this email address." })
-  } catch (e) {
+    } catch (e) {
     return res.status(500).send({ error: e.message })
   }
 })
