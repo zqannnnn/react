@@ -26,7 +26,7 @@ class PrivateRoute extends React.Component<PrivateRouteProps> {
       if (params.route && params.route == 'resetPass') {
         history.replace('/reset/pass')
       }
-    } 
+    }
   }
   render() {
     const { loggedIn, dispatch, component: Component, ...props } = this.props

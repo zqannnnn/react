@@ -58,8 +58,7 @@ class ReNavBar extends React.Component<NavProps> {
   render() {
     const { auth, currency, mobileBreakPoint } = this.props
     const { viewportWidth } = this.state
-
-    if (viewportWidth > mobileBreakPoint) {
+    if (viewportWidth > mobileBreakPoint || !this.props.auth.loggedIn) {
       return (
         <MenuMarkup
           auth={auth}
