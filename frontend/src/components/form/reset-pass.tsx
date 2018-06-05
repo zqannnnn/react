@@ -32,6 +32,9 @@ class ResetPassForm extends React.Component<
   ResetPassFormProps,
   RegisterFormState
 > {
+  state = {
+    confirmDirty: false
+  }
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
@@ -128,7 +131,7 @@ class ResetPassForm extends React.Component<
         </FormItem>
         <FormItem {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit">
-            Register
+            Reset
           </Button>
           {this.props.processing && <Icon type="loading" />}
         </FormItem>

@@ -125,6 +125,9 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
           style={{ lineHeight: '64px', float: 'right' }}
           selectable={false}
         >
+          <Item>
+            <Link to="/">{i18n.t('Home')}</Link>
+          </Item>
           {this.renderItem({
             to: '/login',
             id: 'navbar.login',
