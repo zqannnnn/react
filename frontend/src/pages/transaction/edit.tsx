@@ -56,7 +56,8 @@ class EditPage extends React.Component<TransProps, TransState> {
     this.state = {
       submitted: false,
       transaction: {
-        type: 'Beef'
+        category: 'Beef',
+        type: ''
       },
       imageUploading: false,
       certificateUploading: false,
@@ -191,20 +192,20 @@ class EditPage extends React.Component<TransProps, TransState> {
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     this.setState({ submitted: true })
-    // if (
-    //   this.props.authInfo.licenseStatus !== userConsts.LICENSE_STATUS_CONFIRMED
-    // ) {
-    //   this.props.dispatch(
-    //     alertActionCreators.error(
-    //       'You are not allowed to add transaction, please fullfill company info first.'
-    //     )
-    //   )
-    //   window.scrollTo(0, 0)
-    //   return
-    // }
+    if (
+      this.props.authInfo.licenseStatus !== userConsts.LICENSE_STATUS_CONFIRMED
+    ) {
+      this.props.dispatch(
+        alertActionCreators.error(
+          'You are not allowed to add transaction, please fullfill company info first.'
+        )
+      )
+      window.scrollTo(0, 0)
+      return
+    }
     const { transaction, transactionId } = this.state
     const { dispatch } = this.props
-    if (transaction.type && transaction.title) {
+    if (transaction.category && transaction.title) {
       if (transactionId)
         dispatch(transactionActionCreators.edit(transaction, transactionId))
       else dispatch(transactionActionCreators.new(transaction))
@@ -253,7 +254,7 @@ class EditPage extends React.Component<TransProps, TransState> {
   }
   //for render select input
   renderSelect(optionItems: Array<string>, field: keyof Transaction) {
-    let selectValue = this.state.transaction[field] || ' '
+    let selectValue = this.state.transaction[field] || ''
     return (
       <Select
         value={String(selectValue)}
@@ -289,15 +290,16 @@ class EditPage extends React.Component<TransProps, TransState> {
       placeOfOrigin,
       fed,
       grainFedDays,
-      trimmings
+      trimmings,
+      category
     } = this.state.transaction
     let { submitted } = this.state
     let { editing, categorys, currencys } = this.props
     let options = null
     let currentCategory: Category =
       categorys &&
-      categorys.filter((category: Category) => {
-        return category.type === type
+      categorys.filter((item: Category) => {
+        return item.type === category
       })[0]
 
     let imageList: UploadFile[]
@@ -333,15 +335,15 @@ class EditPage extends React.Component<TransProps, TransState> {
         return (
           <Row>
             <Col xs={20} sm={18} md={12} lg={8} offset={1}>
-              <label>{i18n.t('Transaction Type')}</label>
+              <label>{i18n.t('Transaction Category')}</label>
               <Select
                 size="large"
-                value={type}
+                value={category}
                 onSelect={(value: string) =>
-                  this.handleSelectChange(value, 'type')
+                  this.handleSelectChange(value, 'category')
                 }
               >
-                {transactionConsts.TRANSACTION_TYPE.map((item, index) => (
+                {transactionConsts.CATEGORY.map((item, index) => (
                   <Select.Option key={index} value={item}>
                     {item}
                   </Select.Option>
@@ -403,327 +405,372 @@ class EditPage extends React.Component<TransProps, TransState> {
         return (
           <>
             <Row>
-              <Col span={20} offset={2}>
-                <div className={submitted && !title ? ' has-error' : ''}>
-                  <label className="edits-title">{i18n.t('Title')}</label>
-                  <Input
-                    type="text"
-                    name="title"
-                    value={title}
-                    onChange={this.handleInputChange}
-                    size="large"
-                  />
-                  {submitted &&
-                    !title && (
-                      <div className="invalid-feedback">
-                        {i18n.t('Title is required')}
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 9, offset: 2 }}
+                lg={{ span: 9, offset: 2 }}
+                className="edits-select"
+              >
+                <h2>{i18n.t('Sell or Buy')}</h2>
+                <Select
+                  size="large"
+                  value={this.state.transaction['type']}
+                  onSelect={(value: string) =>
+                    this.handleSelectChange(value, 'type')
+                  }
+                >
+                  <Select.Option key="Buy">
+                    {i18n.t(transactionConsts.TYPE_BUY)}
+                  </Select.Option>
+                  <Select.Option key="Sell">
+                    {i18n.t(transactionConsts.TYPE_SELL)}
+                  </Select.Option>
+                </Select>
+              </Col>
+            </Row>
+            {this.state.transaction.type && (
+              <div className="edits-select">
+                <Row>
+                  <Col span={20} offset={2}>
+                    <div className={submitted && !title ? ' has-error' : ''}>
+                      <label className="edits-title">{i18n.t('Title')}</label>
+                      <Input
+                        placeholder="请输入标题"
+                        type="text"
+                        name="title"
+                        value={title}
+                        onChange={this.handleInputChange}
+                        size="large"
+                      />
+                      {submitted &&
+                        !title && (
+                          <div className="invalid-feedback">
+                            {i18n.t('Title is required')}
+                          </div>
+                        )}
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="edits-select"
+                  >
+                    <label>{i18n.t('Bone')}</label>
+                    {currentCategory &&
+                      this.renderSelect(
+                        currentCategory.details['Bone'],
+                        'bone'
+                      )}
+                  </Col>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="edits-select"
+                  >
+                    <label>{i18n.t('Storage')}</label>
+                    {currentCategory &&
+                      this.renderSelect(
+                        currentCategory.details['Storage'],
+                        'storage'
+                      )}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="edits-select"
+                  >
+                    <label>{i18n.t('Grade')}</label>
+                    {currentCategory &&
+                      this.renderSelect(
+                        currentCategory.details['Grade'],
+                        'grade'
+                      )}
+                  </Col>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="edits-select"
+                  >
+                    <label>{i18n.t('Slaughter Specification')}</label>
+                    {currentCategory &&
+                      this.renderSelect(
+                        currentCategory.details['Slaughter Specification'],
+                        'slaughterSpec'
+                      )}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="edits-select"
+                  >
+                    <label>{i18n.t('Marble Score')}</label>
+                    {currentCategory &&
+                      this.renderSelect(
+                        currentCategory.details['Marble Score'],
+                        'marbleScore'
+                      )}
+                  </Col>
+
+                  {currentCategory &&
+                    currentCategory.category != 'Sheep' && (
+                      <Col
+                        xs={{ span: 20, offset: 2 }}
+                        sm={{ span: 20, offset: 2 }}
+                        md={{ span: 9, offset: 2 }}
+                        lg={{ span: 9, offset: 2 }}
+                        className="edits-select"
+                      >
+                        <label>{i18n.t('Breed')}</label>
+                        {this.renderSelect(
+                          currentCategory.details['Breed'],
+                          'breed'
+                        )}
+                      </Col>
+                    )}
+                </Row>
+                <Row>
+                  {currentCategory &&
+                    currentCategory.category == 'Beef' && (
+                      <Col
+                        xs={{ span: 20, offset: 2 }}
+                        sm={{ span: 20, offset: 2 }}
+                        md={{ span: 9, offset: 2 }}
+                        lg={{ span: 9, offset: 2 }}
+                        className="edits-select"
+                      >
+                        <label>{i18n.t('Fed')}</label>
+                        {this.renderSelect(
+                          currentCategory.details['Fed'],
+                          'fed'
+                        )}
+                      </Col>
+                    )}
+
+                  {fed == 'Grain fed' && (
+                    <Col
+                      xs={{ span: 20, offset: 2 }}
+                      sm={{ span: 20, offset: 2 }}
+                      md={{ span: 9, offset: 2 }}
+                      lg={{ span: 9, offset: 2 }}
+                      className="edits-select"
+                    >
+                      <label>{i18n.t('Grain fed days')}</label>
+                      <div className="flex">
+                        <InputNumber
+                          min={0}
+                          max={100000}
+                          defaultValue={0}
+                          onChange={(value: number) =>
+                            this.handleInputNumber(value, 'grainFedDays')
+                          }
+                        />
+                        <div className="label-right">{i18n.t('Days')}</div>
+                      </div>
+                    </Col>
+                  )}
+                </Row>
+                <Row>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="edits-select"
+                  >
+                    <label>{i18n.t('Primal Cuts')}</label>
+                    <Input
+                      type="text"
+                      name="primalCuts"
+                      value={primalCuts}
+                      onChange={this.handleInputChange}
+                    />
+                  </Col>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="edits-select"
+                  >
+                    <label>{i18n.t('Trimmings')}</label>
+                    <div className="flex">
+                      <InputNumber
+                        min={0}
+                        max={100000}
+                        defaultValue={0}
+                        onChange={(value: number) =>
+                          this.handleInputNumber(value, 'trimmings')
+                        }
+                      />
+                      <div className="label-right">CL</div>
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="edits-select"
+                  >
+                    <label>{i18n.t('Brand')}</label>
+                    <Input
+                      type="text"
+                      name="brand"
+                      value={brand}
+                      onChange={this.handleInputChange}
+                    />
+                  </Col>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="edits-select"
+                  >
+                    <label>{i18n.t('Factory Number')}</label>
+                    <Input
+                      type="text"
+                      name="factoryNum"
+                      value={factoryNum}
+                      onChange={this.handleInputChange}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="edits-select"
+                  >
+                    <label>{i18n.t('Place Of Origin')}</label>
+                    <Input
+                      type="text"
+                      name="placeOfOrigin"
+                      value={placeOfOrigin}
+                      onChange={this.handleInputChange}
+                    />
+                  </Col>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="edits-select"
+                  >
+                    <label>{i18n.t('Delivery Term')}</label>
+                    <Input
+                      type="text"
+                      name="deliveryTerm"
+                      value={deliveryTerm}
+                      onChange={this.handleInputChange}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="edits-select"
+                  >
+                    <label>{i18n.t('Quantity')}</label>
+                    <div className="flex">
+                      <InputNumber
+                        max={999999}
+                        defaultValue={1}
+                        min={1}
+                        value={quantity}
+                        onChange={(value: number) =>
+                          this.handleInputNumber(value, 'quantity')
+                        }
+                      />
+                      <div className="label-right">KG</div>
+                    </div>
+                  </Col>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="edits-select"
+                    offset={2}
+                  >
+                    <label>{i18n.t('Price')}</label>
+                    {currencys && (
+                      <div className="flex">
+                        <InputNumber
+                          min={0}
+                          max={99999}
+                          defaultValue={0}
+                          value={price}
+                          onChange={(value: number) =>
+                            this.handleInputNumber(value, 'price')
+                          }
+                        />
+                        <Select
+                          className="label-right"
+                          placeholder="currencys"
+                          value={this.state.transaction['currencyCode']}
+                          onSelect={(value: string) =>
+                            this.handleSelectChange(value, 'currencyCode')
+                          }
+                        >
+                          {currencys.map((item, index) => (
+                            <Select.Option key={index} value={item.code}>
+                              {item.code}
+                            </Select.Option>
+                          ))}
+                        </Select>
+                        <div className="label-right">/KG</div>
                       </div>
                     )}
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 9, offset: 2 }}
-                lg={{ span: 9, offset: 2 }}
-                className="edits-select"
-              >
-                <label>{i18n.t('Bone')}</label>
-                {currentCategory &&
-                  this.renderSelect(currentCategory.details['Bone'], 'bone')}
-              </Col>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 9, offset: 2 }}
-                lg={{ span: 9, offset: 2 }}
-                className="edits-select"
-              >
-                <label>{i18n.t('Storage')}</label>
-                {currentCategory &&
-                  this.renderSelect(
-                    currentCategory.details['Storage'],
-                    'storage'
-                  )}
-              </Col>
-            </Row>
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 9, offset: 2 }}
-                lg={{ span: 9, offset: 2 }}
-                className="edits-select"
-              >
-                <label>{i18n.t('Grade')}</label>
-                {currentCategory &&
-                  this.renderSelect(currentCategory.details['Grade'], 'grade')}
-              </Col>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 9, offset: 2 }}
-                lg={{ span: 9, offset: 2 }}
-                className="edits-select"
-              >
-                <label>{i18n.t('Slaughter Specification')}</label>
-                {currentCategory &&
-                  this.renderSelect(
-                    currentCategory.details['Slaughter Specification'],
-                    'slaughterSpec'
-                  )}
-              </Col>
-            </Row>
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 9, offset: 2 }}
-                lg={{ span: 9, offset: 2 }}
-                className="edits-select"
-              >
-                <label>{i18n.t('Marble Score')}</label>
-                {currentCategory &&
-                  this.renderSelect(
-                    currentCategory.details['Marble Score'],
-                    'marbleScore'
-                  )}
-              </Col>
-
-              {currentCategory &&
-                currentCategory.type != 'Sheep' && (
+                  </Col>
+                </Row>
+                <Row>
                   <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
+                    sm={20}
+                    md={8}
+                    lg={8}
+                    offset={2}
                     className="edits-select"
                   >
-                    <label>{i18n.t('Breed')}</label>
-                    {this.renderSelect(
-                      currentCategory.details['Breed'],
-                      'breed'
-                    )}
-                  </Col>
-                )}
-            </Row>
-            <Row>
-              {currentCategory &&
-                currentCategory.type == 'Beef' && (
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-select"
-                  >
-                    <label>{i18n.t('Fed')}</label>
-                    {this.renderSelect(currentCategory.details['Fed'], 'fed')}
-                  </Col>
-                )}
-
-              {fed == 'Grain fed' && (
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 9, offset: 2 }}
-                  lg={{ span: 9, offset: 2 }}
-                  className="edits-select"
-                >
-                  <label>{i18n.t('Grain fed days')}</label>
-                  <div className="flex">
-                    <InputNumber
-                      min={0}
-                      max={100000}
-                      defaultValue={0}
-                      onChange={(value: number) =>
-                        this.handleInputNumber(value, 'grainFedDays')
-                      }
-                    />
-                    <div className="label-right">{i18n.t('Days')}</div>
-                  </div>
-                </Col>
-              )}
-            </Row>
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 9, offset: 2 }}
-                lg={{ span: 9, offset: 2 }}
-                className="edits-select"
-              >
-                <label>{i18n.t('Primal Cuts')}</label>
-                <Input
-                  type="text"
-                  name="primalCuts"
-                  value={primalCuts}
-                  onChange={this.handleInputChange}
-                />
-              </Col>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 9, offset: 2 }}
-                lg={{ span: 9, offset: 2 }}
-                className="edits-select"
-              >
-                <label>{i18n.t('Trimmings')}</label>
-                <div className="flex">
-                  <InputNumber
-                    min={0}
-                    max={100000}
-                    defaultValue={0}
-                    onChange={(value: number) =>
-                      this.handleInputNumber(value, 'trimmings')
-                    }
-                  />
-                  <div className="label-right">CL</div>
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 9, offset: 2 }}
-                lg={{ span: 9, offset: 2 }}
-                className="edits-select"
-              >
-                <label>{i18n.t('Brand')}</label>
-                <Input
-                  type="text"
-                  name="brand"
-                  value={brand}
-                  onChange={this.handleInputChange}
-                />
-              </Col>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 9, offset: 2 }}
-                lg={{ span: 9, offset: 2 }}
-                className="edits-select"
-              >
-                <label>{i18n.t('Factory Number')}</label>
-                <Input
-                  type="text"
-                  name="factoryNum"
-                  value={factoryNum}
-                  onChange={this.handleInputChange}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 9, offset: 2 }}
-                lg={{ span: 9, offset: 2 }}
-                className="edits-select"
-              >
-                <label>{i18n.t('Place Of Origin')}</label>
-                <Input
-                  type="text"
-                  name="placeOfOrigin"
-                  value={placeOfOrigin}
-                  onChange={this.handleInputChange}
-                />
-              </Col>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 9, offset: 2 }}
-                lg={{ span: 9, offset: 2 }}
-                className="edits-select"
-              >
-                <label>{i18n.t('Delivery Term')}</label>
-                <Input
-                  type="text"
-                  name="deliveryTerm"
-                  value={deliveryTerm}
-                  onChange={this.handleInputChange}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 9, offset: 2 }}
-                lg={{ span: 9, offset: 2 }}
-                className="edits-select"
-              >
-                <label>{i18n.t('Quantity')}</label>
-                <div className="flex">
-                  <InputNumber
-                    max={999999}
-                    defaultValue={1}
-                    min={1}
-                    value={quantity}
-                    onChange={(value: number) =>
-                      this.handleInputNumber(value, 'quantity')
-                    }
-                  />
-                  <div className="label-right">KG</div>
-                </div>
-              </Col>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 9, offset: 2 }}
-                lg={{ span: 9, offset: 2 }}
-                className="edits-select"
-                offset={2}
-              >
-                <label>{i18n.t('Price')}</label>
-                {currencys && (
-                  <div className="flex">
-                    <InputNumber
-                      min={0}
-                      max={99999}
-                      defaultValue={0}
-                      value={price}
-                      onChange={(value: number) =>
-                        this.handleInputNumber(value, 'price')
-                      }
-                    />
-                    <Select
-                      className="label-right"
-                      placeholder="currencys"
-                      value={this.state.transaction['currencyCode']}
-                      onSelect={(value: string) =>
-                        this.handleSelectChange(value, 'currencyCode')
-                      }
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      className="button-margin"
                     >
-                      {currencys.map((item, index) => (
-                        <Select.Option key={index} value={item.code}>
-                          {item.code}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                    <div className="label-right">/KG</div>
-                  </div>
-                )}
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={20} md={8} lg={8} offset={2} className="edits-select">
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  className="button-margin"
-                >
-                  {i18n.t('Submit')}
-                </Button>
-                {editing && <Icon type="loading" />}
-                <Button>
-                  <Link to="/">{i18n.t('Cancel')}</Link>
-                </Button>
-              </Col>
-            </Row>
+                      {i18n.t('Submit')}
+                    </Button>
+                    {editing && <Icon type="loading" />}
+                    <Button>
+                      <Link to="/">{i18n.t('Cancel')}</Link>
+                    </Button>
+                  </Col>
+                </Row>
+              </div>
+            )}
           </>
         )
       default:

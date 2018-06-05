@@ -87,7 +87,7 @@ export function transaction(
               item.id === action.id
                 ? {
                     ...item,
-                    status: transactionConsts.TRANSACTION_STATUS_FINISHED
+                    status: transactionConsts.STATUS_FINISHED
                   }
                 : item
           )

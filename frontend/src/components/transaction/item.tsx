@@ -94,14 +94,12 @@ class Item extends React.Component<ItemProps, ItemState> {
           </Link>
           <div className="space-between content">
             <div className="status">
-              {transaction.status !=
-              transactionConsts.TRANSACTION_STATUS_FINISHED
+              {transaction.status != transactionConsts.STATUS_FINISHED
                 ? 'On Sale'
                 : 'Sold'}
             </div>
             {authInfo.isAdmin &&
-            transaction.status !=
-              transactionConsts.TRANSACTION_STATUS_FINISHED ? (
+            transaction.status != transactionConsts.STATUS_FINISHED ? (
               <div
                 className="control-btn"
                 onClick={() => {
@@ -129,8 +127,7 @@ class Item extends React.Component<ItemProps, ItemState> {
             </Link>
             {authInfo.id == transaction.userId || authInfo.isAdmin ? (
               <>
-                {transaction.status ===
-                  transactionConsts.TRANSACTION_STATUS_CREATED && (
+                {transaction.status === transactionConsts.STATUS_CREATED && (
                   <>
                     <Link
                       to={'/transaction/edit/' + transaction.id}
@@ -182,8 +179,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                   </>
                 )}
                 {authInfo.isAdmin &&
-                transaction.status ==
-                  transactionConsts.TRANSACTION_STATUS_FINISHED ? (
+                transaction.status == transactionConsts.STATUS_FINISHED ? (
                   <div
                     className="control-btn"
                     onClick={() => {
