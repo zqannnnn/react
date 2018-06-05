@@ -98,7 +98,7 @@ export class Transaction extends Model<Transaction> {
   @BelongsTo(() => Currency)
   public currency: Currency
 
-  @HasMany(() => Image, 'product_id')
+  @HasMany(() => Image, 'transaction_id')
   public images: Image[]
 
   @CreatedAt

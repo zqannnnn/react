@@ -11,7 +11,10 @@ export const consts = {
   LICENSE_STATUS_DENIED: 2,
 
   IMAGE_TYPE_MEDIE: 1,
-  IMAGE_TYPE_CERTIFICATE: 2
+  IMAGE_TYPE_CERTIFICATE: 2,
+
+  TRANSACTION_TYPE_BUY: 'Buy',
+  TRANSACTION_TYPE_SELL: 'Sell'
 }
 export const beefOptions = {
   Storage: ['Frozen', 'Chilled'],

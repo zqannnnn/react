@@ -5,6 +5,72 @@ import { IRequest } from '../middleware/auth'
 import { Currency, Image, Transaction } from '../models/'
 const router = express.Router()
 
+router.get('/list', async (req: IRequest, res: express.Response) => {
+  let transactions
+  const selectType = req.query.selectType
+  const buy = req.query.buy
+  const sell = req.query.sell
+  let typeOption: {
+    type?: string
+  }
+  if (buy && !sell) {
+    typeOption = {
+      type: consts.TRANSACTION_TYPE_BUY
+    }
+  } else if (sell && !buy) {
+    typeOption = {
+      type: consts.TRANSACTION_TYPE_SELL
+    }
+  } else {
+    typeOption = {}
+  }
+  try {
+    if (selectType === 'mine') {
+      transactions = await Transaction.findAll({
+        where: {
+          ...typeOption,
+          userId: req.userId
+        },
+        include: [
+          {
+            model: Image,
+            attributes: ['path', 'type']
+          }
+        ]
+      })
+    } else if (selectType === 'finished') {
+      transactions = await Transaction.findAll({
+        where: {
+          ...typeOption,
+          status: consts.TRANSACTION_STATUS_FINISHED
+        },
+        include: [
+          {
+            model: Image,
+            attributes: ['path', 'type']
+          }
+        ]
+      })
+    } else {
+      transactions = await Transaction.findAll({
+        where: {
+          ...typeOption,
+          status: consts.TRANSACTION_STATUS_CREATED
+        },
+        include: [
+          {
+            model: Image,
+            attributes: ['path', 'type']
+          }
+        ]
+      })
+    }
+    return res.send(transactions)
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
 router.use(authMiddleware)
 
 router.post('/new', async (req: IRequest, res: express.Response) => {
@@ -39,37 +105,7 @@ router.post('/new', async (req: IRequest, res: express.Response) => {
     return res.status(500).send({ error: e.message })
   }
 })
-router.get('/list', async (req: IRequest, res: express.Response) => {
-  let transactions
-  const selectType = req.query.selectType
-  try {
-    if (selectType === 'mine') {
-      transactions = await Transaction.findAll({
-        where: {
-          userId: req.userId
-        },
-        include: [{ model: Image, attributes: ['path', 'type'] }]
-      })
-    } else if (selectType === 'finished') {
-      transactions = await Transaction.findAll({
-        where: {
-          status: consts.TRANSACTION_STATUS_FINISHED
-        },
-        include: [{ model: Image, attributes: ['path', 'type'] }]
-      })
-    } else {
-      transactions = await Transaction.findAll({
-        where: {
-          status: consts.TRANSACTION_STATUS_CREATED
-        },
-        include: [{ model: Image, attributes: ['path', 'type'] }]
-      })
-    }
-    return res.send(transactions)
-  } catch (e) {
-    return res.status(500).send({ error: e.message })
-  }
-})
+
 router.get(
   '/finish/:transactionId',
   async (req: IRequest, res: express.Response) => {
@@ -78,7 +114,9 @@ router.get(
         return res.status(500).send({ error: 'Permission denied.' })
       }
       const transaction = await Transaction.find({
-        where: { id: req.params.transactionId }
+        where: {
+          id: req.params.transactionId
+        }
       })
       if (!transaction) {
         return res.status(500).send({ error: 'Transaction does not exist' })
@@ -99,7 +137,9 @@ router.post(
         return res.status(500).send({ error: 'Permission denied.' })
       }
       const transaction = await Transaction.find({
-        where: { id: req.params.transactionId }
+        where: {
+          id: req.params.transactionId
+        }
       })
       if (!transaction) {
         return res.status(500).send({ error: 'Transaction does not exist' })
@@ -116,10 +156,18 @@ router
   .route('/:transactionId')
   .get(async (req: express.Request, res: express.Response) => {
     const transaction = await Transaction.find({
-      where: { id: req.params.transactionId },
+      where: {
+        id: req.params.transactionId
+      },
       include: [
-        { model: Image, attributes: ['path', 'type'] },
-        { model: Currency, attributes: ['code'] }
+        {
+          model: Image,
+          attributes: ['path', 'type']
+        },
+        {
+          model: Currency,
+          attributes: ['code']
+        }
       ]
     })
     if (!transaction) {
@@ -130,7 +178,9 @@ router
   .put(async (req: IRequest, res: express.Response) => {
     try {
       const transaction = await Transaction.find({
-        where: { id: req.params.transactionId }
+        where: {
+          id: req.params.transactionId
+        }
       })
       if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
         return res.status(500).send({ error: 'Permission denied' })
@@ -143,7 +193,9 @@ router
       )
       transaction.save()
       await Image.destroy({
-        where: { transactionId: req.params.transactionId }
+        where: {
+          transactionId: req.params.transactionId
+        }
       })
       if (req.body.images) {
         req.body.images.forEach((image: { path: string }) => {
@@ -173,7 +225,9 @@ router
   .delete(async (req: IRequest, res: express.Response) => {
     try {
       const transaction = await Transaction.find({
-        where: { id: req.params.transactionId }
+        where: {
+          id: req.params.transactionId
+        }
       })
       if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
         return res.status(500).send({ error: 'Permission denied' })
