@@ -71,21 +71,13 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
           <Item>
             <Link to="/">{i18n.t('Home')}</Link>
           </Item>
-          {this.renderItem({
-            to: '/orders/my',
-            id: 'navbar.myOrders',
-            defaultMessage: 'My Orders'
-          })}
+          
           {this.renderItem({
             to: '/transactions/my',
             id: 'navbar.myTransactions',
             defaultMessage: 'My Transactions'
           })}
-          {this.renderItem({
-            to: '/order/new',
-            id: 'navbar.addOrder',
-            defaultMessage: 'Add Order'
-          })}
+          
           {this.renderItem({
             to: '/transaction/new',
             id: 'navbar.addTransaction',

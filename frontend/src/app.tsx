@@ -14,10 +14,6 @@ import {
   ResetPassPage
 } from './pages/auth'
 import {
-  EditPage as OrderEditPage,
-  ViewPage as OrderViewPage
-} from './pages/order'
-import {
   EditPage as TransactionEditPage,
   ViewPage as TransactionViewPage
 } from './pages/transaction'
@@ -66,24 +62,8 @@ class App extends React.Component<AppProps, any> {
               <Switch>
                 <Route exact path="/" component={HomePage} />
                 <PrivateRoute path="/reset/pass" component={ResetPassPage} />
-                <PrivateRoute
-                  path="/orders/my"
-                  component={() => (
-                    <ListPage selectType="mine" listType="order" />
-                  )}
-                />
-                <PrivateRoute
-                  path="/orders"
-                  component={() => (
-                    <ListPage selectType="all" listType="order" />
-                  )}
-                />
-                <PrivateRoute path="/order/new" component={OrderEditPage} />
-                <PrivateRoute path="/order/:id" component={OrderViewPage} />
-                <PrivateRoute
-                  path="/order/edit/:id"
-                  component={OrderEditPage}
-                />
+                
+                
                 <PrivateRoute
                   path="/transactions/my"
                   component={() => (

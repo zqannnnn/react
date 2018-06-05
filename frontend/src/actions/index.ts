@@ -11,10 +11,6 @@ export {
   Action as TransactionAction
 } from './transaction'
 export {
-  actionCreators as orderActionCreators,
-  Action as OrderAction
-} from './order'
-export {
   actionCreators as userActionCreators,
   Action as UserAction
 } from './user'

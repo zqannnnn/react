@@ -24,14 +24,7 @@
   .block .content .details {
     min-height: 80px;
   }
-  .order-block {
-    flex: 1 1 33.33%;
-    box-sizing: border-box;
-    max-width: 33.33%;
-  }
-  .order-block .content .details {
-    min-height: 80px;
-  }
+  
 }
 
 body {

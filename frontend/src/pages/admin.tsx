@@ -2,13 +2,11 @@ import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import {
   transactionActionCreators,
-  orderActionCreators,
   adminActionCreators
 } from '../actions'
 import {
   RootState,
   TransactionState,
-  OrderState,
   AdminState
 } from '../reducers'
 import { AuthInfo } from '../actions'
@@ -19,7 +17,6 @@ import i18n from 'i18next'
 interface AdminProps {
   dispatch: Dispatch<RootState>
   transaction: TransactionState
-  order: OrderState
   admin: AdminState
 }
 
@@ -31,11 +28,10 @@ class AdminPage extends React.Component<AdminProps> {
     this.props.dispatch(
       transactionActionCreators.getAll({ selectType: 'finished' })
     )
-    this.props.dispatch(orderActionCreators.getAll({ selectType: 'finished' }))
     this.props.dispatch(adminActionCreators.listUnconfirmedCompanies())
   }
   render() {
-    const { transaction, order, admin } = this.props
+    const { transaction, admin } = this.props
     return (
       <div className="page">
         <div className="banner">
@@ -55,11 +51,6 @@ class AdminPage extends React.Component<AdminProps> {
               )}
             </div>
             <div className="list-container">
-              {order.items && (
-                <List items={order.items} title="Finished Orders" />
-              )}
-            </div>
-            <div className="list-container">
               {admin.unconfirmedCompanies && (
                 <List
                   items={admin.unconfirmedCompanies}
@@ -75,8 +66,8 @@ class AdminPage extends React.Component<AdminProps> {
 }
 
 function mapStateToProps(state: RootState) {
-  const { transaction, order, admin } = state
-  return { transaction, order, admin }
+  const { transaction,admin } = state
+  return { transaction, admin }
 }
 
 const connectedHomePage = connect(mapStateToProps)(AdminPage)
