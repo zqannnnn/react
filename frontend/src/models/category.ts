@@ -1,7 +1,6 @@
 export interface Category {
   id?: string
   type: string
-  category: string
   details: Details
 }
 export interface Details {

@@ -529,7 +529,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                   </Col>
 
                   {currentCategory &&
-                    currentCategory.category != 'Sheep' && (
+                    currentCategory.type != 'Sheep' && (
                       <Col
                         xs={{ span: 20, offset: 2 }}
                         sm={{ span: 20, offset: 2 }}
@@ -547,7 +547,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                 </Row>
                 <Row>
                   {currentCategory &&
-                    currentCategory.category == 'Beef' && (
+                    currentCategory.type == 'Beef' && (
                       <Col
                         xs={{ span: 20, offset: 2 }}
                         sm={{ span: 20, offset: 2 }}
