@@ -71,13 +71,13 @@ function addComment(id: string, comment: string) {
     handleResponse
   )
 }
-function getAll(option: { selectType: string }) {
+function getAll(option: { selectType: string; buy: boolean; sell: boolean }) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
   return fetch(
-    '/transaction/list?selectType=' + option.selectType,
+    `/transaction/list?selectType=${option.selectType}&buy=${option.buy}`,
     requestOptions
   ).then(handleResponse)
 }

@@ -2,10 +2,11 @@ import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import { transactionActionCreators } from '../actions'
-import { RootState, TransactionState} from '../reducers'
+import { RootState, TransactionState } from '../reducers'
 import { AuthInfo } from '../actions'
+import { transactionConsts } from '../constants'
 import { List as ListC } from '../components'
-import { Row, Col } from 'antd'
+import { Row, Col, Checkbox } from 'antd'
 interface HomeProps {
   dispatch: Dispatch<RootState>
   transaction: TransactionState
@@ -16,17 +17,37 @@ class HomePage extends React.Component<HomeProps> {
   constructor(props: HomeProps) {
     super(props)
   }
+  onChange = (values: string[]) => {
+    let options: { buy?: boolean; sell?: boolean } = {}
+    values.forEach((value: string) => {
+      if (value == transactionConsts.TYPE_BUY) options = { buy: true }
+      else if (value == transactionConsts.TYPE_SELL) options = { sell: true }
+    })
+    this.props.dispatch(
+      transactionActionCreators.getAll({ selectType: 'all', ...options })
+    )
+  }
   componentDidMount() {
     this.props.dispatch(transactionActionCreators.getAll({ selectType: 'all' }))
   }
   render() {
-    const { authInfo, transaction} = this.props
+    const { authInfo, transaction } = this.props
     return (
       <div className="page">
         <div className="banner">
           <div className="banner-bg" />
           <div className="title">All Transaction</div>
         </div>
+        <Checkbox.Group style={{ width: '100%' }} onChange={this.onChange}>
+          <Row>
+            <Col span={2}>
+              <Checkbox value="transactionConsts.TYPE_BUY">buy</Checkbox>
+            </Col>
+            <Col span={2}>
+              <Checkbox value="transactionConsts.TYPE_SELL">sell</Checkbox>
+            </Col>
+          </Row>
+        </Checkbox.Group>
         <Row>
           <Col
             xs={{ span: 22, offset: 1 }}

@@ -6,8 +6,8 @@ import { RootState, TransactionState } from '../../reducers'
 import { Transaction, ListItem } from '../../models'
 import { transactionConsts } from '../../constants'
 import { Exchange } from '../exchange'
-import { Col } from 'antd'
-
+import { Checkbox, Row, Col } from 'antd'
+import { CheckboxChangeEvent } from 'antd/lib/checkbox'
 interface ItemProps {
   dispatch: Dispatch<RootState>
   transaction: Transaction
@@ -63,7 +63,9 @@ class Item extends React.Component<ItemProps, ItemState> {
         className="block"
       >
         <div className="boxmain">
-          <div className="header">{transaction.type}</div>
+          <div className="leftIcons">
+            <div className="header">{transaction.type}</div>
+          </div>
           <div className="title content">{transaction.title}</div>
           <div className="desc content">
             <span>

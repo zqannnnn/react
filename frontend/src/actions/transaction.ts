@@ -160,6 +160,8 @@ function finish(id: string) {
 }
 const getAll: ActionCreator<ThunkAction<void, RootState, void>> = (option: {
   selectType: string
+  buy: boolean
+  sell: boolean
 }) => {
   return (dispatch: Dispatch<RootState>): void => {
     dispatch(request())

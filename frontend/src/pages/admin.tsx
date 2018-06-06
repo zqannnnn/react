@@ -1,14 +1,7 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import {
-  transactionActionCreators,
-  adminActionCreators
-} from '../actions'
-import {
-  RootState,
-  TransactionState,
-  AdminState
-} from '../reducers'
+import { transactionActionCreators, adminActionCreators } from '../actions'
+import { RootState, TransactionState, AdminState } from '../reducers'
 import { AuthInfo } from '../actions'
 import { List } from '../components'
 import { Row, Col } from 'antd'
@@ -66,7 +59,7 @@ class AdminPage extends React.Component<AdminProps> {
 }
 
 function mapStateToProps(state: RootState) {
-  const { transaction,admin } = state
+  const { transaction, admin } = state
   return { transaction, admin }
 }
 

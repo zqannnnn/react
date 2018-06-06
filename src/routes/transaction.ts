@@ -5,6 +5,8 @@ import { IRequest } from '../middleware/auth'
 import { Currency, Image, Transaction } from '../models/'
 const router = express.Router()
 
+router.use(authMiddleware)
+
 router.get('/list', async (req: IRequest, res: express.Response) => {
   let transactions
   const selectType = req.query.selectType
@@ -70,8 +72,6 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
     return res.status(500).send({ error: e.message })
   }
 })
-
-router.use(authMiddleware)
 
 router.post('/new', async (req: IRequest, res: express.Response) => {
   try {

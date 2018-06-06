@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { transactionActionCreators} from '../actions'
+import { transactionActionCreators } from '../actions'
 import { RootState, TransactionState } from '../reducers'
 import { AuthInfo } from '../actions'
 import { Transaction, ListItem } from '../models'
