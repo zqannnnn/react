@@ -192,18 +192,16 @@ ul.nav li {
 
 .block .header {
   text-align: right;
-  padding: 0 5px;
   font-size: 12px;
-  height: 35px;
+  height: 45px;
   transform: rotate(-45deg);
   position: absolute;
-  line-height: 35px;
+  line-height: 43px;
   text-align: center;
   font-weight: bold;
   color: #fff;
-  font-size: 16px;
 }
-.block .leftIcons:before {
+.block .left-icon:before {
   content: ' ';
   border: 40px solid transparent;
   border-bottom: 45px solid red;

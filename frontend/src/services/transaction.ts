@@ -77,7 +77,7 @@ function getAll(option: { selectType: string; buy: boolean; sell: boolean }) {
     headers: authHeader()
   }
   return fetch(
-    `/transaction/list?selectType=${option.selectType}&buy=${option.buy}`,
+    `/transaction/list?selectType=${option.selectType}&buy=${option.buy}&sell=${option.sell}`,
     requestOptions
   ).then(handleResponse)
 }

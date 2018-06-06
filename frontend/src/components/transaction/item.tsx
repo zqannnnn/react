@@ -63,8 +63,8 @@ class Item extends React.Component<ItemProps, ItemState> {
         className="block"
       >
         <div className="boxmain">
-          <div className="leftIcons">
-            <div className="header">{transaction.type}</div>
+          <div className="left-icon">
+            <div className="header">{transaction.type==transactionConsts.TYPE_BUY?'Wanted':'On Sale'}</div>
           </div>
           <div className="title content">{transaction.title}</div>
           <div className="desc content">
@@ -96,11 +96,10 @@ class Item extends React.Component<ItemProps, ItemState> {
           </Link>
           <div className="space-between content">
             <div className="status">
-              {transaction.status != transactionConsts.STATUS_FINISHED
-                ? 'On Sale'
-                : 'Sold'}
+              {transaction.type==transactionConsts.TYPE_SELL&&(transaction.status != transactionConsts.STATUS_FINISHED
+                ? 'On Sale': 'Sold')}
             </div>
-            {authInfo.isAdmin &&
+            {authInfo.isAdmin && transaction.type==transactionConsts.TYPE_SELL &&
             transaction.status != transactionConsts.STATUS_FINISHED ? (
               <div
                 className="control-btn"

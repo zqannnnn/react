@@ -20,8 +20,8 @@ class HomePage extends React.Component<HomeProps> {
   onChange = (values: string[]) => {
     let options: { buy?: boolean; sell?: boolean } = {}
     values.forEach((value: string) => {
-      if (value == transactionConsts.TYPE_BUY) options = { buy: true }
-      else if (value == transactionConsts.TYPE_SELL) options = { sell: true }
+      if (value == transactionConsts.TYPE_BUY) options = {...options, buy: true }
+      else if (value == transactionConsts.TYPE_SELL) options = {...options, sell: true }
     })
     this.props.dispatch(
       transactionActionCreators.getAll({ selectType: 'all', ...options })
@@ -38,16 +38,6 @@ class HomePage extends React.Component<HomeProps> {
           <div className="banner-bg" />
           <div className="title">All Transaction</div>
         </div>
-        <Checkbox.Group style={{ width: '100%' }} onChange={this.onChange}>
-          <Row>
-            <Col span={2}>
-              <Checkbox value="transactionConsts.TYPE_BUY">buy</Checkbox>
-            </Col>
-            <Col span={2}>
-              <Checkbox value="transactionConsts.TYPE_SELL">sell</Checkbox>
-            </Col>
-          </Row>
-        </Checkbox.Group>
         <Row>
           <Col
             xs={{ span: 22, offset: 1 }}
@@ -55,6 +45,16 @@ class HomePage extends React.Component<HomeProps> {
             md={{ span: 18, offset: 3 }}
             lg={{ span: 16, offset: 4 }}
           >
+          <Checkbox.Group style={{ width: '100%' }} onChange={this.onChange}>
+            <Row>
+              <Col push={21} span={3}>
+                <Checkbox value={transactionConsts.TYPE_BUY}>Wanted</Checkbox>
+              </Col>
+              <Col push={21} span={3}>
+                <Checkbox value={transactionConsts.TYPE_SELL}>On Sale</Checkbox>
+              </Col>
+            </Row>
+          </Checkbox.Group>
             <div className="list-container">
               <div className="header">
                 <div className="title">Home</div>
