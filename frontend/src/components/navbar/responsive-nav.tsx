@@ -86,6 +86,7 @@ class ReNavBar extends React.Component<NavProps> {
         placement={this.props.placement}
         visible={this.state.menuVisible}
         onVisibleChange={this.handleMenuVisibility}
+        overlayClassName="pop"
       >
         <Icon type="menu-unfold" className="icon-menu" />
       </Popover>

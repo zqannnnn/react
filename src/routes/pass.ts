@@ -58,10 +58,10 @@ router.post('/lost', async (req: express.Request, res: express.Response) => {
           return res.send({ success: true })
         }
       )
-      }else{
-        return res.status(500).send({ error: "Can't find this email address." })
-      }
-    } catch (e) {
+    } else {
+      return res.status(500).send({ error: "Can't find this email address." })
+    }
+  } catch (e) {
     return res.status(500).send({ error: e.message })
   }
 })

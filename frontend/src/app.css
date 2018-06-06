@@ -585,3 +585,55 @@ ul.nav li {
 .ant-input-number {
   width: 100%;
 }
+.home-menu {
+  display: inline;
+}
+.home-menu a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.65);
+}
+.home-menu a:hover {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 1);
+}
+.pop .home-menu a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.65);
+}
+.pop .home-menu a:link {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.65);
+}
+.pop .home-menu a:visited {
+  text-decoration: none;
+}
+.pop .home-menu a:hover {
+  text-decoration: none;
+  color: #1890ff;
+}
+.pop .home-menu a:active {
+  text-decoration: none;
+  color: #1890ff;
+}
+.pop .home-menu {
+  line-height: 40px;
+  padding: 0 16px;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  display: inherit;
+}
+.home-menu.active {
+  background-color: #e6f7ff;
+}
+.home-menu.active a:link {
+  color: #1890ff;
+}
+.home-menu.active a:visited {
+  color: #1890ff;
+}
+.home-menu.active a:hover {
+  color: #1890ff;
+}
+.home-menu.active a:active {
+  color: #1890ff;
+}

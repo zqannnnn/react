@@ -9,6 +9,7 @@ import { CurrencyState, AuthState } from '../../reducers'
 import throttle from 'lodash.throttle'
 import { Menu, Select } from 'antd'
 import i18n from 'i18next'
+import '../../app.css'
 
 const { Item } = Menu
 interface MenuMarkupProps {
@@ -56,66 +57,72 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
     let menu: JSX.Element
     if (loggedIn) {
       menu = (
-        <Menu
-          theme={mobileVersion ? 'light' : 'dark'}
-          mode={mobileVersion ? 'vertical' : 'horizontal'}
-          style={
-            mobileVersion
-              ? { borderRight: 'none' }
-              : { lineHeight: '64px', float: 'right', borderBottom: 'none' }
-          }
-          className={menuClassName}
-          selectedKeys={[activeLinkKey || '/']}
-          selectable={mobileVersion}
-        >
-          <Item>
+        <>
+          <div
+            className={
+              'home-menu ' + (this.props.activeLinkKey === '/' ? 'active' : '')
+            }
+            onClick={this.props.onLinkClick}
+          >
             <Link to="/">{i18n.t('Home')}</Link>
-          </Item>
-
-          {this.renderItem({
-            to: '/transactions/my',
-            id: 'navbar.myTransactions',
-            defaultMessage: 'My Transactions'
-          })}
-
-          {this.renderItem({
-            to: '/transaction/new',
-            id: 'navbar.addTransaction',
-            defaultMessage: 'Add Transaction'
-          })}
-          {this.renderItem({
-            to: '/profile',
-            id: 'navbar.myProfile',
-            defaultMessage: 'My Profile'
-          })}
-          {authInfo &&
-            authInfo.isAdmin &&
-            this.renderItem({
-              to: '/admin',
-              id: 'navbar.adminList',
-              defaultMessage: 'Admin'
+          </div>
+          <Menu
+            theme={mobileVersion ? 'light' : 'dark'}
+            mode={mobileVersion ? 'vertical' : 'horizontal'}
+            style={
+              mobileVersion
+                ? { borderRight: 'none' }
+                : { lineHeight: '64px', float: 'right', borderBottom: 'none' }
+            }
+            className={menuClassName}
+            selectedKeys={[activeLinkKey || '/']}
+            selectable={mobileVersion}
+          >
+            {this.renderItem({
+              to: '/transactions/my',
+              id: 'navbar.myTransactions',
+              defaultMessage: 'My Transactions'
             })}
 
-          {this.renderItem({
-            to: '/login',
-            id: 'navbar.logout',
-            defaultMessage: 'Logout',
-            onClick: this.props.logout
-          })}
+            {this.renderItem({
+              to: '/transaction/new',
+              id: 'navbar.addTransaction',
+              defaultMessage: 'Add Transaction'
+            })}
+            {this.renderItem({
+              to: '/profile',
+              id: 'navbar.myProfile',
+              defaultMessage: 'My Profile'
+            })}
+            {authInfo &&
+              authInfo.isAdmin &&
+              this.renderItem({
+                to: '/admin',
+                id: 'navbar.adminList',
+                defaultMessage: 'Admin'
+              })}
 
-          <Select
-            value={currency.currentCurrency}
-            onChange={this.props.handleSelect}
-          >
-            {currency.items
-              ? currency.items.map((item, index) => (
-                  <Select.Option key={index} value={item.code}>
-                    {item.code}({item.description})
-                  </Select.Option>
-                ))
-              : ''}
-          </Select>
-        </Menu>
+            {this.renderItem({
+              to: '/login',
+              id: 'navbar.logout',
+              defaultMessage: 'Logout',
+              onClick: this.props.logout
+            })}
+
+            <Select
+              value={currency.currentCurrency}
+              onChange={this.props.handleSelect}
+            >
+              {currency.items
+                ? currency.items.map((item, index) => (
+                    <Select.Option key={index} value={item.code}>
+                      {item.code}({item.description})
+                    </Select.Option>
+                  ))
+                : ''}
+            </Select>
+          </Menu>
+        </>
       )
     } else {
       menu = (
@@ -125,7 +132,7 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
           style={{ lineHeight: '64px', float: 'right' }}
           selectable={false}
         >
-          <Item>
+          <Item style={{ position: 'absolute', left: 30 }}>
             <Link to="/">{i18n.t('Home')}</Link>
           </Item>
           {this.renderItem({

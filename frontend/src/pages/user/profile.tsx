@@ -127,7 +127,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   }
   //for render select input
   renderCurrencySelect = (optionItems: Currency[]) => {
-    let preferCurrency = this.state.user.preferredCurrencyCode || '';
+    let preferCurrency = this.state.user.preferredCurrencyCode || ''
     return (
       <Select
         value={String(preferCurrency)}

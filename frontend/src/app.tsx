@@ -52,7 +52,7 @@ class App extends React.Component<AppProps, any> {
         <Router history={history}>
           <div>
             <Layout.Header>
-              <NavBar mobileBreakPoint={1030} placement="bottomLeft" />
+              <NavBar mobileBreakPoint={866} placement="bottomLeft" />
             </Layout.Header>
             {lightbox.showing && <Lightbox />}
             <Layout.Content>

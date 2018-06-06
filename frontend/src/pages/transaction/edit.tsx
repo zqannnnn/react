@@ -192,9 +192,10 @@ class EditPage extends React.Component<TransProps, TransState> {
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     this.setState({ submitted: true })
-    if(this.state.transaction.type === "Sell"){
+    if (this.state.transaction.type === 'Sell') {
       if (
-        this.props.authInfo.licenseStatus !== authConsts.LICENSE_STATUS_CONFIRMED
+        this.props.authInfo.licenseStatus !==
+        userConsts.LICENSE_STATUS_CONFIRMED
       ) {
         this.props.dispatch(
           alertActionCreators.error(
