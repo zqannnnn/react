@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
-import { userActionCreators } from '../../actions'
+import { authActionCreators } from '../../actions'
 import { RootState } from '../../reducers'
 import { User } from '../../models'
 import { userConsts } from '../../constants'
@@ -44,7 +44,7 @@ class RegisterPage extends React.Component<RegisterProps, RegisterState> {
     const { dispatch } = this.props
     const { userType } = this.state.user
     let newUser: User = { ...values, userType, isActive: true }
-    dispatch(userActionCreators.new(newUser))
+    dispatch(authActionCreators.register(newUser))
   }
 
   render() {

@@ -1,8 +1,9 @@
-import { userConsts } from '../constants'
+import { authConsts,userConsts } from '../constants'
 import { userService } from '../services/user'
 import { alertActionCreators } from '.'
 import { history } from '../helpers/history'
 import * as auth from '../helpers/auth'
+import { User } from '../models'
 export type AuthInfo = {
   id?: string
   token?: string
@@ -13,13 +14,43 @@ export const actionCreators = {
   login,
   logout,
   setAuth,
-  refresh
+  refresh,
+  register,
+  lostPass,
+  resetPass
 }
 export type Action = {
   type: string
   authInfo?: AuthInfo
   error?: string
 }
+
+function register(user: User) {
+  return (dispatch: (action: Action) => void) => {
+    dispatch(request(user))
+
+    userService.new(user).then(
+      (user: User) => {
+        dispatch(success())
+        dispatch(alertActionCreators.success('Create user succeed'))
+      },
+      (error: any) => {
+        dispatch(failure(error))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
+  }
+  function request(user: User) {
+    return { type: authConsts.REGISTER_REQUEST, user }
+  }
+  function success() {
+    return { type: authConsts.REGISTER_SUCCESS }
+  }
+  function failure(error: string) {
+    return { type: authConsts.REGISTER_FAILURE, error }
+  }
+}
+
 function login(username: string, password: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request())
@@ -36,13 +67,13 @@ function login(username: string, password: string) {
   }
 
   function request() {
-    return { type: userConsts.LOGIN_REQUEST }
+    return { type: authConsts.LOGIN_REQUEST }
   }
   function success(authInfo: AuthInfo) {
-    return { type: userConsts.LOGIN_SUCCESS, authInfo }
+    return { type: authConsts.LOGIN_SUCCESS, authInfo }
   }
   function failure(error: string) {
-    return { type: userConsts.LOGIN_FAILURE, error }
+    return { type: authConsts.LOGIN_FAILURE, error }
   }
 }
 function refresh() {
@@ -53,7 +84,7 @@ function refresh() {
         authInfo.token = oldAuth.token
         dispatch(success(authInfo))
         dispatch(setAuth(authInfo))
-        if (authInfo.licenseStatus === userConsts.LICENSE_STATUS_DENIED) {
+        if (authInfo.licenseStatus === authConsts.LICENSE_STATUS_DENIED) {
           dispatch(
             alertActionCreators.warning(
               'Company information has been denied by admin, please refill it.'
@@ -69,18 +100,75 @@ function refresh() {
   }
 
   function success(authInfo: AuthInfo) {
-    return { type: userConsts.REFRESH_AUTH_SUCCESS, authInfo }
+    return { type: authConsts.REFRESH_AUTH_SUCCESS, authInfo }
   }
   function failure(error: string) {
-    return { type: userConsts.REFRESH_AUTH_FAILURE, error }
+    return { type: authConsts.REFRESH_AUTH_FAILURE, error }
   }
 }
 function logout() {
   userService.logout()
-  return { type: userConsts.LOGOUT }
+  return { type: authConsts.LOGOUT }
 }
 
 function setAuth(authInfo: AuthInfo) {
   auth.setAuth(authInfo)
-  return { type: userConsts.LOGIN_SUCCESS, authInfo }
+  return { type: authConsts.LOGIN_SUCCESS, authInfo }
+}
+
+function lostPass(email: string) {
+  return (dispatch: (action: Action) => void) => {
+    dispatch(request())
+
+    userService.lostPass(email).then(
+      () => {
+        dispatch(
+          alertActionCreators.success(
+            "If there is a corresponding account, then you'll receive an email with a link to change your password."
+          )
+        )
+        dispatch(success())
+      },
+      error => {
+        dispatch(alertActionCreators.error(error))
+        dispatch(failure(error))
+      }
+    )
+  }
+
+  function request() {
+    return { type: authConsts.LOST_PASS_REQUEST }
+  }
+  function success() {
+    return { type: authConsts.LOST_PASS_SUCCESS }
+  }
+  function failure(error: string) {
+    return { type: authConsts.LOST_PASS_FAILURE, error }
+  }
+}
+function resetPass(pass: string) {
+  return (dispatch: (action: Action) => void) => {
+    dispatch(request())
+
+    userService.resetPass(pass).then(
+      () => {
+        dispatch(alertActionCreators.success('Reset password succeed.'))
+        dispatch(success())
+      },
+      (error: any) => {
+        dispatch(alertActionCreators.error(error))
+        dispatch(failure(error))
+      }
+    )
+  }
+
+  function request() {
+    return { type: authConsts.RESET_PASS_REQUEST }
+  }
+  function success() {
+    return { type: authConsts.RESET_PASS_SUCCESS }
+  }
+  function failure(error: string) {
+    return { type: authConsts.RESET_PASS_FAILURE, error }
+  }
 }

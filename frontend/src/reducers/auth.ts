@@ -1,4 +1,4 @@
-import { userConsts } from '../constants'
+import { authConsts } from '../constants'
 import { getAuth } from '../helpers/auth'
 import { AuthInfo, AuthAction } from '../actions'
 import { User } from '../models'
@@ -12,38 +12,38 @@ export type State = {
 
 export function auth(state: State = initialState, action: AuthAction): State {
   switch (action.type) {
-    case userConsts.LOGIN_REQUEST:
+    case authConsts.LOGIN_REQUEST:
       return {
         processing: true,
         authInfo: action.authInfo
       }
-    case userConsts.LOGIN_SUCCESS:
+    case authConsts.LOGIN_SUCCESS:
       return {
         loggedIn: true,
         authInfo: action.authInfo
       }
-    case userConsts.LOGIN_FAILURE:
+    case authConsts.LOGIN_FAILURE:
       return {}
-    case userConsts.REGISTER_REQUEST:
+    case authConsts.REGISTER_REQUEST:
       return {
         processing: true,
         authInfo: action.authInfo
       }
-    case userConsts.REGISTER_SUCCESS:
+    case authConsts.REGISTER_SUCCESS:
       return {
         loggedIn: true,
         authInfo: action.authInfo
       }
-    case userConsts.REGISTER_FAILURE:
+    case authConsts.REGISTER_FAILURE:
       return {}
-    case userConsts.REFRESH_AUTH_SUCCESS:
+    case authConsts.REFRESH_AUTH_SUCCESS:
       return {
         ...state,
         authInfo: action.authInfo
       }
-    case userConsts.REFRESH_AUTH_FAILURE:
+    case authConsts.REFRESH_AUTH_FAILURE:
       return { ...state }
-    case userConsts.LOGOUT:
+    case authConsts.LOGOUT:
       return {}
     default:
       return state

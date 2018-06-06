@@ -13,7 +13,7 @@ import {
 import { Transaction, Image } from '../../models'
 import { Category, CategoryDetails, Currency } from '../../models'
 import { RootState } from '../../reducers'
-import { transactionConsts, userConsts } from '../../constants'
+import { transactionConsts, authConsts } from '../../constants'
 import {
   Steps,
   Button,
@@ -194,11 +194,11 @@ class EditPage extends React.Component<TransProps, TransState> {
     this.setState({ submitted: true })
     if(this.state.transaction.type === "Sell"){
       if (
-        this.props.authInfo.licenseStatus !== userConsts.LICENSE_STATUS_CONFIRMED
+        this.props.authInfo.licenseStatus !== authConsts.LICENSE_STATUS_CONFIRMED
       ) {
         this.props.dispatch(
           alertActionCreators.error(
-            'You are not allowed to add transaction, please fullfill company info first.'
+            'You are not allowed to add new Offer, please fullfill company info first.'
           )
         )
         window.scrollTo(0, 0)

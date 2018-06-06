@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import { ResetPassForm } from '../../components/form'
-import { userActionCreators } from '../../actions'
+import { authActionCreators } from '../../actions'
 import { RootState } from '../../reducers'
 import { Row, Col } from 'antd'
 import i18n from 'i18next'
@@ -17,7 +17,7 @@ class ResetPassPage extends React.Component<ResetPassProps> {
   }
 
   handleSubmit = (pass: string) => {
-    this.props.dispatch(userActionCreators.resetPass(pass))
+    this.props.dispatch(authActionCreators.resetPass(pass))
   }
 
   render() {

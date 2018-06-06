@@ -10,7 +10,7 @@ import {
 } from '../../actions'
 import { RootState, UserState, UploadState } from '../../reducers'
 import { User, Currency, Image } from '../../models'
-import { userConsts } from '../../constants'
+import { authConsts } from '../../constants'
 import { Row, Col, Input, Select, Button, Icon, Upload } from 'antd'
 import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface'
 import i18n from 'i18next'
@@ -119,7 +119,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     let user = this.state.user
     if (user.firstName && user.lastName && user.email) {
       if (user.companyName) {
-        user.licenseStatus = userConsts.LICENSE_STATUS_UNCONFIRMED
+        user.licenseStatus = authConsts.LICENSE_STATUS_UNCONFIRMED
       }
       this.props.dispatch(userActionCreators.update(user))
     }
@@ -269,7 +269,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                 </div>
               </div>
             </div>
-            {user.licenseStatus !== userConsts.LICENSE_STATUS_CONFIRMED && (
+            {user.licenseStatus !== authConsts.LICENSE_STATUS_CONFIRMED && (
               <div>
                 {i18n.t(
                   'Please fulfill company information for adding transaction'
