@@ -59,6 +59,8 @@ export class Transaction extends Model<Transaction> {
 
   @Column public fed: string
 
+  @Column public brand: string
+
   @Column({ field: 'grain_fed_days' })
   public grainFedDays: number
 

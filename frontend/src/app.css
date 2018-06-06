@@ -188,6 +188,8 @@ ul.nav li {
 .block .content {
   padding: 0 10px;
   min-height: 1rem;
+  height: 25px;
+  line-height: 25px;
 }
 
 .block .header {
@@ -218,7 +220,7 @@ ul.nav li {
 
 .block .title {
   text-align: center;
-  padding: 5px 10px;
+  padding: 6px 10px;
   font-size: 18px;
 }
 
@@ -228,12 +230,8 @@ ul.nav li {
   justify-content: space-between;
   font-size: 12px;
 }
-.block .status {
-  padding: 5px 0;
-}
 .block .control-btn {
   color: #007bff;
-  padding: 5px 0;
 }
 .block .control-btn:hover {
   text-decoration: underline;
@@ -246,7 +244,6 @@ ul.nav li {
   padding: 0 10px;
   flex-grow: 2;
 }
-
 .block .image-wr {
   overflow: hidden;
   height: 140px;

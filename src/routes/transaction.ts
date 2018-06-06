@@ -10,8 +10,8 @@ router.use(authMiddleware)
 router.get('/list', async (req: IRequest, res: express.Response) => {
   let transactions
   const selectType = req.query.selectType
-  const buy = req.query.buy ==='true'
-  const sell = req.query.sell ==='true'
+  const buy = req.query.buy === 'true'
+  const sell = req.query.sell === 'true'
   let typeOption: {
     type?: string
   }

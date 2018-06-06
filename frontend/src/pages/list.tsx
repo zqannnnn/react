@@ -19,8 +19,10 @@ class List extends React.Component<ListProps> {
   onChange = (values: string[]) => {
     let options: { buy?: boolean; sell?: boolean } = {}
     values.forEach((value: string) => {
-      if (value == transactionConsts.TYPE_BUY) options = {...options, buy: true }
-      else if (value == transactionConsts.TYPE_SELL) options = {...options, sell: true }
+      if (value == transactionConsts.TYPE_BUY)
+        options = { ...options, buy: true }
+      else if (value == transactionConsts.TYPE_SELL)
+        options = { ...options, sell: true }
     })
     this.props.dispatch(
       transactionActionCreators.getAll({
@@ -48,14 +50,14 @@ class List extends React.Component<ListProps> {
         {transaction.error && (
           <span className="text-danger">ERROR: {transaction.error}</span>
         )}
-         
+
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 20, offset: 2 }}
           md={{ span: 18, offset: 3 }}
           lg={{ span: 16, offset: 4 }}
         >
-         <Checkbox.Group style={{ width: '100%' }} onChange={this.onChange}>
+          <Checkbox.Group style={{ width: '100%' }} onChange={this.onChange}>
             <Row>
               <Col push={21} span={3}>
                 <Checkbox value={transactionConsts.TYPE_BUY}>Wanted</Checkbox>

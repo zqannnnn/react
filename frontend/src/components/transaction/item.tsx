@@ -64,25 +64,26 @@ class Item extends React.Component<ItemProps, ItemState> {
       >
         <div className="boxmain">
           <div className="left-icon">
-            <div className="header">{transaction.type==transactionConsts.TYPE_BUY?'Wanted':'On Sale'}</div>
+            <div className="header">
+              {transaction.type == transactionConsts.TYPE_BUY
+                ? 'Wanted'
+                : 'On Sale'}
+            </div>
           </div>
-          <div className="title content">{transaction.title}</div>
+          <div className="title">{transaction.title}</div>
           <div className="desc content">
             <span>
-              {transaction.storage && 'Storage:' + transaction.storage + ','}
+              {transaction.brand && 'Brand:' + transaction.brand + ', '}
             </span>
             <span>
-              {transaction.breed && 'Breed:' + transaction.breed + ','}
+              {transaction.breed && 'Breed:' + transaction.breed + ', '}
             </span>
             <span>
-              {transaction.grade && 'Grade:' + transaction.grade + ','}
+              {transaction.grade && 'Grade:' + transaction.grade + ', '}
             </span>
             <span>
-              {transaction.slaughterSpec &&
-                'Slaughter Specificatin:' + transaction.slaughterSpec + ','}
-            </span>
-            <span>
-              {transaction.primalCuts && 'Primal Cut:' + transaction.primalCuts}
+              {transaction.quantity &&
+                'Quantity:' + transaction.quantity + 'kg'}
             </span>
           </div>
           <Link to={'/transaction/' + transaction.id}>
@@ -96,10 +97,14 @@ class Item extends React.Component<ItemProps, ItemState> {
           </Link>
           <div className="space-between content">
             <div className="status">
-              {transaction.type==transactionConsts.TYPE_SELL&&(transaction.status != transactionConsts.STATUS_FINISHED
-                ? 'On Sale': 'Sold')}
+              {transaction.type == transactionConsts.TYPE_SELL &&
+                (transaction.status != transactionConsts.STATUS_FINISHED
+                  ? 'On Sale'
+                  : 'Sold')}
             </div>
-            {authInfo.isAdmin && transaction.type==transactionConsts.TYPE_SELL &&
+            {authInfo &&
+            authInfo.isAdmin &&
+            transaction.type == transactionConsts.TYPE_SELL &&
             transaction.status != transactionConsts.STATUS_FINISHED ? (
               <div
                 className="control-btn"
@@ -126,7 +131,8 @@ class Item extends React.Component<ItemProps, ItemState> {
             <Link className="control-btn" to={'/transaction/' + transaction.id}>
               Read More
             </Link>
-            {authInfo.id == transaction.userId || authInfo.isAdmin ? (
+            {authInfo &&
+            (authInfo.id == transaction.userId || authInfo.isAdmin) ? (
               <>
                 {transaction.status === transactionConsts.STATUS_CREATED && (
                   <>

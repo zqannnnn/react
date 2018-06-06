@@ -68,25 +68,25 @@ class ViewPage extends React.Component<TransactionProps, TransactionState> {
             <Icon type="loading" />
           ) : (
             <div>
-              <h3>{i18n.t('Title:')}</h3>
+              <h3>{i18n.t('Title')}:</h3>
               <div>{transaction.title}</div>
-              <h3>{i18n.t('Storage:')}</h3>
+              <h3>{i18n.t('Storage')}:</h3>
               <div>{transaction.storage}</div>
-              <h3 className="label">{i18n.t('Breed:')}</h3>
+              <h3 className="label">{i18n.t('Breed')}:</h3>
               <div>{transaction.breed}</div>
-              <h3 className="label">{i18n.t('Grade:')}</h3>
+              <h3 className="label">{i18n.t('Grade')}:</h3>
               <div>{transaction.grade}</div>
-              <h3>{i18n.t('MarbleScore:')}</h3>
+              <h3>{i18n.t('MarbleScore')}:</h3>
               <div>{transaction.marbleScore}</div>
-              <h3>{i18n.t('Slaughter Specification:')}</h3>
+              <h3>{i18n.t('Slaughter Specification')}:</h3>
               <div>{transaction.slaughterSpec}</div>
-              <h3>{i18n.t('Bone:')}</h3>
+              <h3>{i18n.t('Bone')}:</h3>
               <div>{transaction.bone}</div>
-              <h3>{i18n.t('Primal Cuts::')}</h3>
+              <h3>{i18n.t('Primal Cuts')}::</h3>
               <div>{transaction.primalCuts}</div>
-              <h3>{i18n.t('Trimmings:')}</h3>
+              <h3>{i18n.t('Trimmings')}:</h3>
               <div>{transaction.trimmings && transaction.trimmings + 'CL'}</div>
-              <h3>{i18n.t('Fed:')}</h3>
+              <h3>{i18n.t('Fed')}:</h3>
               <div>
                 {transaction.fed}
                 {transaction.grainFedDays ? (
@@ -98,23 +98,23 @@ class ViewPage extends React.Component<TransactionProps, TransactionState> {
                   ''
                 )}
               </div>
-              <h3>{i18n.t('Price:')}</h3>
+              <h3>{i18n.t('Price')}:</h3>
               <div>
                 <span>{`${transaction.price} ${
                   transaction.currencyCode
                 }/KG`}</span>
               </div>
-              <h3>{i18n.t('Quantity:')}</h3>
+              <h3>{i18n.t('Quantity')}:</h3>
               <div>{transaction.quantity && transaction.quantity + 'KG'}</div>
-              <h3>{i18n.t('Brand:')}</h3>
+              <h3>{i18n.t('Brand')}:</h3>
               <div>{transaction.brand}</div>
-              <h3>{i18n.t('Factory Number:')}</h3>
+              <h3>{i18n.t('Factory Number')}:</h3>
               <div>{transaction.factoryNum}</div>
-              <h3>{i18n.t('Delivery Term:')}</h3>
+              <h3>{i18n.t('Delivery Term')}:</h3>
               <div>{transaction.deliveryTerm}</div>
-              <h3>{i18n.t('Place Of Origin:')}</h3>
+              <h3>{i18n.t('Place Of Origin')}:</h3>
               <div>{transaction.placeOfOrigin}</div>
-              <h3 className="label">{i18n.t('Images:')}</h3>
+              <h3 className="label">{i18n.t('Images')}:</h3>
               <div>
                 {imagePaths && (
                   <div className="images-container">
