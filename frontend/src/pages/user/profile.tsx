@@ -30,9 +30,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   constructor(props: ProfileProps) {
     super(props)
     this.state = {
-      user: {
-        preferredCurrencyCode: ''
-      },
+      user: {},
       submitted: false
     }
   }
@@ -50,8 +48,8 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     if (userData && !submitted) {
       this.setState({
         user: {
-          ...user,
-          ...userData
+          ...userData,
+          ...user
         }
       })
     }
@@ -75,8 +73,8 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     }
   }
   handleUpload = (uploadFile: UploadFile) => {
-    let liecnese = uploadFile.originFileObj
-    this.props.dispatch(uploadActionCreators.uploadImage(liecnese))
+    let license = uploadFile.originFileObj
+    this.props.dispatch(uploadActionCreators.uploadImage(license))
   }
   handleDeleteImage = (uploadFile: UploadFile) => {
     const { user } = this.state
@@ -256,10 +254,10 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                     listType="picture-card"
                     fileList={licenseList}
                     accept="image/*"
+                    customRequest={this.customRequest}
                     onChange={(file: UploadChangeParam) =>
                       this.handleUpload(file.file)
                     }
-                    customRequest={this.customRequest}
                     onPreview={this.handlePreview}
                     onRemove={this.handleDeleteImage}
                   >

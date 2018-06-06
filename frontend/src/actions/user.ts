@@ -1,6 +1,6 @@
 import { userConsts } from '../constants'
 import { userService } from '../services'
-import { alertActionCreators } from '.'
+import { alertActionCreators} from '.'
 import { history } from '../helpers/history'
 import * as auth from '../helpers/auth'
 import { User } from '../models'
