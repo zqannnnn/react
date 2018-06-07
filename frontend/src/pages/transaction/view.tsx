@@ -153,7 +153,7 @@ class ViewPage extends React.Component<TransactionProps, TransactionState> {
                     <label>{i18n.t('Price')}:</label>
                     <div className="message">{`${
                       transaction.price ? transaction.price : 'N/A'
-                    } ${transaction.currencyCode}/KG`}</div>
+                    } ${transaction.currencyCode ? transaction.currencyCode + '/KG': '' }`}</div>
                   </Col>
                 </Row>
                 <Row>
