@@ -14,7 +14,9 @@ export const consts = {
   IMAGE_TYPE_CERTIFICATE: 2,
 
   TRANSACTION_TYPE_BUY: 'Buy',
-  TRANSACTION_TYPE_SELL: 'Sell'
+  TRANSACTION_TYPE_SELL: 'Sell',
+
+  EXPIREMENT: 60 * 60 * 24 * 7
 }
 export const beefOptions = {
   Storage: ['Frozen', 'Chilled'],

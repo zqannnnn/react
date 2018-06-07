@@ -13,7 +13,7 @@ const uploadRouter = require('./routes/upload')
 const qs = require('querystring')
 const authMiddleware = require('./middleware/auth')
 
-const expiresIn = 60 * 60 * 24 * 7
+import { consts } from './config/static'
 
 const handleSequelizeError = (res, error) => {
   console.error(error)
@@ -35,7 +35,7 @@ module.exports = (app, passport) => {
         return res.status(401).send({ error: 'Incorrect email or password.' })
       }
       const data = {
-        token: jwt.sign(user, app.get('secretKey'), { expiresIn }),
+        token: jwt.sign(user, app.get('secretKey'), consts.EXPIREMENT),
         id: user.id
       }
       if (user.userType == 1) {

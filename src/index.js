@@ -1,5 +1,4 @@
 const express = require('express')
-const app = express()
 const path = require('path')
 const port = process.env.PORT || 3000
 const passport = require('passport')
@@ -8,7 +7,7 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const models = require('./models')
 require('./middleware/webpack')(app)
-
+export const app = express()
 models.setupDatabase()
 
 // Get the exchange rate API

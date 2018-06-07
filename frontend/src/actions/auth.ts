@@ -1,5 +1,5 @@
 import { authConsts, userConsts } from '../constants'
-import { userService } from '../services/user'
+import { authService } from '../services'
 import { alertActionCreators } from '.'
 import { history } from '../helpers/history'
 import * as auth from '../helpers/auth'
@@ -29,10 +29,13 @@ function register(user: User) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request(user))
 
-    userService.new(user).then(
-      (user: User) => {
-        dispatch(success())
+    authService.register(user).then(
+      (authInfo: AuthInfo) => {
         dispatch(alertActionCreators.success('Create user succeed'))
+        dispatch(success(authInfo))
+        setTimeout(function() {
+          history.replace('/')
+        }, 1000)
       },
       (error: any) => {
         dispatch(failure(error))
@@ -43,8 +46,8 @@ function register(user: User) {
   function request(user: User) {
     return { type: authConsts.REGISTER_REQUEST, user }
   }
-  function success() {
-    return { type: authConsts.REGISTER_SUCCESS }
+  function success(authInfo: AuthInfo) {
+    return { type: authConsts.REGISTER_SUCCESS, authInfo }
   }
   function failure(error: string) {
     return { type: authConsts.REGISTER_FAILURE, error }
@@ -55,7 +58,7 @@ function login(username: string, password: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request())
 
-    userService.login(username, password).then(
+    authService.login(username, password).then(
       (authInfo: AuthInfo) => {
         dispatch(success(authInfo))
       },
@@ -78,7 +81,7 @@ function login(username: string, password: string) {
 }
 function refresh() {
   return (dispatch: (action: Action) => void) => {
-    userService.refreshAuth().then(
+    authService.refreshAuth().then(
       (authInfo: AuthInfo) => {
         let oldAuth = auth.getAuth()
         authInfo.token = oldAuth.token
@@ -107,7 +110,7 @@ function refresh() {
   }
 }
 function logout() {
-  userService.logout()
+  authService.logout()
   return { type: authConsts.LOGOUT }
 }
 
@@ -120,7 +123,7 @@ function lostPass(email: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request())
 
-    userService.lostPass(email).then(
+    authService.lostPass(email).then(
       () => {
         dispatch(
           alertActionCreators.success(
@@ -150,7 +153,7 @@ function resetPass(pass: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request())
 
-    userService.resetPass(pass).then(
+    authService.resetPass(pass).then(
       () => {
         dispatch(alertActionCreators.success('Reset password succeed.'))
         dispatch(success())

@@ -1,6 +1,8 @@
 import * as express from 'express'
+import * as jwt from 'jsonwebtoken'
 import { AuthInfo } from '../../frontend/src/actions'
 import { consts } from '../config/static'
+import { app } from '../index'
 import { authMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
 import { Image, User } from '../models'
@@ -16,16 +18,24 @@ router.post('/new', async (req, res) => {
       userType: req.body.userType
     })
     await user.save()
-    if (req.body.businessLicenses) {
-      req.body.businessLicenses.forEach((image: { path: string }) => {
-        const imageDb = new Image({
-          path: image.path,
-          userId: user.id
-        })
-        imageDb.save()
-      })
+    const token = jwt.sign(
+      {
+        id: user.id,
+        userType: user.userType,
+        password: user.password,
+        licenseStatus: user.licenseStatus
+      },
+      app.get('secretKey'),
+      { expiresIn: consts.EXPIREMENT }
+    )
+    const data = {
+      token,
+      id: user.id,
+      licenseStatus: 0,
+      userType: user.userType,
+      password: user.password
     }
-    return res.send({ success: true })
+    return res.send(data)
   } catch (e) {
     return res.status(500).send({ error: e.message })
   }
