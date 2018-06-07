@@ -15,7 +15,7 @@ function genMessage(resetUrl: string, email: string) {
   return {
     from: '', // sender address
     to: email, // list of receivers
-    subject: 'Reset Password', // Subject line
+    subject: i18n.t('Reset Password'), // Subject line    
     /* tslint:disable:max-line-length */
     text: '', // plain text body
     html: `<html>
