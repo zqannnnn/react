@@ -9,7 +9,7 @@ import { Transaction } from '../../models'
 import { Category, CategoryDetails } from '../../models'
 import { RootState } from '../../reducers'
 import { Exchange } from '../../components/exchange'
-import { Icon, Col, Row } from 'antd'
+import { Row, Col, Icon } from 'antd'
 import i18n from 'i18next'
 interface TransactionProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
@@ -56,84 +56,175 @@ class ViewPage extends React.Component<TransactionProps, TransactionState> {
       imagePaths = []
     }
     return (
-      <Row>
-        <Col
-          xs={{ span: 22, offset: 1 }}
-          sm={{ span: 16, offset: 4 }}
-          md={{ span: 12, offset: 6 }}
-          lg={{ span: 10, offset: 7 }}
-        >
-          <h3 className="header-center">{i18n.t('Transaction View Page')}</h3>
-          {loading ? (
-            <Icon type="loading" />
-          ) : (
-            <div>
-              <h3>{i18n.t('Title')}:</h3>
-              <div>{transaction.title}</div>
-              <h3>{i18n.t('Storage')}:</h3>
-              <div>{transaction.storage}</div>
-              <h3 className="label">{i18n.t('Breed')}:</h3>
-              <div>{transaction.breed}</div>
-              <h3 className="label">{i18n.t('Grade')}:</h3>
-              <div>{transaction.grade}</div>
-              <h3>{i18n.t('MarbleScore')}:</h3>
-              <div>{transaction.marbleScore}</div>
-              <h3>{i18n.t('Slaughter Specification')}:</h3>
-              <div>{transaction.slaughterSpec}</div>
-              <h3>{i18n.t('Bone')}:</h3>
-              <div>{transaction.bone}</div>
-              <h3>{i18n.t('Primal Cuts')}::</h3>
-              <div>{transaction.primalCuts}</div>
-              <h3>{i18n.t('Trimmings')}:</h3>
-              <div>{transaction.trimmings && transaction.trimmings + 'CL'}</div>
-              <h3>{i18n.t('Fed')}:</h3>
-              <div>
-                {transaction.fed}
-                {transaction.grainFedDays ? (
-                  <span>
-                    <br />
-                    {transaction.grainFedDays} Day
-                  </span>
-                ) : (
-                  ''
-                )}
+      <>
+        <Row type="flex" justify="space-around" align="middle">
+          <Col span={20}>
+            <h2 className="header-center">{i18n.t('Transaction View Page')}</h2>
+            {loading ? (
+              <Icon type="loading" />
+            ) : (
+              <div className="view-content">
+                <Row>
+                  <Col span={20} offset={2}>
+                    <label>{i18n.t('Title')}:</label>
+                    <div className="message">
+                      {transaction.title ? transaction.title : 'N/A'}
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('Storage')}:</label>
+                    <div className="message">
+                      {transaction.storage ? transaction.storage : 'N/A'}
+                    </div>
+                  </Col>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('Breed')}:</label>
+                    <div className="message">
+                      {transaction.breed ? transaction.breed : 'N/A'}
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('Grade')}:</label>
+                    <div className="message">
+                      {transaction.grade ? transaction.grade : 'N/A'}
+                    </div>
+                  </Col>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('MarbleScore')}:</label>
+                    <div className="message">
+                      {transaction.marbleScore
+                        ? transaction.marbleScore
+                        : 'N/A'}
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('Slaughter Specification')}:</label>
+                    <div className="message">
+                      {transaction.slaughterSpec
+                        ? transaction.slaughterSpec
+                        : 'N/A'}
+                    </div>
+                  </Col>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('Bone')}:</label>
+                    <div className="message">
+                      {transaction.bone ? transaction.bone : 'N/A'}
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('Primal Cuts')}:</label>
+                    <div className="message">
+                      {transaction.primalCuts ? transaction.primalCuts : 'N/A'}
+                    </div>
+                  </Col>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('Trimmings')}:</label>
+                    <div className="message">
+                      {transaction.trimmings
+                        ? transaction.trimmings + 'CL'
+                        : 'N/A'}
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('Fed')}:</label>
+                    <div className="message">
+                      {transaction.fed ? transaction.fed : 'N/A'}
+                      {transaction.grainFedDays ? (
+                        <span>
+                          <br />
+                          {transaction.grainFedDays} Day
+                        </span>
+                      ) : (
+                        ''
+                      )}
+                    </div>
+                  </Col>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('Price')}:</label>
+                    <div className="message">{`${
+                      transaction.price ? transaction.price : 'N/A'
+                    } ${transaction.currencyCode}/KG`}</div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('Quantity')}:</label>
+                    <div className="message">
+                      {transaction.quantity
+                        ? transaction.quantity + 'KG'
+                        : 'N/A'}
+                    </div>
+                  </Col>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('Brand')}:</label>
+                    <div className="message">
+                      {transaction.brand ? transaction.brand : 'N/A'}
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('Factory Number')}:</label>
+                    <div className="message">
+                      {transaction.factoryNum ? transaction.factoryNum : 'N/A'}
+                    </div>
+                  </Col>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('Delivery Term')}:</label>
+                    <div className="message">
+                      {transaction.deliveryTerm
+                        ? transaction.deliveryTerm
+                        : 'N/A'}
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm={20} md={9} offset={2} className="view-top">
+                    <label>{i18n.t('Place of Origin')}:</label>
+                    <div className="message">
+                      {transaction.placeOfOrigin
+                        ? transaction.placeOfOrigin
+                        : 'N/A'}
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={20} offset={2} className="view-top">
+                    <label>{i18n.t('Images')}:</label>
+                    <div>
+                      {imagePaths && (
+                        <div className="images-container">
+                          {imagePaths.map((image, index) => (
+                            <div key={index} className="image-wrapper">
+                              <img
+                                className="image cursor-pointer"
+                                onClick={() =>
+                                  this.openLightbox(imagePaths, index)
+                                }
+                                src={image}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </Col>
+                </Row>
               </div>
-              <h3>{i18n.t('Price')}:</h3>
-              <div>
-                <span>{`${transaction.price} ${
-                  transaction.currencyCode
-                }/KG`}</span>
-              </div>
-              <h3>{i18n.t('Quantity')}:</h3>
-              <div>{transaction.quantity && transaction.quantity + 'KG'}</div>
-              <h3>{i18n.t('Brand')}:</h3>
-              <div>{transaction.brand}</div>
-              <h3>{i18n.t('Factory Number')}:</h3>
-              <div>{transaction.factoryNum}</div>
-              <h3>{i18n.t('Delivery Term')}:</h3>
-              <div>{transaction.deliveryTerm}</div>
-              <h3>{i18n.t('Place Of Origin')}:</h3>
-              <div>{transaction.placeOfOrigin}</div>
-              <h3 className="label">{i18n.t('Images')}:</h3>
-              <div>
-                {imagePaths && (
-                  <div className="images-container">
-                    {imagePaths.map((image, index) => (
-                      <div key={index} className="image-wrapper">
-                        <img
-                          className="image cursor-pointer"
-                          onClick={() => this.openLightbox(imagePaths, index)}
-                          src={image}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </Col>
-      </Row>
+            )}
+          </Col>
+        </Row>
+      </>
     )
   }
 }
