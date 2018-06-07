@@ -7,7 +7,6 @@ export const consts = {
   GET_SUCCESS: 'USER_GET_SUCCESS',
   GET_FAILURE: 'USER_GET_FAILURE',
 
-
   USER_TYPE_NORMAL: 0,
   USER_TYPE_ADMIN: 1
 }

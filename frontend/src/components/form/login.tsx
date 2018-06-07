@@ -29,13 +29,13 @@ class LoginForm extends React.Component<LoginFormProps> {
             rules: [
               {
                 required: true,
-                message: 'Please input your email!'
+                message: i18n.t('Please input your email!')
               }
             ]
           })(
             <Input
               prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder="Email"
+              placeholder={i18n.t('Email')}
             />
           )}
         </FormItem>
@@ -44,14 +44,14 @@ class LoginForm extends React.Component<LoginFormProps> {
             rules: [
               {
                 required: true,
-                message: 'Please input your Password!'
+                message: i18n.t('Please input your Password!')
               }
             ]
           })(
             <Input
               prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
               type="password"
-              placeholder="Password"
+              placeholder={i18n.t('Password')}
             />
           )}
         </FormItem>
@@ -66,7 +66,8 @@ class LoginForm extends React.Component<LoginFormProps> {
             size="large"
             className="login-form-button"
           >
-            Log in{this.props.processing && <Icon type="loading" />}
+            {i18n.t('Log in')}
+            {this.props.processing && <Icon type="loading" />}
           </Button>
           <Button size="large" className="login-form-button">
             <Link to="/register" className="btn">

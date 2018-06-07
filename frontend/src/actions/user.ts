@@ -10,7 +10,7 @@ import { ThunkAction } from 'redux-thunk'
 import { RootState } from '../reducers'
 export const actionCreators = {
   getById,
-  update,
+  update
 }
 export type Action = {
   type: string

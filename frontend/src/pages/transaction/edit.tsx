@@ -195,7 +195,7 @@ class EditPage extends React.Component<TransProps, TransState> {
     if (this.state.transaction.type === 'Sell') {
       if (
         this.props.authInfo.licenseStatus !==
-        userConsts.LICENSE_STATUS_CONFIRMED
+        authConsts.LICENSE_STATUS_CONFIRMED
       ) {
         this.props.dispatch(
           alertActionCreators.error(

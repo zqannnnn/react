@@ -19,6 +19,7 @@ import {
   ValidationRule,
   ValidateCallback
 } from 'antd/lib/form'
+import i18n from 'i18next'
 const FormItem = Form.Item
 
 interface ResetPassFormProps extends FormComponentProps {
@@ -54,7 +55,7 @@ class ResetPassForm extends React.Component<
   ) => {
     const form = this.props.form
     if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!')
+      callback(i18n.t('Two passwords that you enter is inconsistent!'))
     } else {
       callback()
     }
@@ -103,12 +104,12 @@ class ResetPassForm extends React.Component<
     }
     return (
       <Form onSubmit={this.handleSubmit}>
-        <FormItem {...formItemLayout} label="Password">
+        <FormItem {...formItemLayout} label={i18n.t('Password')}>
           {getFieldDecorator('password', {
             rules: [
               {
                 required: true,
-                message: 'Please input your password!'
+                message: i18n.t('Please input your password!')
               },
               {
                 validator: this.validateToNextPassword
@@ -116,12 +117,12 @@ class ResetPassForm extends React.Component<
             ]
           })(<Input type="password" />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="Confirm Password">
+        <FormItem {...formItemLayout} label={i18n.t('Confirm Password')}>
           {getFieldDecorator('confirm', {
             rules: [
               {
                 required: true,
-                message: 'Please confirm your password!'
+                message: i18n.t('Please confirm your password!')
               },
               {
                 validator: this.compareToFirstPassword
@@ -131,7 +132,7 @@ class ResetPassForm extends React.Component<
         </FormItem>
         <FormItem {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit">
-            Reset
+            {i18n.t('Reset')}
           </Button>
           {this.props.processing && <Icon type="loading" />}
         </FormItem>

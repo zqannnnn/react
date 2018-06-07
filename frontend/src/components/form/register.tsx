@@ -10,6 +10,7 @@ import {
   ValidationRule,
   ValidateCallback
 } from 'antd/lib/form'
+import i18n from 'i18next'
 const FormItem = Form.Item
 export interface RegisterValuesProps {
   firstName: string
@@ -52,7 +53,7 @@ class RegisterForm extends React.Component<
   ) => {
     const form = this.props.form
     if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!')
+      callback(i18n.t('Two passwords that you enter is inconsistent!'))
     } else {
       callback()
     }
@@ -108,16 +109,16 @@ class RegisterForm extends React.Component<
     }
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
-        <FormItem {...formItemLayout} label="E-mail">
+        <FormItem {...formItemLayout} label={i18n.t('Email')}>
           {getFieldDecorator('email', {
             rules: [
               {
                 type: 'email',
-                message: 'The input is not valid E-mail!'
+                message: i18n.t('The input is not valid Email!')
               },
               {
                 required: true,
-                message: 'Please input your E-mail!'
+                message: i18n.t('Please input your Email!')
               }
             ]
           })(<Input />)}
@@ -127,7 +128,7 @@ class RegisterForm extends React.Component<
             rules: [
               {
                 required: true,
-                message: 'Please input your First Name!'
+                message: i18n.t('Please input your First Name!')
               }
             ]
           })(<Input />)}
@@ -137,7 +138,7 @@ class RegisterForm extends React.Component<
             rules: [
               {
                 required: true,
-                message: 'Please input your Last Name!'
+                message: i18n.t('Please input your Last Name!')
               }
             ]
           })(<Input />)}
@@ -147,7 +148,7 @@ class RegisterForm extends React.Component<
             rules: [
               {
                 required: true,
-                message: 'Please input your password!'
+                message: i18n.t('Please input your password!')
               },
               {
                 validator: this.validateToNextPassword
@@ -160,7 +161,7 @@ class RegisterForm extends React.Component<
             rules: [
               {
                 required: true,
-                message: 'Please confirm your password!'
+                message: i18n.t('Please confirm your password!')
               },
               {
                 validator: this.compareToFirstPassword
@@ -170,7 +171,7 @@ class RegisterForm extends React.Component<
         </FormItem>
         <FormItem {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit">
-            Register
+            {i18n.t('Register')}
           </Button>
           {this.props.processing && <Icon type="loading" />}
         </FormItem>

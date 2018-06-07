@@ -1,4 +1,4 @@
-import { authConsts,userConsts } from '../constants'
+import { authConsts, userConsts } from '../constants'
 import { userService } from '../services/user'
 import { alertActionCreators } from '.'
 import { history } from '../helpers/history'
