@@ -20,7 +20,7 @@ import {
 import { ProfilePage, CompanyConfirmPage } from './pages/user'
 import { AdminPage, HomePage, ListPage } from './pages'
 import { RootState, LightboxState, AuthState, AlertState } from './reducers'
-import { Layout, Alert } from 'antd'
+import { Layout, Alert, BackTop } from 'antd'
 import './app.css'
 interface AppProps {
   dispatch: (action: any) => void
@@ -95,6 +95,9 @@ class App extends React.Component<AppProps, any> {
                 <Route path="/register" component={RegisterPage} />
                 <Route path="/lost/pass" component={LostPassPage} />
               </Switch>
+              <BackTop>
+                <div className="ant-back-top-inner">UP</div>
+              </BackTop>
             </Layout.Content>
           </div>
         </Router>
