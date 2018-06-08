@@ -9,7 +9,6 @@ import { Exchange } from '../exchange'
 import { Checkbox, Row, Col } from 'antd'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
 import i18n from 'i18next'
-import { I18nextProvider } from 'react-i18next';
 interface ItemProps {
   dispatch: Dispatch<RootState>
   transaction: Transaction
@@ -32,7 +31,7 @@ class Item extends React.Component<ItemProps, ItemState> {
     this.props.dispatch(transactionActionCreators.cancell(id))
   }
   handleFinish = (id: string) => {
-    let r = confirm('Are you sure?')
+    let r = confirm(i18n.t('Are you sure?'))
     if (r) this.props.dispatch(transactionActionCreators.finish(id))
   }
   triggerCommentInput = () => {
@@ -52,31 +51,34 @@ class Item extends React.Component<ItemProps, ItemState> {
     )
     this.setState({ commentInputShowing: false })
   }
-  renderStatus = (type:string = transactionConsts.TYPE_BUY, status:number=transactionConsts.STATUS_CREATED)=>{
-    let finalStatus:string
-    if(type==transactionConsts.TYPE_SELL){
-      switch(status){
+  renderStatus = (
+    type: string = transactionConsts.TYPE_BUY,
+    status: number = transactionConsts.STATUS_CREATED
+  ) => {
+    let finalStatus: string
+    if (type == transactionConsts.TYPE_SELL) {
+      switch (status) {
         case transactionConsts.STATUS_CANCELLED:
-          finalStatus = i18n.t("Cancelled")
-          break; 
+          finalStatus = i18n.t('Cancelled')
+          break
         case transactionConsts.STATUS_FINISHED:
-          finalStatus = i18n.t("Sold")
-          break;
+          finalStatus = i18n.t('Sold')
+          break
         default:
-          finalStatus=i18n.t("On Sale")
-          break;
+          finalStatus = i18n.t('On Sale')
+          break
       }
-    }else{
-      switch(status){
+    } else {
+      switch (status) {
         case transactionConsts.STATUS_CANCELLED:
-          finalStatus =i18n.t("Cancelled") 
-          break; 
+          finalStatus = i18n.t('Cancelled')
+          break
         case transactionConsts.STATUS_FINISHED:
-          finalStatus =i18n.t("Bought")
-          break;
+          finalStatus = i18n.t('Bought')
+          break
         default:
-          finalStatus=i18n.t("Wanted")
-          break;
+          finalStatus = i18n.t('Wanted')
+          break
       }
     }
     return finalStatus
@@ -96,7 +98,7 @@ class Item extends React.Component<ItemProps, ItemState> {
         <div className="boxmain">
           <div className="left-icon">
             <div className="header">
-              {this.renderStatus(transaction.type,transaction.status)}
+              {this.renderStatus(transaction.type, transaction.status)}
             </div>
           </div>
           <div className="title">{transaction.title}</div>
@@ -125,9 +127,13 @@ class Item extends React.Component<ItemProps, ItemState> {
             </div>
           </Link>
           <div className="space-between content">
-            <div className="status">
-             
-            </div>
+            {transaction.price &&
+              transaction.currencyCode && (
+                <Exchange
+                  price={transaction.price}
+                  currencyCode={transaction.currencyCode}
+                />
+              )}
             {authInfo &&
             authInfo.isAdmin &&
             transaction.type == transactionConsts.TYPE_SELL &&
@@ -138,24 +144,15 @@ class Item extends React.Component<ItemProps, ItemState> {
                   if (transaction.id) this.handleFinish(transaction.id)
                 }}
               >
-                Set Finish
+                {i18n.t('Set Finish')}
               </div>
             ) : (
               ''
             )}
           </div>
-          <div className="content">
-            {transaction.price &&
-              transaction.currencyCode && (
-                <Exchange
-                  price={transaction.price}
-                  currencyCode={transaction.currencyCode}
-                />
-              )}
-          </div>
           <div className="menu content">
             <Link className="control-btn" to={'/transaction/' + transaction.id}>
-              Read More
+              i18n.t("Read More")}
             </Link>
             {authInfo &&
             (authInfo.id == transaction.userId || authInfo.isAdmin) ? (
@@ -166,7 +163,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                       to={'/transaction/edit/' + transaction.id}
                       className="control-btn"
                     >
-                      Edit ✎
+                      i18n.t("Edit")} ✎
                     </Link>
 <<<<<<< d5d5a361979cf2b094276dfd71971ca53937d33a
                     <div className="space-between content">
@@ -205,7 +202,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                         if (transaction.id) this.handleCancell(transaction.id)
                       }}
                     >
-                      Cancel{' '}
+                      i18n.t("Cancel")}{' '}
                       <i className="fa fa-times-circle" aria-hidden="true" />
 >>>>>>> refactor whole frontend with ant design and add new solution of i18n using react-i18next
                     </div>

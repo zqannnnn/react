@@ -47,4 +47,3 @@ app.listen(port, err => {
   if (err) console.log(err)
   console.log(`⚡ Express started on port ${port}`)
 })
-
