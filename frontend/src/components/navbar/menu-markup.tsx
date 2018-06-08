@@ -9,7 +9,6 @@ import { CurrencyState, AuthState } from '../../reducers'
 import throttle from 'lodash.throttle'
 import { Menu, Select } from 'antd'
 import i18n from 'i18next'
-import '../../app.css'
 
 const { Item } = Menu
 interface MenuMarkupProps {

@@ -165,37 +165,6 @@ class Item extends React.Component<ItemProps, ItemState> {
                     >
                       i18n.t("Edit")} ✎
                     </Link>
-<<<<<<< d5d5a361979cf2b094276dfd71971ca53937d33a
-                    <div className="space-between content">
-                        <div className="status" >{offer.status!=offerConsts.OFFER_STATUS_FINISHED?'On Sale':'Sold'}</div>
-                        {authInfo.isAdmin&&offer.status!=offerConsts.OFFER_STATUS_FINISHED?<div className="control-btn" onClick = {()=>{
-                                if(offer.id)
-                                    this.handleFinish(offer.id)
-                            }
-                        }>Set Sold</div>:
-                    ''}
-                    </div>
-                    <div className="content">{offer.price&&offer.currencyCode&&<Exchange price={offer.price} currencyCode = {offer.currencyCode}/>}</div>
-                    <div className="menu content">
-                        <Link className="control-btn" to={'/offer/' + offer.id}>Read More</Link>
-                        {(authInfo.id==offer.userId||authInfo.isAdmin)?
-                        <>
-                            {offer.status===offerConsts.OFFER_STATUS_CREATED &&<>
-                                <Link to={'/offer/edit/' + offer.id} className="control-btn">Edit ✎</Link>
-                                <div className="control-btn" onClick = {()=>{
-                                        if(offer.id)
-                                            this.handleCancell(offer.id)
-                                        }
-                                    }>
-                                    Cancel < i className = "fa fa-times-circle" aria-hidden="true" ></i>
-                                </div>
-                            </>}
-                            {(authInfo.isAdmin&&offer.status==offerConsts.OFFER_STATUS_FINISHED)?
-                            <div className="control-btn" onClick={()=>{this.triggerCommentInput()}}>{"Comment "}
-                                <i className={"fa fa-comment-o "+(commentInputShowing?"icon-active":"")} aria-hidden="true"  ></i>
-                            </div>:''}
-                        </>:''}
-=======
                     <div
                       className="control-btn"
                       onClick={() => {
@@ -204,7 +173,6 @@ class Item extends React.Component<ItemProps, ItemState> {
                     >
                       i18n.t("Cancel")}{' '}
                       <i className="fa fa-times-circle" aria-hidden="true" />
->>>>>>> refactor whole frontend with ant design and add new solution of i18n using react-i18next
                     </div>
                   </>
                 )}

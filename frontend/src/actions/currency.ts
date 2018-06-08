@@ -9,17 +9,10 @@ import { ThunkAction } from 'redux-thunk'
 import { RootState } from '../reducers'
 
 export type Action = {
-<<<<<<< d5d5a361979cf2b094276dfd71971ca53937d33a
-    type: string;
-    error?: string;
-    currencys?:Array < Currency >;
-    currencyState?:string;
-=======
   type: string
   error?: string
   currencys?: Array<Currency>
   currencyState?: string
->>>>>>> refactor whole frontend with ant design and add new solution of i18n using react-i18next
 }
 type Thunk = ThunkAction<void, RootState, void>
 
