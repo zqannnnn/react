@@ -1813,7 +1813,7 @@ flush-write-stream@^1.0.2:
     inherits "^2.0.1"
     readable-stream "^2.0.4"
 
-for-in@^1.0.2:
+for-in@^1.0.1, for-in@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
 
@@ -2134,10 +2134,6 @@ html-parse-stringify2@2.0.1:
   dependencies:
     void-elements "^2.0.1"
 
-<<<<<<< 5b40d336f6ce906311a3649fc746a747eba4da94
-<<<<<<< 0b7efb46a332255a91cae211d0f8835bbc4ac058
-=======
->>>>>>> extracting translations keys
 htmlparser2@^3.9.2:
   version "3.9.2"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-3.9.2.tgz#1bdf87acca0f3f9e53fa4fcceb0f4b4cbb00b338"
@@ -2149,11 +2145,6 @@ htmlparser2@^3.9.2:
     inherits "^2.0.1"
     readable-stream "^2.0.2"
 
-<<<<<<< 5b40d336f6ce906311a3649fc746a747eba4da94
-=======
->>>>>>> get i18n works
-=======
->>>>>>> extracting translations keys
 http-errors@1.6.2:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.6.2.tgz#0a002cc85707192a7e7946ceedc11155f60ec736"
@@ -2188,19 +2179,12 @@ i18next-browser-languagedetector@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/i18next-browser-languagedetector/-/i18next-browser-languagedetector-2.2.0.tgz#5f41abe61964a56dce70102ab31c3ed5d5866edc"
 
-<<<<<<< HEAD
-<<<<<<< 5b40d336f6ce906311a3649fc746a747eba4da94
-<<<<<<< 0b7efb46a332255a91cae211d0f8835bbc4ac058
-=======
->>>>>>> extracting translations keys
-=======
 i18next-express-middleware@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/i18next-express-middleware/-/i18next-express-middleware-1.1.1.tgz#9204f28c8800ac3bff87fbee01945367956f349c"
   dependencies:
     cookies "0.7.1"
 
->>>>>>> i18next-backend
 i18next-parser@^1.0.0-beta17:
   version "1.0.0-beta9"
   resolved "https://registry.yarnpkg.com/i18next-parser/-/i18next-parser-1.0.0-beta9.tgz#9e0fff4eea55850ab3be6ee85fa5dcdc0ab379a3"
@@ -2237,11 +2221,6 @@ i18next-scanner@^2.4.6:
     vinyl "^2.1.0"
     vinyl-fs "^3.0.1"
 
-<<<<<<< 5b40d336f6ce906311a3649fc746a747eba4da94
-=======
->>>>>>> get i18n works
-=======
->>>>>>> extracting translations keys
 i18next@^11.3.2:
   version "11.3.2"
   resolved "https://registry.yarnpkg.com/i18next/-/i18next-11.3.2.tgz#4a1a7bb14383ba6aed4abca139b03681fc96e023"
@@ -4455,22 +4434,6 @@ react-i18next@^7.6.1:
     html-parse-stringify2 "2.0.1"
     prop-types "^15.6.0"
 
-<<<<<<< 2164ea79ba3005613aba0c4f72a5353c0a862e62
-react-lazy-load@^3.0.12:
-  version "3.0.13"
-  resolved "https://registry.yarnpkg.com/react-lazy-load/-/react-lazy-load-3.0.13.tgz#3b0a92d336d43d3f0d73cbe6f35b17050b08b824"
-  dependencies:
-    eventlistener "0.0.1"
-    lodash.debounce "^4.0.0"
-    lodash.throttle "^4.0.0"
-    prop-types "^15.5.8"
-
-react-lifecycles-compat@^3.0.2:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
-
-=======
->>>>>>> add yarn.lock after remove deps relate to react-intl
 react-lazy-load@^3.0.12:
   version "3.0.13"
   resolved "https://registry.yarnpkg.com/react-lazy-load/-/react-lazy-load-3.0.13.tgz#3b0a92d336d43d3f0d73cbe6f35b17050b08b824"
