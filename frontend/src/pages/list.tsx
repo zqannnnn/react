@@ -6,6 +6,7 @@ import { AuthInfo } from '../actions'
 import { List as ListC } from '../components'
 import { Checkbox, Row, Col } from 'antd'
 import { transactionConsts } from '../constants'
+import i18n from 'i18next'
 interface ListProps {
   dispatch: Dispatch<RootState>
   transaction: TransactionState
@@ -44,11 +45,14 @@ class List extends React.Component<ListProps> {
           <div className="banner-bg" />
           <div className="title">
             {selectType === 'mine' ? 'My ' : 'All '}
-            Transaction
+            {i18n.t('Transaction')}
           </div>
         </div>
         {transaction.error && (
-          <span className="text-danger">ERROR: {transaction.error}</span>
+          <span className="text-danger">
+            {i18n.t('ERROR: ')}
+            {transaction.error}
+          </span>
         )}
         <Col
           xs={{ span: 22, offset: 1 }}
@@ -59,10 +63,14 @@ class List extends React.Component<ListProps> {
           <Checkbox.Group style={{ width: '100%' }} onChange={this.onChange}>
             <Row>
               <Col push={21} span={3}>
-                <Checkbox value={transactionConsts.TYPE_BUY}>Wanted</Checkbox>
+                <Checkbox value={transactionConsts.TYPE_BUY}>
+                  {i18n.t('Wanted')}
+                </Checkbox>
               </Col>
               <Col push={21} span={3}>
-                <Checkbox value={transactionConsts.TYPE_SELL}>On Sale</Checkbox>
+                <Checkbox value={transactionConsts.TYPE_SELL}>
+                  {i18n.t('On Sale')}
+                </Checkbox>
               </Col>
             </Row>
           </Checkbox.Group>

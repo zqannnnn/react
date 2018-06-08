@@ -196,7 +196,9 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
               />{' '}
               {submitted &&
                 !user.firstName && (
-                  <div className="invalid-feedback">First Name is required</div>
+                  <div className="invalid-feedback">
+                    {i18n.t('First Name is required')}
+                  </div>
                 )}
             </div>
             <div className={submitted && !user.lastName ? ' has-error' : ''}>
@@ -209,7 +211,9 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
               />{' '}
               {submitted &&
                 !user.lastName && (
-                  <div className="invalid-feedback">Last Name is required</div>
+                  <div className="invalid-feedback">
+                    {i18n.t('Last Name is required')}
+                  </div>
                 )}
             </div>
             <div>
@@ -263,7 +267,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                   >
                     <div>
                       <Icon type="plus" />
-                      <div className="ant-upload-text">Upload</div>
+                      <div className="ant-upload-text">{i18n.t('Upload')}</div>
                     </div>
                   </Upload>
                 </div>

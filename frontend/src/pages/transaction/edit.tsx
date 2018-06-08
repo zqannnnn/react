@@ -375,7 +375,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                   >
                     <div>
                       <Icon type="plus" />
-                      <div className="ant-upload-text">Upload</div>
+                      <div className="ant-upload-text">{i18n.t('Upload')}</div>
                     </div>
                   </Upload>
                 </div>
@@ -396,7 +396,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                   >
                     <div>
                       <Icon type="plus" />
-                      <div className="ant-upload-text">Upload</div>
+                      <div className="ant-upload-text">{i18n.t('Upload')}</div>
                     </div>
                   </Upload>
                 </div>
@@ -816,13 +816,13 @@ class EditPage extends React.Component<TransProps, TransState> {
             <div className="steps-action">
               {this.state.current < steps.length - 1 && (
                 <Button type="primary" onClick={() => this.next()}>
-                  Next
+                  {i18n.t('Next')}
                 </Button>
               )}
 
               {this.state.current > 0 && (
                 <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-                  Previous
+                  {i18n.t('Previous')}
                 </Button>
               )}
             </div>
