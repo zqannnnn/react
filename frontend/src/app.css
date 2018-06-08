@@ -196,12 +196,14 @@ ul.nav li {
   text-align: right;
   font-size: 12px;
   height: 45px;
-  transform: rotate(-45deg);
+  transform: rotate(-45deg)scale(0.83);
   position: absolute;
   line-height: 43px;
   text-align: center;
   font-weight: bold;
   color: #fff;
+  width: 60px;
+  left: -8px;
 }
 .block .left-icon:before {
   content: ' ';

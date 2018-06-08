@@ -8,6 +8,8 @@ import { transactionConsts } from '../../constants'
 import { Exchange } from '../exchange'
 import { Checkbox, Row, Col } from 'antd'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
+import i18n from 'i18next'
+import { I18nextProvider } from 'react-i18next';
 interface ItemProps {
   dispatch: Dispatch<RootState>
   transaction: Transaction
@@ -50,6 +52,35 @@ class Item extends React.Component<ItemProps, ItemState> {
     )
     this.setState({ commentInputShowing: false })
   }
+  renderStatus = (type:string = transactionConsts.TYPE_BUY, status:number=transactionConsts.STATUS_CREATED)=>{
+    let finalStatus:string
+    if(type==transactionConsts.TYPE_SELL){
+      switch(status){
+        case transactionConsts.STATUS_CANCELLED:
+          finalStatus = i18n.t("Cancelled")
+          break; 
+        case transactionConsts.STATUS_FINISHED:
+          finalStatus = i18n.t("Sold")
+          break;
+        default:
+          finalStatus=i18n.t("On Sale")
+          break;
+      }
+    }else{
+      switch(status){
+        case transactionConsts.STATUS_CANCELLED:
+          finalStatus =i18n.t("Cancelled") 
+          break; 
+        case transactionConsts.STATUS_FINISHED:
+          finalStatus =i18n.t("Bought")
+          break;
+        default:
+          finalStatus=i18n.t("Wanted")
+          break;
+      }
+    }
+    return finalStatus
+  }
   render() {
     const { transaction, authInfo } = this.props
     const { commentInputShowing, comment } = this.state
@@ -65,9 +96,7 @@ class Item extends React.Component<ItemProps, ItemState> {
         <div className="boxmain">
           <div className="left-icon">
             <div className="header">
-              {transaction.type == transactionConsts.TYPE_BUY
-                ? 'Wanted'
-                : 'On Sale'}
+              {this.renderStatus(transaction.type,transaction.status)}
             </div>
           </div>
           <div className="title">{transaction.title}</div>
@@ -97,10 +126,7 @@ class Item extends React.Component<ItemProps, ItemState> {
           </Link>
           <div className="space-between content">
             <div className="status">
-              {transaction.type == transactionConsts.TYPE_SELL &&
-                (transaction.status != transactionConsts.STATUS_FINISHED
-                  ? 'On Sale'
-                  : 'Sold')}
+             
             </div>
             {authInfo &&
             authInfo.isAdmin &&
@@ -112,7 +138,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                   if (transaction.id) this.handleFinish(transaction.id)
                 }}
               >
-                Set Sold
+                Set Finish
               </div>
             ) : (
               ''
