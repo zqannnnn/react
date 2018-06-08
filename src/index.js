@@ -1,4 +1,7 @@
+import { i18n, middleware } from './middleware/i18n';
 const express = require('express')
+const app = express()
+app.use(middleware.handle(i18n));
 const path = require('path')
 const port = process.env.PORT || 3000
 const passport = require('passport')

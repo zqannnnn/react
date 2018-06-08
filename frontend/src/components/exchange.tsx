@@ -37,7 +37,6 @@ class Exchange extends React.Component<ItemProps> {
     return (
       <>
         {newPrice}
-        {}
       </>
     )
   }

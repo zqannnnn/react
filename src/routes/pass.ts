@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as i18n from 'i18next'
 import * as jwt from 'jsonwebtoken'
 import * as nodemailer from 'nodemailer'
 import * as qs from 'querystring'
@@ -18,20 +19,7 @@ function genMessage(resetUrl: string, email: string) {
     subject: i18n.t('Reset Password'), // Subject line    
     /* tslint:disable:max-line-length */
     text: '', // plain text body
-    html: `<html>
-            <body>
-                <br>Someone requested to reset the password for the ${ourName} account at ${email}.<br>
-                <br>Please click this link to reset your password:<br>
-                <br><a href="${resetUrl}" target="_blank">Reset Password</a><br>
-                <br>
-                <br>If clicking the link doesn't work,you can copy and paste the link below into your browser's address window
-                <p style="font-size:14px; line-height: 20px; word-wrap: break-word; overflow-wrap: break-word;"><a href="${resetUrl}">${resetUrl}</a></p>
-                <br>If you did not make this request, please ignore this email and your password will not be reset.
-                <br>
-                <p>Sincerely yours<p>
-                <a href="">${ourName}</a>
-            </body>\
-        </html>`
+    html: i18n.t('reset-password-email', { ourName: ourName, email: email, resetUrl: resetUrl })
     /* tslint:enable:max-line-length */
   }
 }
