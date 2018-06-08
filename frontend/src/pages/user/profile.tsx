@@ -30,9 +30,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   constructor(props: ProfileProps) {
     super(props)
     this.state = {
-      user: {
-        preferredCurrencyCode: ''
-      },
+      user: {},
       submitted: false
     }
   }
@@ -50,8 +48,8 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     if (userData && !submitted) {
       this.setState({
         user: {
-          ...user,
-          ...userData
+          ...userData,
+          ...user
         }
       })
     }
