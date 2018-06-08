@@ -6,8 +6,8 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const models = require('./models')
-require('./middleware/webpack')(app)
 export const app = express()
+require('./middleware/webpack')(app)
 models.setupDatabase()
 
 // Get the exchange rate API
@@ -44,3 +44,4 @@ app.listen(port, err => {
   if (err) console.log(err)
   console.log(`⚡ Express started on port ${port}`)
 })
+
