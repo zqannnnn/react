@@ -152,7 +152,7 @@ class Item extends React.Component<ItemProps, ItemState> {
           </div>
           <div className="menu content">
             <Link className="control-btn" to={'/transaction/' + transaction.id}>
-              i18n.t("Read More")}
+              {i18n.t("Read More")}
             </Link>
             {authInfo &&
             (authInfo.id == transaction.userId || authInfo.isAdmin) ? (
@@ -163,7 +163,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                       to={'/transaction/edit/' + transaction.id}
                       className="control-btn"
                     >
-                      i18n.t("Edit")} ✎
+                     {i18n.t("Edit")} ✎
                     </Link>
                     <div
                       className="control-btn"
@@ -171,7 +171,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                         if (transaction.id) this.handleCancell(transaction.id)
                       }}
                     >
-                      i18n.t("Cancel")}{' '}
+                      {i18n.t("Cancel")}{' '}
                       <i className="fa fa-times-circle" aria-hidden="true" />
                     </div>
                   </>
