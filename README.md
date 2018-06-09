@@ -177,3 +177,15 @@ https://codesandbox.io/s/8n252n822
 ```sh
 docker exec -u postgres -i bmp-db psql < script/currency.sql
 ```
+
+### Tesing
+
+For testing used [jest library](https://facebook.github.io/jest/)
+It have lot of additions and testing process can be developed in more sophisticated way.
+Bur for in just example for reducers testing.
+
+to run tests:
+
+```sh
+yarn test
+```
