@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as i18n from 'i18next'
 import { consts } from '../config/static'
 import { authMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
@@ -111,7 +112,7 @@ router.get(
   async (req: IRequest, res: express.Response) => {
     try {
       if (!req.isAdmin) {
-        return res.status(500).send({ error: 'Permission denied.' })
+        return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
       const transaction = await Transaction.find({
         where: {
@@ -119,7 +120,9 @@ router.get(
         }
       })
       if (!transaction) {
-        return res.status(500).send({ error: 'Transaction does not exist' })
+        return res
+          .status(500)
+          .send({ error: i18n.t('Transaction does not exist.') })
       }
       transaction.status = consts.TRANSACTION_STATUS_FINISHED
       transaction.save()
@@ -134,7 +137,7 @@ router.post(
   async (req: IRequest, res: express.Response) => {
     try {
       if (!req.isAdmin) {
-        return res.status(500).send({ error: 'Permission denied.' })
+        return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
       const transaction = await Transaction.find({
         where: {
@@ -142,7 +145,9 @@ router.post(
         }
       })
       if (!transaction) {
-        return res.status(500).send({ error: 'Transaction does not exist' })
+        return res
+          .status(500)
+          .send({ error: i18n.t('Transaction does not exist.') })
       }
       transaction.comment = req.body.comment
       transaction.save()
@@ -171,7 +176,9 @@ router
       ]
     })
     if (!transaction) {
-      return res.status(403).send({ error: 'Transaction does not exist' })
+      return res
+        .status(403)
+        .send({ error: i18n.t('Transaction does not exist.') })
     }
     return res.send(transaction)
   })
@@ -183,10 +190,12 @@ router
         }
       })
       if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
-        return res.status(500).send({ error: 'Permission denied' })
+        return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
       if (!transaction) {
-        return res.status(500).send({ error: 'Transaction does not exist' })
+        return res
+          .status(500)
+          .send({ error: i18n.t('Transaction does not exist.') })
       }
       Object.keys(req.body).forEach(
         (key: string) => (transaction[key] = req.body[key])
@@ -230,10 +239,12 @@ router
         }
       })
       if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
-        return res.status(500).send({ error: 'Permission denied' })
+        return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
       if (!transaction) {
-        return res.status(500).send({ error: 'Transaction does not exist' })
+        return res
+          .status(500)
+          .send({ error: i18n.t('Transaction does not exist.') })
       }
       transaction.status = consts.TRANSACTION_STATUS_CANCELLED
       transaction.save()
