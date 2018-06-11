@@ -6,8 +6,10 @@ import { RootState, TransactionState } from '../reducers'
 import { AuthInfo } from '../actions'
 import { transactionConsts } from '../constants'
 import { List as ListC } from '../components'
-import { Row, Col, Checkbox } from 'antd'
+import { Row, Col } from 'antd'
+import { Filter } from '../components'
 import i18n from 'i18next'
+
 interface HomeProps {
   dispatch: Dispatch<RootState>
   transaction: TransactionState
@@ -18,18 +20,7 @@ class HomePage extends React.Component<HomeProps> {
   constructor(props: HomeProps) {
     super(props)
   }
-  onChange = (values: string[]) => {
-    let options: { buy?: boolean; sell?: boolean } = {}
-    values.forEach((value: string) => {
-      if (value == transactionConsts.TYPE_BUY)
-        options = { ...options, buy: true }
-      else if (value == transactionConsts.TYPE_SELL)
-        options = { ...options, sell: true }
-    })
-    this.props.dispatch(
-      transactionActionCreators.getAll({ selectType: 'all', ...options })
-    )
-  }
+
   componentDidMount() {
     this.props.dispatch(transactionActionCreators.getAll({ selectType: 'all' }))
   }
@@ -48,20 +39,7 @@ class HomePage extends React.Component<HomeProps> {
             md={{ span: 18, offset: 3 }}
             lg={{ span: 16, offset: 4 }}
           >
-            <Checkbox.Group style={{ width: '100%' }} onChange={this.onChange}>
-              <Row>
-                <Col push={21} span={3}>
-                  <Checkbox value={transactionConsts.TYPE_BUY}>
-                    {i18n.t('Wanted')}
-                  </Checkbox>
-                </Col>
-                <Col push={21} span={3}>
-                  <Checkbox value={transactionConsts.TYPE_SELL}>
-                    {i18n.t('On Sale')}
-                  </Checkbox>
-                </Col>
-              </Row>
-            </Checkbox.Group>
+            <Filter />
             <div className="list-container">
               <div className="header">
                 <div className="title">{i18n.t('Home')}</div>

@@ -37,6 +37,7 @@ class Exchange extends React.Component<ItemProps> {
     return <>{newPrice}</>
   }
 }
+
 function mapStateToProps(state: RootState) {
   const { currency } = state
   return { currencyState: currency }
