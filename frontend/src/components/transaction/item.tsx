@@ -154,74 +154,7 @@ class Item extends React.Component<ItemProps, ItemState> {
             <Link className="control-btn" to={'/transaction/' + transaction.id}>
               {i18n.t('Read More')}
             </Link>
-            {authInfo &&
-            (authInfo.id == transaction.userId || authInfo.isAdmin) ? (
-              <>
-                {transaction.status === transactionConsts.STATUS_CREATED && (
-                  <>
-                    <Link
-                      to={'/transaction/edit/' + transaction.id}
-                      className="control-btn"
-                    >
-                      {i18n.t('Edit')} ✎
-                    </Link>
-                    <div
-                      className="control-btn"
-                      onClick={() => {
-                        if (transaction.id) this.handleCancell(transaction.id)
-                      }}
-                    >
-                      {i18n.t('Cancel')}{' '}
-                      <i className="fa fa-times-circle" aria-hidden="true" />
-                    </div>
-                  </>
-                )}
-                {authInfo.isAdmin &&
-                transaction.status == transactionConsts.STATUS_FINISHED ? (
-                  <div
-                    className="control-btn"
-                    onClick={() => {
-                      this.triggerCommentInput()
-                    }}
-                  >
-                    {'Comment '}
-                    <i
-                      className={
-                        'fa fa-comment-o ' +
-                        (commentInputShowing ? 'icon-active' : '')
-                      }
-                      aria-hidden="true"
-                    />
-                  </div>
-                ) : (
-                  ''
-                )}
-              </>
-            ) : (
-              ''
-            )}
           </div>
-          {commentInputShowing ? (
-            <div className="input-wr content">
-              <input
-                type="text"
-                name="comment"
-                value={comment}
-                onChange={this.handleInputChange}
-              />
-              <div className="input-btn-wr">
-                <i
-                  className="fa fa-share-square-o input-btn"
-                  aria-hidden="true"
-                  onClick={() => {
-                    if (transaction.id) this.sendComment(transaction.id)
-                  }}
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="comment content">{transaction.comment}</div>
-          )}
         </div>
       </Col>
     )

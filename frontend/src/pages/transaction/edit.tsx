@@ -34,7 +34,7 @@ const Step = Steps.Step
 interface TransProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
   loading: boolean
-  editing: boolean
+  processing: boolean
   transData: Transaction
   categorys: Category[]
   currencys: Currency[]
@@ -297,7 +297,7 @@ class EditPage extends React.Component<TransProps, TransState> {
       category
     } = this.state.transaction
     let { submitted } = this.state
-    let { editing, categorys, currencys } = this.props
+    let { processing, categorys, currencys } = this.props
     let options = null
     let currentCategory: Category =
       categorys &&
@@ -766,7 +766,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                     >
                       {i18n.t('Submit')}
                     </Button>
-                    {editing && <Icon type="loading" />}
+                    {processing && <Icon type="loading" />}
                     <Button>
                       <Link to="/">{i18n.t('Cancel')}</Link>
                     </Button>
@@ -834,9 +834,9 @@ class EditPage extends React.Component<TransProps, TransState> {
 }
 function mapStateToProps(state: RootState) {
   const { transaction, category, currency, upload, auth } = state
-  const { editing, loading, transData } = transaction
+  const { processing, loading, transData } = transaction
   return {
-    editing,
+    processing,
     categorys: category.items,
     currencys: currency.items,
     transData,

@@ -2,8 +2,7 @@ import { transactionConsts } from '../constants'
 import { TransactionAction } from '../actions'
 import { Transaction } from '../models'
 export type State = {
-  editing?: boolean
-  cancelling?: boolean
+  processing?: boolean
   cancellError?: string
   finishing?: boolean
   finishError?: string
@@ -18,13 +17,13 @@ export function transaction(
 ): State {
   switch (action.type) {
     case transactionConsts.CREATE_REQUEST:
-      return { editing: true }
+      return { processing: true }
     case transactionConsts.CREATE_SUCCESS:
       return {}
     case transactionConsts.CREATE_FAILURE:
       return { error: action.error }
     case transactionConsts.EDIT_REQUEST:
-      return { editing: true }
+      return { processing: true }
     case transactionConsts.EDIT_SUCCESS:
       return {}
     case transactionConsts.EDIT_FAILURE:
@@ -109,49 +108,30 @@ export function transaction(
           )
         }
     case transactionConsts.COMMENT_REQUEST:
-      if (state.items)
-        return {
-          ...state,
-          items: state.items.map(
-            item =>
-              item.id === action.id
-                ? {
-                    ...item,
-                    processing: true
-                  }
-                : item
-          )
+      return {
+        ...state,
+        transData: {
+          ...state.transData,
+          processing: true
         }
+      }
     case transactionConsts.COMMENT_SUCCESS:
-      if (state.items)
-        return {
-          ...state,
-          items: state.items.map(
-            item =>
-              item.id === action.id
-                ? {
-                    ...item,
-                    comment: action.comment
-                  }
-                : item
-          )
+      return {
+        ...state,
+        transData: {
+          ...state.transData,
+          comment: action.comment
         }
+      }
 
     case transactionConsts.COMMENT_FAILURE:
-      if (state.items)
-        return {
-          ...state,
-          items: state.items.map(
-            item =>
-              item.id === action.id
-                ? {
-                    ...item,
-                    finishing: false,
-                    finishError: action.error
-                  }
-                : item
-          )
+      return {
+        ...state,
+        transData: {
+          ...state.transData,
+          error: action.error
         }
+      }
     case transactionConsts.GET_REQUEST:
       return { loading: true }
     case transactionConsts.GET_SUCCESS:

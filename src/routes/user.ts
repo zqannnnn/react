@@ -1,6 +1,6 @@
 import * as express from 'express'
-import * as jwt from 'jsonwebtoken'
 import * as i18n from 'i18next'
+import * as jwt from 'jsonwebtoken'
 import { AuthInfo } from '../../frontend/src/actions'
 import { consts } from '../config/static'
 import { app } from '../index'
