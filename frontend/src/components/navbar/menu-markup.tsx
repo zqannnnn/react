@@ -11,6 +11,7 @@ import { Menu, Select } from 'antd'
 import i18n from 'i18next'
 
 const { Item } = Menu
+
 interface MenuMarkupProps {
   auth: AuthState
   currency: CurrencyState
@@ -107,19 +108,6 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
               defaultMessage: 'Logout',
               onClick: this.props.logout
             })}
-
-            <Select
-              value={currency.currentCurrency}
-              onChange={this.props.handleSelect}
-            >
-              {currency.items
-                ? currency.items.map((item, index) => (
-                    <Select.Option key={index} value={item.code}>
-                      {item.code}({item.description})
-                    </Select.Option>
-                  ))
-                : ''}
-            </Select>
           </Menu>
         </>
       )
