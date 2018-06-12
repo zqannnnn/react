@@ -35,7 +35,7 @@ interface TransProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
   loading: boolean
   processing: boolean
-  transData: Transaction
+  transProp: Transaction
   categorys: Category[]
   currencys: Currency[]
   image: string
@@ -57,7 +57,7 @@ class EditPage extends React.Component<TransProps, TransState> {
       submitted: false,
       transaction: {
         category: 'Beef',
-        type: ''
+        currencyCode: 'USD'
       },
       imageUploading: false,
       certificateUploading: false,
@@ -86,9 +86,19 @@ class EditPage extends React.Component<TransProps, TransState> {
       this.props.dispatch(currencyActionCreators.getAll())
     transactionId &&
       this.props.dispatch(transactionActionCreators.getById(transactionId))
+
+    if (this.props.authInfo && this.props.authInfo.preferredCurrencyCode) {
+      const transaction = this.state.transaction
+      this.setState({
+        transaction: {
+          ...transaction,
+          currencyCode: this.props.authInfo.preferredCurrencyCode
+        }
+      })
+    }
   }
   componentWillReceiveProps(nextProps: TransProps) {
-    const { transData, image, categorys } = nextProps
+    const { transProp, image, categorys } = nextProps
     const {
       submitted,
       transactionId,
@@ -96,11 +106,11 @@ class EditPage extends React.Component<TransProps, TransState> {
       imageUploading,
       certificateUploading
     } = this.state
-    if (transactionId && transData && !submitted) {
+    if (transactionId && transProp && !submitted) {
       this.setState({
         transaction: {
-          ...transData,
-          ...transaction
+          ...transaction,
+          ...transProp
         }
       })
     }
@@ -208,7 +218,12 @@ class EditPage extends React.Component<TransProps, TransState> {
     }
     const { transaction, transactionId } = this.state
     const { dispatch } = this.props
-    if (transaction.category && transaction.title) {
+    if (
+      transaction.category &&
+      transaction.title &&
+      transaction.quantity &&
+      transaction.price
+    ) {
       if (transactionId)
         dispatch(transactionActionCreators.edit(transaction, transactionId))
       else dispatch(transactionActionCreators.new(transaction))
@@ -294,7 +309,8 @@ class EditPage extends React.Component<TransProps, TransState> {
       fed,
       grainFedDays,
       trimmings,
-      category
+      category,
+      currencyCode
     } = this.state.transaction
     let { submitted } = this.state
     let { processing, categorys, currencys } = this.props
@@ -333,6 +349,14 @@ class EditPage extends React.Component<TransProps, TransState> {
     } else {
       certificateList = []
     }
+    // let currencyCode: string|undefined = this.state.transaction.currencyCode
+    // if(!currencyCode&&this.props.authInfo.preferredCurrencyCode){
+    //   currencyCode = this.props.authInfo.preferredCurrencyCode
+    //   {(value:string) => this.handleSelectChange(value,'currencyCode')}
+    // }else if(!currencyCode&&!this.props.authInfo.preferredCurrencyCode){
+    //   currencyCode = 'USD'
+    //   {(value:string) => this.handleSelectChange(value,'currencyCode')}
+    // }
     switch (current) {
       case 0:
         return (
@@ -698,18 +722,26 @@ class EditPage extends React.Component<TransProps, TransState> {
                     lg={{ span: 9, offset: 2 }}
                     className="edits-select"
                   >
-                    <label>{i18n.t('Quantity')}</label>
-                    <div className="flex">
-                      <InputNumber
-                        max={999999}
-                        defaultValue={1}
-                        min={1}
-                        value={quantity}
-                        onChange={(value: number) =>
-                          this.handleInputNumber(value, 'quantity')
-                        }
-                      />
-                      <div className="label-right">KG</div>
+                    <div className={submitted && !quantity ? 'has-error' : ''}>
+                      <label>{i18n.t('Quantity')}</label>
+                      <div className="flex">
+                        <InputNumber
+                          max={999999}
+                          defaultValue={1}
+                          min={1}
+                          value={quantity}
+                          onChange={(value: number) =>
+                            this.handleInputNumber(value, 'quantity')
+                          }
+                        />
+                        <div className="label-right">KG</div>
+                      </div>
+                      {submitted &&
+                        !quantity && (
+                          <div className="invalid-feedback">
+                            {i18n.t('Quantity is required')}
+                          </div>
+                        )}
                     </div>
                   </Col>
                   <Col
@@ -723,19 +755,26 @@ class EditPage extends React.Component<TransProps, TransState> {
                     <label>{i18n.t('Price')}</label>
                     {currencys && (
                       <div className="flex">
-                        <InputNumber
-                          min={0}
-                          max={99999}
-                          defaultValue={0}
-                          value={price}
-                          onChange={(value: number) =>
-                            this.handleInputNumber(value, 'price')
-                          }
-                        />
+                        <div className={submitted && !price ? 'has-error' : ''}>
+                          <InputNumber
+                            min={0}
+                            max={99999}
+                            defaultValue={0}
+                            value={price}
+                            onChange={(value: number) =>
+                              this.handleInputNumber(value, 'price')
+                            }
+                          />
+                          {submitted &&
+                            !price && (
+                              <div className="invalid-feedback">
+                                {i18n.t('Price is required')}
+                              </div>
+                            )}
+                        </div>
                         <Select
                           className="label-right"
-                          placeholder="currencys"
-                          value={this.state.transaction['currencyCode']}
+                          value={currencyCode}
                           onSelect={(value: string) =>
                             this.handleSelectChange(value, 'currencyCode')
                           }
@@ -839,7 +878,7 @@ function mapStateToProps(state: RootState) {
     processing,
     categorys: category.items,
     currencys: currency.items,
-    transData,
+    transProp: transData,
     image: upload.image,
     authInfo: auth.authInfo
   }

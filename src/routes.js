@@ -40,9 +40,10 @@ module.exports = (app, passport) => {
         token: jwt.sign(user, app.get('secretKey'), consts.EXPIREMENT),
         id: user.id
       }
-      if (user.userType == 1) {
+      if (user.userType == consts.USER_TYPE_ADMIN) {
         data.isAdmin = true
       }
+      data.preferredCurrencyCode = user.preferredCurrencyCode
       data.licenseStatus = user.licenseStatus
       res.send(data)
     })(req, res, next)
@@ -52,7 +53,16 @@ module.exports = (app, passport) => {
     const email = req.param('email')
     const key = req.param('key')
     if (email) {
-      const user = await User.findOne({ where: { email: email } })
+      const user = await User.findOne({
+        where: { email: email },
+        attributes: [
+          'id',
+          'userType',
+          'licenseStatus',
+          'preferredCurrencyCode',
+          'password'
+        ]
+      })
       if (user != null && user.resetKey == key) {
         const data = {
           token: jwt.sign(
@@ -63,9 +73,12 @@ module.exports = (app, passport) => {
             { expiresIn }
           ),
           id: user.id,
+          isAdmin: user.isAdmin,
+          preferredCurrencyCode: user.preferredCurrencyCode,
+          licenseStatus: user.licenseStatus,
           route: 'resetPass'
         }
-        if (user.userType == 1) {
+        if (user.userType == consts.USER_TYPE_ADMIN) {
           data.isAdmin = true
         }
         return res.redirect('/#/reset/pass/?' + qs.stringify(data))
