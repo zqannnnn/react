@@ -10,7 +10,7 @@ import {
 } from '../../actions'
 import { RootState, UserState, UploadState } from '../../reducers'
 import { User, Currency, Image } from '../../models'
-import { userConsts } from '../../constants'
+import { authConsts } from '../../constants'
 import { Row, Col, Input, Select, Button, Icon, Upload } from 'antd'
 import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface'
 import i18n from 'i18next'
@@ -30,9 +30,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   constructor(props: ProfileProps) {
     super(props)
     this.state = {
-      user: {
-        preferredCurrencyCode: ''
-      },
+      user: {},
       submitted: false
     }
   }
@@ -50,8 +48,8 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     if (userData && !submitted) {
       this.setState({
         user: {
-          ...user,
-          ...userData
+          ...userData,
+          ...user
         }
       })
     }
@@ -75,8 +73,8 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     }
   }
   handleUpload = (uploadFile: UploadFile) => {
-    let liecnese = uploadFile.originFileObj
-    this.props.dispatch(uploadActionCreators.uploadImage(liecnese))
+    let license = uploadFile.originFileObj
+    this.props.dispatch(uploadActionCreators.uploadImage(license))
   }
   handleDeleteImage = (uploadFile: UploadFile) => {
     const { user } = this.state
@@ -121,7 +119,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     let user = this.state.user
     if (user.firstName && user.lastName && user.email) {
       if (user.companyName) {
-        user.licenseStatus = userConsts.LICENSE_STATUS_UNCONFIRMED
+        user.licenseStatus = authConsts.LICENSE_STATUS_UNCONFIRMED
       }
       this.props.dispatch(userActionCreators.update(user))
     }
@@ -129,9 +127,10 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   }
   //for render select input
   renderCurrencySelect = (optionItems: Currency[]) => {
+    let preferCurrency = this.state.user.preferredCurrencyCode || ''
     return (
       <Select
-        value={String(this.state.user.preferredCurrencyCode)}
+        value={String(preferCurrency)}
         onSelect={(value: string) =>
           this.handleSelect(value, 'preferredCurrencyCode')
         }
@@ -151,6 +150,11 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   openLightbox = (images: string[], index: number) => {
     this.props.dispatch(lightboxActionCreators.open(images, index))
   }
+
+  customRequest = () => {
+    return false
+  }
+
   render() {
     const { userState, currencys } = this.props
     const { processing } = userState
@@ -192,7 +196,9 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
               />{' '}
               {submitted &&
                 !user.firstName && (
-                  <div className="invalid-feedback">First Name is required</div>
+                  <div className="invalid-feedback">
+                    {i18n.t('First Name is required')}
+                  </div>
                 )}
             </div>
             <div className={submitted && !user.lastName ? ' has-error' : ''}>
@@ -205,7 +211,9 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
               />{' '}
               {submitted &&
                 !user.lastName && (
-                  <div className="invalid-feedback">Last Name is required</div>
+                  <div className="invalid-feedback">
+                    {i18n.t('Last Name is required')}
+                  </div>
                 )}
             </div>
             <div>
@@ -250,6 +258,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                     listType="picture-card"
                     fileList={licenseList}
                     accept="image/*"
+                    customRequest={this.customRequest}
                     onChange={(file: UploadChangeParam) =>
                       this.handleUpload(file.file)
                     }
@@ -258,15 +267,17 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                   >
                     <div>
                       <Icon type="plus" />
-                      <div className="ant-upload-text">Upload</div>
+                      <div className="ant-upload-text">{i18n.t('Upload')}</div>
                     </div>
                   </Upload>
                 </div>
               </div>
             </div>
-            {user.licenseStatus !== userConsts.LICENSE_STATUS_CONFIRMED && (
+            {user.licenseStatus !== authConsts.LICENSE_STATUS_CONFIRMED && (
               <div>
-                {i18n.t('Please fulfill company information for adding offer')}
+                {i18n.t(
+                  'Please fulfill company information for adding transaction'
+                )}
               </div>
             )}
             <div>

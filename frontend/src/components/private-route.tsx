@@ -20,12 +20,15 @@ class PrivateRoute extends React.Component<PrivateRouteProps> {
     if (params && params.token) {
       let authInfo = {
         token: params.token,
-        id: params.id
+        id: params.id,
+        isAdmin: params.isAdmin,
+        preferredCurrencyCode: params.preferredCurrencyCode,
+        licenseStatus: params.licenseStatus
       }
       this.props.dispatch(authActionCreators.setAuth(authInfo))
-    }
-    if (params.route && params.route == 'resetPass'){
-      history.replace('/reset/pass')
+      if (params.route && params.route == 'resetPass') {
+        history.replace('/reset/pass')
+      }
     }
   }
   render() {

@@ -14,17 +14,13 @@ import {
   ResetPassPage
 } from './pages/auth'
 import {
-  EditPage as OrderEditPage,
-  ViewPage as OrderViewPage
-} from './pages/order'
-import {
-  EditPage as OfferEditPage,
-  ViewPage as OfferViewPage
-} from './pages/offer'
+  EditPage as TransactionEditPage,
+  ViewPage as TransactionViewPage
+} from './pages/transaction'
 import { ProfilePage, CompanyConfirmPage } from './pages/user'
 import { AdminPage, HomePage, ListPage } from './pages'
 import { RootState, LightboxState, AuthState, AlertState } from './reducers'
-import { Layout, Alert } from 'antd'
+import { Layout, Alert, BackTop } from 'antd'
 import './app.css'
 interface AppProps {
   dispatch: (action: any) => void
@@ -49,14 +45,13 @@ class App extends React.Component<AppProps, any> {
       i18n.changeLanguage(lng);
     };
     */
-
     const { alert, lightbox } = this.props
     return (
       <Layout>
         <Router history={history}>
           <div>
             <Layout.Header>
-              <NavBar mobileBreakPoint={1030} placement="bottomLeft" />
+              <NavBar mobileBreakPoint={930} placement="bottomLeft" />
             </Layout.Header>
             {lightbox.showing && <Lightbox />}
             <Layout.Content>
@@ -67,41 +62,25 @@ class App extends React.Component<AppProps, any> {
                 <Route exact path="/" component={HomePage} />
                 <PrivateRoute path="/reset/pass" component={ResetPassPage} />
                 <PrivateRoute
-                  path="/orders/my"
-                  component={() => (
-                    <ListPage selectType="mine" listType="order" />
-                  )}
+                  path="/transactions/my"
+                  component={() => <ListPage type="mine" />}
                 />
                 <PrivateRoute
-                  path="/orders"
-                  component={() => (
-                    <ListPage selectType="all" listType="order" />
-                  )}
-                />
-                <PrivateRoute path="/order/new" component={OrderEditPage} />
-                <PrivateRoute path="/order/:id" component={OrderViewPage} />
-                <PrivateRoute
-                  path="/order/edit/:id"
-                  component={OrderEditPage}
+                  path="/transactions"
+                  component={() => <ListPage type="all" />}
                 />
                 <PrivateRoute
-                  path="/offers/my"
-                  component={() => (
-                    <ListPage selectType="mine" listType="offer" />
-                  )}
+                  path="/transaction/new"
+                  component={TransactionEditPage}
                 />
                 <PrivateRoute
-                  path="/offers"
-                  component={() => (
-                    <ListPage selectType="all" listType="offer" />
-                  )}
+                  path="/transaction/edit/:id"
+                  component={TransactionEditPage}
                 />
-                <PrivateRoute path="/offer/new" component={OfferEditPage} />
                 <PrivateRoute
-                  path="/offer/edit/:id"
-                  component={OfferEditPage}
+                  path="/transaction/:id"
+                  component={TransactionViewPage}
                 />
-                <PrivateRoute path="/offer/:id" component={OfferViewPage} />
                 <PrivateRoute path="/profile" component={ProfilePage} />
                 <AdminRoute path="/admin" component={AdminPage} />
                 <AdminRoute
@@ -112,6 +91,9 @@ class App extends React.Component<AppProps, any> {
                 <Route path="/register" component={RegisterPage} />
                 <Route path="/lost/pass" component={LostPassPage} />
               </Switch>
+              <BackTop>
+                <div className="ant-back-top-inner">UP</div>
+              </BackTop>
             </Layout.Content>
           </div>
         </Router>
@@ -127,5 +109,4 @@ function mapStateToProps(state: RootState) {
   const { alert, lightbox, auth } = state
   return { alert, lightbox, auth: auth }
 }
-
 export default connect(mapStateToProps)(App)

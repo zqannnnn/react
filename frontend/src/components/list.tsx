@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { offerActionCreators, orderActionCreators } from '../actions'
 import { RootState } from '../reducers'
 import { AuthInfo } from '../actions'
 import { ListItem } from '../models'
@@ -25,7 +24,7 @@ class List extends React.Component<ListProps> {
           </div>
         )}
 
-        <Row className="block-container">
+        <Row className="block-container" gutter={15}>
           {items.map((item, index) => <Item key={index} item={item} />)}
         </Row>
       </div>

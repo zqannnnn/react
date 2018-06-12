@@ -25,6 +25,9 @@ function confirm(id: string) {
       () => {
         dispatch(success())
         dispatch(alertActionCreators.success('Operation succeed'))
+        setTimeout(function() {
+          history.replace('/admin')
+        }, 1000)
       },
       (error: string) => {
         dispatch(failure(error))
@@ -51,6 +54,9 @@ function disconfirm(id: string) {
       () => {
         dispatch(success())
         dispatch(alertActionCreators.success('Operation succeed'))
+        setTimeout(function() {
+          history.replace('/admin')
+        }, 1000)
       },
       (error: string) => {
         dispatch(failure(error))

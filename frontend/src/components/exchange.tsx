@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { offerActionCreators, orderActionCreators } from '../actions'
 import { RootState, CurrencyState } from '../reducers'
 import { AuthInfo } from '../actions'
 import { Currency } from '../models'
@@ -35,14 +34,10 @@ class Exchange extends React.Component<ItemProps> {
   render() {
     const { price, currencyCode } = this.props
     let newPrice = this.exchangeCurrency(price, currencyCode)
-    return (
-      <>
-        {newPrice}
-        {}
-      </>
-    )
+    return <>{newPrice}</>
   }
 }
+
 function mapStateToProps(state: RootState) {
   const { currency } = state
   return { currencyState: currency }

@@ -1,12 +1,13 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
-import { userActionCreators } from '../../actions'
+import { authActionCreators } from '../../actions'
 import { RootState } from '../../reducers'
 import { User } from '../../models'
 import { userConsts } from '../../constants'
 import { Input, Select, Button, Icon, Row, Col } from 'antd'
 import { RegisterForm, RegisterValuesProps } from '../../components/form'
+import i18n from 'i18next'
 interface RegisterProps {
   dispatch: Dispatch<RootState>
   processing: boolean
@@ -44,7 +45,7 @@ class RegisterPage extends React.Component<RegisterProps, RegisterState> {
     const { dispatch } = this.props
     const { userType } = this.state.user
     let newUser: User = { ...values, userType, isActive: true }
-    dispatch(userActionCreators.new(newUser))
+    dispatch(authActionCreators.register(newUser))
   }
 
   render() {
@@ -52,7 +53,7 @@ class RegisterPage extends React.Component<RegisterProps, RegisterState> {
     const { user, submitted } = this.state
     return (
       <Row className="page">
-        <div className="header-profile header">Register User</div>
+        <div className="header-profile header">{i18n.t('Register User')}</div>
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 18, offset: 3 }}

@@ -2,9 +2,10 @@ import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import { adminActionCreators, AuthInfo } from '../../actions'
-import { RootState, OfferState } from '../../reducers'
+import { RootState, TransactionState } from '../../reducers'
 import { User, ListItem } from '../../models'
 import { adminConsts } from '../../constants'
+import i18n from 'i18next'
 interface ItemProps {
   dispatch: Dispatch<RootState>
   company: User
@@ -36,7 +37,7 @@ class Item extends React.Component<ItemProps> {
 
           <div className="footer">
             <Link className="" to={'/company/confirm/' + company.id}>
-              Read More
+              {i18n.t('Read More')}
             </Link>
           </div>
         </div>

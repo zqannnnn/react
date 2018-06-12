@@ -1,44 +1,58 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { offerActionCreators, orderActionCreators } from '../actions'
-import { RootState, OfferState, OrderState } from '../reducers'
+import { transactionActionCreators } from '../actions'
+import { RootState, TransactionState } from '../reducers'
 import { AuthInfo } from '../actions'
 import { List as ListC } from '../components'
-import { Row, Col } from 'antd'
+import { Checkbox, Row, Col } from 'antd'
+import { transactionConsts } from '../constants'
+import i18n from 'i18next'
+import { Filter } from '../components'
 interface ListProps {
   dispatch: Dispatch<RootState>
-  offer: OfferState
-  order: OrderState
-  selectType: string
-  listType: string
+  transaction: TransactionState
+  type: string
 }
 class List extends React.Component<ListProps> {
   constructor(props: ListProps) {
     super(props)
   }
+  onChange = (values: string[]) => {
+    let options: { buy?: boolean; sell?: boolean } = {}
+    values.forEach((value: string) => {
+      if (value == transactionConsts.TYPE_BUY)
+        options = { ...options, buy: true }
+      else if (value == transactionConsts.TYPE_SELL)
+        options = { ...options, sell: true }
+    })
+    this.props.dispatch(
+      transactionActionCreators.getAll({
+        type: this.props.type,
+        ...options
+      })
+    )
+  }
   componentDidMount() {
-    if (this.props.listType === 'offer')
-      this.props.dispatch(
-        offerActionCreators.getAll({ selectType: this.props.selectType })
-      )
-    else
-      this.props.dispatch(
-        orderActionCreators.getAll({ selectType: this.props.selectType })
-      )
+    this.props.dispatch(
+      transactionActionCreators.getAll({ type: this.props.type })
+    )
   }
   render() {
-    const { offer, order, listType, selectType } = this.props
+    const { transaction, type } = this.props
     return (
       <Row className="page">
         <div className="banner">
           <div className="banner-bg" />
           <div className="title">
-            {selectType === 'mine' ? 'My ' : 'All '}
-            {listType === 'offer' ? 'Offer' : 'Order'}
+            {type === 'mine' ? 'My ' : 'All '}
+            Transaction
           </div>
         </div>
-        {offer.error && (
-          <span className="text-danger">ERROR: {offer.error}</span>
+        {transaction.error && (
+          <span className="text-danger">
+            {i18n.t('ERROR: ')}
+            {transaction.error}
+          </span>
         )}
         <Col
           xs={{ span: 22, offset: 1 }}
@@ -46,9 +60,8 @@ class List extends React.Component<ListProps> {
           md={{ span: 18, offset: 3 }}
           lg={{ span: 16, offset: 4 }}
         >
-          {listType === 'offer'
-            ? offer.items && <ListC items={offer.items} />
-            : order.items && <ListC items={order.items} />}
+          <Filter />
+          {transaction.items && <ListC items={transaction.items} />}
         </Col>
       </Row>
     )
@@ -56,8 +69,8 @@ class List extends React.Component<ListProps> {
 }
 
 function mapStateToProps(state: RootState) {
-  const { offer, order } = state
-  return { offer, order }
+  const { transaction } = state
+  return { transaction }
 }
 
 const connectedList = connect(mapStateToProps)(List)

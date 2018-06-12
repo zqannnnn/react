@@ -1,11 +1,7 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import {
-  offerActionCreators,
-  orderActionCreators,
-  adminActionCreators
-} from '../actions'
-import { RootState, OfferState, OrderState, AdminState } from '../reducers'
+import { transactionActionCreators, adminActionCreators } from '../actions'
+import { RootState, TransactionState, AdminState } from '../reducers'
 import { AuthInfo } from '../actions'
 import { List } from '../components'
 import { Row, Col } from 'antd'
@@ -13,8 +9,7 @@ import i18n from 'i18next'
 
 interface AdminProps {
   dispatch: Dispatch<RootState>
-  offer: OfferState
-  order: OrderState
+  transaction: TransactionState
   admin: AdminState
 }
 
@@ -23,12 +18,11 @@ class AdminPage extends React.Component<AdminProps> {
     super(props)
   }
   componentDidMount() {
-    this.props.dispatch(offerActionCreators.getAll({ selectType: 'finished' }))
-    this.props.dispatch(orderActionCreators.getAll({ selectType: 'finished' }))
+    this.props.dispatch(transactionActionCreators.getAll({ type: 'finished' }))
     this.props.dispatch(adminActionCreators.listUnconfirmedCompanies())
   }
   render() {
-    const { offer, order, admin } = this.props
+    const { transaction, admin } = this.props
     return (
       <div className="page">
         <div className="banner">
@@ -43,13 +37,8 @@ class AdminPage extends React.Component<AdminProps> {
             lg={{ span: 16, offset: 4 }}
           >
             <div className="list-container ">
-              {offer.items && (
-                <List items={offer.items} title="Finished Offers" />
-              )}
-            </div>
-            <div className="list-container">
-              {order.items && (
-                <List items={order.items} title="Finished Orders" />
+              {transaction.items && (
+                <List items={transaction.items} title="Finished Transactions" />
               )}
             </div>
             <div className="list-container">
@@ -68,8 +57,8 @@ class AdminPage extends React.Component<AdminProps> {
 }
 
 function mapStateToProps(state: RootState) {
-  const { offer, order, admin } = state
-  return { offer, order, admin }
+  const { transaction, admin } = state
+  return { transaction, admin }
 }
 
 const connectedHomePage = connect(mapStateToProps)(AdminPage)

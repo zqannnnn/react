@@ -1,5 +1,5 @@
 import { authHeader } from '../helpers/auth'
-import { Offer } from '../models'
+import { Transaction } from '../models'
 export const uploadService = {
   uploadImage
 }

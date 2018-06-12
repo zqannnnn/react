@@ -1,6 +1,7 @@
-import { Currency, ListItem } from '.'
+import { Currency, ListItem, Image } from '.'
+import { category } from '../reducers/category'
 
-export class Order implements ListItem {
+export class Transaction implements ListItem {
   id?: string
   userId?: string
   status?: number
@@ -23,11 +24,13 @@ export class Order implements ListItem {
   marbleScore?: number
   quantity?: number
   price?: number
-  currencyCode?: string
   currency?: Currency
+  currencyCode?: string
   trimmings?: number
   comment?: string
-  offerId?: string
-  cancelling?: boolean
-  cancellError?: string
+  images?: Image[]
+  certificates?: Image[]
+  processing?: boolean
+  error?: string
+  category?: string
 }

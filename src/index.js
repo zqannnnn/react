@@ -1,5 +1,7 @@
+import { i18n, middleware } from './middleware/i18n'
 const express = require('express')
 const app = express()
+app.use(middleware.handle(i18n))
 const path = require('path')
 const port = process.env.PORT || 3000
 const passport = require('passport')
@@ -7,13 +9,13 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const models = require('./models')
+export const app = express()
 require('./middleware/webpack')(app)
-
 models.setupDatabase()
 
 // Get the exchange rate API
-const currencyApi = require('./api/currency')
-currencyApi.getApi()
+// const currencyApi = require('./api/currency')
+// currencyApi.getApi()
 app.set('secretKey', 'just a test')
 
 require('./passport')(passport) // pass passport for configuration

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Link, withRouter, RouteComponentProps } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import { lightboxActionCreators } from '../actions'
 import { RootState, LightboxState } from '../reducers'

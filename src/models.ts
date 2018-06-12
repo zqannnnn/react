@@ -1,10 +1,10 @@
 import { Sequelize } from 'sequelize-typescript'
 import { config } from './config/db'
 import { beefOptions, consts, sheepOptions, vealOptions } from './config/static'
-import { Category, Currency, Image, Offer, Order, User } from './models/'
+import { Category, Currency, Image, Transaction, User } from './models/'
 
 const sequelize = new Sequelize(config)
-sequelize.addModels([User, Order, Offer, Category, Image, Currency])
+sequelize.addModels([User, Transaction, Category, Image, Currency])
 
 const setupDatabase = async () => {
   await sequelize.sync()
@@ -48,4 +48,4 @@ const setupDatabase = async () => {
   })
 }
 
-export { User, Order, Offer, Category, Image, setupDatabase }
+export { User, Transaction, Category, Image, setupDatabase }

@@ -58,8 +58,7 @@ class ReNavBar extends React.Component<NavProps> {
   render() {
     const { auth, currency, mobileBreakPoint } = this.props
     const { viewportWidth } = this.state
-
-    if (viewportWidth > mobileBreakPoint) {
+    if (viewportWidth > mobileBreakPoint || !this.props.auth.loggedIn) {
       return (
         <MenuMarkup
           auth={auth}
@@ -87,6 +86,7 @@ class ReNavBar extends React.Component<NavProps> {
         placement={this.props.placement}
         visible={this.state.menuVisible}
         onVisibleChange={this.handleMenuVisibility}
+        overlayClassName="pop"
       >
         <Icon type="menu-unfold" className="icon-menu" />
       </Popover>

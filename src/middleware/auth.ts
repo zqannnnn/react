@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as i18n from 'i18next'
 import * as jwt from 'jsonwebtoken'
 import { consts } from '../config/static'
 import { User } from '../models/user'
@@ -31,11 +32,11 @@ export const authMiddleware = (
         (err: jwt.JsonWebTokenError, decoded: IDecodedObject) => {
           if (err) {
             if (err.name === 'TokenExpiredError') {
-              return res
-                .status(498)
-                .send({ error: 'Login has expired, please login again.' })
+              return res.status(498).send({
+                error: i18n.t('Login has expired, please login again.')
+              })
             } else {
-              return res.status(401).send({ error: 'Invalid Token.' })
+              return res.status(401).send({ error: i18n.t('Invalid Token.') })
             }
           }
           if (decoded.userType === consts.USER_TYPE_ADMIN) {
@@ -49,5 +50,7 @@ export const authMiddleware = (
       )
     }
   }
-  return res.status(403).send({ error: 'Please log in before this operation' })
+  return res
+    .status(403)
+    .send({ error: i18n.t('Please log in before this operation.') })
 }

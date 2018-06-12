@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 
-import { userActionCreators } from '../../actions'
+import { authActionCreators } from '../../actions'
 import { RootState } from '../../reducers'
 import { Row, Col, Input, Icon, Button } from 'antd'
 import i18n from 'i18next'
@@ -15,8 +15,8 @@ class LostPassPage extends React.Component<LostPassProps> {
   constructor(props: LostPassProps) {
     super(props)
   }
-  handleSubmit = (email:string) => {
-    this.props.dispatch(userActionCreators.lostPass(email))
+  handleSubmit = (email: string) => {
+    this.props.dispatch(authActionCreators.lostPass(email))
   }
 
   render() {
