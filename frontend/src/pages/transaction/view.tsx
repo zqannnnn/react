@@ -3,27 +3,35 @@ import { Link, RouteComponentProps } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import {
   transactionActionCreators,
-  lightboxActionCreators
+  lightboxActionCreators,
+  AuthInfo
 } from '../../actions'
 import { Transaction } from '../../models'
 import { Category, CategoryDetails } from '../../models'
 import { RootState } from '../../reducers'
+import { transactionConsts } from '../../constants'
 import { Exchange } from '../../components/exchange'
-import { Row, Col, Icon } from 'antd'
+import { Row, Col, Icon, Input } from 'antd'
 import i18n from 'i18next'
-interface TransactionProps extends RouteComponentProps<{ id: string }> {
+import { auth } from '../../reducers/auth'
+const InputArea = Input.Search
+interface ViewProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
   transaction: Transaction
-}
-interface TransactionState {
-  transactionId?: string
+  authInfo: AuthInfo
   loading: boolean
 }
-class ViewPage extends React.Component<TransactionProps, TransactionState> {
-  constructor(props: TransactionProps) {
+interface ViewState {
+  commentInputShowing: boolean
+  transactionId?: string
+  comment: string
+}
+class ViewPage extends React.Component<ViewProps, ViewState> {
+  constructor(props: ViewProps) {
     super(props)
     this.state = {
-      loading: true
+      commentInputShowing: false,
+      comment: ''
     }
   }
   componentDidMount() {
@@ -36,18 +44,38 @@ class ViewPage extends React.Component<TransactionProps, TransactionState> {
     transactionId &&
       this.props.dispatch(transactionActionCreators.getById(transactionId))
   }
-  componentWillReceiveProps(nextProps: TransactionProps) {
+  componentWillReceiveProps(nextProps: ViewProps) {
     const { transaction } = nextProps
-    if (transaction) {
-      this.setState({ loading: false })
+    if (transaction && transaction.comment) {
+      this.setState({ comment: transaction.comment })
     }
   }
   openLightbox = (images: string[], index: number) => {
     this.props.dispatch(lightboxActionCreators.open(images, index))
   }
+  triggerCommentInput = () => {
+    let value = this.state.commentInputShowing
+    this.setState({ ...this.state, commentInputShowing: !value })
+  }
+  handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const { name, value } = e.currentTarget
+    this.setState({
+      ...this.state,
+      [name]: value
+    })
+  }
+  sendComment = () => {
+    const transId = this.state.transactionId
+    if (transId) {
+      this.props.dispatch(
+        transactionActionCreators.addComment(transId, this.state.comment)
+      )
+      this.setState({ commentInputShowing: false })
+    }
+  }
   render() {
-    const { transaction } = this.props
-    const { loading } = this.state
+    const { transaction, authInfo, loading } = this.props
+    const { commentInputShowing, comment } = this.state
 
     let imagePaths: string[]
     if (transaction && transaction.images) {
@@ -60,7 +88,7 @@ class ViewPage extends React.Component<TransactionProps, TransactionState> {
         <Row type="flex" justify="space-around" align="middle">
           <Col span={20}>
             <h2 className="header-center">{i18n.t('Transaction View Page')}</h2>
-            {loading ? (
+            {!transaction ? (
               <Icon type="loading" />
             ) : (
               <div className="view-content">
@@ -205,7 +233,7 @@ class ViewPage extends React.Component<TransactionProps, TransactionState> {
                 <Row>
                   <Col span={20} offset={2} className="view-top">
                     <label>{i18n.t('Images')}:</label>
-                    <div>
+                    <div className="message">
                       {imagePaths && (
                         <div className="images-container">
                           {imagePaths.map((image, index) => (
@@ -224,6 +252,54 @@ class ViewPage extends React.Component<TransactionProps, TransactionState> {
                     </div>
                   </Col>
                 </Row>
+                <Row>
+                  <Col span={8} offset={2} className="view-top">
+                    <div className="message">
+                      {authInfo.isAdmin &&
+                      transaction.status ==
+                        transactionConsts.STATUS_FINISHED ? (
+                        <div
+                          className="control-btn"
+                          onClick={() => {
+                            this.triggerCommentInput()
+                          }}
+                        >
+                          <span className="view-comment">{'Comment '}</span>
+                          <i
+                            className={
+                              'fa fa-comment-o ' +
+                              (commentInputShowing ? 'icon-active' : '')
+                            }
+                            aria-hidden="true"
+                          />
+                        </div>
+                      ) : (
+                        ''
+                      )}
+                      {commentInputShowing ? (
+                        <div className="input-wr content">
+                          <Input
+                            addonAfter={
+                              <Icon
+                                type="edit"
+                                onClick={() => {
+                                  this.sendComment()
+                                }}
+                              />
+                            }
+                            name="comment"
+                            value={comment}
+                            onChange={this.handleInputChange}
+                          />
+                        </div>
+                      ) : (
+                        <div className="comment content">
+                          {this.state.comment}
+                        </div>
+                      )}
+                    </div>
+                  </Col>
+                </Row>
               </div>
             )}
           </Col>
@@ -234,9 +310,13 @@ class ViewPage extends React.Component<TransactionProps, TransactionState> {
 }
 
 function mapStateToProps(state: RootState) {
-  const { transaction } = state
+  const { transaction, auth } = state
   const { transData } = transaction
-  return { transaction: transData }
+  return {
+    transaction: transData,
+    authInfo: auth.authInfo,
+    loading: transaction.loading
+  }
 }
 const connectedViewPage = connect(mapStateToProps)(ViewPage)
 export { connectedViewPage as ViewPage }

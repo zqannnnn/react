@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as i18n from 'i18next'
 import { consts } from '../config/static'
 import { authMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
@@ -9,64 +10,65 @@ router.use(authMiddleware)
 
 router.get('/list', async (req: IRequest, res: express.Response) => {
   let transactions
-  const selectType = req.query.selectType
+  const type = req.query.type
   const buy = req.query.buy === 'true'
   const sell = req.query.sell === 'true'
-  let typeOption: {
+  const page = Number(req.query.page)
+  const pageSize = Number(req.query.pageSize)
+  const keyword = req.query.keyword
+  const sorting = req.query.sorting
+  const whereOption: {
+    userId?: string
+    status?: number
     type?: string
-  }
+    title?: { $like: string }
+  } = {}
+
+  const pageOption: {
+    offset?: number
+    limit?: number
+  } = {}
+
+  let orderOption: string[] = ['createdAt', 'DESC']
+
   if (buy && !sell) {
-    typeOption = {
-      type: consts.TRANSACTION_TYPE_BUY
-    }
+    whereOption.type = consts.TRANSACTION_TYPE_BUY
   } else if (sell && !buy) {
-    typeOption = {
-      type: consts.TRANSACTION_TYPE_SELL
-    }
+    whereOption.type = consts.TRANSACTION_TYPE_SELL
+  }
+  if (pageSize && typeof page !== 'undefined') {
+    pageOption.offset = (page - 1) * pageSize
+    pageOption.limit = (page - 1) * pageSize + pageSize
+  }
+  if (typeof keyword !== 'undefined') {
+    whereOption.title = { $like: `%${keyword}%` }
+  }
+  if (type === 'mine') {
+    whereOption.userId = req.userId
+  } else if (type === 'finished') {
+    whereOption.status = consts.TRANSACTION_STATUS_FINISHED
   } else {
-    typeOption = {}
+    whereOption.status = consts.TRANSACTION_STATUS_CREATED
+  }
+  if (sorting === 'new') {
+    orderOption = ['createdAt', 'DESC']
+  } else if (sorting === 'old') {
+    orderOption = ['createdAt', 'ASC']
   }
   try {
-    if (selectType === 'mine') {
-      transactions = await Transaction.findAll({
-        where: {
-          ...typeOption,
-          userId: req.userId
-        },
-        include: [
-          {
-            model: Image,
-            attributes: ['path', 'type']
-          }
-        ]
-      })
-    } else if (selectType === 'finished') {
-      transactions = await Transaction.findAll({
-        where: {
-          ...typeOption,
-          status: consts.TRANSACTION_STATUS_FINISHED
-        },
-        include: [
-          {
-            model: Image,
-            attributes: ['path', 'type']
-          }
-        ]
-      })
-    } else {
-      transactions = await Transaction.findAll({
-        where: {
-          ...typeOption,
-          status: consts.TRANSACTION_STATUS_CREATED
-        },
-        include: [
-          {
-            model: Image,
-            attributes: ['path', 'type']
-          }
-        ]
-      })
-    }
+    transactions = await Transaction.findAll({
+      where: {
+        ...whereOption
+      },
+      include: [
+        {
+          model: Image,
+          attributes: ['path', 'type']
+        }
+      ],
+      ...pageOption,
+      order: [orderOption]
+    })
     return res.send(transactions)
   } catch (e) {
     return res.status(500).send({ error: e.message })
@@ -111,7 +113,7 @@ router.get(
   async (req: IRequest, res: express.Response) => {
     try {
       if (!req.isAdmin) {
-        return res.status(500).send({ error: 'Permission denied.' })
+        return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
       const transaction = await Transaction.find({
         where: {
@@ -119,7 +121,9 @@ router.get(
         }
       })
       if (!transaction) {
-        return res.status(500).send({ error: 'Transaction does not exist' })
+        return res
+          .status(500)
+          .send({ error: i18n.t('Transaction does not exist.') })
       }
       transaction.status = consts.TRANSACTION_STATUS_FINISHED
       transaction.save()
@@ -134,7 +138,7 @@ router.post(
   async (req: IRequest, res: express.Response) => {
     try {
       if (!req.isAdmin) {
-        return res.status(500).send({ error: 'Permission denied.' })
+        return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
       const transaction = await Transaction.find({
         where: {
@@ -142,7 +146,9 @@ router.post(
         }
       })
       if (!transaction) {
-        return res.status(500).send({ error: 'Transaction does not exist' })
+        return res
+          .status(500)
+          .send({ error: i18n.t('Transaction does not exist.') })
       }
       transaction.comment = req.body.comment
       transaction.save()
@@ -171,7 +177,9 @@ router
       ]
     })
     if (!transaction) {
-      return res.status(403).send({ error: 'Transaction does not exist' })
+      return res
+        .status(403)
+        .send({ error: i18n.t('Transaction does not exist.') })
     }
     return res.send(transaction)
   })
@@ -183,10 +191,12 @@ router
         }
       })
       if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
-        return res.status(500).send({ error: 'Permission denied' })
+        return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
       if (!transaction) {
-        return res.status(500).send({ error: 'Transaction does not exist' })
+        return res
+          .status(500)
+          .send({ error: i18n.t('Transaction does not exist.') })
       }
       Object.keys(req.body).forEach(
         (key: string) => (transaction[key] = req.body[key])
@@ -230,10 +240,12 @@ router
         }
       })
       if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
-        return res.status(500).send({ error: 'Permission denied' })
+        return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
       if (!transaction) {
-        return res.status(500).send({ error: 'Transaction does not exist' })
+        return res
+          .status(500)
+          .send({ error: i18n.t('Transaction does not exist.') })
       }
       transaction.status = consts.TRANSACTION_STATUS_CANCELLED
       transaction.save()

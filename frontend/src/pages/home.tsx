@@ -6,7 +6,10 @@ import { RootState, TransactionState } from '../reducers'
 import { AuthInfo } from '../actions'
 import { transactionConsts } from '../constants'
 import { List as ListC } from '../components'
-import { Row, Col, Checkbox } from 'antd'
+import { Row, Col } from 'antd'
+import { Filter } from '../components'
+import i18n from 'i18next'
+
 interface HomeProps {
   dispatch: Dispatch<RootState>
   transaction: TransactionState
@@ -17,18 +20,6 @@ class HomePage extends React.Component<HomeProps> {
   constructor(props: HomeProps) {
     super(props)
   }
-  onChange = (values: string[]) => {
-    let options: { buy?: boolean; sell?: boolean } = {}
-    values.forEach((value: string) => {
-      if (value == transactionConsts.TYPE_BUY)
-        options = { ...options, buy: true }
-      else if (value == transactionConsts.TYPE_SELL)
-        options = { ...options, sell: true }
-    })
-    this.props.dispatch(
-      transactionActionCreators.getAll({ type: 'all', ...options })
-    )
-  }
   componentDidMount() {
     this.props.dispatch(transactionActionCreators.getAll({ type: 'all' }))
   }
@@ -38,7 +29,7 @@ class HomePage extends React.Component<HomeProps> {
       <div className="page">
         <div className="banner">
           <div className="banner-bg" />
-          <div className="title">All Transaction</div>
+          <div className="title">{i18n.t('All Transaction')}</div>
         </div>
         <Row>
           <Col
@@ -47,25 +38,14 @@ class HomePage extends React.Component<HomeProps> {
             md={{ span: 18, offset: 3 }}
             lg={{ span: 16, offset: 4 }}
           >
-            <Checkbox.Group style={{ width: '100%' }} onChange={this.onChange}>
-              <Row>
-                <Col push={21} span={3}>
-                  <Checkbox value={transactionConsts.TYPE_BUY}>Wanted</Checkbox>
-                </Col>
-                <Col push={21} span={3}>
-                  <Checkbox value={transactionConsts.TYPE_SELL}>
-                    On Sale
-                  </Checkbox>
-                </Col>
-              </Row>
-            </Checkbox.Group>
+            <Filter />
             <div className="list-container">
               <div className="header">
-                <div className="title">Home</div>
+                <div className="title">{i18n.t('Home')}</div>
                 <div className="subtitle">
-                  <div className="des">People looking for sell</div>
+                  <div className="des">{i18n.t('People looking for sell')}</div>
                   <Link className="link" to={'/transactions'}>
-                    👁 view all transactions
+                    {i18n.t('👁 view all transactions')}
                   </Link>
                 </div>
               </div>

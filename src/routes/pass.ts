@@ -1,6 +1,5 @@
 import * as express from 'express'
 import * as i18n from 'i18next'
-import * as jwt from 'jsonwebtoken'
 import * as nodemailer from 'nodemailer'
 import * as qs from 'querystring'
 import { smtpConfig } from '../config/email'
@@ -47,7 +46,9 @@ router.post('/lost', async (req: express.Request, res: express.Response) => {
         }
       )
     } else {
-      return res.status(500).send({ error: "Can't find this email address." })
+      return res
+        .status(500)
+        .send({ error: i18n.t("Can't find this email address.") })
     }
   } catch (e) {
     return res.status(500).send({ error: e.message })
@@ -65,7 +66,7 @@ router.post('/reset', async (req: IRequest, res: express.Response) => {
       await user.save()
       return res.send({ success: true })
     }
-    return res.status(500).send({ error: 'Invaild Operation.' })
+    return res.status(500).send({ error: i18n.t('Invalid Operation.') })
   } catch (e) {
     return res.status(500).send({ error: e.message })
   }

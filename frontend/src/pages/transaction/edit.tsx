@@ -34,7 +34,7 @@ const Step = Steps.Step
 interface TransProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
   loading: boolean
-  editing: boolean
+  processing: boolean
   transData: Transaction
   categorys: Category[]
   currencys: Currency[]
@@ -297,7 +297,7 @@ class EditPage extends React.Component<TransProps, TransState> {
       category
     } = this.state.transaction
     let { submitted } = this.state
-    let { editing, categorys, currencys } = this.props
+    let { processing, categorys, currencys } = this.props
     let options = null
     let currentCategory: Category =
       categorys &&
@@ -375,7 +375,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                   >
                     <div>
                       <Icon type="plus" />
-                      <div className="ant-upload-text">Upload</div>
+                      <div className="ant-upload-text">{i18n.t('Upload')}</div>
                     </div>
                   </Upload>
                 </div>
@@ -396,7 +396,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                   >
                     <div>
                       <Icon type="plus" />
-                      <div className="ant-upload-text">Upload</div>
+                      <div className="ant-upload-text">{i18n.t('Upload')}</div>
                     </div>
                   </Upload>
                 </div>
@@ -766,7 +766,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                     >
                       {i18n.t('Submit')}
                     </Button>
-                    {editing && <Icon type="loading" />}
+                    {processing && <Icon type="loading" />}
                     <Button>
                       <Link to="/">{i18n.t('Cancel')}</Link>
                     </Button>
@@ -816,13 +816,13 @@ class EditPage extends React.Component<TransProps, TransState> {
             <div className="steps-action">
               {this.state.current < steps.length - 1 && (
                 <Button type="primary" onClick={() => this.next()}>
-                  Next
+                  {i18n.t('Next')}
                 </Button>
               )}
 
               {this.state.current > 0 && (
                 <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-                  Previous
+                  {i18n.t('Previous')}
                 </Button>
               )}
             </div>
@@ -834,9 +834,9 @@ class EditPage extends React.Component<TransProps, TransState> {
 }
 function mapStateToProps(state: RootState) {
   const { transaction, category, currency, upload, auth } = state
-  const { editing, loading, transData } = transaction
+  const { processing, loading, transData } = transaction
   return {
-    editing,
+    processing,
     categorys: category.items,
     currencys: currency.items,
     transData,

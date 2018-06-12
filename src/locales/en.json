@@ -1,5 +1,16 @@
 {
   "reset-password-email":
     "<html><body><br>EN Someone requested to reset the password for the {{ourName}} account at {{email}}.<br><br>Please click this link to reset your password:<br><br><a href='{{resetUrl}}' target='_blank'>Reset Password</a><br><br><br>If clicking the link doesn't work,you can copy and paste the link below into your browser's address window<p style='font-size:14px; line-height: 20px; word-wrap: break-word; overflow-wrap: break-word;'><a href='{{resetUrl}}'>{{resetUrl}}</a></p><br>If you did not make this request, please ignore this email and your password will not be reset.<br><p>Sincerely yours<p><a href=''>{{ourName}}</a></body></html>",
-  "Reset Password": "Reset Password"
+  "Reset Password": "Reset Password",
+  "Login has expired, please login again.":
+    "Login has expired, please login again.",
+  "Invalid Token.": "Invalid Token.",
+  "Please log in before this operation.":
+    "Please log in before this operation.",
+  "Can't find this email address.": "Can't find this email address.",
+  "Invalid Operation.": "Invalid Operation.",
+  "Permission denied.": "Permission denied.",
+  "Transaction does not exist.": "Transaction does not exist.",
+  "Server error.": "Server error.",
+  "User does not exist.": "User does not exist."
 }

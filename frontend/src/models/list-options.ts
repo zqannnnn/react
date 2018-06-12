@@ -5,4 +5,6 @@ export type ListOptions = {
   Type?: string
   page?: number
   pageSize?: number
+  keyword?: string
+  sorting?: string
 }
