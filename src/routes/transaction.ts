@@ -13,61 +13,62 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   const selectType = req.query.selectType
   const buy = req.query.buy === 'true'
   const sell = req.query.sell === 'true'
-  let typeOption: {
+  const page = Number(req.query.page)
+  const pageSize = Number(req.query.pageSize)
+  const keyword = req.query.keyword
+  const sorting = req.query.sorting
+  const whereOption: {
+    userId?: string
+    status?: number
     type?: string
-  }
+    title?: { $like: string }
+  } = {}
+
+  const pageOption: {
+    offset?: number
+    limit?: number
+  } = {}
+
+  let orderOption: string[] = ['createdAt', 'DESC']
+
   if (buy && !sell) {
-    typeOption = {
-      type: consts.TRANSACTION_TYPE_BUY
-    }
+    whereOption.type = consts.TRANSACTION_TYPE_BUY
   } else if (sell && !buy) {
-    typeOption = {
-      type: consts.TRANSACTION_TYPE_SELL
-    }
+    whereOption.type = consts.TRANSACTION_TYPE_SELL
+  }
+  if (pageSize && typeof page !== 'undefined') {
+    pageOption.offset = (page - 1) * pageSize
+    pageOption.limit = (page - 1) * pageSize + pageSize
+  }
+  if (typeof keyword !== 'undefined') {
+    whereOption.title = { $like: `%${keyword}%` }
+  }
+  if (selectType === 'mine') {
+    whereOption.userId = req.userId
+  } else if (selectType === 'finished') {
+    whereOption.status = consts.TRANSACTION_STATUS_FINISHED
   } else {
-    typeOption = {}
+    whereOption.status = consts.TRANSACTION_STATUS_CREATED
+  }
+  if (sorting === 'new') {
+    orderOption = ['createdAt', 'DESC']
+  } else if (sorting === 'old') {
+    orderOption = ['createdAt', 'ASC']
   }
   try {
-    if (selectType === 'mine') {
-      transactions = await Transaction.findAll({
-        where: {
-          ...typeOption,
-          userId: req.userId
-        },
-        include: [
-          {
-            model: Image,
-            attributes: ['path', 'type']
-          }
-        ]
-      })
-    } else if (selectType === 'finished') {
-      transactions = await Transaction.findAll({
-        where: {
-          ...typeOption,
-          status: consts.TRANSACTION_STATUS_FINISHED
-        },
-        include: [
-          {
-            model: Image,
-            attributes: ['path', 'type']
-          }
-        ]
-      })
-    } else {
-      transactions = await Transaction.findAll({
-        where: {
-          ...typeOption,
-          status: consts.TRANSACTION_STATUS_CREATED
-        },
-        include: [
-          {
-            model: Image,
-            attributes: ['path', 'type']
-          }
-        ]
-      })
-    }
+    transactions = await Transaction.findAll({
+      where: {
+        ...whereOption
+      },
+      include: [
+        {
+          model: Image,
+          attributes: ['path', 'type']
+        }
+      ],
+      ...pageOption,
+      order: [orderOption]
+    })
     return res.send(transactions)
   } catch (e) {
     return res.status(500).send({ error: e.message })
