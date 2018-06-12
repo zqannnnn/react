@@ -30,6 +30,7 @@ import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface'
 import i18n from 'i18next'
 
 const Step = Steps.Step
+const { TextArea } = Input
 
 interface TransProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
@@ -159,7 +160,9 @@ class EditPage extends React.Component<TransProps, TransState> {
       }
     })
   }
-  handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
+  handleInputChange = (
+    e: React.FormEvent<HTMLInputElement> | React.FormEvent<HTMLTextAreaElement>
+  ) => {
     const { value, name } = e.currentTarget
     const { transaction } = this.state
     this.setState({
@@ -285,6 +288,7 @@ class EditPage extends React.Component<TransProps, TransState> {
       price,
       bone,
       title,
+      desc,
       quantity,
       primalCuts,
       brand,
@@ -413,7 +417,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                 sm={{ span: 20, offset: 2 }}
                 md={{ span: 9, offset: 2 }}
                 lg={{ span: 9, offset: 2 }}
-                className="edits-select"
+                className="edits-input"
               >
                 <h2>{i18n.t('Sell or Buy')}</h2>
                 <Select
@@ -433,13 +437,15 @@ class EditPage extends React.Component<TransProps, TransState> {
               </Col>
             </Row>
             {this.state.transaction.type && (
-              <div className="edits-select">
+              <div className="edits-input">
                 <Row>
                   <Col span={20} offset={2}>
                     <div className={submitted && !title ? ' has-error' : ''}>
-                      <label className="edits-title">{i18n.t('Title')}</label>
+                      <label className="font-bold edits-input">
+                        {i18n.t('Title')}
+                      </label>
                       <Input
-                        placeholder="请输入标题"
+                        placeholder=""
                         type="text"
                         name="title"
                         value={title}
@@ -456,12 +462,24 @@ class EditPage extends React.Component<TransProps, TransState> {
                   </Col>
                 </Row>
                 <Row>
+                  <Col span={20} offset={2} className="edits-input">
+                    <label>{i18n.t('Description')}</label>
+                    <TextArea
+                      placeholder=""
+                      name="desc"
+                      rows={4}
+                      value={desc}
+                      onChange={this.handleInputChange}
+                    />
+                  </Col>
+                </Row>
+                <Row>
                   <Col
                     xs={{ span: 20, offset: 2 }}
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-select"
+                    className="edits-input"
                   >
                     <label>{i18n.t('Bone')}</label>
                     {currentCategory &&
@@ -475,7 +493,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-select"
+                    className="edits-input"
                   >
                     <label>{i18n.t('Storage')}</label>
                     {currentCategory &&
@@ -491,7 +509,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-select"
+                    className="edits-input"
                   >
                     <label>{i18n.t('Grade')}</label>
                     {currentCategory &&
@@ -505,7 +523,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-select"
+                    className="edits-input"
                   >
                     <label>{i18n.t('Slaughter Specification')}</label>
                     {currentCategory &&
@@ -521,7 +539,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-select"
+                    className="edits-input"
                   >
                     <label>{i18n.t('Marble Score')}</label>
                     {currentCategory &&
@@ -538,7 +556,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                         sm={{ span: 20, offset: 2 }}
                         md={{ span: 9, offset: 2 }}
                         lg={{ span: 9, offset: 2 }}
-                        className="edits-select"
+                        className="edits-input"
                       >
                         <label>{i18n.t('Breed')}</label>
                         {this.renderSelect(
@@ -556,7 +574,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                         sm={{ span: 20, offset: 2 }}
                         md={{ span: 9, offset: 2 }}
                         lg={{ span: 9, offset: 2 }}
-                        className="edits-select"
+                        className="edits-input"
                       >
                         <label>{i18n.t('Fed')}</label>
                         {this.renderSelect(
@@ -572,7 +590,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                       sm={{ span: 20, offset: 2 }}
                       md={{ span: 9, offset: 2 }}
                       lg={{ span: 9, offset: 2 }}
-                      className="edits-select"
+                      className="edits-input"
                     >
                       <label>{i18n.t('Grain fed days')}</label>
                       <div className="flex">
@@ -595,7 +613,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-select"
+                    className="edits-input"
                   >
                     <label>{i18n.t('Primal Cuts')}</label>
                     <Input
@@ -610,7 +628,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-select"
+                    className="edits-input"
                   >
                     <label>{i18n.t('Trimmings')}</label>
                     <div className="flex">
@@ -632,7 +650,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-select"
+                    className="edits-input"
                   >
                     <label>{i18n.t('Brand')}</label>
                     <Input
@@ -647,7 +665,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-select"
+                    className="edits-input"
                   >
                     <label>{i18n.t('Factory Number')}</label>
                     <Input
@@ -664,7 +682,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-select"
+                    className="edits-input"
                   >
                     <label>{i18n.t('Place Of Origin')}</label>
                     <Input
@@ -679,7 +697,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-select"
+                    className="edits-input"
                   >
                     <label>{i18n.t('Delivery Term')}</label>
                     <Input
@@ -696,7 +714,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-select"
+                    className="edits-input"
                   >
                     <label>{i18n.t('Quantity')}</label>
                     <div className="flex">
@@ -717,7 +735,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-select"
+                    className="edits-input"
                     offset={2}
                   >
                     <label>{i18n.t('Price')}</label>
@@ -752,13 +770,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                   </Col>
                 </Row>
                 <Row>
-                  <Col
-                    sm={20}
-                    md={8}
-                    lg={8}
-                    offset={2}
-                    className="edits-select"
-                  >
+                  <Col sm={20} md={8} lg={8} offset={2} className="edits-input">
                     <Button
                       type="primary"
                       htmlType="submit"

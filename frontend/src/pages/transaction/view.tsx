@@ -101,6 +101,14 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                   </Col>
                 </Row>
                 <Row>
+                  <Col span={20} offset={2} className="view-top">
+                    <label>{i18n.t('Description')}:</label>
+                    <div className="message">
+                      {transaction.desc ? transaction.desc : 'N/A'}
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
                   <Col sm={20} md={9} offset={2} className="view-top">
                     <label>{i18n.t('Storage')}:</label>
                     <div className="message">
