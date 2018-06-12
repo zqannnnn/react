@@ -11,8 +11,7 @@ import { Filter } from '../components'
 interface ListProps {
   dispatch: Dispatch<RootState>
   transaction: TransactionState
-  selectType: string
-  listType: string
+  type: string
 }
 class List extends React.Component<ListProps> {
   constructor(props: ListProps) {
@@ -28,25 +27,25 @@ class List extends React.Component<ListProps> {
     })
     this.props.dispatch(
       transactionActionCreators.getAll({
-        selectType: this.props.selectType,
+        type: this.props.type,
         ...options
       })
     )
   }
   componentDidMount() {
     this.props.dispatch(
-      transactionActionCreators.getAll({ selectType: this.props.selectType })
+      transactionActionCreators.getAll({ type: this.props.type })
     )
   }
   render() {
-    const { transaction, listType, selectType } = this.props
+    const { transaction, type } = this.props
     return (
       <Row className="page">
         <div className="banner">
           <div className="banner-bg" />
           <div className="title">
-            {selectType === 'mine' ? 'My ' : 'All '}
-            {i18n.t('Transaction')}
+            {type === 'mine' ? 'My ' : 'All '}
+            Transaction
           </div>
         </div>
         {transaction.error && (

@@ -159,7 +159,7 @@ function finish(id: string) {
   }
 }
 const getAll: ActionCreator<ThunkAction<void, RootState, void>> = (option: {
-  selectType: string
+  type: string
   buy: boolean
   sell: boolean
 }) => {

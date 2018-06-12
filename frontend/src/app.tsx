@@ -63,15 +63,11 @@ class App extends React.Component<AppProps, any> {
                 <PrivateRoute path="/reset/pass" component={ResetPassPage} />
                 <PrivateRoute
                   path="/transactions/my"
-                  component={() => (
-                    <ListPage selectType="mine" listType="transaction" />
-                  )}
+                  component={() => <ListPage type="mine" />}
                 />
                 <PrivateRoute
                   path="/transactions"
-                  component={() => (
-                    <ListPage selectType="all" listType="transaction" />
-                  )}
+                  component={() => <ListPage type="all" />}
                 />
                 <PrivateRoute
                   path="/transaction/new"

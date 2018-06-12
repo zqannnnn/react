@@ -1,5 +1,6 @@
 import { authHeader } from '../helpers/auth'
 import { Transaction } from '../models'
+import { ListOptions } from '../models'
 export const transService = {
   new: _new,
   edit,
@@ -71,17 +72,25 @@ function addComment(id: string, comment: string) {
     handleResponse
   )
 }
-function getAll(option: { selectType: string; buy: boolean; sell: boolean }) {
+function renderQuery(options: ListOptions) {
+  let query: string = ''
+  for (const key in options) {
+    if (options.hasOwnProperty(key)) {
+      const element = options[key]
+      query += `${key}=${element}&`
+    }
+  }
+  return query
+}
+function getAll(options: ListOptions) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
-  return fetch(
-    `/transaction/list?selectType=${option.selectType}&buy=${option.buy}&sell=${
-      option.sell
-    }`,
-    requestOptions
-  ).then(handleResponse)
+  let query = renderQuery(options)
+  return fetch('/transaction/list?' + query, requestOptions).then(
+    handleResponse
+  )
 }
 
 function handleResponse(response: Response) {

@@ -14,8 +14,8 @@ require('./middleware/webpack')(app)
 models.setupDatabase()
 
 // Get the exchange rate API
-const currencyApi = require('./api/currency')
-currencyApi.getApi()
+// const currencyApi = require('./api/currency')
+// currencyApi.getApi()
 app.set('secretKey', 'just a test')
 
 require('./passport')(passport) // pass passport for configuration
