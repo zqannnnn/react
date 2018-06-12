@@ -50,12 +50,12 @@ class Filter extends React.Component<ItemProps> {
             defaultValue="New to old"
             style={{ width: 160 }}
             onChange={this.handleChange}
-            className="sorting"
+            className="sorting-left"
           >
             <Option value="new">{i18n.t('New to old')}</Option>
             <Option value="old">{i18n.t('old to New')}</Option>
           </Select>
-          <div className="Select">
+          <div className="float-right">
             <Checkbox.Group onChange={this.onChange}>
               <Checkbox value={transactionConsts.TYPE_BUY}>
                 {' '}

@@ -10,7 +10,7 @@ router.use(authMiddleware)
 
 router.get('/list', async (req: IRequest, res: express.Response) => {
   let transactions
-  const selectType = req.query.selectType
+  const type = req.query.type
   const buy = req.query.buy === 'true'
   const sell = req.query.sell === 'true'
   const page = Number(req.query.page)
@@ -43,9 +43,9 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   if (typeof keyword !== 'undefined') {
     whereOption.title = { $like: `%${keyword}%` }
   }
-  if (selectType === 'mine') {
+  if (type === 'mine') {
     whereOption.userId = req.userId
-  } else if (selectType === 'finished') {
+  } else if (type === 'finished') {
     whereOption.status = consts.TRANSACTION_STATUS_FINISHED
   } else {
     whereOption.status = consts.TRANSACTION_STATUS_CREATED

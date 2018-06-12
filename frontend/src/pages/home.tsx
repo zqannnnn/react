@@ -20,9 +20,8 @@ class HomePage extends React.Component<HomeProps> {
   constructor(props: HomeProps) {
     super(props)
   }
-
   componentDidMount() {
-    this.props.dispatch(transactionActionCreators.getAll({ selectType: 'all' }))
+    this.props.dispatch(transactionActionCreators.getAll({ type: 'all' }))
   }
   render() {
     const { authInfo, transaction } = this.props
