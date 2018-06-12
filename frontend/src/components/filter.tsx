@@ -2,20 +2,15 @@ import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { transactionConsts } from '../constants'
 import { RootState, CurrencyState } from '../reducers'
-import { Row, Col, Checkbox, Select, Icon } from 'antd'
+import { Row, Col, Checkbox, Select } from 'antd'
 import { transactionActionCreators, currencyActionCreators } from '../actions'
 import i18n from 'i18next'
+import { Transaction } from '../../../src/models'
+const Option = Select.Option
 
 interface ItemProps {
   dispatch: Dispatch<RootState>
   currency: CurrencyState
-}
-
-const grid = {
-  xs: { span: 24 },
-  sm: { span: 18, push: 6 },
-  md: { span: 16, push: 8 },
-  lg: { span: 10, push: 14 }
 }
 
 class Filter extends React.Component<ItemProps> {
@@ -39,12 +34,28 @@ class Filter extends React.Component<ItemProps> {
     this.props.dispatch(currencyActionCreators.upCurrencystatus(value))
   }
 
+  handleChange = (value: string) => {
+    let options: { sorting: string } = { sorting: value }
+    this.props.dispatch(
+      transactionActionCreators.getAll({ selectType: 'all', ...options })
+    )
+  }
+
   render() {
     const { currency } = this.props
     return (
       <div className="margin-bottom">
         <Row>
-          <Col {...grid}>
+          <Select
+            defaultValue="New to old"
+            style={{ width: 160 }}
+            onChange={this.handleChange}
+            className="sorting"
+          >
+            <Option value="new">{i18n.t('New to old')}</Option>
+            <Option value="old">{i18n.t('old to New')}</Option>
+          </Select>
+          <div className="Select">
             <Checkbox.Group onChange={this.onChange}>
               <Checkbox value={transactionConsts.TYPE_BUY}>
                 {' '}
@@ -57,6 +68,7 @@ class Filter extends React.Component<ItemProps> {
             <Select
               value={currency.currentCurrency}
               onChange={this.handleSelect}
+              style={{ width: 220 }}
             >
               {currency.items
                 ? currency.items.map((item, index) => (
@@ -66,7 +78,7 @@ class Filter extends React.Component<ItemProps> {
                   ))
                 : ''}
             </Select>
-          </Col>
+          </div>
         </Row>
       </div>
     )

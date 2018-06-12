@@ -674,3 +674,10 @@ ul.nav li {
 .ant-back-top {
   bottom: 20px;
 }
+.sorting {
+  margin-right: 8px;
+  float: left;
+}
+.Select {
+  float: right;
+}
