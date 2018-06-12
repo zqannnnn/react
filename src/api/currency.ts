@@ -66,7 +66,6 @@ const add = async (data: IObject, symbol: IObject) => {
         currency.rate = data[code]
         currency.save()
       }
-
     }
   }
 }

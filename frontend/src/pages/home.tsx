@@ -26,11 +26,11 @@ class HomePage extends React.Component<HomeProps> {
         options = { ...options, sell: true }
     })
     this.props.dispatch(
-      transactionActionCreators.getAll({ selectType: 'all', ...options })
+      transactionActionCreators.getAll({ type: 'all', ...options })
     )
   }
   componentDidMount() {
-    this.props.dispatch(transactionActionCreators.getAll({ selectType: 'all' }))
+    this.props.dispatch(transactionActionCreators.getAll({ type: 'all' }))
   }
   render() {
     const { authInfo, transaction } = this.props

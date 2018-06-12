@@ -1,5 +1,6 @@
 export { Category, Details as CategoryDetails } from './category'
 export { ListItem } from './list-item'
+export { ListOptions } from './list-options'
 export { Transaction } from './transaction'
 export { Image } from './image'
 export { User } from './user'

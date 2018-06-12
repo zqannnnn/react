@@ -34,11 +34,7 @@ class Exchange extends React.Component<ItemProps> {
   render() {
     const { price, currencyCode } = this.props
     let newPrice = this.exchangeCurrency(price, currencyCode)
-    return (
-      <>
-        {newPrice}
-      </>
-    )
+    return <>{newPrice}</>
   }
 }
 function mapStateToProps(state: RootState) {

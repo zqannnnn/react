@@ -16,10 +16,10 @@ function genMessage(resetUrl: string, email: string) {
   return {
     from: '', // sender address
     to: email, // list of receivers
-    subject: i18n.t('Reset Password'), // Subject line    
+    subject: i18n.t('Reset Password'), // Subject line
     /* tslint:disable:max-line-length */
     text: '', // plain text body
-    html: i18n.t('reset-password-email', { ourName: ourName, email: email, resetUrl: resetUrl })
+    html: i18n.t('reset-password-email', { ourName, email, resetUrl })
     /* tslint:enable:max-line-length */
   }
 }
