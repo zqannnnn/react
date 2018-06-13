@@ -17,7 +17,7 @@ class LoginForm extends React.Component<LoginFormProps> {
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      this.props.handleSubmit(values)
+      if (!err) this.props.handleSubmit(values)
     })
   }
   render() {

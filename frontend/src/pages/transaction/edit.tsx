@@ -457,9 +457,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                 <Row>
                   <Col span={20} offset={2}>
                     <div className={submitted && !title ? ' has-error' : ''}>
-                      <label className="edits-input">
-                        {i18n.t('Title')}
-                      </label>
+                      <label className="edits-input">{i18n.t('Title')}</label>
                       <Input
                         placeholder=""
                         type="text"

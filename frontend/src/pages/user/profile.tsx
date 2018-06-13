@@ -182,9 +182,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
           lg={{ span: 10, offset: 7 }}
         >
           <div className="header-center">{i18n.t('User Profile')}</div>
-          <div className="subtitle">
-            {i18n.t('Personal Information')}
-          </div>
+          <div className="subtitle">{i18n.t('Personal Information')}</div>
           <form name="form" onSubmit={this.handleSubmit}>
             <div className={submitted && !user.firstName ? ' has-error' : ''}>
               <label>{i18n.t('First Name')}</label>
@@ -229,16 +227,12 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
               <label>{i18n.t('Preferred Currency')}</label>
               {currencys && this.renderCurrencySelect(currencys)}
             </div>
-            <div className="subtitle">
-              {i18n.t('Company Information')}
-            </div>
+            <div className="subtitle">{i18n.t('Company Information')}</div>
             {user.licenseStatus !== authConsts.LICENSE_STATUS_CONFIRMED && (
-                <div className="tips">
-                  {i18n.t(
-                    'Please fulfill company information for adding offer'
-                  )}
-                </div>
-              )}
+              <div className="tips">
+                {i18n.t('Please fulfill company information for adding offer')}
+              </div>
+            )}
             <div>
               <label>{i18n.t('Company Name')}</label>
               <Input

@@ -16,7 +16,7 @@ class LostPassForm extends React.Component<LostPassFormProps> {
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      this.props.handleSubmit(values.email)
+      if (!err) this.props.handleSubmit(values.email)
     })
   }
   render() {
