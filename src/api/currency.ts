@@ -33,13 +33,13 @@ const fetchRate = async (dataList: any, dataSymbolsList: any) => {
       dataList = data
     })
   fetch(
-    'https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH&tsyms=EUR'
+    'https://min-api.cryptocompare.com/data/pricemulti?fsyms=EUR&tsyms=BTC,ETH'
   )
     .then(resBE => resBE.json())
     .then(dataBE => {
       if (dataList.success) {
-        dataList.rates.BTC = dataBE.BTC.EUR
-        dataList.rates.ETH = dataBE.ETH.EUR
+        dataList.rates.BTC = dataBE.EUR.BTC
+        dataList.rates.ETH = dataBE.EUR.ETH
         dataList.symbols = null
         if (dataSymbolsList) {
           dataList.symbols = dataSymbolsList.symbols
