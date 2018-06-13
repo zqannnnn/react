@@ -101,8 +101,8 @@ class Item extends React.Component<ItemProps, ItemState> {
               {this.renderStatus(transaction.type, transaction.status)}
             </div>
           </div>
-          <div className="title">{transaction.title}</div>
-          <div className="desc content">
+          <div className="title text-overflow">{transaction.title}</div>
+          <div className="desc content text-overflow">
             <span>
               {transaction.brand && 'Brand:' + transaction.brand + ', '}
             </span>
@@ -126,7 +126,7 @@ class Item extends React.Component<ItemProps, ItemState> {
               )}
             </div>
           </Link>
-          <div className="space-between content">
+          <div className="space-between content text-overflow">
             {transaction.price &&
               transaction.currencyCode && (
                 <Exchange

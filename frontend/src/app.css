@@ -32,6 +32,23 @@
   }
 }
 
+@media (min-width: 370px) and (max-width: 767px) {
+  .filter.margin-bottom {
+    margin-bottom: 10px;
+  }
+  .filter .margin-bottom {
+    margin-bottom: 10px;
+  }
+  .filter .margin-right {
+    margin-right: 10px;
+  }
+}
+
+@media (min-width: 456px) and (max-width: 702px) {
+  .filter .media-width {
+    width: 394px;
+  }
+}
 body {
   background-color: #e9ecef;
 }
@@ -232,7 +249,7 @@ ul.nav li {
 
 .block .title {
   text-align: center;
-  padding: 6px 10px;
+  padding: 6px 45px;
   font-size: 18px;
 }
 
@@ -696,4 +713,9 @@ ul.nav li {
 .sorting-left {
   margin-right: 8px;
   float: left;
+}
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
