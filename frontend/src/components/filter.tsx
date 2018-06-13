@@ -44,20 +44,23 @@ class Filter extends React.Component<ItemProps> {
   render() {
     const { currency } = this.props
     return (
-      <div className="margin-bottom">
-        <Row>
+      <div className="filter margin-bottom">
+        <Row className="media-width">
           <Select
             defaultValue={i18n.t('New to old')}
             style={{ width: 160 }}
             onChange={this.handleChange}
-            className="sorting-left"
+            className="sorting-left margin-bottom"
           >
             <Option value="new">{i18n.t('New to old')}</Option>
             <Option value="old">{i18n.t('Old to new')}</Option>
           </Select>
           <div className="float-right">
-            <Checkbox.Group onChange={this.onChange}>
-              <Checkbox value={transactionConsts.TYPE_BUY}>
+            <Checkbox.Group onChange={this.onChange} className="margin-bottom">
+              <Checkbox
+                value={transactionConsts.TYPE_BUY}
+                className="margin-right"
+              >
                 {' '}
                 {i18n.t('Wanted')}
               </Checkbox>
