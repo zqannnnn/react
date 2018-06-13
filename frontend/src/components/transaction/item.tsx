@@ -154,6 +154,25 @@ class Item extends React.Component<ItemProps, ItemState> {
             <Link className="control-btn" to={'/transaction/' + transaction.id}>
               {i18n.t('Read More')}
             </Link>
+            {(authInfo.id == transaction.userId || authInfo.isAdmin) &&
+              transaction.status === transactionConsts.STATUS_CREATED && (
+                <>
+                  <Link
+                    to={'/transaction/edit/' + transaction.id}
+                    className="control-btn"
+                  >
+                    {i18n.t('Edit')}
+                  </Link>
+                  <div
+                    className="control-btn"
+                    onClick={() => {
+                      if (transaction.id) this.handleCancell(transaction.id)
+                    }}
+                  >
+                    {i18n.t('Cancel')}
+                  </div>
+                </>
+              )}
           </div>
         </div>
       </Col>
