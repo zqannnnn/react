@@ -47,13 +47,13 @@ class Filter extends React.Component<ItemProps> {
       <div className="margin-bottom">
         <Row>
           <Select
-            defaultValue="New to old"
+            defaultValue={i18n.t('New to old')}
             style={{ width: 160 }}
             onChange={this.handleChange}
             className="sorting-left"
           >
             <Option value="new">{i18n.t('New to old')}</Option>
-            <Option value="old">{i18n.t('old to New')}</Option>
+            <Option value="old">{i18n.t('Old to new')}</Option>
           </Select>
           <div className="float-right">
             <Checkbox.Group onChange={this.onChange}>

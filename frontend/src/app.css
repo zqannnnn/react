@@ -351,6 +351,7 @@ ul.nav li {
   height: 38px;
   display: inline-block;
   margin-left: 5px;
+  max-width: 80px;
 }
 
 .page .subtitle {
@@ -516,24 +517,21 @@ ul.nav li {
 .view-top {
   margin-top: 20px;
 }
-.container-wrap-profile {
-  width: 70%;
-  margin: 0 auto;
-}
-.container-wrap-profile div {
-  margin-bottom: 10px;
-}
 .header-center {
   font: 25px bold;
   margin: 10px;
   color: black;
   text-align: center;
 }
-.profile-subtitle {
+.profile-page .subtitle {
   font: 17px bold;
   margin: 6px 0;
   color: black;
   margin-top: 20px;
+}
+.profile-page .tips {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.65);
 }
 .button-margin {
   margin-right: 10px;
@@ -591,12 +589,12 @@ ul.nav li {
 .container-upload {
   margin-bottom: 30px;
 }
-.uploadCls-profile {
+.upload-profile {
   padding: 10px;
   background: #fff;
   border: 1px solid #eee;
 }
-.uploadCls-transactions-edit {
+.upload-transactions-edit {
   padding: 10px;
   margin-bottom: 15px;
   border-radius: 10px;
