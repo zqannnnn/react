@@ -6,6 +6,7 @@ import { Row, Col, Checkbox, Select } from 'antd'
 import { transactionActionCreators, currencyActionCreators } from '../actions'
 import i18n from 'i18next'
 import { Transaction } from '../../../src/models'
+
 const Option = Select.Option
 
 interface ItemProps {
@@ -27,7 +28,7 @@ class Filter extends React.Component<ItemProps> {
         options = { ...options, sell: true }
     })
     this.props.dispatch(
-      transactionActionCreators.getAll({ selectType: 'all', ...options })
+      transactionActionCreators.getAll({ type: 'all', ...options })
     )
   }
   handleSelect = (value: string) => {
@@ -37,7 +38,7 @@ class Filter extends React.Component<ItemProps> {
   handleChange = (value: string) => {
     let options: { sorting: string } = { sorting: value }
     this.props.dispatch(
-      transactionActionCreators.getAll({ selectType: 'all', ...options })
+      transactionActionCreators.getAll({ type: 'all', ...options })
     )
   }
 

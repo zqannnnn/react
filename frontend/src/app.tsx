@@ -6,7 +6,7 @@ import i18n from 'i18next'
 
 import { history } from './helpers/history'
 import { alertActionCreators, authActionCreators } from './actions'
-import { PrivateRoute, AdminRoute, NavBar, Lightbox } from './components'
+import { PrivateRoute, AdminRoute, NavBar, Lightbox, Search } from './components'
 import {
   LoginPage,
   RegisterPage,
@@ -18,10 +18,11 @@ import {
   ViewPage as TransactionViewPage
 } from './pages/transaction'
 import { ProfilePage, CompanyConfirmPage } from './pages/user'
-import { AdminPage, HomePage, ListPage } from './pages'
+import { AdminPage, HomePage,AllListPage,MyListPage } from './pages'
 import { RootState, LightboxState, AuthState, AlertState } from './reducers'
-import { Layout, Alert, BackTop } from 'antd'
+import { Layout, Alert, BackTop} from 'antd'
 import './app.css'
+
 interface AppProps {
   dispatch: (action: any) => void
   alert: AlertState
@@ -39,6 +40,7 @@ class App extends React.Component<AppProps, any> {
     })
     if (auth.loggedIn) dispatch(authActionCreators.refresh())
   }
+
   render() {
     /*
     const changeLanguage = (lng: string) => {
@@ -51,6 +53,7 @@ class App extends React.Component<AppProps, any> {
         <Router history={history}>
           <div>
             <Layout.Header>
+              <Search />
               <NavBar mobileBreakPoint={930} placement="bottomLeft" />
             </Layout.Header>
             {lightbox.showing && <Lightbox />}
@@ -63,11 +66,11 @@ class App extends React.Component<AppProps, any> {
                 <PrivateRoute path="/reset/pass" component={ResetPassPage} />
                 <PrivateRoute
                   path="/transactions/my"
-                  component={() => <ListPage type="mine" />}
+                  component={MyListPage}
                 />
-                <PrivateRoute
+                <Route
                   path="/transactions"
-                  component={() => <ListPage type="all" />}
+                  component={AllListPage}
                 />
                 <PrivateRoute
                   path="/transaction/new"

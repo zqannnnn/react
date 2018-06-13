@@ -18,7 +18,9 @@ class AdminPage extends React.Component<AdminProps> {
     super(props)
   }
   componentDidMount() {
-    this.props.dispatch(transactionActionCreators.getAll({ type: 'finished' }))
+    this.props.dispatch(
+      transactionActionCreators.getAll({ type: 'finished' })
+    )
     this.props.dispatch(adminActionCreators.listUnconfirmedCompanies())
   }
   render() {
