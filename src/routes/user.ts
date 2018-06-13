@@ -24,17 +24,18 @@ router.post('/new', async (req, res) => {
         id: user.id,
         userType: user.userType,
         password: user.password,
-        licenseStatus: user.licenseStatus
+        licenseStatus: user.licenseStatus,
+        preferredCurrencyCode: user.preferredCurrencyCode
       },
       app.get('secretKey'),
       { expiresIn: consts.EXPIREMENT }
     )
-    const data = {
+    const data: AuthInfo = {
       token,
       id: user.id,
       licenseStatus: 0,
-      userType: user.userType,
-      password: user.password
+      isAdmin: user.userType === consts.USER_TYPE_ADMIN,
+      preferredCurrencyCode: user.preferredCurrencyCode
     }
     return res.send(data)
   } catch (e) {
@@ -47,16 +48,19 @@ router.use(authMiddleware)
 router.get('/refresh/auth', async (req: IRequest, res: express.Response) => {
   User.findOne({
     where: { id: req.userId },
-    attributes: ['userType', 'licenseStatus']
+    attributes: ['userType', 'licenseStatus', 'preferredCurrencyCode']
   }).then(user => {
     if (!user) {
       return res.status(401).send({ error: i18n.t('Server error.') })
     }
-    const authInfo: AuthInfo = { id: req.userId }
-    if (user.userType === 1) {
+    const authInfo: AuthInfo = {
+      id: req.userId,
+      preferredCurrencyCode: user.preferredCurrencyCode,
+      licenseStatus: user.licenseStatus
+    }
+    if (user.userType === consts.USER_TYPE_ADMIN) {
       authInfo.isAdmin = true
     }
-    authInfo.licenseStatus = user.licenseStatus
     res.send(authInfo)
   })
 })

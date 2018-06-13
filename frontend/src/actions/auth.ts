@@ -8,6 +8,7 @@ export type AuthInfo = {
   id?: string
   token?: string
   isAdmin?: boolean
+  preferredCurrencyCode?: string
   licenseStatus?: number
 }
 export const actionCreators = {

@@ -25,7 +25,7 @@ class Exchange extends React.Component<ItemProps> {
       let newRate = currencys.filter(currency => {
         return currency.code === currentCurrency
       })[0].rate
-      let newPrice = Math.floor((price / oldRate) * newRate * 100) / 100
+      let newPrice = (((price / oldRate) * newRate * 100) / 100).toFixed(4)
       result = newPrice.toString() + currentCurrency
     }
 

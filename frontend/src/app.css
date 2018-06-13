@@ -7,6 +7,23 @@
   clear: both;
 }
 
+@media (min-width:1200px) {
+  .nav-search{
+    left: 230px;
+    width: 380px;
+  }
+  .page-container {
+    padding-top: 2rem;
+  }
+  .block {
+    flex: 1 1 33.33%;
+    box-sizing: border-box;
+    max-width: 33.33%;
+  }
+  .block .content .details {
+    min-height: 80px;
+  }
+}
 @media (min-width:992px) and (max-width:1199px){
   .nav-search{
     left: 150px;
@@ -26,6 +43,15 @@
   .nav-search{
     left: 160px;
     width:175px;
+  }
+  .filter.margin-bottom {
+    margin-bottom: 10px;
+  }
+  .filter .margin-bottom {
+    margin-bottom: 10px;
+  }
+  .filter .margin-right {
+    margin-right: 10px;
   }
 }
 
@@ -241,7 +267,7 @@ ul.nav li {
 
 .block .title {
   text-align: center;
-  padding: 6px 10px;
+  padding: 6px 45px;
   font-size: 18px;
 }
 
@@ -360,6 +386,7 @@ ul.nav li {
   height: 38px;
   display: inline-block;
   margin-left: 5px;
+  max-width: 80px;
 }
 
 .page .subtitle {
@@ -390,7 +417,7 @@ ul.nav li {
 .modal {
   display: block;
   position: fixed;
-  z-index: 1;
+  z-index: 20;
   padding: 10% 0;
   left: 0;
   top: 0;
@@ -525,24 +552,21 @@ ul.nav li {
 .view-top {
   margin-top: 20px;
 }
-.container-wrap-profile {
-  width: 70%;
-  margin: 0 auto;
-}
-.container-wrap-profile div {
-  margin-bottom: 10px;
-}
 .header-center {
   font: 25px bold;
   margin: 10px;
   color: black;
   text-align: center;
 }
-.profile-subtitle {
+.profile-page .subtitle {
   font: 17px bold;
   margin: 6px 0;
   color: black;
   margin-top: 20px;
+}
+.profile-page .tips {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.65);
 }
 .button-margin {
   margin-right: 10px;
@@ -600,12 +624,12 @@ ul.nav li {
 .container-upload {
   margin-bottom: 30px;
 }
-.uploadCls-profile {
+.upload-profile {
   padding: 10px;
   background: #fff;
   border: 1px solid #eee;
 }
-.uploadCls-transactions-edit {
+.upload-transactions-edit {
   padding: 10px;
   margin-bottom: 15px;
   border-radius: 10px;
@@ -706,20 +730,8 @@ ul.nav li {
   margin-right: 8px;
   float: left;
 }
-@media (min-width:1200px) {
-  .nav-search{
-    left: 230px;
-    width: 380px;
-  }
-  .page-container {
-    padding-top: 2rem;
-  }
-  .block {
-    flex: 1 1 33.33%;
-    box-sizing: border-box;
-    max-width: 33.33%;
-  }
-  .block .content .details {
-    min-height: 80px;
-  }
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

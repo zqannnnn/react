@@ -9,13 +9,12 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const models = require('./models')
-export const app = express()
 require('./middleware/webpack')(app)
 models.setupDatabase()
 
 // Get the exchange rate API
-// const currencyApi = require('./api/currency')
-// currencyApi.getApi()
+const currencyApi = require('./api/currency')
+currencyApi.getApi()
 app.set('secretKey', 'just a test')
 
 require('./passport')(passport) // pass passport for configuration
@@ -47,3 +46,4 @@ app.listen(port, err => {
   if (err) console.log(err)
   console.log(`⚡ Express started on port ${port}`)
 })
+export { app }
