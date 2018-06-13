@@ -104,11 +104,12 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                   </Col>
                 </Row>
                 <Row>
-                  <Col 
+                  <Col
                     xs={{ span: 20, offset: 2 }}
                     sm={{ span: 20, offset: 2 }}
-                    md={{ span: 6, offset: 7 }} 
-                    className="view-top">
+                    md={{ span: 20, offset: 7 }}
+                    className="view-top"
+                  >
                     <label>{i18n.t('Description')}:</label>
                     <div className="message">
                       {transaction.desc ? transaction.desc : 'N/A'}
@@ -116,11 +117,12 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                   </Col>
                 </Row>
                 <Row>
-                  <Col 
+                  <Col
                     xs={{ span: 20, offset: 2 }}
                     sm={{ span: 20, offset: 2 }}
-                    md={{ span: 6, offset: 7 }} 
-                    className="view-top">
+                    md={{ span: 6, offset: 7 }}
+                    className="view-top"
+                  >
                     <label>{i18n.t('Storage')}:</label>
                     <div className="message">
                       {transaction.storage ? transaction.storage : 'N/A'}

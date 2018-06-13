@@ -353,20 +353,12 @@ class EditPage extends React.Component<TransProps, TransState> {
     } else {
       certificateList = []
     }
-    // let currencyCode: string|undefined = this.state.transaction.currencyCode
-    // if(!currencyCode&&this.props.authInfo.preferredCurrencyCode){
-    //   currencyCode = this.props.authInfo.preferredCurrencyCode
-    //   {(value:string) => this.handleSelectChange(value,'currencyCode')}
-    // }else if(!currencyCode&&!this.props.authInfo.preferredCurrencyCode){
-    //   currencyCode = 'USD'
-    //   {(value:string) => this.handleSelectChange(value,'currencyCode')}
-    // }
     switch (current) {
       case 0:
         return (
           <Row>
             <Col xs={20} sm={18} md={12} lg={8} offset={1}>
-              <label>{i18n.t('Transaction Category')}</label>
+              <label>{i18n.t('Category')}</label>
               <Select
                 size="large"
                 value={category}
@@ -388,7 +380,7 @@ class EditPage extends React.Component<TransProps, TransState> {
           <Row>
             <Col className="container-upload" span={22} offset={1}>
               <label>{i18n.t('Images')}</label>
-              <div className="uploadCls-transactions-edit">
+              <div className="upload-transactions-edit">
                 <div className="clearfix">
                   <Upload
                     accept="image/*"
@@ -409,7 +401,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                 </div>
               </div>
               <label>{i18n.t('Certificates')}</label>
-              <div className="uploadCls-transactions-edit">
+              <div className="upload-transactions-edit">
                 <div className="clearfix">
                   <Upload
                     customRequest={this.customRequest}
@@ -443,7 +435,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                 lg={{ span: 9, offset: 2 }}
                 className="edits-input"
               >
-                <h2>{i18n.t('Sell or Buy')}</h2>
+                <h2>{i18n.t('Buy or Sell')}</h2>
                 <Select
                   size="large"
                   value={this.state.transaction['type']}
@@ -465,7 +457,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                 <Row>
                   <Col span={20} offset={2}>
                     <div className={submitted && !title ? ' has-error' : ''}>
-                      <label className="font-bold edits-input">
+                      <label className="edits-input">
                         {i18n.t('Title')}
                       </label>
                       <Input
@@ -847,7 +839,7 @@ class EditPage extends React.Component<TransProps, TransState> {
     return (
       <Row className="edit-page">
         <Col
-          xs={24}
+          xs={{ span: 22, offset: 1 }}
           sm={{ span: 22, offset: 1 }}
           md={{ span: 20, offset: 2 }}
           lg={{ span: 20, offset: 2 }}
