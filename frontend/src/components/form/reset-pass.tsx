@@ -39,7 +39,7 @@ class ResetPassForm extends React.Component<
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      this.props.handleSubmit(values.password)
+      if (!err) this.props.handleSubmit(values.password)
     })
   }
   handleConfirmBlur = (e: React.FormEvent<HTMLInputElement>) => {
