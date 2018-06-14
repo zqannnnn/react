@@ -54,7 +54,7 @@ class App extends React.Component<AppProps, any> {
           <div>
             <Layout.Header>
               <Search />
-              <NavBar mobileBreakPoint={930} placement="bottomLeft" />
+              <NavBar mobileBreakPoint={1057} placement="bottomLeft" />
             </Layout.Header>
             {lightbox.showing && <Lightbox />}
             <Layout.Content>
