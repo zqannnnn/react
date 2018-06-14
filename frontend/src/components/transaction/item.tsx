@@ -67,7 +67,7 @@ class Item extends React.Component<ItemProps, ItemState> {
     if (type == transactionConsts.TYPE_SELL) {
       switch (status) {
         case transactionConsts.STATUS_CANCELLED:
-          finalStatus = i18n.t('Cancelled')
+          finalStatus = i18n.t('Not active')
           break
         case transactionConsts.STATUS_FINISHED:
           finalStatus = i18n.t('Sold')
@@ -79,8 +79,8 @@ class Item extends React.Component<ItemProps, ItemState> {
     } else {
       switch (status) {
         case transactionConsts.STATUS_CANCELLED:
-          finalStatus = i18n.t('Cancelled')
-          break
+        finalStatus = i18n.t('Not active')
+        break
         case transactionConsts.STATUS_FINISHED:
           finalStatus = i18n.t('Bought')
           break
@@ -177,7 +177,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                       if (transaction.id) this.handleCancell(transaction.id)
                     }}
                   >
-                    {i18n.t('Cancel')}
+                    {i18n.t('Deactivate')}
                   </div>
                 </>
               )}
