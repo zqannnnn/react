@@ -2,6 +2,7 @@ import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { lightboxActionCreators } from '../actions'
 import { RootState, LightboxState } from '../reducers'
+import { Icon } from 'antd'
 import { lightbox } from '../reducers/lightbox'
 
 interface LightboxProps {
@@ -31,13 +32,7 @@ class Lightbox extends React.Component<LightboxProps> {
     return (
       <div className="modal">
         <div className="close" onClick={this.close}>
-          x
-        </div>
-        <div className="prev" onClick={this.prev}>
-          &#10094;
-        </div>
-        <div className="next" onClick={this.next}>
-          &#10095;
+          <Icon type="close" />
         </div>
         <div className="modal-content">
           <div className="mySlides">
@@ -45,6 +40,12 @@ class Lightbox extends React.Component<LightboxProps> {
               {currentIdx + 1 + ' / ' + images.length}
             </div>
             <img src={images[currentIdx]} />
+          </div>
+          <div className="prev" onClick={this.prev}>
+            <Icon type="left" />
+          </div>
+          <div className="next" onClick={this.next}>
+            <Icon type="right" />
           </div>
         </div>
       </div>
