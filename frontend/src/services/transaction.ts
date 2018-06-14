@@ -7,6 +7,7 @@ export const transService = {
   getById,
   getAll,
   cancell,
+  reactivate,
   finish,
   addComment
 }
@@ -49,6 +50,19 @@ function cancell(id: string) {
   }
 
   return fetch('/transaction/' + id, requestOptions).then(handleResponse)
+}
+function reactivate(transaction: Transaction) {
+  const requestOptions = {
+    method: 'PUT',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(transaction)
+  }
+  return fetch('/transaction/' + transaction.id, requestOptions).then(
+    handleResponse
+  )
 }
 function finish(id: string) {
   const requestOptions = {

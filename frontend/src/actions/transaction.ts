@@ -123,7 +123,7 @@ function cancell(id: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request(id))
 
-    transService
+    return transService
       .cancell(id)
       .then(
         () => dispatch(success(id)),
@@ -139,6 +139,27 @@ function cancell(id: string) {
   }
   function failure(error: string, id: string) {
     return { type: transactionConsts.CANCELL_FAILURE, error, id }
+  }
+}
+function reactivate(transaction: Transaction) {
+  return (dispatch: (action: Action) => void) => {
+    dispatch(request(transaction.id))
+    return transService
+      .reactivate(transaction)
+      .then(
+        () => dispatch(success(transaction.id)),
+        (error: string) => dispatch(failure(error, transaction.id))
+      )
+  }
+
+  function request(id: any) {
+    return { type: transactionConsts.REACTIVATE_REQUEST, id }
+  }
+  function success(id: any) {
+    return { type: transactionConsts.REACTIVATE_SUCCESS, id }
+  }
+  function failure(error: string, id: any) {
+    return { type: transactionConsts.REACTIVATE_FAILURE, error, id }
   }
 }
 function finish(id: string) {
@@ -230,6 +251,7 @@ export const actionCreators = {
   getAll,
   getById,
   cancell,
+  reactivate,
   finish,
   addComment
 }
