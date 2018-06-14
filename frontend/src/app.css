@@ -29,7 +29,9 @@
 body {
   background-color: #e9ecef;
 }
-
+html {
+  height: 101%;
+}
 .navbar {
   padding: 0 15%;
   background: white;

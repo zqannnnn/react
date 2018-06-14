@@ -10,6 +10,7 @@ export type State = {
   error?: string
   transData?: Transaction
   items?: Array<Transaction>
+  total?: number
 }
 export function transaction(
   state: State = {},
@@ -28,20 +29,6 @@ export function transaction(
       return {}
     case transactionConsts.EDIT_FAILURE:
       return { error: action.error }
-    case transactionConsts.CANCELL_REQUEST:
-      if (state.items)
-        return {
-          ...state,
-          items: state.items.map(
-            item =>
-              item.id === action.id
-                ? {
-                    ...item,
-                    cancelling: true
-                  }
-                : item
-          )
-        }
     case transactionConsts.CANCELL_SUCCESS:
       if (state.items)
         return {
@@ -141,7 +128,7 @@ export function transaction(
     case transactionConsts.GETALL_REQUEST:
       return { loading: true }
     case transactionConsts.GETALL_SUCCESS:
-      return { items: action.transactions }
+      return { items: action.transactions,total:action.total }
     case transactionConsts.GETALL_FAILURE:
       return { error: action.error }
     default:
