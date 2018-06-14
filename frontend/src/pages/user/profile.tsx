@@ -174,7 +174,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
       licenseList = []
     }
     return (
-      <Row>
+      <Row className="profile-page">
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 16, offset: 4 }}
@@ -182,9 +182,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
           lg={{ span: 10, offset: 7 }}
         >
           <div className="header-center">{i18n.t('User Profile')}</div>
-          <div className="profile-subtitle">
-            {i18n.t('Personal Information')}
-          </div>
+          <div className="subtitle">{i18n.t('Personal Information')}</div>
           <form name="form" onSubmit={this.handleSubmit}>
             <div className={submitted && !user.firstName ? ' has-error' : ''}>
               <label>{i18n.t('First Name')}</label>
@@ -229,9 +227,12 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
               <label>{i18n.t('Preferred Currency')}</label>
               {currencys && this.renderCurrencySelect(currencys)}
             </div>
-            <div className="subtitle profile-subtitle">
-              {i18n.t('Company Information')}
-            </div>
+            <div className="subtitle">{i18n.t('Company Information')}</div>
+            {user.licenseStatus !== authConsts.LICENSE_STATUS_CONFIRMED && (
+              <div className="tips">
+                {i18n.t('Please fulfill company information for adding offer')}
+              </div>
+            )}
             <div>
               <label>{i18n.t('Company Name')}</label>
               <Input
@@ -253,7 +254,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
             <div>
               <div>
                 <label>{i18n.t('Business License')}</label>
-                <div className="uploadCls-profile clearfix">
+                <div className="upload-profile clearfix">
                   <Upload
                     listType="picture-card"
                     fileList={licenseList}
@@ -273,13 +274,6 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                 </div>
               </div>
             </div>
-            {user.licenseStatus !== authConsts.LICENSE_STATUS_CONFIRMED && (
-              <div>
-                {i18n.t(
-                  'Please fulfill company information for adding transaction'
-                )}
-              </div>
-            )}
             <div>
               <Button
                 htmlType="submit"

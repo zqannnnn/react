@@ -36,7 +36,7 @@ class RegisterForm extends React.Component<
     e.preventDefault()
     this.props.form.validateFieldsAndScroll(
       (err: string, values: RegisterValuesProps) => {
-        this.props.handleSubmit(values)
+        if (!err) this.props.handleSubmit(values)
       }
     )
   }

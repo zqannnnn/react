@@ -6,13 +6,12 @@
   height: 0;
   clear: both;
 }
-@media (max-width: 640px) {
-  .block {
-    width: 100%;
-  }
-}
 
-@media (min-width: 992px) {
+@media (min-width:1200px) {
+  .nav-search{
+    left: 230px;
+    width: 380px;
+  }
   .page-container {
     padding-top: 2rem;
   }
@@ -23,6 +22,43 @@
   }
   .block .content .details {
     min-height: 80px;
+  }
+}
+@media (min-width:992px) and (max-width:1199px){
+  .nav-search{
+    left: 150px;
+    width:300px;
+  }
+}
+@media (min-width:768px) and (max-width:991px){
+  .nav-search{
+    left: 270px;
+    width:320px;
+  }
+  .block {
+    width: 50%;
+  }
+}
+@media (min-width:370px) and (max-width:767px){
+  .nav-search{
+    left: 160px;
+    width:175px;
+  }
+  .filter.margin-bottom {
+    margin-bottom: 10px;
+  }
+  .filter .margin-bottom {
+    margin-bottom: 10px;
+  }
+  .filter .margin-right {
+    margin-right: 10px;
+  }
+}
+
+@media (max-width:369px) {
+  .nav-search{
+    left: 120px;
+    width:165px;
   }
 }
 
@@ -39,6 +75,11 @@ html {
 
 .navbar a {
   color: black;
+}
+
+.nav-search{
+  position: absolute;
+  top:19px;
 }
 
 ul.nav li a {
@@ -206,6 +247,10 @@ ul.nav li {
   color: #fff;
   width: 60px;
   left: -8px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .block .left-icon:before {
   content: ' ';
@@ -224,7 +269,7 @@ ul.nav li {
 
 .block .title {
   text-align: center;
-  padding: 6px 10px;
+  padding: 6px 45px;
   font-size: 18px;
 }
 
@@ -310,6 +355,14 @@ ul.nav li {
   justify-content: space-between;
 }
 
+.float-right {
+  float: right;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
@@ -335,6 +388,7 @@ ul.nav li {
   height: 38px;
   display: inline-block;
   margin-left: 5px;
+  max-width: 80px;
 }
 
 .page .subtitle {
@@ -365,7 +419,7 @@ ul.nav li {
 .modal {
   display: block;
   position: fixed;
-  z-index: 1;
+  z-index: 20;
   padding: 10% 0;
   left: 0;
   top: 0;
@@ -479,11 +533,8 @@ ul.nav li {
 .steps-action {
   margin-top: 24px;
 }
-.edits-title {
-  font-size: 20px;
-  font-weight: bold;
-}
-.edits-select {
+
+.edits-input {
   margin-top: 20px;
 }
 .edits-top {
@@ -503,24 +554,21 @@ ul.nav li {
 .view-top {
   margin-top: 20px;
 }
-.container-wrap-profile {
-  width: 70%;
-  margin: 0 auto;
-}
-.container-wrap-profile div {
-  margin-bottom: 10px;
-}
 .header-center {
   font: 25px bold;
   margin: 10px;
   color: black;
   text-align: center;
 }
-.profile-subtitle {
+.profile-page .subtitle {
   font: 17px bold;
   margin: 6px 0;
   color: black;
   margin-top: 20px;
+}
+.profile-page .tips {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.65);
 }
 .button-margin {
   margin-right: 10px;
@@ -578,12 +626,12 @@ ul.nav li {
 .container-upload {
   margin-bottom: 30px;
 }
-.uploadCls-profile {
+.upload-profile {
   padding: 10px;
   background: #fff;
   border: 1px solid #eee;
 }
-.uploadCls-transactions-edit {
+.upload-transactions-edit {
   padding: 10px;
   margin-bottom: 15px;
   border-radius: 10px;
@@ -680,10 +728,12 @@ ul.nav li {
 .ant-back-top {
   bottom: 20px;
 }
-.sorting {
+.sorting-left {
   margin-right: 8px;
   float: left;
 }
-.Select {
-  float: right;
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

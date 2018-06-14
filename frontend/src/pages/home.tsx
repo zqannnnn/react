@@ -43,7 +43,9 @@ class HomePage extends React.Component<HomeProps> {
               <div className="header">
                 <div className="title">{i18n.t('Home')}</div>
                 <div className="subtitle">
-                  <div className="des">{i18n.t('People looking for sell')}</div>
+                  <div className="des">
+                    {i18n.t('People looking for buy or sell')}
+                  </div>
                   <Link className="link" to={'/transactions'}>
                     {i18n.t('👁 view all transactions')}
                   </Link>

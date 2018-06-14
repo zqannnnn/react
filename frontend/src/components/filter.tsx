@@ -6,6 +6,7 @@ import { Row, Col, Checkbox, Select } from 'antd'
 import { transactionActionCreators, currencyActionCreators } from '../actions'
 import i18n from 'i18next'
 import { Transaction } from '../../../src/models'
+
 const Option = Select.Option
 
 interface ItemProps {
@@ -27,7 +28,7 @@ class Filter extends React.Component<ItemProps> {
         options = { ...options, sell: true }
     })
     this.props.dispatch(
-      transactionActionCreators.getAll({ selectType: 'all', ...options })
+      transactionActionCreators.getAll({ type: 'all', ...options })
     )
   }
   handleSelect = (value: string) => {
@@ -37,27 +38,30 @@ class Filter extends React.Component<ItemProps> {
   handleChange = (value: string) => {
     let options: { sorting: string } = { sorting: value }
     this.props.dispatch(
-      transactionActionCreators.getAll({ selectType: 'all', ...options })
+      transactionActionCreators.getAll({ type: 'all', ...options })
     )
   }
 
   render() {
     const { currency } = this.props
     return (
-      <div className="margin-bottom">
-        <Row>
+      <div className="filter margin-bottom">
+        <Row className="media-width">
           <Select
-            defaultValue="New to old"
+            defaultValue={i18n.t('New to old')}
             style={{ width: 160 }}
             onChange={this.handleChange}
-            className="sorting"
+            className="sorting-left margin-bottom"
           >
             <Option value="new">{i18n.t('New to old')}</Option>
-            <Option value="old">{i18n.t('old to New')}</Option>
+            <Option value="old">{i18n.t('Old to new')}</Option>
           </Select>
-          <div className="Select">
-            <Checkbox.Group onChange={this.onChange}>
-              <Checkbox value={transactionConsts.TYPE_BUY}>
+          <div className="float-right">
+            <Checkbox.Group onChange={this.onChange} className="margin-bottom">
+              <Checkbox
+                value={transactionConsts.TYPE_BUY}
+                className="margin-right"
+              >
                 {' '}
                 {i18n.t('Wanted')}
               </Checkbox>

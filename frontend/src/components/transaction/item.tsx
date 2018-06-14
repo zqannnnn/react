@@ -101,8 +101,8 @@ class Item extends React.Component<ItemProps, ItemState> {
               {this.renderStatus(transaction.type, transaction.status)}
             </div>
           </div>
-          <div className="title">{transaction.title}</div>
-          <div className="desc content">
+          <div className="title text-overflow">{transaction.title}</div>
+          <div className="desc content text-overflow">
             <span>
               {transaction.brand && 'Brand:' + transaction.brand + ', '}
             </span>
@@ -126,7 +126,7 @@ class Item extends React.Component<ItemProps, ItemState> {
               )}
             </div>
           </Link>
-          <div className="space-between content">
+          <div className="space-between content text-overflow">
             {transaction.price &&
               transaction.currencyCode && (
                 <Exchange
@@ -154,6 +154,25 @@ class Item extends React.Component<ItemProps, ItemState> {
             <Link className="control-btn" to={'/transaction/' + transaction.id}>
               {i18n.t('Read More')}
             </Link>
+            {(authInfo.id == transaction.userId || authInfo.isAdmin) &&
+              transaction.status === transactionConsts.STATUS_CREATED && (
+                <>
+                  <Link
+                    to={'/transaction/edit/' + transaction.id}
+                    className="control-btn"
+                  >
+                    {i18n.t('Edit')}
+                  </Link>
+                  <div
+                    className="control-btn"
+                    onClick={() => {
+                      if (transaction.id) this.handleCancell(transaction.id)
+                    }}
+                  >
+                    {i18n.t('Cancel')}
+                  </div>
+                </>
+              )}
           </div>
         </div>
       </Col>
