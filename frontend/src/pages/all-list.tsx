@@ -53,13 +53,6 @@ class List extends React.Component<ListProps, ListStates> {
             <div className="title">{i18n.t('All Transaction')}</div>
           </div>
         )}
-        {transaction.error && (
-          <span className="text-danger">
-            {i18n.t('ERROR: ')}
-            {transaction.error}
-          </span>
-        )}
-
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 20, offset: 2 }}
@@ -69,6 +62,12 @@ class List extends React.Component<ListProps, ListStates> {
           {this.state.searched && <div className="edits-input" />}
           <Filter />
           {transaction.items && <ListC items={transaction.items} />}
+          {transaction.error && (
+            <span className="text-danger subtitle">
+              {i18n.t('ERROR: ')}
+              {transaction.error}
+            </span>
+          )}
         </Col>
       </Row>
     )
