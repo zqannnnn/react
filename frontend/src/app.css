@@ -84,7 +84,9 @@
 body {
   background-color: #e9ecef;
 }
-
+html {
+  height: 101%;
+}
 .navbar {
   padding: 0 15%;
   background: white;
@@ -269,7 +271,7 @@ ul.nav li {
   text-align: center;
   font-weight: bold;
   color: #fff;
-  width: 60px;
+  width: 64px;
   left: -8px;
   -webkit-user-select: none;
   -moz-user-select: none;

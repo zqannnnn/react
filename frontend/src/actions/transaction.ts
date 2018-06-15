@@ -18,7 +18,9 @@ export type Action = {
   data?: Transaction
   imagePath?: string
   comment?: string
+  total?: number
 }
+
 type Thunk = ThunkAction<void, RootState, void>
 
 // prefixed function name with underscore because new is a reserved word in
@@ -116,12 +118,12 @@ function getById(id: string) {
     return { type: transactionConsts.GET_FAILURE, error }
   }
 }
-function cancell(id: string) {
+function cancel(id: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request(id))
 
-    transService
-      .cancell(id)
+    return transService
+      .cancel(id)
       .then(
         () => dispatch(success(id)),
         (error: string) => dispatch(failure(error, id))
@@ -129,13 +131,34 @@ function cancell(id: string) {
   }
 
   function request(id: string) {
-    return { type: transactionConsts.CANCELL_REQUEST, id }
+    return { type: transactionConsts.CANCEL_REQUEST, id }
   }
   function success(id: string) {
-    return { type: transactionConsts.CANCELL_SUCCESS, id }
+    return { type: transactionConsts.CANCEL_SUCCESS, id }
   }
   function failure(error: string, id: string) {
-    return { type: transactionConsts.CANCELL_FAILURE, error, id }
+    return { type: transactionConsts.CANCEL_FAILURE, error, id }
+  }
+}
+function reactivate(transaction: Transaction) {
+  return (dispatch: (action: Action) => void) => {
+    dispatch(request(transaction.id))
+    return transService
+      .reactivate(transaction)
+      .then(
+        () => dispatch(success(transaction.id)),
+        (error: string) => dispatch(failure(error, transaction.id))
+      )
+  }
+
+  function request(id: any) {
+    return { type: transactionConsts.REACTIVATE_REQUEST, id }
+  }
+  function success(id: any) {
+    return { type: transactionConsts.REACTIVATE_SUCCESS, id }
+  }
+  function failure(error: string, id: any) {
+    return { type: transactionConsts.REACTIVATE_FAILURE, error, id }
   }
 }
 function finish(id: string) {
@@ -168,7 +191,8 @@ const getAll: ActionCreator<ThunkAction<void, RootState, void>> = (
     transService
       .getAll(option)
       .then(
-        (transactions: Array<Transaction>) => dispatch(success(transactions)),
+        (result: { transactions: Array<Transaction>; total: number }) =>
+          dispatch(success(result.transactions, result.total)),
         (error: string) => dispatch(failure(error))
       )
   }
@@ -176,7 +200,7 @@ const getAll: ActionCreator<ThunkAction<void, RootState, void>> = (
   function request(): Action {
     return { type: transactionConsts.GETALL_REQUEST }
   }
-  function success(transactions: Array<Transaction>): Action {
+  function success(transactions: Array<Transaction>, total: number): Action {
     transactions.forEach(transaction => {
       transaction.itemType = 'Transaction'
       if (transaction.images) {
@@ -191,7 +215,7 @@ const getAll: ActionCreator<ThunkAction<void, RootState, void>> = (
       }
     })
 
-    return { type: transactionConsts.GETALL_SUCCESS, transactions }
+    return { type: transactionConsts.GETALL_SUCCESS, transactions, total }
   }
   function failure(error: string): Action {
     return { type: transactionConsts.GETALL_FAILURE, error }
@@ -211,7 +235,7 @@ function addComment(id: string, comment: string) {
   }
 
   function request(id: string) {
-    return { type: transactionConsts.COMMENT_FAILURE, id }
+    return { type: transactionConsts.COMMENT_REQUEST, id }
   }
   function success(id: string, comment: string) {
     return { type: transactionConsts.COMMENT_SUCCESS, id, comment }
@@ -225,7 +249,8 @@ export const actionCreators = {
   edit,
   getAll,
   getById,
-  cancell,
+  cancel,
+  reactivate,
   finish,
   addComment
 }
