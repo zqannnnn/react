@@ -31,40 +31,28 @@ class List extends React.Component<ListProps, ListStates> {
     let keyword = keywordParams.keyword
     let options: ListOptions = { type: 'all' }
     if (keyword) {
-      options.keyword = keyword;
+      options.keyword = keyword
       this.setState({ searched: !this.state.searched })
     }
-    this.props.dispatch(
-      transactionActionCreators.getAll(options)
-    )
+    this.props.dispatch(transactionActionCreators.getAll(options))
   }
   componentDidMount() {
-    this.getTransaction();
+    this.getTransaction()
     history.listen((location, action) => {
-      this.getTransaction();
-    }
-    )
+      this.getTransaction()
+    })
   }
 
   render() {
-    const { transaction } = this.props;
+    const { transaction } = this.props
     return (
       <Row className="page">
-        {!this.state.searched &&
+        {!this.state.searched && (
           <div className="banner">
             <div className="banner-bg" />
-            <div className="title">
-              {i18n.t('All Transaction')}
-            </div>
+            <div className="title">{i18n.t('All Transaction')}</div>
           </div>
-        }
-        {transaction.error && (
-          <span className="text-danger">
-            {i18n.t('ERROR: ')}
-            {transaction.error}
-          </span>
         )}
-
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 20, offset: 2 }}
@@ -74,6 +62,12 @@ class List extends React.Component<ListProps, ListStates> {
           {this.state.searched && <div className="edits-input" />}
           <Filter />
           {transaction.items && <ListC items={transaction.items} />}
+          {transaction.error && (
+            <span className="text-danger subtitle">
+              {i18n.t('ERROR: ')}
+              {transaction.error}
+            </span>
+          )}
         </Col>
       </Row>
     )

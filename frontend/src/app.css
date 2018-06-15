@@ -7,8 +7,8 @@
   clear: both;
 }
 
-@media (min-width:1200px) {
-  .nav-search{
+@media (min-width: 1200px) {
+  .nav-search {
     left: 230px;
     width: 380px;
   }
@@ -24,27 +24,30 @@
     min-height: 80px;
   }
 }
-@media (min-width:992px) and (max-width:1199px){
-  .nav-search{
-    left: 150px;
-    width:300px;
-  }
-}
-@media (min-width:768px) and (max-width:991px){
-  .nav-search{
-    left: 270px;
-    width:320px;
+@media (min-width: 992px) and (max-width: 1199px) {
+  .nav-search {
+    left: 120px;
+    width: 300px;
   }
   .block {
     width: 50%;
   }
 }
-@media (min-width:370px) and (max-width:767px){
-  .nav-search{
-    left: 160px;
-    width:175px;
+@media (min-width: 768px) and (max-width: 991px) {
+  .nav-search {
+    left: 120px;
+    width: 320px;
   }
-  .filter.margin-bottom {
+  .block {
+    width: 50%;
+  }
+}
+@media (min-width: 320px) and (max-width: 767px) {
+  .nav-search {
+    left: 100px;
+    width: 175px;
+  }
+  .filter .margin-bottom {
     margin-bottom: 10px;
   }
   .filter .margin-bottom {
@@ -53,12 +56,28 @@
   .filter .margin-right {
     margin-right: 10px;
   }
+  .ant-layout-header {
+    padding: 0;
+  }
+  .ant-menu-dark .ant-menu-item:nth-child(2) {
+    position: absolute;
+    right: 30px;
+  }
+  .ant-menu-dark .ant-menu-item:nth-child(3) {
+    display: none;
+  }
+  .ant-menu-item {
+    padding: 0;
+  }
+  .list .list__content .list__subtitle {
+    font-size: 14px;
+  }
 }
 
-@media (max-width:369px) {
-  .nav-search{
-    left: 120px;
-    width:165px;
+@media (max-width: 369px) {
+  .nav-search {
+    left: 80px;
+    width: 165px;
   }
 }
 
@@ -75,9 +94,9 @@ body {
   color: black;
 }
 
-.nav-search{
+.nav-search {
   position: absolute;
-  top:19px;
+  top: 19px;
 }
 
 ul.nav li a {
@@ -142,6 +161,12 @@ ul.nav li {
 .list-container .header .title {
   font-size: 18px;
   font-weight: bold;
+}
+
+.list-container .header .subtitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .list-container .header .subtitle {
@@ -279,6 +304,7 @@ ul.nav li {
   font-size: 12px;
 }
 .block .control-btn {
+  font-weight: bold;
   color: #007bff;
 }
 .block .control-btn:hover {
@@ -306,6 +332,7 @@ ul.nav li {
 .block img {
   width: 100%;
   max-height: 150px;
+  height: 100%;
 }
 .block .comment {
   border-top: solid 1px #ccc;
@@ -736,4 +763,8 @@ ul.nav li {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.ant-upload-list-item-info span {
+  width: 100%;
+  height: 100%;
 }
