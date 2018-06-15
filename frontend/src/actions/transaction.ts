@@ -10,7 +10,6 @@ import { ThunkAction } from 'redux-thunk'
 import { RootState } from '../reducers'
 import { ListOptions } from '../models'
 
-
 export type Action = {
   type: string
   error?: string
@@ -119,12 +118,12 @@ function getById(id: string) {
     return { type: transactionConsts.GET_FAILURE, error }
   }
 }
-function cancell(id: string) {
+function cancel(id: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request(id))
 
     return transService
-      .cancell(id)
+      .cancel(id)
       .then(
         () => dispatch(success(id)),
         (error: string) => dispatch(failure(error, id))
@@ -132,13 +131,13 @@ function cancell(id: string) {
   }
 
   function request(id: string) {
-    return { type: transactionConsts.CANCELL_REQUEST, id }
+    return { type: transactionConsts.CANCEL_REQUEST, id }
   }
   function success(id: string) {
-    return { type: transactionConsts.CANCELL_SUCCESS, id }
+    return { type: transactionConsts.CANCEL_SUCCESS, id }
   }
   function failure(error: string, id: string) {
-    return { type: transactionConsts.CANCELL_FAILURE, error, id }
+    return { type: transactionConsts.CANCEL_FAILURE, error, id }
   }
 }
 function reactivate(transaction: Transaction) {
@@ -184,9 +183,9 @@ function finish(id: string) {
     return { type: transactionConsts.FINISH_FAILURE, error, id }
   }
 }
-const getAll: ActionCreator<ThunkAction<void, RootState, void>> = (option:ListOptions
- ) => {
-
+const getAll: ActionCreator<ThunkAction<void, RootState, void>> = (
+  option: ListOptions
+) => {
   return (dispatch: Dispatch<RootState>): void => {
     dispatch(request())
     transService
@@ -250,7 +249,7 @@ export const actionCreators = {
   edit,
   getAll,
   getById,
-  cancell,
+  cancel,
   reactivate,
   finish,
   addComment

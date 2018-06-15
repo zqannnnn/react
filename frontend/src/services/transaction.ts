@@ -6,7 +6,7 @@ export const transService = {
   edit,
   getById,
   getAll,
-  cancell,
+  cancel,
   reactivate,
   finish,
   addComment
@@ -43,7 +43,7 @@ function getById(id: string) {
 
   return fetch('/transaction/' + id, requestOptions).then(handleResponse)
 }
-function cancell(id: string) {
+function cancel(id: string) {
   const requestOptions = {
     method: 'DELETE',
     headers: authHeader()

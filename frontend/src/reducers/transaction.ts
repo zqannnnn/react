@@ -3,7 +3,7 @@ import { TransactionAction } from '../actions'
 import { Transaction } from '../models'
 export type State = {
   processing?: boolean
-  cancellError?: string
+  CANCELError?: string
   finishing?: boolean
   finishError?: string
   loading?: boolean
@@ -29,7 +29,7 @@ export function transaction(
       return {}
     case transactionConsts.EDIT_FAILURE:
       return { error: action.error }
-    case transactionConsts.CANCELL_REQUEST:
+    case transactionConsts.CANCEL_REQUEST:
       if (state.items) {
         let items = state.items.filter(item => item.id !== action.id)
         let item = state.items.filter(item => item.id === action.id)[0]
@@ -40,9 +40,9 @@ export function transaction(
           items: items
         }
       }
-    case transactionConsts.CANCELL_SUCCESS:
+    case transactionConsts.CANCEL_SUCCESS:
       return state
-    case transactionConsts.CANCELL_FAILURE:
+    case transactionConsts.CANCEL_FAILURE:
       if (state.items) {
         let items = state.items.filter(item => item.id !== action.id)
         let item = state.items.filter(item => item.id === action.id)[0]
@@ -155,7 +155,7 @@ export function transaction(
     case transactionConsts.GETALL_REQUEST:
       return { loading: true }
     case transactionConsts.GETALL_SUCCESS:
-      return { items: action.transactions,total:action.total }
+      return { items: action.transactions, total: action.total }
     case transactionConsts.GETALL_FAILURE:
       return { error: action.error }
     default:

@@ -27,16 +27,19 @@ class Item extends React.Component<ItemProps, ItemState> {
     }
   }
 
-  handleCancell = (id: string) => {
-    this.props.dispatch(transactionActionCreators.cancell(id)).then(() =>
-      this.forceUpdate()
-    )
+  handleCancel = (id: string) => {
+    let r = confirm(i18n.t('Are you sure?'))
+    if (r)
+      this.props
+        .dispatch(transactionActionCreators.cancel(id))
+        .then(() => this.forceUpdate())
   }
   handleReactivate = (id: string) => {
     let r = confirm(i18n.t('Are you sure?'))
-    if (r) this.props.dispatch(transactionActionCreators.reactivate(this.props.transaction)).then(() =>
-      this.forceUpdate()
-    )
+    if (r)
+      this.props
+        .dispatch(transactionActionCreators.reactivate(this.props.transaction))
+        .then(() => this.forceUpdate())
   }
   handleFinish = (id: string) => {
     let r = confirm(i18n.t('Are you sure?'))
@@ -79,8 +82,8 @@ class Item extends React.Component<ItemProps, ItemState> {
     } else {
       switch (status) {
         case transactionConsts.STATUS_CANCELLED:
-        finalStatus = i18n.t('Not active')
-        break
+          finalStatus = i18n.t('Not active')
+          break
         case transactionConsts.STATUS_FINISHED:
           finalStatus = i18n.t('Bought')
           break
@@ -174,7 +177,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                   <div
                     className="control-btn"
                     onClick={() => {
-                      if (transaction.id) this.handleCancell(transaction.id)
+                      if (transaction.id) this.handleCancel(transaction.id)
                     }}
                   >
                     {i18n.t('Deactivate')}
