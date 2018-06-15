@@ -8,7 +8,8 @@
   "scripts": {
     "format": "prettier --write ./**/*.{js,ts,tsx,json,css}",
     "tslint": "tslint src/**/*.ts --fix",
-    "watch": "nodemon -e js,ts,jsx -w src/ -w frontend/ -x ts-node src/index"
+    "watch": "nodemon -e js,ts,jsx -w src/ -x ts-node src/index",
+    "old_watch": "nodemon -e js,ts,jsx -w src/ -w frontend/ -x ts-node src/index"
   },
   "dependencies": {
     "antd": "^3.5.3",

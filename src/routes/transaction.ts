@@ -9,7 +9,6 @@ const router = express.Router()
 router.use(authMiddleware)
 
 router.get('/list', async (req: IRequest, res: express.Response) => {
-  let transactions
   const type = req.query.type
   const buy = req.query.buy === 'true'
   const sell = req.query.sell === 'true'
@@ -56,7 +55,7 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
     orderOption = ['createdAt', 'ASC']
   }
   try {
-    transactions = await Transaction.findAll({
+    const result = await Transaction.findAndCount({
       where: {
         ...whereOption
       },
@@ -69,7 +68,7 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
       ...pageOption,
       order: [orderOption]
     })
-    return res.send(transactions)
+    return res.send({ transactions: result.rows, total: result.count })
   } catch (e) {
     return res.status(500).send({ error: e.message })
   }

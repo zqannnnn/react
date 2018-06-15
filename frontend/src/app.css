@@ -6,13 +6,12 @@
   height: 0;
   clear: both;
 }
-@media (max-width: 640px) {
-  .block {
-    width: 100%;
-  }
-}
 
-@media (min-width: 992px) {
+@media (min-width: 1200px) {
+  .nav-search {
+    left: 230px;
+    width: 380px;
+  }
   .page-container {
     padding-top: 2rem;
   }
@@ -25,14 +24,26 @@
     min-height: 80px;
   }
 }
-
-@media (max-width: 992px) {
+@media (min-width: 992px) and (max-width: 1199px) {
+  .nav-search {
+    left: 150px;
+    width: 300px;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .nav-search {
+    left: 270px;
+    width: 320px;
+  }
   .block {
     width: 50%;
   }
 }
-
 @media (min-width: 370px) and (max-width: 767px) {
+  .nav-search {
+    left: 160px;
+    width: 175px;
+  }
   .filter.margin-bottom {
     margin-bottom: 10px;
   }
@@ -44,15 +55,19 @@
   }
 }
 
-@media (min-width: 456px) and (max-width: 702px) {
-  .filter .media-width {
-    width: 394px;
+@media (max-width: 369px) {
+  .nav-search {
+    left: 120px;
+    width: 165px;
   }
 }
+
 body {
   background-color: #e9ecef;
 }
-
+html {
+  height: 101%;
+}
 .navbar {
   padding: 0 15%;
   background: white;
@@ -60,6 +75,11 @@ body {
 
 .navbar a {
   color: black;
+}
+
+.nav-search {
+  position: absolute;
+  top: 16px;
 }
 
 ul.nav li a {
@@ -146,6 +166,7 @@ ul.nav li {
   width: 100%;
   margin-bottom: 20px;
   padding: 10px;
+  min-height: 70px;
 }
 
 .images-container .image-add {
@@ -225,7 +246,7 @@ ul.nav li {
   text-align: center;
   font-weight: bold;
   color: #fff;
-  width: 60px;
+  width: 64px;
   left: -8px;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -400,7 +421,7 @@ ul.nav li {
   display: block;
   position: fixed;
   z-index: 20;
-  padding: 10% 0;
+  padding: 5% 0;
   left: 0;
   top: 0;
   width: 100%;
@@ -417,7 +438,6 @@ ul.nav li {
   margin: auto;
   padding: 0;
   width: 90%;
-  height: 80%;
   max-width: 1200px;
   animation: PicMove 0.5s;
 }
@@ -441,6 +461,7 @@ ul.nav li {
   font-size: 35px;
   font-weight: bold;
   opacity: 1;
+  z-index: 30;
 }
 
 .close:hover,
@@ -459,7 +480,7 @@ ul.nav li {
 .prev,
 .next {
   cursor: pointer;
-  position: fixed;
+  position: absolute;
   top: 50%;
   width: auto;
   padding: 16px;
@@ -471,6 +492,7 @@ ul.nav li {
   border-radius: 0 3px 3px 0;
   user-select: none;
   -webkit-user-select: none;
+  z-index: 30;
 }
 
 /* Position the "next button" to the right */
@@ -491,7 +513,7 @@ ul.nav li {
 
 .modal .numbertext {
   color: #f2f2f2;
-  font-size: 12px;
+  font-size: 18px;
   padding: 8px 12px;
   position: absolute;
   top: 0;

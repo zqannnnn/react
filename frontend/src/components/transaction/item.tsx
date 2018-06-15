@@ -27,8 +27,19 @@ class Item extends React.Component<ItemProps, ItemState> {
     }
   }
 
-  handleCancell = (id: string) => {
-    this.props.dispatch(transactionActionCreators.cancell(id))
+  handleCancel = (id: string) => {
+    let r = confirm(i18n.t('Are you sure?'))
+    if (r)
+      this.props
+        .dispatch(transactionActionCreators.cancel(id))
+        .then(() => this.forceUpdate())
+  }
+  handleReactivate = (id: string) => {
+    let r = confirm(i18n.t('Are you sure?'))
+    if (r)
+      this.props
+        .dispatch(transactionActionCreators.reactivate(this.props.transaction))
+        .then(() => this.forceUpdate())
   }
   handleFinish = (id: string) => {
     let r = confirm(i18n.t('Are you sure?'))
@@ -59,7 +70,7 @@ class Item extends React.Component<ItemProps, ItemState> {
     if (type == transactionConsts.TYPE_SELL) {
       switch (status) {
         case transactionConsts.STATUS_CANCELLED:
-          finalStatus = i18n.t('Cancelled')
+          finalStatus = i18n.t('Not active')
           break
         case transactionConsts.STATUS_FINISHED:
           finalStatus = i18n.t('Sold')
@@ -71,7 +82,7 @@ class Item extends React.Component<ItemProps, ItemState> {
     } else {
       switch (status) {
         case transactionConsts.STATUS_CANCELLED:
-          finalStatus = i18n.t('Cancelled')
+          finalStatus = i18n.t('Not active')
           break
         case transactionConsts.STATUS_FINISHED:
           finalStatus = i18n.t('Bought')
@@ -154,6 +165,38 @@ class Item extends React.Component<ItemProps, ItemState> {
             <Link className="control-btn" to={'/transaction/' + transaction.id}>
               {i18n.t('Read More')}
             </Link>
+            {(authInfo.id == transaction.userId || authInfo.isAdmin) &&
+              transaction.status === transactionConsts.STATUS_CREATED && (
+                <>
+                  <Link
+                    to={'/transaction/edit/' + transaction.id}
+                    className="control-btn"
+                  >
+                    {i18n.t('Edit')}
+                  </Link>
+                  <div
+                    className="control-btn"
+                    onClick={() => {
+                      if (transaction.id) this.handleCancel(transaction.id)
+                    }}
+                  >
+                    {i18n.t('Deactivate')}
+                  </div>
+                </>
+              )}
+            {(authInfo.id == transaction.userId || authInfo.isAdmin) &&
+              transaction.status === transactionConsts.STATUS_CANCELLED && (
+                <>
+                  <div
+                    className="control-btn"
+                    onClick={() => {
+                      if (transaction.id) this.handleReactivate(transaction.id)
+                    }}
+                  >
+                    {i18n.t('Reactivate')}
+                  </div>
+                </>
+              )}
           </div>
         </div>
       </Col>
