@@ -17,21 +17,17 @@ class List extends React.Component<ListProps> {
   constructor(props: ListProps) {
     super(props)
   }
-  
+
   componentDidMount() {
-    this.props.dispatch(
-      transactionActionCreators.getAll({ type: 'mine' })
-    )
+    this.props.dispatch(transactionActionCreators.getAll({ type: 'mine' }))
   }
   render() {
-    const {transaction} = this.props;
+    const { transaction } = this.props
     return (
       <Row className="page">
         <div className="banner">
           <div className="banner-bg" />
-          <div className="title">
-            {i18n.t('My Transaction')}
-          </div>
+          <div className="title">{i18n.t('My Transaction')}</div>
         </div>
         {transaction.error && (
           <span className="text-danger">
