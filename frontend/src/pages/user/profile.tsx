@@ -6,7 +6,8 @@ import {
   AuthInfo,
   currencyActionCreators,
   uploadActionCreators,
-  lightboxActionCreators
+  lightboxActionCreators,
+  authActionCreators
 } from '../../actions'
 import { RootState, UserState, UploadState } from '../../reducers'
 import { User, Currency, Image } from '../../models'
@@ -114,16 +115,19 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   }
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-
+    const { dispatch } = this.props
     this.setState({ submitted: true })
     let user = this.state.user
     if (user.firstName && user.lastName && user.email) {
       if (user.companyName) {
         user.licenseStatus = authConsts.LICENSE_STATUS_UNCONFIRMED
       }
-      this.props.dispatch(userActionCreators.update(user))
+      dispatch(userActionCreators.update(user))
     }
     window.scrollTo(0, 0)
+    setTimeout(() => 
+      dispatch(authActionCreators.refresh())
+    , 1000)
   }
   //for render select input
   renderCurrencySelect = (optionItems: Currency[]) => {
