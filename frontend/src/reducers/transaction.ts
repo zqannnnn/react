@@ -3,7 +3,7 @@ import { TransactionAction } from '../actions'
 import { Transaction } from '../models'
 export type State = {
   processing?: boolean
-  cancellError?: string
+  CANCELError?: string
   finishing?: boolean
   finishError?: string
   loading?: boolean
@@ -29,27 +29,54 @@ export function transaction(
       return {}
     case transactionConsts.EDIT_FAILURE:
       return { error: action.error }
-    case transactionConsts.CANCELL_SUCCESS:
-      if (state.items)
+    case transactionConsts.CANCEL_REQUEST:
+      if (state.items) {
+        let items = state.items.filter(item => item.id !== action.id)
+        let item = state.items.filter(item => item.id === action.id)[0]
+        item.status = transactionConsts.STATUS_CANCELLED
+        items.push(item)
         return {
           ...state,
-          items: state.items.filter(item => item.id !== action.id)
+          items: items
         }
-    case transactionConsts.CANCELL_FAILURE:
-      if (state.items)
+      }
+    case transactionConsts.CANCEL_SUCCESS:
+      return state
+    case transactionConsts.CANCEL_FAILURE:
+      if (state.items) {
+        let items = state.items.filter(item => item.id !== action.id)
+        let item = state.items.filter(item => item.id === action.id)[0]
+        item.status = transactionConsts.STATUS_CREATED
+        items.push(item)
         return {
           ...state,
-          items: state.items.map(
-            item =>
-              item.id === action.id
-                ? {
-                    ...item,
-                    cancelling: false,
-                    cancellError: action.error
-                  }
-                : item
-          )
+          items: items
         }
+      }
+    case transactionConsts.REACTIVATE_REQUEST:
+      if (state.items) {
+        let items = state.items.filter(item => item.id !== action.id)
+        let item = state.items.filter(item => item.id === action.id)[0]
+        item.status = transactionConsts.STATUS_CREATED
+        items.push(item)
+        return {
+          ...state,
+          items: items
+        }
+      }
+    case transactionConsts.REACTIVATE_SUCCESS:
+      return state
+    case transactionConsts.REACTIVATE_FAILURE:
+      if (state.items) {
+        let items = state.items.filter(item => item.id !== action.id)
+        let item = state.items.filter(item => item.id === action.id)[0]
+        item.status = transactionConsts.STATUS_CANCELLED
+        items.push(item)
+        return {
+          ...state,
+          items: items
+        }
+      }
     case transactionConsts.FINISH_REQUEST:
       if (state.items)
         return {

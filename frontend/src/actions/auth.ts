@@ -59,7 +59,7 @@ function login(username: string, password: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request())
 
-    authService.login(username, password).then(
+    return authService.login(username, password).then(
       (authInfo: AuthInfo) => {
         dispatch(success(authInfo))
       },

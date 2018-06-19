@@ -1,12 +1,10 @@
 import * as React from 'react'
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
-
 import { authActionCreators } from '../../actions'
 import { RootState } from '../../reducers'
 import { Row, Col } from 'antd'
 import i18n from 'i18next'
-
 import { LoginForm } from '../../components/form'
 interface LoginProps extends RouteComponentProps<{}> {
   dispatch: Dispatch<RootState>

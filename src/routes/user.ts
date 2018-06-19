@@ -11,6 +11,13 @@ const router = express.Router()
 
 router.post('/new', async (req, res) => {
   try {
+    User.findOne({
+      where: { email: req.body.email }
+    }).then(user => {
+      if (user) {
+        return res.status(401).send({ error: i18n.t('Email has been used.') })
+      }
+    })
     const user = new User({
       email: req.body.email,
       password: req.body.password,

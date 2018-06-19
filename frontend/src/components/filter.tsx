@@ -31,7 +31,7 @@ class Filter extends React.Component<ItemProps> {
     const { currency, handleChangeType, handleSelectSort } = this.props
     return (
       <div className="filter margin-bottom">
-        <Row className="media-width">
+        <Row>
           <Select
             defaultValue={i18n.t('New to old')}
             style={{ width: 160 }}
