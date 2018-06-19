@@ -65,12 +65,9 @@ class RegisterForm extends React.Component<
   ) => {
     const form = this.props.form
     if (value && this.state.confirmDirty) {
-      form.validateFieldsAndScroll(
-        ['confirm'],
-        {
-          force: true
-        }
-      )
+      form.validateFieldsAndScroll(['confirm'], {
+        force: true
+      })
     }
     callback()
   }
