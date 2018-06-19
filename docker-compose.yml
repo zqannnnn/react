@@ -13,6 +13,8 @@ services:
       - .:/home/node/bmp
     depends_on:
       - postgres
+    environment:
+      - NODE_ENV=development
 
   postgres:
     image: postgres:alpine

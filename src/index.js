@@ -10,7 +10,7 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const models = require('./models')
 require('./middleware/webpack')(app)
-models.setupDatabase()
+//models.setupDatabase()
 
 // Get the exchange rate API
 // const currencyApi = require('./api/currency')
@@ -44,6 +44,6 @@ app.use('/static', express.static('./uploads'))
 // launch
 app.listen(port, err => {
   if (err) console.log(err)
-  console.log(`⚡ Express started on port ${port}`)
+  console.log(`⚡ Express started on port ${port}, in ${process.env.NODE_ENV} mode`)
 })
 export { app }
