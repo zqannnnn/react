@@ -6,7 +6,13 @@ import i18n from 'i18next'
 
 import { history } from './helpers/history'
 import { alertActionCreators, authActionCreators } from './actions'
-import { PrivateRoute, AdminRoute, NavBar, Lightbox, Search } from './components'
+import {
+  PrivateRoute,
+  AdminRoute,
+  NavBar,
+  Lightbox,
+  Search
+} from './components'
 import {
   LoginPage,
   RegisterPage,
@@ -18,9 +24,9 @@ import {
   ViewPage as TransactionViewPage
 } from './pages/transaction'
 import { ProfilePage, CompanyConfirmPage } from './pages/user'
-import { AdminPage, HomePage,AllListPage,MyListPage } from './pages'
+import { AdminPage, HomePage, AllListPage, MyListPage } from './pages'
 import { RootState, LightboxState, AuthState, AlertState } from './reducers'
-import { Layout, Alert, BackTop} from 'antd'
+import { Layout, Alert, BackTop } from 'antd'
 import './app.css'
 
 interface AppProps {
@@ -64,14 +70,8 @@ class App extends React.Component<AppProps, any> {
               <Switch>
                 <Route exact path="/" component={HomePage} />
                 <PrivateRoute path="/reset/pass" component={ResetPassPage} />
-                <PrivateRoute
-                  path="/transactions/my"
-                  component={MyListPage}
-                />
-                <Route
-                  path="/transactions"
-                  component={AllListPage}
-                />
+                <PrivateRoute path="/transactions/my" component={MyListPage} />
+                <Route path="/transactions" component={AllListPage} />
                 <PrivateRoute
                   path="/transaction/new"
                   component={TransactionEditPage}

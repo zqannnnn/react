@@ -128,7 +128,7 @@ export function transaction(
     case transactionConsts.GETALL_REQUEST:
       return { loading: true }
     case transactionConsts.GETALL_SUCCESS:
-      return { items: action.transactions,total:action.total }
+      return { items: action.transactions, total: action.total }
     case transactionConsts.GETALL_FAILURE:
       return { error: action.error }
     default:

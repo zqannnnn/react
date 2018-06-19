@@ -10,7 +10,6 @@ import { ThunkAction } from 'redux-thunk'
 import { RootState } from '../reducers'
 import { ListOptions } from '../models'
 
-
 export type Action = {
   type: string
   error?: string
@@ -163,9 +162,9 @@ function finish(id: string) {
     return { type: transactionConsts.FINISH_FAILURE, error, id }
   }
 }
-const getAll: ActionCreator<ThunkAction<void, RootState, void>> = (option:ListOptions
- ) => {
-
+const getAll: ActionCreator<ThunkAction<void, RootState, void>> = (
+  option: ListOptions
+) => {
   return (dispatch: Dispatch<RootState>): void => {
     dispatch(request())
     transService
