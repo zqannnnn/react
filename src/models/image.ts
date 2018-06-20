@@ -12,6 +12,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { Transaction, User } from '.'
+import { Goods } from './goods'
 @Table({
   tableName: 'image',
   underscored: true
@@ -26,6 +27,10 @@ export class Image extends Model<Image> {
   @Column
   public id: string
 
+  @ForeignKey(() => Goods)
+  @Column({ field: 'goods_id' })
+  public goodsId: string
+
   @Column({ field: 'path' })
   public path: string
 
@@ -39,10 +44,6 @@ export class Image extends Model<Image> {
   @UpdatedAt
   @Column({ field: 'updated_at' })
   public updatedAt: Date
-
-  @ForeignKey(() => Transaction)
-  @Column({ field: 'transaction_id' })
-  public transactionId: string
 
   @ForeignKey(() => User)
   @Column({ field: 'user_id' })
