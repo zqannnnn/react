@@ -19,6 +19,8 @@ services:
   postgres:
     image: postgres:alpine
     container_name: bmp-db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
@@ -29,3 +31,6 @@ services:
     restart: always
     ports:
       - 127.0.0.1:8011:8080
+      
+volumes: 
+  pgdata:
