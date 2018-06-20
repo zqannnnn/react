@@ -76,7 +76,7 @@ class Item extends React.Component<ItemProps, ItemState> {
           finalStatus = i18n.t('Sold')
           break
         default:
-          finalStatus = i18n.t('On Sale')
+          finalStatus = i18n.t('For Sale')
           break
       }
     } else {

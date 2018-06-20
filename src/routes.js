@@ -1,7 +1,6 @@
 const path = require('path')
 const jwt = require('jsonwebtoken')
 const i18n = require('i18next')
-const consts = require('./config/static')
 const Models = require('./models')
 const User = Models.User
 const userRouter = require('./routes/user')
@@ -37,7 +36,9 @@ module.exports = (app, passport) => {
           .send({ error: i18n.t('Incorrect email or password.') })
       }
       const data = {
-        token: jwt.sign(user, app.get('secretKey'), consts.EXPIREMENT),
+        token: jwt.sign(user, app.get('secretKey'), {
+          expiresIn: consts.EXPIREMENT
+        }),
         id: user.id
       }
       if (user.userType == consts.USER_TYPE_ADMIN) {
@@ -70,7 +71,7 @@ module.exports = (app, passport) => {
               plain: true
             }),
             app.get('secretKey'),
-            { expiresIn }
+            { expiresIn: consts.EXPIREMENT }
           ),
           id: user.id,
           isAdmin: user.isAdmin,

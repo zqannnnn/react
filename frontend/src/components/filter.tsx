@@ -53,7 +53,7 @@ class Filter extends React.Component<ItemProps> {
                 {i18n.t('Wanted')}
               </Checkbox>
               <Checkbox value={transactionConsts.TYPE_SELL}>
-                {i18n.t('On Sale')}
+                {i18n.t('For Sale')}
               </Checkbox>
             </Checkbox.Group>
             <Select
