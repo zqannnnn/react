@@ -27,13 +27,5 @@ module.exports = {
         loader: 'style-loader!css-loader'
       }
     ]
-  },
-  //devtool: 'source-map',
-  devServer: {
-    historyApiFallback: true,
-    inline: true,
-    stats: {
-      colors: true
-    }
   }
 }
