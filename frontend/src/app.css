@@ -478,6 +478,15 @@ ul.nav li {
   }
 }
 
+@keyframes PicMove-back {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  100% {
+    transform: translateX(-100%) scale(0);
+  }
+}
+
 /* The Close Button */
 
 .close {
