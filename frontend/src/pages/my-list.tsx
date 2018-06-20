@@ -72,9 +72,7 @@ class List extends React.Component<ListProps, ListState> {
     )
   }
   componentDidMount() {
-    this.props.dispatch(
-      transactionActionCreators.getAll(this.state.options)
-    )
+    this.props.dispatch(transactionActionCreators.getAll(this.state.options))
   }
   render() {
     const { transaction } = this.props

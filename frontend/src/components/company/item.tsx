@@ -6,6 +6,7 @@ import { RootState, TransactionState } from '../../reducers'
 import { User, ListItem } from '../../models'
 import { adminConsts } from '../../constants'
 import i18n from 'i18next'
+import { Col } from 'antd'
 interface ItemProps {
   dispatch: Dispatch<RootState>
   company: User
@@ -19,29 +20,30 @@ class Item extends React.Component<ItemProps> {
   render() {
     const { company, authInfo } = this.props
     return (
-      <div className="block col-sm-6 col-md-4 col-lg-3">
+      <Col className="block" xs={12} sm={11} md={10} lg={9}>
         <div className="boxmain">
-          <div className="title">{company.companyName}</div>
-          <div className="desc">
+          <div className="title text-overflow">{company.companyName}</div>
+          <div className="desc text-overflow">
             <span>
               {company.companyAddress && 'Address:' + company.companyAddress}
             </span>
           </div>
-          <div className="image-wr">
-            {company.businessLicenses && company.businessLicenses[0] ? (
-              <img src={company.businessLicenses[0].path} />
-            ) : (
-              <img src="/asset/no-image.jpg" />
-            )}
-          </div>
-
-          <div className="footer">
+          <Link to={'/company/confirm/' + company.id}>
+            <div className="image-wr">
+              {company.businessLicenses && company.businessLicenses[0] ? (
+                <img src={company.businessLicenses[0].path} />
+              ) : (
+                <img src="/asset/no-image.jpg" />
+              )}
+            </div>
+          </Link>
+          <div className="menu content">
             <Link className="" to={'/company/confirm/' + company.id}>
               {i18n.t('Read More')}
             </Link>
           </div>
         </div>
-      </div>
+      </Col>
     )
   }
 }

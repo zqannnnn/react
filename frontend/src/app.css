@@ -72,6 +72,13 @@
   .list .list__content .list__subtitle {
     font-size: 14px;
   }
+  .media-width {
+    width: 100%;
+  }
+  .list-container .header .subtitle .des,
+  .list-container .header .subtitle .link {
+    font-size: 13px;
+  }
 }
 
 @media (max-width: 369px) {
@@ -259,6 +266,7 @@ ul.nav li {
   min-height: 1rem;
   height: 25px;
   line-height: 25px;
+  font-weight: bold;
 }
 
 .block .header {
@@ -491,7 +499,7 @@ ul.nav li {
 
 .close {
   color: white;
-  position: absolute;
+  position: fixed;
   top: 10px;
   right: 25px;
   font-size: 35px;

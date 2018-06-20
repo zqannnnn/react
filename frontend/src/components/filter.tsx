@@ -34,9 +34,8 @@ class Filter extends React.Component<ItemProps> {
         <Row>
           <Select
             defaultValue={i18n.t('New to old')}
-            style={{ width: 160 }}
             onChange={handleSelectSort}
-            className="sorting-left margin-bottom"
+            className="sorting-left margin-bottom media-width"
           >
             <Option value="new">{i18n.t('New to old')}</Option>
             <Option value="old">{i18n.t('Old to new')}</Option>
@@ -60,7 +59,7 @@ class Filter extends React.Component<ItemProps> {
             <Select
               value={currency.currentCurrency}
               onChange={this.handleSelectCurrency}
-              style={{ width: 220 }}
+              className="media-width"
             >
               {currency.items
                 ? currency.items.map((item, index) => (

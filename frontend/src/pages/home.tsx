@@ -32,9 +32,7 @@ class HomePage extends React.Component<HomeProps, HomeState> {
     }
   }
   componentDidMount() {
-    this.props.dispatch(
-      transactionActionCreators.getAll(this.state.options)
-    )
+    this.props.dispatch(transactionActionCreators.getAll(this.state.options))
   }
   handleChangeType = (values: string[]) => {
     let typeOption: { buy?: boolean; sell?: boolean } = {}

@@ -24,7 +24,7 @@ class List extends React.Component<ListProps> {
           </div>
         )}
 
-        <Row className="block-container" gutter={15}>
+        <Row className="block-container" gutter={15} style={{ marginLeft: 0 }}>
           {items.map((item, index) => <Item key={index} item={item} />)}
         </Row>
       </div>
