@@ -125,9 +125,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
       dispatch(userActionCreators.update(user))
     }
     window.scrollTo(0, 0)
-    setTimeout(() => 
-      dispatch(authActionCreators.refresh())
-    , 1000)
+    setTimeout(() => dispatch(authActionCreators.refresh()), 1000)
   }
   //for render select input
   renderCurrencySelect = (optionItems: Currency[]) => {

@@ -89,9 +89,7 @@ class List extends React.Component<ListProps, ListStates> {
     history.listen((location, action) => {
       this.getTransaction()
     })
-    this.props.dispatch(
-      transactionActionCreators.getAll(this.state.options)
-    )
+    this.props.dispatch(transactionActionCreators.getAll(this.state.options))
   }
 
   render() {
