@@ -34,6 +34,16 @@ export class User extends Model<User> {
   @Column
   public id: string
 
+  @ForeignKey(() => Currency)
+  @Column({ field: 'prefer_currency_code' })
+  public preferCurrencyCode: string
+
+  @BelongsTo(() => Currency)
+  public prefer_currency_code: Currency
+
+  @Column({ field: 'user_name' })
+  public userName: string
+
   @Column({ field: 'user_type' })
   public userType: number
 
