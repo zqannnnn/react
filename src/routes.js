@@ -1,4 +1,3 @@
-const path = require('path')
 const jwt = require('jsonwebtoken')
 const i18n = require('i18next')
 const Models = require('./models')
@@ -10,7 +9,6 @@ const transactionRouter = require('./routes/transaction')
 const passRouter = require('./routes/pass')
 const uploadRouter = require('./routes/upload')
 const qs = require('querystring')
-const authMiddleware = require('./middleware/auth')
 
 import { consts } from './config/static'
 

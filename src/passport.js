@@ -1,12 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy
-const jwt = require('jsonwebtoken')
 
 const Models = require('./models')
-const UserGitlab = Models.UserGitlab
-const UserLocal = Models.UserLocal
 const User = Models.User
-
-const consts = require('./config/static')
 
 module.exports = passport => {
   passport.use(

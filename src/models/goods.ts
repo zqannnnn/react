@@ -1,5 +1,4 @@
 import {
-  BeforeCreate,
   BelongsTo,
   Column,
   CreatedAt,
@@ -7,17 +6,13 @@ import {
   Default,
   ForeignKey,
   HasMany,
-  HasOne,
-  IsEmail,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
-  Unique,
   UpdatedAt
 } from 'sequelize-typescript'
-import { consts } from '../config/static'
-import { Currency, Image, User } from './'
+import { Image, User } from './'
 @Table({
   tableName: 'goods',
   underscored: true
@@ -104,6 +99,9 @@ export class Goods extends Model<Goods> {
 
   @HasMany(() => Image, 'goods_id')
   public images: Image[]
+
+  @Column({ field: 'if_exist' })
+  public ifExist: boolean
 
   @CreatedAt
   @Column({ field: 'created_at' })
