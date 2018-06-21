@@ -1,23 +1,18 @@
 import {
-  BeforeCreate,
   BelongsTo,
   Column,
   CreatedAt,
   DataType,
   Default,
   ForeignKey,
-  HasMany,
-  HasOne,
-  IsEmail,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
-  Unique,
   UpdatedAt
 } from 'sequelize-typescript'
 import { consts } from '../config/static'
-import { Currency, Image, User } from './'
+import { Currency, User } from './'
 import { Goods } from './goods'
 @Table({
   tableName: 'transaction',
@@ -73,6 +68,9 @@ export class Transaction extends Model<Transaction> {
 
   @BelongsTo(() => Currency)
   public currency: Currency
+
+  @Column({ field: 'is_maker_seller' })
+  public isMakerSeller: boolean
 
   @CreatedAt
   @Column({ field: 'created_at' })

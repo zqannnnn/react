@@ -1,5 +1,4 @@
 import {
-  BelongsTo,
   Column,
   CreatedAt,
   DataType,
@@ -11,8 +10,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { Transaction, User } from '.'
-import { Goods } from './goods'
+import { User,Goods } from '.'
 @Table({
   tableName: 'image',
   underscored: true

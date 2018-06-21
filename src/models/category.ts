@@ -1,21 +1,13 @@
 import {
-  BeforeCreate,
-  BelongsTo,
   Column,
-  CreatedAt,
   DataType,
   Default,
-  ForeignKey,
-  HasMany,
-  IsEmail,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
-  Unique,
-  UpdatedAt
+  Unique
 } from 'sequelize-typescript'
-import { User } from './user'
 @Table({
   tableName: 'category',
   underscored: true

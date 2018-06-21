@@ -2,7 +2,6 @@ import * as express from 'express'
 import * as i18n from 'i18next'
 import * as jwt from 'jsonwebtoken'
 import { consts } from '../config/static'
-import { User } from '../models/user'
 
 // TODO use the User model to identify if user is logged in or not, not the JWT
 
