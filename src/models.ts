@@ -6,9 +6,18 @@ import { Category, Currency, Image, Transaction, User } from './models/'
 const sequelize = new Sequelize(config)
 sequelize.addModels([User, Transaction, Category, Image, Currency])
 
-const setupDatabase = async () => {
+const initDatabase = async () => {
   await sequelize.sync()
+  User.findOne({ where: { email: 'admin@admin.com' } }).then(user => {
+    if (!user) {
+      insertInitialData()
+      const currencyApi = require('./api/currency')
+      currencyApi.getApi()      
+    }
+  })
+}
 
+const insertInitialData = () => {
   User.findOne({ where: { email: 'admin@admin.com' } }).then(user => {
     if (!user) {
       const newUser = new User({
@@ -48,4 +57,4 @@ const setupDatabase = async () => {
   })
 }
 
-export { User, Transaction, Category, Image, setupDatabase }
+export { User, Transaction, Category, Image, initDatabase }

@@ -10,11 +10,9 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const models = require('./models')
 require('./middleware/webpack')(app)
-//models.setupDatabase()
 
-// Get the exchange rate API
-// const currencyApi = require('./api/currency')
-// currencyApi.getApi()
+models.initDatabase()
+
 app.set('secretKey', 'just a test')
 
 require('./passport')(passport) // pass passport for configuration
