@@ -12,7 +12,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { consts } from '../config/static'
-import { Currency, User } from './'
+import { Currency, Image, User } from './'
 import { Goods } from './goods'
 @Table({
   tableName: 'transaction',
@@ -48,10 +48,6 @@ export class Transaction extends Model<Transaction> {
 
   @BelongsTo(() => Goods)
   public goods: Goods
-
-  @Column public type: string
-
-  @Column public category: string
 
   @Default(consts.TRANSACTION_STATUS_CREATED)
   @Column
