@@ -10,7 +10,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { User,Goods } from '.'
+import { Goods, User } from '.'
 @Table({
   tableName: 'image',
   underscored: true

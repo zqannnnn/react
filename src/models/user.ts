@@ -36,7 +36,7 @@ export class User extends Model<User> {
   public preferCurrencyCode: string
 
   @BelongsTo(() => Currency)
-  public prefer_currency_code: Currency
+  public preferCurrency: Currency
 
   @Column({ field: 'user_name' })
   public userName: string

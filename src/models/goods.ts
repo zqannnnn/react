@@ -48,8 +48,6 @@ export class Goods extends Model<Goods> {
   @BelongsTo(() => User)
   public creator: User
 
-  @Column public type: string
-
   @Column public category: string
 
   @Column public title: string
