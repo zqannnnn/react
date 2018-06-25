@@ -35,7 +35,7 @@ router.post('/new', async (req, res) => {
         preferredCurrencyCode: user.preferredCurrencyCode
       },
       app.get('secretKey'),
-      { expiresIn: consts.EXPIREMENT }
+      { expiresIn: consts.EXPIRE_IN }
     )
     const data: AuthInfo = {
       token,

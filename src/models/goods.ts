@@ -28,13 +28,6 @@ export class Goods extends Model<Goods> {
   public id: string
 
   @ForeignKey(() => User)
-  @Column({ field: 'user_id' })
-  public userId: string
-
-  @BelongsTo(() => User)
-  public user: User
-
-  @ForeignKey(() => User)
   @Column({ field: 'owner_id' })
   public ownerId: string
 

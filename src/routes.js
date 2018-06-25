@@ -35,7 +35,7 @@ module.exports = (app, passport) => {
       }
       const data = {
         token: jwt.sign(user, app.get('secretKey'), {
-          expiresIn: consts.EXPIREMENT
+          expiresIn: consts.EXPIRE_IN
         }),
         id: user.id
       }
@@ -69,7 +69,7 @@ module.exports = (app, passport) => {
               plain: true
             }),
             app.get('secretKey'),
-            { expiresIn: consts.EXPIREMENT }
+            { expiresIn: consts.EXPIRE_IN }
           ),
           id: user.id,
           isAdmin: user.isAdmin,

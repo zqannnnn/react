@@ -3,7 +3,7 @@ import * as i18n from 'i18next'
 import { consts } from '../config/static'
 import { authMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
-import { Currency, Image, Transaction } from '../models/'
+import { Currency, Goods, Image, Transaction } from '../models/'
 const router = express.Router()
 
 router.use(authMiddleware)
@@ -17,12 +17,14 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   const keyword = req.query.keyword
   const sorting = req.query.sorting
   const whereOption: {
-    userId?: string
+    makerId?: string
     status?: number
-    type?: string
-    title?: { $like: string }
+    isMakerSeller?: boolean
   } = {}
-
+  const goodsOption: {
+    title?: { $like: string }
+    category?: number
+  } = {}
   const pageOption: {
     offset?: number
     limit?: number
@@ -31,19 +33,19 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   let orderOption: string[] = ['createdAt', 'DESC']
 
   if (buy && !sell) {
-    whereOption.type = consts.TRANSACTION_TYPE_BUY
+    whereOption.isMakerSeller = true
   } else if (sell && !buy) {
-    whereOption.type = consts.TRANSACTION_TYPE_SELL
+    whereOption.isMakerSeller = false
   }
   if (pageSize && typeof page !== 'undefined') {
     pageOption.offset = (page - 1) * pageSize
     pageOption.limit = (page - 1) * pageSize + pageSize
   }
   if (typeof keyword !== 'undefined') {
-    whereOption.title = { $like: `%${keyword}%` }
+    goodsOption.title = { $like: `%${keyword}%` }
   }
   if (type === 'mine') {
-    whereOption.userId = req.userId
+    whereOption.makerId = req.userId
   } else if (type === 'finished') {
     whereOption.status = consts.TRANSACTION_STATUS_FINISHED
   } else {
@@ -63,6 +65,10 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
         {
           model: Image,
           attributes: ['path', 'type']
+        },
+        {
+          model: Goods,
+          where: { ...goodsOption }
         }
       ],
       ...pageOption,
@@ -86,7 +92,7 @@ router.post('/new', async (req: IRequest, res: express.Response) => {
         const imageDb = new Image({
           path: image.path,
           transactionId: transaction.id,
-          type: consts.IMAGE_TYPE_MEDIE
+          type: consts.IMAGE_TYPE_MEDIA
         })
         imageDb.save()
       })
@@ -211,7 +217,7 @@ router
           const imageDb = new Image({
             path: image.path,
             transactionId: transaction.id,
-            type: consts.IMAGE_TYPE_MEDIE
+            type: consts.IMAGE_TYPE_MEDIA
           })
           imageDb.save()
         })
