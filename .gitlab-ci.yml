@@ -22,7 +22,7 @@ deploy:
     - ssh-add ~/.ssh/id_rsa
     - ssh-keyscan -H $DEPLOYMENT_SERVER_IP >> ~/.ssh/known_hosts
   script:
-    - scp -r ./Dockerfile ./node_modules ./bin ./src ./frontend ./public root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
+    - scp -r ./Dockerfile ./bin ./src ./frontend ./public root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./development.env root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./docker-compose.yml ./package.json ./tslint.json ./package-lock.json ./tsconfig.json root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./i18next-scanner-backend.config.js ./i18next-scanner.config.js ./webpack.common.js ./webpack.prod.js ./webpack.dev.js ./yarn.lock root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
