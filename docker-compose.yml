@@ -10,7 +10,7 @@ services:
     env_file:
       - development.env
     volumes:
-      - .:/opt/projects/bmp
+      - .:/home/node/bmp
     depends_on:
       - postgres
     environment:
