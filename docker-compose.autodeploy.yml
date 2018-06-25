@@ -4,5 +4,3 @@ web:
     - "80:80"
   env_file:
     - environment.env
-  links:
-    - db:db
