@@ -2,14 +2,16 @@ const jwt = require('jsonwebtoken')
 const i18n = require('i18next')
 const Models = require('./models')
 const User = Models.User
-const userRouter = require('./routes/user')
-const categoryRouter = require('./routes/category')
-const currencyRouter = require('./routes/currency')
-const transactionRouter = require('./routes/transaction')
-const passRouter = require('./routes/pass')
-const uploadRouter = require('./routes/upload')
 const qs = require('querystring')
-
+import {
+  userRouter,
+  categoryRouter,
+  currencyRouter,
+  transactionRouter,
+  goodsRouter,
+  passRouter,
+  uploadRouter
+} from './routes'
 import { consts } from './config/static'
 
 const handleSequelizeError = (res, error) => {
@@ -91,4 +93,5 @@ module.exports = (app, passport) => {
   app.use('/transaction', transactionRouter)
   app.use('/upload', uploadRouter)
   app.use('/currency', currencyRouter)
+  app.use('/goods', goodsRouter)
 }

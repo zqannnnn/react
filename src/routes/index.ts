@@ -1,0 +1,7 @@
+export { route as categoryRouter } from './category'
+export { route as transactionRouter } from './transaction'
+export { route as goodsRouter } from './goods'
+export { route as userRouter } from './user'
+export { route as passRouter } from './pass'
+export { route as uploadRouter } from './upload'
+export { route as currencyRouter } from './currency'
