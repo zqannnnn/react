@@ -94,4 +94,5 @@ export const router = (app: Application, passport: PassportStatic) => {
   app.use('/transaction', transactionRouter)
   app.use('/upload', uploadRouter)
   app.use('/currency', currencyRouter)
+  app.use('/goods', goodsRouter)
 }

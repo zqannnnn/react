@@ -63,12 +63,14 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
       },
       include: [
         {
-          model: Image,
-          attributes: ['path', 'type']
-        },
-        {
           model: Goods,
-          where: { ...goodsOption }
+          where: { ...goodsOption },
+          include: [
+            {
+              model: Image,
+              attributes: ['path', 'type']
+            }
+          ]
         }
       ],
       ...pageOption,
@@ -83,30 +85,10 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
 router.post('/new', async (req: IRequest, res: express.Response) => {
   try {
     const transaction = new Transaction({
-      userId: req.userId,
+      makerId: req.userId,
       ...req.body
     })
     await transaction.save()
-    if (req.body.images) {
-      req.body.images.forEach((image: { path: string }) => {
-        const imageDb = new Image({
-          path: image.path,
-          transactionId: transaction.id,
-          type: consts.IMAGE_TYPE_MEDIA
-        })
-        imageDb.save()
-      })
-    }
-    if (req.body.certificates) {
-      req.body.certificates.forEach((certificate: { path: string }) => {
-        const imageDb = new Image({
-          path: certificate.path,
-          transactionId: transaction.id,
-          type: consts.IMAGE_TYPE_CERTIFICATE
-        })
-        imageDb.save()
-      })
-    }
     return res.send({ success: true })
   } catch (e) {
     return res.status(500).send({ error: e.message })
@@ -131,6 +113,7 @@ router.get(
           .send({ error: i18n.t('Transaction does not exist.') })
       }
       transaction.status = consts.TRANSACTION_STATUS_FINISHED
+      transaction.takerId = req.body.takerId
       transaction.save()
       return res.send({ success: true })
     } catch (e) {
@@ -172,12 +155,11 @@ router
       },
       include: [
         {
-          model: Image,
-          attributes: ['path', 'type']
-        },
-        {
           model: Currency,
           attributes: ['code']
+        },
+        {
+          model: Goods
         }
       ]
     })
@@ -195,7 +177,7 @@ router
           id: req.params.transactionId
         }
       })
-      if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
+      if (transaction && transaction.makerId !== req.userId && !req.isAdmin) {
         return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
       if (!transaction) {
@@ -207,31 +189,6 @@ router
         (key: string) => (transaction[key] = req.body[key])
       )
       transaction.save()
-      await Image.destroy({
-        where: {
-          transactionId: req.params.transactionId
-        }
-      })
-      if (req.body.images) {
-        req.body.images.forEach((image: { path: string }) => {
-          const imageDb = new Image({
-            path: image.path,
-            transactionId: transaction.id,
-            type: consts.IMAGE_TYPE_MEDIA
-          })
-          imageDb.save()
-        })
-      }
-      if (req.body.certificates) {
-        req.body.certificates.forEach((certificate: { path: string }) => {
-          const imageDb = new Image({
-            path: certificate.path,
-            transactionId: transaction.id,
-            type: consts.IMAGE_TYPE_CERTIFICATE
-          })
-          imageDb.save()
-        })
-      }
       return res.send({ success: true })
     } catch (e) {
       return res.status(500).send({ error: e.message })
@@ -244,7 +201,7 @@ router
           id: req.params.transactionId
         }
       })
-      if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
+      if (transaction && transaction.makerId !== req.userId && !req.isAdmin) {
         return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
       if (!transaction) {
