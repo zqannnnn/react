@@ -23,6 +23,7 @@ deploy:
     - ssh-keyscan -H $DEPLOYMENT_SERVER_IP >> ~/.ssh/known_hosts
   script:
     - scp -r ./Dockerfile ./bin ./src ./frontend ./public root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
+    - scp -r .development.env root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./docker-compose.yml ./package.json ./tslint.json ./package-lock.json ./tsconfig.json root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./i18next-scanner-backend.config.js ./i18next-scanner.config.js ./webpack.common.js ./webpack.prod.js ./yarn.lock root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
-    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker-compose -f docker-compose.yml stop; docker-compose -f docker-compose.yml down; docker-compose -f docker-compose.yml up -d"
+    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker-compose stop; docker-compose down; docker-compose build; docker-compose up -d"
