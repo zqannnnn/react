@@ -7,12 +7,16 @@ const sequelize = new Sequelize(config)
 sequelize.addModels([User, Transaction, Category, Image, Currency])
 
 const initDatabase = async () => {
+  console.log(`initDatabase`)
   await sequelize.sync()
   User.findOne({ where: { email: 'admin@admin.com' } }).then(user => {
     if (!user) {
+      console.log(`initDatabase 1`)
       insertInitialData()
       const currencyApi = require('./api/currency')
       currencyApi.getApi()      
+    } else {
+      console.log(`initDatabase 2`)
     }
   })
 }
