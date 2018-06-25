@@ -23,6 +23,10 @@ import {
   EditPage as TransactionEditPage,
   ViewPage as TransactionViewPage
 } from './pages/transaction'
+import {
+  EditPage as GoodsEditPage,
+  ViewPage as GoodsViewPage
+} from './pages/goods'
 import { ProfilePage, CompanyConfirmPage } from './pages/user'
 import { AdminPage, HomePage, AllListPage, MyListPage } from './pages'
 import { RootState, LightboxState, AuthState, AlertState } from './reducers'
@@ -84,6 +88,12 @@ class App extends React.Component<AppProps, any> {
                   path="/transaction/:id"
                   component={TransactionViewPage}
                 />
+                <PrivateRoute path="/goods/new" component={GoodsEditPage} />
+                <PrivateRoute
+                  path="/goods/edit/:id"
+                  component={GoodsEditPage}
+                />
+                <PrivateRoute path="/goods/:id" component={GoodsViewPage} />
                 <PrivateRoute path="/profile" component={ProfilePage} />
                 <AdminRoute path="/admin" component={AdminPage} />
                 <AdminRoute
