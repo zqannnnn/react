@@ -4,6 +4,7 @@ export class Goods implements ListItem {
   id?: string
   creatorId?: string
   ownerId?: string
+  itemType?: string
   category?: string
   storage?: string
   breed?: string

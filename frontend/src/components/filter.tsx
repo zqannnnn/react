@@ -3,10 +3,8 @@ import { connect, Dispatch } from 'react-redux'
 import { transactionConsts } from '../constants'
 import { RootState, CurrencyState } from '../reducers'
 import { Row, Col, Checkbox, Select } from 'antd'
-import { transactionActionCreators, currencyActionCreators } from '../actions'
+import { currencyActionCreators } from '../actions'
 import i18n from 'i18next'
-import { Transaction } from '../../../src/models'
-import { ListOptions } from '../models'
 
 const Option = Select.Option
 
