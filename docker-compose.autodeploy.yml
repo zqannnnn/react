@@ -1,0 +1,8 @@
+web:
+  image: registry.dev.ak5.cc/kingqi/bmp:latest
+  ports:
+    - "80:80"
+  env_file:
+    - environment.env
+  links:
+    - db:db

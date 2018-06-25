@@ -1,0 +1,27 @@
+cache:
+  key: "$CI_BUILD_REF_NAME node:8-alpine"
+  paths:
+    - node_modules/
+
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  image: gitlab/dind:latest
+  only:
+    - "prod-config"
+  environment: production
+  services:
+    - docker:dind
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo "$DEPLOY_SERVER_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/id_rsa
+    - ssh-keyscan -H $DEPLOYMENT_SERVER_IP >> ~/.ssh/known_hosts
+  script:
+    - printf "DATABASE_URL=${DATABASE_URL}\nPORT=80\n" > environment.env
+    - scp -r ./environment.env ./docker-compose.autodeploy.yml root@${DEPLOYMENT_SERVER_IP}:~/deploy/
+    - ssh root@$DEPLOYMENT_SERVER_IP "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}; docker-compose -f docker-compose.autodeploy.yml stop; docker-compose -f docker-compose.autodeploy.yml rm web --force; docker pull ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest; docker-compose -f docker-compose.autodeploy.yml up -d"
