@@ -1,5 +1,5 @@
 web:
-  image: dev.ak5.cc/kingqi/bmp:latest
+  image: registry.dev.ak5.cc/kingqi/bmp:latest
   ports:
     - "80:80"
   env_file:
