@@ -38,7 +38,7 @@ export const router = (app: Application, passport: PassportStatic) => {
       }
       const data: AuthInfo = {
         token: jwt.sign(user, app.get('secretKey'), {
-          expiresIn: consts.EXPIREMENT
+          expiresIn: consts.EXPIRE_IN
         }),
         id: user.id
       }
@@ -72,7 +72,7 @@ export const router = (app: Application, passport: PassportStatic) => {
               plain: true
             }),
             app.get('secretKey'),
-            { expiresIn: consts.EXPIREMENT }
+            { expiresIn: consts.EXPIRE_IN }
           ),
           id: user.id,
           isAdmin: user.isAdmin,

@@ -11,4 +11,5 @@ export class Transaction implements ListItem {
   makerId?: string
   goods?: Goods
   isMakerSeller?: boolean
+  comment?: string
 }

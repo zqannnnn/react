@@ -22,7 +22,6 @@ export class Goods implements ListItem {
   marbleScore?: number
   quantity?: number
   trimmings?: number
-  comment?: string
   images?: Image[]
   certificates?: Image[]
   ifExist?: boolean
