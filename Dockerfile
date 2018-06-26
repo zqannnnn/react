@@ -1,8 +1,8 @@
 FROM node:carbon
 
 RUN yarn config set registry https://registry.npm.taobao.org 
-COPY . /opt/projects/bmp
-RUN chown -R node:users /opt/projects/bmp
+COPY . /home/node/bmp
+RUN chown -R node:users /home/node/bmp
 USER node
-WORKDIR /opt/projects/bmp
-CMD ["/usr/local/bin/npm", "run-script", "run"]
+WORKDIR /home/node/bmp
+CMD ["/usr/local/bin/npm", "run-script", "watch"]
