@@ -26,5 +26,4 @@ deploy:
     - scp -r ./development.env root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./docker-compose.yml ./package.json ./tslint.json ./package-lock.json ./tsconfig.json root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./i18next-scanner-backend.config.js ./i18next-scanner.config.js ./webpack.common.js ./webpack.prod.js ./webpack.dev.js ./yarn.lock root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
-    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp/bin; perl -i -pe  's/\/home\/node\/bmp/\/opt\/projects\/bmp/g' ./*;"
-    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker-compose -f docker-compose.yml down; rm -rf node_modules; rm yarn.lock; perl -i -pe  's/\/home\/node\/bmp/\/opt\/projects\/bmp/g' ./*; mkdir node_modules; chmod -R 777 node_modules; touch yarn-error.log; chmod 777 yarn-error.log; touch yarn.lock; chmod 777 yarn.lock; ./bin/yarn install; docker-compose -f docker-compose.yml build; docker-compose -f docker-compose.yml up -d"
+    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker-compose -f docker-compose.yml down; docker-compose -f docker-compose.yml build; docker-compose -f docker-compose.yml up -d"
