@@ -22,7 +22,7 @@ deploy:
     - ssh-add ~/.ssh/id_rsa
     - ssh-keyscan -H $DEPLOYMENT_SERVER_IP >> ~/.ssh/known_hosts
     - rm ./Dockerfile 
-    - mv ./Dockerfile.prod ./Dockerfile
+    - mv ./Dockerfile.prod ./Dockerfile    
   script:
     - scp -r ./Dockerfile ./bin ./src ./frontend ./public root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./development.env root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
