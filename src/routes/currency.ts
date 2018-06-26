@@ -10,4 +10,4 @@ router.get('/list', async (req: express.Request, res: express.Response) => {
     return res.status(500).send({ error: e.message })
   }
 })
-export = router
+export { router }

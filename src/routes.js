@@ -11,7 +11,7 @@ import {
   goodsRouter,
   passRouter,
   uploadRouter
-} from './routes'
+} from './routes/index'
 import { consts } from './config/static'
 
 const handleSequelizeError = (res, error) => {
