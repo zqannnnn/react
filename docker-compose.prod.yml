@@ -1,0 +1,6 @@
+version: '2'
+
+services:
+  bmp:
+    volumes:
+      - .:/opt/projects/bmp
