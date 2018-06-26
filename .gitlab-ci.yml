@@ -23,8 +23,6 @@ deploy:
     - ssh-keyscan -H $DEPLOYMENT_SERVER_IP >> ~/.ssh/known_hosts
     - rm ./Dockerfile 
     - mv ./Dockerfile.prod ./Dockerfile
-    - rm ./yarn 
-    - mv ./bin/yarn.prod ./yarn    
   script:
     - scp -r ./Dockerfile ./bin ./src ./frontend ./public root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./development.env root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
