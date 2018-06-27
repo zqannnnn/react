@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as i18n from 'i18next'
 import { consts } from '../config/static'
-import { authMiddleware } from '../middleware/auth'
+import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
 import { Currency, Goods, Image, Transaction } from '../models/'
 const router = express.Router()
@@ -82,6 +82,7 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   }
 })
 
+router.use(loginCheckMiddleware)
 router.post('/new', async (req: IRequest, res: express.Response) => {
   try {
     const transaction = new Transaction({
