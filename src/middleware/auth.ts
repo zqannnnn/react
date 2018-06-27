@@ -28,9 +28,16 @@ export const authMiddleware = (
       return jwt.verify(
         token,
         req.app.get('secretKey'),
-        (err: jwt.JsonWebTokenError, decoded: IDecodedObject) => {
+        (
+          err:
+            | jwt.JsonWebTokenError
+            | jwt.NotBeforeError
+            | jwt.TokenExpiredError,
+          decoded: IDecodedObject
+        ) => {
           if (err) {
-            if (err.name === 'TokenExpiredError') {
+            console.log(`jwt token error:${err.message}`)
+            if (err instanceof jwt.TokenExpiredError) {
               return res.status(498).send({
                 error: i18n.t('Login has expired, please login again.')
               })
