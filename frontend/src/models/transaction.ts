@@ -9,6 +9,7 @@ export class Transaction implements ListItem {
   currencyCode?: string
   takerId?: string
   makerId?: string
+  goodsId?: string
   goods?: Goods
   isMakerSeller?: boolean
   comment?: string

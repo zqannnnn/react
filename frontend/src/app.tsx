@@ -77,7 +77,7 @@ class App extends React.Component<AppProps, any> {
                 <PrivateRoute path="/transactions/my" component={MyListPage} />
                 <Route path="/transactions" component={AllListPage} />
                 <PrivateRoute
-                  path="/transaction/new"
+                  path="/transaction/new/:goodsId"
                   component={TransactionEditPage}
                 />
                 <PrivateRoute
