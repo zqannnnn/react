@@ -101,16 +101,16 @@ function getById(id: string) {
     return { type: transactionConsts.GET_REQUEST }
   }
   function success(transaction: Transaction) {
-    if (transaction.images) {
-      let images = transaction.images.filter(
+    if (transaction.goods.images) {
+      let images = transaction.goods.images.filter(
         image => image.type === transactionConsts.IMAGE_TYPE_MEDIE
       )
 
-      let certificates = transaction.images.filter(
+      let certificates = transaction.goods.images.filter(
         image => image.type === transactionConsts.IMAGE_TYPE_CERTIFICATE
       )
-      transaction.images = images
-      transaction.certificates = certificates
+      transaction.goods.images = images
+      transaction.goods.certificates = certificates
     }
     return { type: transactionConsts.GET_SUCCESS, data: transaction }
   }
@@ -202,16 +202,16 @@ const getAll: ActionCreator<ThunkAction<void, RootState, void>> = (
   }
   function success(transactions: Array<Transaction>, total: number): Action {
     transactions.forEach(transaction => {
-      transaction.itemType = 'Transaction'
-      if (transaction.images) {
-        let images = transaction.images.filter(
+      transaction.goods.itemType = 'Transaction'
+      if (transaction.goods.images) {
+        let images = transaction.goods.images.filter(
           image => image.type === transactionConsts.IMAGE_TYPE_MEDIE
         )
-        let certificates = transaction.images.filter(
+        let certificates = transaction.goods.images.filter(
           image => image.type === transactionConsts.IMAGE_TYPE_CERTIFICATE
         )
-        transaction.certificates = certificates
-        transaction.images = images
+        transaction.goods.certificates = certificates
+        transaction.goods.images = images
       }
     })
 

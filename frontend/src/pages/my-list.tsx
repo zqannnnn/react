@@ -1,13 +1,12 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { transactionActionCreators, currencyActionCreators } from '../actions'
+import { transactionActionCreators } from '../actions'
 import { RootState, TransactionState } from '../reducers'
 import { List as ListC } from '../components'
-import { Checkbox, Row, Col, Pagination } from 'antd'
+import { Row, Col, Pagination } from 'antd'
 import { transactionConsts } from '../constants'
 import i18n from 'i18next'
 import { Filter } from '../components'
-import { Link } from 'react-router-dom'
 import { ListOptions } from '../models'
 
 interface ListProps {
@@ -67,9 +66,7 @@ class List extends React.Component<ListProps, ListState> {
     let options = this.state.options
     options.sorting = value
     this.setState({ options })
-    this.props.dispatch(
-      transactionActionCreators.getAll({ type: 'mine', ...options })
-    )
+    this.props.dispatch(transactionActionCreators.getAll({ ...options }))
   }
   componentDidMount() {
     this.props.dispatch(transactionActionCreators.getAll(this.state.options))
