@@ -25,7 +25,6 @@ deploy:
     - mv ./Dockerfile.prod ./Dockerfile    
     - rm ./bin/yarn 
     - mv ./bin/yarn.prod ./bin/yarn    
-
   script:
     - scp -r ./Dockerfile ./bin ./src ./frontend ./public root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./development.env root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
