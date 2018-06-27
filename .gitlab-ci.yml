@@ -10,7 +10,7 @@ deploy:
   stage: deploy
   image: gitlab/dind:latest
   only:
-    - "prod-config"
+    - "prod-config1"
   environment: production
   services:
     - docker:dind
