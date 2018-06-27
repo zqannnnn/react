@@ -124,10 +124,7 @@ export function transaction(
     case transactionConsts.COMMENT_REQUEST:
       return {
         ...state,
-        transData: {
-          ...state.transData,
-          processing: true
-        }
+        processing: true
       }
     case transactionConsts.COMMENT_SUCCESS:
       return {
@@ -141,10 +138,7 @@ export function transaction(
     case transactionConsts.COMMENT_FAILURE:
       return {
         ...state,
-        transData: {
-          ...state.transData,
-          error: action.error
-        }
+        error: action.error
       }
     case transactionConsts.GET_REQUEST:
       return { loading: true }

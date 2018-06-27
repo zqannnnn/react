@@ -56,7 +56,6 @@ class List extends React.Component<ListProps, ListStates> {
     )
   }
   handleChangeType = (values: string[]) => {
-    let typeOption: { buy?: boolean; sell?: boolean } = {}
     let newOptions = this.state.options
     if (values.length === 2) {
       newOptions.buy = true

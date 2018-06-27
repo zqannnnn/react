@@ -3,6 +3,7 @@ import { Goods } from '.'
 
 export class Transaction implements ListItem {
   id?: string
+  itemType?: string
   status?: number
   price?: number
   currency?: Currency
