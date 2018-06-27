@@ -30,4 +30,4 @@ router.post(
   }
 )
 
-export = router
+export { router }
