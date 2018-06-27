@@ -1,11 +1,11 @@
 import * as express from 'express'
 import * as fs from 'fs'
 import * as multer from 'multer'
-import { authMiddleware } from '../middleware/auth'
+import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { makeRandomString } from '../util'
 const router = express.Router()
 router.use(authMiddleware)
-
+router.use(loginCheckMiddleware)
 const upload = multer({ dest: 'uploads/' })
 
 function makeRandomName(originalname: string) {

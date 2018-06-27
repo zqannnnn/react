@@ -4,11 +4,11 @@ import * as jwt from 'jsonwebtoken'
 import { AuthInfo } from '../../frontend/src/actions'
 import { consts } from '../config/static'
 import { app } from '../index'
-import { authMiddleware } from '../middleware/auth'
+import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
 import { Image, User } from '../models'
 const router = express.Router()
-
+router.use(authMiddleware)
 router.post('/new', async (req, res) => {
   try {
     User.findOne({
@@ -50,7 +50,7 @@ router.post('/new', async (req, res) => {
   }
 })
 
-router.use(authMiddleware)
+router.use(loginCheckMiddleware)
 
 router.get('/refresh/auth', async (req: IRequest, res: express.Response) => {
   User.findOne({
@@ -58,7 +58,9 @@ router.get('/refresh/auth', async (req: IRequest, res: express.Response) => {
     attributes: ['userType', 'licenseStatus', 'preferredCurrencyCode']
   }).then(user => {
     if (!user) {
-      return res.status(401).send({ error: i18n.t('Server error.') })
+      return res
+        .status(401)
+        .send({ error: i18n.t('Login has expired, please login again.') })
     }
     const authInfo: AuthInfo = {
       id: req.userId,
