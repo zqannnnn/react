@@ -101,7 +101,7 @@ function getById(id: string) {
     return { type: transactionConsts.GET_REQUEST }
   }
   function success(transaction: Transaction) {
-    if (transaction.goods.images) {
+    if (transaction.goods && transaction.goods.images) {
       let images = transaction.goods.images.filter(
         image => image.type === transactionConsts.IMAGE_TYPE_MEDIE
       )
@@ -202,8 +202,8 @@ const getAll: ActionCreator<ThunkAction<void, RootState, void>> = (
   }
   function success(transactions: Array<Transaction>, total: number): Action {
     transactions.forEach(transaction => {
-      transaction.goods.itemType = 'Transaction'
-      if (transaction.goods.images) {
+      transaction.itemType = 'Transaction'
+      if (transaction.goods && transaction.goods.images) {
         let images = transaction.goods.images.filter(
           image => image.type === transactionConsts.IMAGE_TYPE_MEDIE
         )

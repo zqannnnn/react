@@ -3,6 +3,7 @@ import { Goods } from '.'
 
 export class Transaction implements ListItem {
   id?: string
+  itemType?: string
   status?: number
   price?: number
   currency?: Currency
@@ -10,7 +11,7 @@ export class Transaction implements ListItem {
   takerId?: string
   makerId?: string
   goodsId?: string
-  goods: Goods
+  goods?: Goods
   isMakerSeller?: boolean
   comment?: string
 }

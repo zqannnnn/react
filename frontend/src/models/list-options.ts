@@ -2,7 +2,7 @@ export type ListOptions = {
   [key: string]: any
   buy?: boolean
   sell?: boolean
-  Type?: string
+  type?: string
   page?: number
   pageSize?: number
   keyword?: string
