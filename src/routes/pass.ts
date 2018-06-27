@@ -71,4 +71,4 @@ router.post('/reset', async (req: IRequest, res: express.Response) => {
     return res.status(500).send({ error: e.message })
   }
 })
-export = router
+export { router }
