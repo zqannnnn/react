@@ -4,3 +4,6 @@ services:
   bmp:
     volumes:
       - .:/opt/projects/bmp
+    environment:
+      - NODE_ENV=production
+
