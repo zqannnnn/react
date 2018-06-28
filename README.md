@@ -172,6 +172,15 @@ to change languge programmatically use: i18n.changeLanguage(lng)
 
 here some example of using i18next:
 https://codesandbox.io/s/8n252n822
+
+### Deployment & Production
+
+To deploy your changes to server just merge your changes to **deploy** branch.
+All settings for production already done except two things: 
+* is some problem to use only **prod** dependencies for yarn (probably because of confusing in instalation process --save-dev or not )
+* CSS still not minified
+
+
 ### Import Currency
 
 ```sh
