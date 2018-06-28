@@ -26,8 +26,7 @@ deploy:
     - rm ./bin/yarn 
     - mv ./bin/yarn.prod ./bin/yarn     
     - rm ./docker-compose.yml
-    - mv ./docker-compose.prod.yml ./docker-compose.yml
-    
+    - mv ./docker-compose.prod.yml ./docker-compose.yml    
   script:
     - scp -r ./Dockerfile ./bin ./src ./frontend ./public root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./production.env root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
