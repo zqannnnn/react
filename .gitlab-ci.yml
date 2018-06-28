@@ -25,13 +25,14 @@ deploy:
     - mv ./Dockerfile.prod ./Dockerfile    
     - rm ./bin/yarn 
     - mv ./bin/yarn.prod ./bin/yarn     
-       
+    - rm ./docker-compose.yml
+    - mv ./docker-compose.prod.yml ./docker-compose.yml
   script:
     - scp -r ./Dockerfile ./bin ./src ./frontend ./public root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./production.env root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
-    - scp -r ./docker-compose.yml ./docker-compose.prod.yml ./package.json ./tslint.json ./package-lock.json ./tsconfig.json root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
+    - scp -r ./docker-compose.yml ./package.json ./tslint.json ./package-lock.json ./tsconfig.json root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./i18next-scanner-backend.config.js ./i18next-scanner.config.js ./webpack.common.js ./webpack.prod.js ./webpack.dev.js ./yarn.lock root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
-    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker-compose -f docker-compose.yml -f docker-compose.prod.yml down;"
+    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker-compose -f docker-compose.yml down;"
     - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; mkdir node_modules; chmod -R 777 node_modules; mkdir uploads; chmod -R 777 uploads;"
     - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; ./bin/yarn install;"
-    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker-compose -f docker-compose.yml -f docker-compose.prod.yml build; docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d;"
+    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker-compose -f docker-compose.yml build; docker-compose -f docker-compose.yml up -d;"
