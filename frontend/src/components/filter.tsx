@@ -6,12 +6,16 @@ import { Row, Col, Checkbox, Select } from 'antd'
 import { transactionActionCreators, currencyActionCreators } from '../actions'
 import i18n from 'i18next'
 import { Transaction } from '../../../src/models'
+import { ListOptions } from '../models'
 
 const Option = Select.Option
 
 interface ItemProps {
   dispatch: Dispatch<RootState>
   currency: CurrencyState
+  handleSelectSort: (value: string) => void
+
+  handleChangeType: (values: string[]) => void
 }
 
 class Filter extends React.Component<ItemProps> {
@@ -19,45 +23,28 @@ class Filter extends React.Component<ItemProps> {
     super(props)
   }
 
-  onChange = (values: string[]) => {
-    let options: { buy?: boolean; sell?: boolean } = {}
-    values.forEach((value: string) => {
-      if (value == transactionConsts.TYPE_BUY)
-        options = { ...options, buy: true }
-      else if (value == transactionConsts.TYPE_SELL)
-        options = { ...options, sell: true }
-    })
-    this.props.dispatch(
-      transactionActionCreators.getAll({ type: 'all', ...options })
-    )
-  }
-  handleSelect = (value: string) => {
+  handleSelectCurrency = (value: string) => {
     this.props.dispatch(currencyActionCreators.upCurrencystatus(value))
   }
 
-  handleChange = (value: string) => {
-    let options: { sorting: string } = { sorting: value }
-    this.props.dispatch(
-      transactionActionCreators.getAll({ type: 'all', ...options })
-    )
-  }
-
   render() {
-    const { currency } = this.props
+    const { currency, handleChangeType, handleSelectSort } = this.props
     return (
       <div className="filter margin-bottom">
         <Row>
           <Select
             defaultValue={i18n.t('New to old')}
-            style={{ width: 160 }}
-            onChange={this.handleChange}
-            className="sorting-left margin-bottom"
+            onChange={handleSelectSort}
+            className="sorting-left margin-bottom media-width"
           >
             <Option value="new">{i18n.t('New to old')}</Option>
             <Option value="old">{i18n.t('Old to new')}</Option>
           </Select>
           <div className="float-right">
-            <Checkbox.Group onChange={this.onChange} className="margin-bottom">
+            <Checkbox.Group
+              onChange={handleChangeType}
+              className="margin-bottom"
+            >
               <Checkbox
                 value={transactionConsts.TYPE_BUY}
                 className="margin-right"
@@ -66,13 +53,13 @@ class Filter extends React.Component<ItemProps> {
                 {i18n.t('Wanted')}
               </Checkbox>
               <Checkbox value={transactionConsts.TYPE_SELL}>
-                {i18n.t('On Sale')}
+                {i18n.t('For Sale')}
               </Checkbox>
             </Checkbox.Group>
             <Select
               value={currency.currentCurrency}
-              onChange={this.handleSelect}
-              style={{ width: 220 }}
+              onChange={this.handleSelectCurrency}
+              className="media-width"
             >
               {currency.items
                 ? currency.items.map((item, index) => (

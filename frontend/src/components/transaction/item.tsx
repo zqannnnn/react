@@ -76,7 +76,7 @@ class Item extends React.Component<ItemProps, ItemState> {
           finalStatus = i18n.t('Sold')
           break
         default:
-          finalStatus = i18n.t('On Sale')
+          finalStatus = i18n.t('For Sale')
           break
       }
     } else {
@@ -115,13 +115,14 @@ class Item extends React.Component<ItemProps, ItemState> {
           <div className="title text-overflow">{transaction.title}</div>
           <div className="desc content text-overflow">
             <span>
-              {transaction.brand && 'Brand:' + transaction.brand + ', '}
+              {transaction.brand && 'Brand:' + transaction.brand + ' , '}
             </span>
             <span>
-              {transaction.breed && 'Breed:' + transaction.breed + ', '}
+              {transaction.breed && 'Breed:' + transaction.breed + ' , '}
             </span>
+            <br />
             <span>
-              {transaction.grade && 'Grade:' + transaction.grade + ', '}
+              {transaction.grade && 'Grade:' + transaction.grade + ' , '}
             </span>
             <span>
               {transaction.quantity &&

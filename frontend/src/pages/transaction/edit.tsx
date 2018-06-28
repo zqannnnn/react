@@ -66,8 +66,10 @@ class EditPage extends React.Component<TransProps, TransState> {
     }
   }
   next() {
-    const current = this.state.current + 1
-    this.setState({ current })
+    if (this.state.transaction.type) {
+      const current = this.state.current + 1
+      this.setState({ current })
+    }
   }
   prev() {
     const current = this.state.current - 1
@@ -357,20 +359,27 @@ class EditPage extends React.Component<TransProps, TransState> {
       case 0:
         return (
           <Row>
-            <Col xs={20} sm={18} md={12} lg={8} offset={1}>
-              <label>{i18n.t('Category')}</label>
+            <Col
+              xs={{ span: 20, offset: 2 }}
+              sm={{ span: 20, offset: 2 }}
+              md={{ span: 9, offset: 2 }}
+              lg={{ span: 9, offset: 2 }}
+              className="edits-input"
+            >
+              <h2>{i18n.t('Buy or Sell')}</h2>
               <Select
                 size="large"
-                value={category}
+                value={this.state.transaction['type']}
                 onSelect={(value: string) =>
-                  this.handleSelectChange(value, 'category')
+                  this.handleSelectChange(value, 'type')
                 }
               >
-                {transactionConsts.CATEGORY.map((item, index) => (
-                  <Select.Option key={index} value={item}>
-                    {item}
-                  </Select.Option>
-                ))}
+                <Select.Option key="Buy">
+                  {i18n.t(transactionConsts.TYPE_BUY)}
+                </Select.Option>
+                <Select.Option key="Sell">
+                  {i18n.t(transactionConsts.TYPE_SELL)}
+                </Select.Option>
               </Select>
             </Col>
           </Row>
@@ -427,35 +436,32 @@ class EditPage extends React.Component<TransProps, TransState> {
       case 2:
         return (
           <>
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 9, offset: 2 }}
-                lg={{ span: 9, offset: 2 }}
-                className="edits-input"
-              >
-                <h2>{i18n.t('Buy or Sell')}</h2>
-                <Select
-                  size="large"
-                  value={this.state.transaction['type']}
-                  onSelect={(value: string) =>
-                    this.handleSelectChange(value, 'type')
-                  }
-                >
-                  <Select.Option key="Buy">
-                    {i18n.t(transactionConsts.TYPE_BUY)}
-                  </Select.Option>
-                  <Select.Option key="Sell">
-                    {i18n.t(transactionConsts.TYPE_SELL)}
-                  </Select.Option>
-                </Select>
-              </Col>
-            </Row>
             {this.state.transaction.type && (
               <div className="edits-input">
                 <Row>
-                  <Col span={20} offset={2}>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="edits-input"
+                  >
+                    <label>{i18n.t('Category')}</label>
+                    <Select
+                      size="large"
+                      value={category}
+                      onSelect={(value: string) =>
+                        this.handleSelectChange(value, 'category')
+                      }
+                    >
+                      {transactionConsts.CATEGORY.map((item, index) => (
+                        <Select.Option key={index} value={item}>
+                          {item}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Col>
+                  <Col span={20} offset={2} className="edits-input">
                     <div className={submitted && !title ? ' has-error' : ''}>
                       <label className="edits-input">{i18n.t('Title')}</label>
                       <Input
