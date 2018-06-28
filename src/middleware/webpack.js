@@ -2,7 +2,6 @@ const webpack = require('webpack')
 const webpackMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 
-//const config = require('../../webpack.config.js')
 let config = require('../../webpack.dev.js')
 if ( process.env.NODE_ENV == 'production') config = require('../../webpack.prod.js')
 
