@@ -177,7 +177,7 @@ https://codesandbox.io/s/8n252n822
 
 To deploy your changes to server just merge your changes to **deploy** branch.
 All settings for production already done except two things: 
-* is some problem to use only **prod** dependencies for yarn (probably because of confusing in instalation process --save-dev or not )
+* is some problem to use only **prod** dependencies for yarn (probably cause confusing with --save-dev in instalation process )
 * CSS still not minified
 
 
