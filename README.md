@@ -134,7 +134,7 @@ import i18n from "i18next"
 after adding translations to components run:
 
 ```sh
-i18next-scanner --config i18next-scanner.config.js "frontend/**/*.{ts,tsx}"
+i18next-scanner --config i18n/i18next-scanner.config.js "frontend/**/*.{ts,tsx}"
 ```
 
 it will add missing translation keys to locale .json files
@@ -158,7 +158,7 @@ i18n.t('reset-password-email', { ourName: ourName, email: email, resetUrl: reset
 to generate translation keys for new added translations run:
 
 ```sh
-i18next-scanner --config i18next-scanner-backend.config.js "src/**/*.{ts,tsx}"
+i18next-scanner --config i18n/i18next-scanner-backend.config.js "src/**/*.{ts,tsx}"
 ```
 > Note: if you translating whole email or something realy long, 
 > please add a new key manually to locales files (not with script).
