@@ -31,7 +31,7 @@ const _new: ActionCreator<Thunk> = (goods: Goods) => {
         dispatch(success())
         dispatch(alertActionCreators.success('Create goods successful'))
         setTimeout(function() {
-          history.replace('/goods/my')
+          history.replace('/')
         }, 1000)
       },
       (error: string) => {

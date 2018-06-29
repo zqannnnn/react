@@ -85,11 +85,6 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
             })}
 
             {this.renderItem({
-              to: '/transaction/new',
-              id: 'navbar.addTransaction',
-              defaultMessage: 'Add Transaction'
-            })}
-            {this.renderItem({
               to: '/profile',
               id: 'navbar.myProfile',
               defaultMessage: 'My Profile'

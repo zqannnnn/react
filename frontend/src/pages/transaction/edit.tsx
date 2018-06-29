@@ -48,7 +48,7 @@ interface TransState {
   transaction: Transaction
   transactionId?: string
   goodsId?: string
-  goods: Goods
+  goods?: Goods
   submitted: boolean
   imageUploading: boolean
   certificateUploading: boolean
@@ -61,9 +61,10 @@ class EditPage extends React.Component<TransProps, TransState> {
     this.state = {
       submitted: false,
       transaction: {
-        currencyCode: 'USD'
+        currencyCode: 'USD',
+        isMakerSeller: true,
+        goods: {}
       },
-      goods: {},
       imageUploading: false,
       certificateUploading: false,
       current: 0
@@ -113,7 +114,8 @@ class EditPage extends React.Component<TransProps, TransState> {
   }
   componentWillReceiveProps(nextProps: TransProps) {
     const { transProp, goodsProp, image, categorys } = nextProps
-    const { submitted, transactionId, goodsId, goods, transaction } = this.state
+    const { submitted, transactionId, goodsId, transaction } = this.state
+    const goods = transaction.goods
     if (transactionId && transProp && !submitted) {
       this.setState({
         transaction: {
@@ -131,16 +133,12 @@ class EditPage extends React.Component<TransProps, TransState> {
     }
     if (goodsId && goodsProp && !submitted) {
       this.setState({
-        goods: {
-          ...goods,
-          ...goodsProp
-        }
-      })
-    }
-    if (!goodsId && categorys) {
-      this.setState({
-        goods: {
-          ...goods
+        transaction: {
+          ...transaction,
+          goods: {
+            ...goods,
+            ...goodsProp
+          }
         }
       })
     }
@@ -148,10 +146,10 @@ class EditPage extends React.Component<TransProps, TransState> {
     this.setState({ certificateUploading: false })
   }
   handleSelectChange = (value: string, name: string) => {
-    const { goods } = this.state
+    const { transaction } = this.state
     this.setState({
-      goods: {
-        ...goods,
+      transaction: {
+        ...transaction,
         [name]: value
       }
     })
@@ -215,9 +213,7 @@ class EditPage extends React.Component<TransProps, TransState> {
   }
 
   renderItem = (current: number) => {
-    let { price, status, currencyCode } = this.state.transaction
-    let { goods } = this.state
-    let { title, desc } = goods
+    const { price, status, currencyCode, goods } = this.state.transaction
     let { submitted } = this.state
     let { processing, currencys } = this.props
     let imagePaths: string[]
@@ -258,29 +254,22 @@ class EditPage extends React.Component<TransProps, TransState> {
       case 1:
         return (
           <>
-            {this.state.goods && (
+            {goods && (
               <div className="edits-input">
                 <Row>
                   <Col span={20} offset={2} className="edits-input">
-                    <div className={submitted && !title ? ' has-error' : ''}>
-                      <label className="edits-input">{i18n.t('Title')}</label>
-                      <div>title:{title}</div>
-                    </div>
+                    <label className="edits-input">{i18n.t('Title')}</label>
+                    <div>{goods.title}</div>
                   </Col>
                 </Row>
                 <Row>
                   <Col span={20} offset={2} className="edits-input">
                     <label>{i18n.t('Description')}</label>
-                    <div>Description:{desc}</div>
+                    <div>{goods.desc}</div>
                   </Col>
                 </Row>
                 <Row>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 12, offset: 5 }}
-                    className="view-top"
-                  >
+                  <Col span={20} offset={2} className="view-top">
                     <label>{i18n.t('Images')}:</label>
                     <div className="message">
                       {imagePaths && (
@@ -379,9 +368,6 @@ class EditPage extends React.Component<TransProps, TransState> {
       },
       {
         title: 'Second'
-      },
-      {
-        title: 'Last'
       }
     ]
     return (
@@ -424,13 +410,15 @@ class EditPage extends React.Component<TransProps, TransState> {
   }
 }
 function mapStateToProps(state: RootState) {
-  const { transaction, category, currency, upload, auth } = state
+  const { transaction, category, currency, upload, auth, goods } = state
   const { processing, loading, transData } = transaction
+  const { goodsData } = goods
   return {
     processing,
     categorys: category.items,
     currencys: currency.items,
     transProp: transData,
+    goodsProp: goodsData,
     image: upload.image,
     authInfo: auth.authInfo
   }
