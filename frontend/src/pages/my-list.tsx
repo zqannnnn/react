@@ -41,32 +41,11 @@ class List extends React.Component<ListProps, ListState> {
       })
     )
   }
-  handleChangeType = (values: string[]) => {
-    let typeOption: { buy?: boolean; sell?: boolean } = {}
-    let newOptions = this.state.options
-    if (values.length === 2) {
-      newOptions.buy = true
-      newOptions.sell = true
-    } else if (values.length === 1) {
-      if (values[0] === transactionConsts.TYPE_BUY) {
-        newOptions.buy = true
-        newOptions.sell = false
-      } else {
-        newOptions.buy = false
-        newOptions.sell = true
-      }
-    } else if (values.length === 0) {
-      newOptions.buy = false
-      newOptions.sell = false
-    }
-    this.setState({ options: newOptions })
-    this.props.dispatch(transactionActionCreators.getAll({ ...newOptions }))
-  }
-  handleSelectSort = (value: string) => {
-    let options = this.state.options
-    options.sorting = value
+  onOptionsChange = (newOptions: ListOptions) => {
+    const oldOptions = this.state.options
+    const options = { ...oldOptions, ...newOptions }
     this.setState({ options })
-    this.props.dispatch(transactionActionCreators.getAll({ ...options }))
+    this.props.dispatch(transactionActionCreators.getAll(options))
   }
   componentDidMount() {
     this.props.dispatch(transactionActionCreators.getAll(this.state.options))
@@ -92,8 +71,8 @@ class List extends React.Component<ListProps, ListState> {
           lg={{ span: 16, offset: 4 }}
         >
           <Filter
-            handleChangeType={this.handleChangeType}
-            handleSelectSort={this.handleSelectSort}
+            initOptions={this.state.options}
+            onOptionsChange={this.onOptionsChange}
           />
           {transaction.items && <ListC items={transaction.items} />}
           <Pagination
