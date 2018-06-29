@@ -13,4 +13,4 @@ router.get('/', async (req: express.Request, res: express.Response) => {
   return res.send(categorys)
 })
 
-export = router
+export { router }
