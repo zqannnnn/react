@@ -1,13 +1,14 @@
-const webpack = require('webpack')
-const webpackMiddleware = require('webpack-dev-middleware')
-const webpackHotMiddleware = require('webpack-hot-middleware')
+import { Application } from 'express'
+import * as webpack from 'webpack'
+import * as webpackDevMiddleware from 'webpack-dev-middleware'
+import * as webpackHotMiddleware from 'webpack-hot-middleware'
 
 let config = require('../../webpack/webpack.dev.js')
 if ( process.env.NODE_ENV == 'production') config = require('../../webpack/webpack.prod.js')
 
-module.exports = app => {
+export const webpackMiddleware = (app: Application) => {
   const compiler = webpack(config)
-  const middleware = webpackMiddleware(compiler, {
+  const middleware = webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath,
     stats: {
       colors: true,

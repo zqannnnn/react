@@ -1,30 +1,31 @@
-const path = require('path')
-const jwt = require('jsonwebtoken')
-const i18n = require('i18next')
-const Models = require('./models')
-const User = Models.User
-const userRouter = require('./routes/user')
-const categoryRouter = require('./routes/category')
-const currencyRouter = require('./routes/currency')
-const transactionRouter = require('./routes/transaction')
-const passRouter = require('./routes/pass')
-const uploadRouter = require('./routes/upload')
-const qs = require('querystring')
-const authMiddleware = require('./middleware/auth')
-
+import * as jwt from 'jsonwebtoken'
+import * as i18n from 'i18next'
+import * as qs from 'querystring'
+import { Application, Response, Request, NextFunction } from 'express'
+import { PassportStatic } from 'passport'
+import {
+  userRouter,
+  categoryRouter,
+  currencyRouter,
+  transactionRouter,
+  passRouter,
+  uploadRouter
+} from './routes/index'
+import { User } from './models'
 import { consts } from './config/static'
+import { AuthInfo } from '../frontend/src/actions'
 
-const handleSequelizeError = (res, error) => {
-  console.error(error)
-  res.status(500).send({ error: error.message })
-}
+// const handleSequelizeError = (res, error) => {
+//   console.error(error)
+//   res.status(500).send({ error: error.message })
+// }
 
-const handleSuccess = res => {
-  res.json({ success: true })
-}
+// const handleSuccess = res => {
+//   res.json({ success: true })
+// }
 
-module.exports = (app, passport) => {
-  app.post('/login', (req, res, next) => {
+export const router = (app: Application, passport: PassportStatic) => {
+  app.post('/login', (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate('local-login', (err, user, info) => {
       if (err) {
         return next(err) // will generate a 500 error
@@ -35,7 +36,7 @@ module.exports = (app, passport) => {
           .status(401)
           .send({ error: i18n.t('Incorrect email or password.') })
       }
-      const data = {
+      const data: AuthInfo = {
         token: jwt.sign(user, app.get('secretKey'), {
           expiresIn: consts.EXPIREMENT
         }),
@@ -50,7 +51,7 @@ module.exports = (app, passport) => {
     })(req, res, next)
   })
 
-  app.get('/reset/pass', async (req, res) => {
+  app.get('/reset/pass', async (req: Request, res: Response) => {
     const email = req.param('email')
     const key = req.param('key')
     if (email) {

@@ -1,21 +1,27 @@
+import * as express from 'express'
+import * as path from 'path'
+import * as morgan from 'morgan'
+import * as bodyParser from 'body-parser'
+import * as session from 'express-session'
+import * as passport from 'passport'
+
+import { initDatabase } from './models'
+import { router } from './routes'
+import { passportConfig } from './passport'
 import { i18n, middleware } from './middleware/i18n'
-const express = require('express')
+import { webpackMiddleware } from './middleware/webpack'
+
 const app = express()
+webpackMiddleware(app)
 app.use(middleware.handle(i18n))
-const path = require('path')
-const port = process.env.PORT || 3000
-const passport = require('passport')
-const morgan = require('morgan')
-const bodyParser = require('body-parser')
-const session = require('express-session')
-const models = require('./models')
-require('./middleware/webpack')(app)
 
-models.initDatabase()
-
+initDatabase()
+// Get the exchange rate API
+// import { getApi as currencyApi } from './api/currency'
+// currencyApi()
 app.set('secretKey', 'just a test')
 
-require('./passport')(passport) // pass passport for configuration
+passportConfig(passport) // pass passport for configuration
 
 // set up our express application
 app.use(express.static(path.join(__dirname, '../public')))
@@ -34,13 +40,14 @@ app.use(
 app.use(passport.initialize())
 
 // routes
-require('./routes')(app, passport) // load our routes and pass in our app and fully configured passport
+router(app, passport) // load our routes and pass in our app and fully configured passport
 
 //static
 app.use('/static', express.static('./uploads'))
 
 // launch
-app.listen(port, err => {
+const port = process.env.PORT || 3000
+app.listen(port, (err: string) => {
   if (err) console.log(err)
   console.log(`⚡ Express started on port ${port}, in ${process.env.NODE_ENV} mode`)
 })

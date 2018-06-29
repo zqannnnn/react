@@ -1,14 +1,8 @@
-const LocalStrategy = require('passport-local').Strategy
-const jwt = require('jsonwebtoken')
+import { Strategy as LocalStrategy } from 'passport-local'
+import { PassportStatic } from 'passport'
+import { User } from './models'
 
-const Models = require('./models')
-const UserGitlab = Models.UserGitlab
-const UserLocal = Models.UserLocal
-const User = Models.User
-
-const consts = require('./config/static')
-
-module.exports = passport => {
+export const passportConfig = (passport: PassportStatic) => {
   passport.use(
     'local-login',
     new LocalStrategy(
@@ -23,8 +17,8 @@ module.exports = passport => {
         //     email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
 
         // asynchronous
-        process.nextTick(function() {
-          User.findOne({
+        process.nextTick(async function() {
+          let user = await User.findOne({
             where: { email },
             attributes: [
               'id',
@@ -33,17 +27,17 @@ module.exports = passport => {
               'licenseStatus',
               'preferredCurrencyCode'
             ]
-          }).then(user => {
-            if (!user) return done(null, false)
-
-            user.validatePassword(password).then(result => {
-              if (result) {
-                return done(null, user.get())
-              } else {
-                return done(null, false)
-              }
-            })
           })
+          if (!user) {
+            return done(null, false)
+          }
+
+          let result = await user.validatePassword(password)
+          if (result) {
+            return done(null, user.get())
+          } else {
+            return done(null, false)
+          }
         })
       }
     )
