@@ -10,7 +10,7 @@ deploy:
   stage: deploy
   image: gitlab/dind:latest
   only:
-    - "deploy"
+    - "prod-config1"
   environment: production
   services:
     - docker:dind
@@ -22,11 +22,11 @@ deploy:
     - ssh-add ~/.ssh/id_rsa
     - ssh-keyscan -H $DEPLOYMENT_SERVER_IP >> ~/.ssh/known_hosts
     - rm ./Dockerfile 
-    - mv ./Dockerfile.prod ./Dockerfile    
+    - mv ./production/Dockerfile.prod ./Dockerfile    
     - rm ./bin/yarn 
-    - mv ./bin/yarn.prod ./bin/yarn     
+    - mv ./production/bin/yarn.prod ./bin/yarn     
     - rm ./docker-compose.yml
-    - mv ./docker-compose.prod.yml ./docker-compose.yml    
+    - mv ./production/docker-compose.prod.yml ./docker-compose.yml    
   script:
     - scp -r ./Dockerfile ./bin ./src ./frontend ./public root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./production.env root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
