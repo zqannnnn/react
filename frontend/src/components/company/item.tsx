@@ -26,15 +26,17 @@ class Item extends React.Component<ItemProps> {
               {company.companyAddress && 'Address:' + company.companyAddress}
             </span>
           </div>
-          <div className="image-wr">
-            {company.businessLicenses && company.businessLicenses[0] ? (
-              <img src={company.businessLicenses[0].path} />
-            ) : (
-              <img src="/asset/no-image.jpg" />
-            )}
-          </div>
+          <Link to={'/company/confirm/' + company.id}>
+            <div className="image-wr">
+              {company.businessLicenses && company.businessLicenses[0] ? (
+                <img src={company.businessLicenses[0].path} />
+              ) : (
+                <img src="/asset/no-image.jpg" />
+              )}
+            </div>
+          </Link>
 
-          <div className="footer">
+          <div className="menu">
             <Link className="" to={'/company/confirm/' + company.id}>
               {i18n.t('Read More')}
             </Link>
