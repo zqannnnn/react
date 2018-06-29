@@ -24,7 +24,7 @@ deploy:
     - rm ./Dockerfile 
     - mv ./production/Dockerfile.prod ./Dockerfile    
     - rm ./bin/yarn 
-    - mv ./production/bin/yarn.prod ./bin/yarn     
+    - mv ./production/yarn.prod ./bin/yarn     
     - rm ./docker-compose.yml
     - mv ./production/docker-compose.prod.yml ./docker-compose.yml    
   script:
