@@ -48,6 +48,19 @@ interface GoodsState {
 }
 
 class EditPage extends React.Component<GoodsProps, GoodsState> {
+  constructor(props: GoodsProps) {
+    super(props)
+    this.state = {
+      submitted: false,
+      imageUploading: false,
+      certificateUploading: false,
+      goods: {
+        category: 'Beef',
+        ifExist: true
+      },
+      current: 0
+    }
+  }
   next() {
     if (this.state.goods) {
       const current = this.state.current + 1
@@ -304,6 +317,33 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       case 0:
         return (
           <Row>
+            <Col
+              xs={{ span: 20, offset: 2 }}
+              sm={{ span: 20, offset: 2 }}
+              md={{ span: 9, offset: 2 }}
+              lg={{ span: 9, offset: 2 }}
+              className="edits-input"
+            >
+              <label>{i18n.t('Category')}</label>
+              <Select
+                size="large"
+                value={category}
+                onSelect={(value: string) =>
+                  this.handleSelectChange(value, 'category')
+                }
+              >
+                {goodsConsts.CATEGORY.map((item, index) => (
+                  <Select.Option key={index} value={item}>
+                    {item}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
+        )
+      case 1:
+        return (
+          <Row>
             <Col className="container-upload" span={22} offset={1}>
               <label>{i18n.t('Images')}</label>
               <div className="upload-transactions-edit">
@@ -350,33 +390,11 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
             </Col>
           </Row>
         )
-      case 1:
+      case 2:
         return (
           <>
             <div className="edits-input">
               <Row>
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 9, offset: 2 }}
-                  lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
-                >
-                  <label>{i18n.t('Category')}</label>
-                  <Select
-                    size="large"
-                    value={category}
-                    onSelect={(value: string) =>
-                      this.handleSelectChange(value, 'category')
-                    }
-                  >
-                    {goodsConsts.CATEGORY.map((item, index) => (
-                      <Select.Option key={index} value={item}>
-                        {item}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Col>
                 <Col span={20} offset={2} className="edits-input">
                   <div className={submitted && !title ? ' has-error' : ''}>
                     <label className="edits-input">{i18n.t('Title')}</label>
@@ -685,7 +703,6 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                 </Col>
               </Row>
             </div>
-            }
           </>
         )
       default:
