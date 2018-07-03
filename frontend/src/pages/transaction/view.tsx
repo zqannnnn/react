@@ -72,7 +72,10 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
   render() {
     const { transaction, authInfo, loading } = this.props
     const { commentInputShowing, comment } = this.state
-    const goods = transaction.goods
+    let goods
+    if (transaction) {
+      goods = transaction.goods
+    }
     let imagePaths: string[]
     if (goods && goods.images) {
       imagePaths = goods.images.map(image => image.path)
