@@ -3,6 +3,7 @@ import { Transaction } from '../models'
 import { ListOptions } from '../models'
 export const transService = {
   new: _new,
+  newOrder: newOrder,
   edit,
   getById,
   getAll,
@@ -21,6 +22,17 @@ function _new(transaction: Transaction) {
     body: JSON.stringify(transaction)
   }
   return fetch('/transaction/new', requestOptions).then(handleResponse)
+}
+function newOrder(transaction: Transaction) {
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(transaction)
+  }
+  return fetch('/transaction/order/new', requestOptions).then(handleResponse)
 }
 function edit(transaction: Transaction, transactionId: string) {
   const requestOptions = {

@@ -96,6 +96,27 @@ router.post('/new', async (req: IRequest, res: express.Response) => {
   }
 })
 
+router.post('/order/new', async (req: IRequest, res: express.Response) => {
+  try {
+    const goods = new Goods({
+      creatorId: req.userId,
+      ownerId: req.userId,
+      ...req.body.goods
+    })
+    await goods.save()
+    const transaction = new Transaction({
+      makerId: req.userId,
+      goodsId: goods.id,
+      price: req.body.price,
+      currencyCode: req.body.currencyCode
+    })
+    await transaction.save()
+    return res.send({ success: true })
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
 router.get(
   '/finish/:transactionId',
   async (req: IRequest, res: express.Response) => {
