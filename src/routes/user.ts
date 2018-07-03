@@ -87,8 +87,8 @@ router.get(
     if (req.isAdmin) {
       const users = await User.findAll({
         attributes: { exclude: ['password'] },
-        where: { licenseStatus: consts.LICENSE_STATUS_UNCONFIRMED },
-        include: [{ model: Image, attributes: ['path'] }]
+        include: [{ model: Image, attributes: ['path'] }],
+        where: { licenseStatus: consts.LICENSE_STATUS_UNCONFIRMED }
       })
       return res.send(users)
     } else {
@@ -183,4 +183,4 @@ router
     }
   })
 
-  export { router }
+export { router }

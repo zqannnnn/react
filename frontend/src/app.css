@@ -72,12 +72,16 @@
   .list .list__content .list__subtitle {
     font-size: 14px;
   }
-  .media-width {
-    width: 100%;
-  }
   .list-container .header .subtitle .des,
   .list-container .header .subtitle .link {
     font-size: 13px;
+  }
+  .media-width,
+  .float-right {
+    width: 100%;
+  }
+  .ant-layout-header {
+    padding: 0 15px;
   }
 }
 

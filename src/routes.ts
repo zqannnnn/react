@@ -8,6 +8,7 @@ import {
   categoryRouter,
   currencyRouter,
   transactionRouter,
+  goodsRouter,
   passRouter,
   uploadRouter
 } from './routes/index'
