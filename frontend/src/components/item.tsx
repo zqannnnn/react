@@ -4,6 +4,7 @@ import { RootState } from '../reducers'
 import { ListItem } from '../models'
 import { Item as TransactionItem } from './transaction/item'
 import { Item as CompanyItem } from './company/item'
+import { Item as GoodsItem } from './goods/item'
 interface ItemProps {
   dispatch: Dispatch<RootState>
   key: number
@@ -20,6 +21,8 @@ class Item extends React.Component<ItemProps> {
         return <TransactionItem transaction={item} />
       case 'Company':
         return <CompanyItem company={item} />
+      case 'Goods':
+        return <GoodsItem goods={item} />
       default:
         break
     }
