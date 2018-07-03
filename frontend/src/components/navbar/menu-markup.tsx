@@ -89,6 +89,13 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
               id: 'navbar.myInventory',
               defaultMessage: 'My inventory'
             })}
+            
+            {this.renderItem({
+              to: '/order/new',
+              id: 'navbar.allOrder',
+              defaultMessage: 'Add Order'
+            })}
+
             {this.renderItem({
               to: '/profile',
               id: 'navbar.myProfile',

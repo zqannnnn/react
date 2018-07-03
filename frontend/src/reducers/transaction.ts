@@ -23,6 +23,12 @@ export function transaction(
       return {}
     case transactionConsts.CREATE_FAILURE:
       return { error: action.error }
+    case transactionConsts.CREATE_ORDER_REQUEST:
+      return { processing: true }
+    case transactionConsts.CREATE_ORDER_SUCCESS:
+      return {}
+    case transactionConsts.CREATE_ORDER_FAILURE:
+      return { error: action.error }
     case transactionConsts.EDIT_REQUEST:
       return { processing: true }
     case transactionConsts.EDIT_SUCCESS:

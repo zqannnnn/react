@@ -24,14 +24,12 @@ export type Action = {
 type Thunk = ThunkAction<void, RootState, void>
 
 // prefixed function name with underscore because new is a reserved word in
-const _new: ActionCreator<ThunkAction<void, RootState, void>> = (
-  transaction: Transaction
-) => {
+const _new: ActionCreator<Thunk> = (transaction: Transaction) => {
   return (dispatch: Dispatch<RootState>): void => {
     dispatch(request())
 
     transService.new(transaction).then(
-      (transaction: Transaction) => {
+      () => {
         dispatch(success())
         dispatch(alertActionCreators.success('Create transaction successful'))
         setTimeout(function() {
@@ -54,7 +52,37 @@ const _new: ActionCreator<ThunkAction<void, RootState, void>> = (
     return { type: transactionConsts.CREATE_FAILURE, error }
   }
 }
-const edit: ActionCreator<ThunkAction<void, RootState, void>> = (
+
+const newOrder: ActionCreator<Thunk> = (transaction: Transaction) => {
+  return (dispatch: Dispatch<RootState>): void => {
+    dispatch(request())
+
+    transService.newOrder(transaction).then(
+      () => {
+        dispatch(success())
+        dispatch(alertActionCreators.success('Create order successful'))
+        setTimeout(function() {
+          history.replace('/transactions/my')
+        }, 1000)
+      },
+      (error: string) => {
+        dispatch(failure(error))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
+  }
+  function request(): Action {
+    return { type: transactionConsts.CREATE_ORDER_REQUEST }
+  }
+  function success(): Action {
+    return { type: transactionConsts.CREATE_ORDER_SUCCESS }
+  }
+  function failure(error: string): Action {
+    return { type: transactionConsts.CREATE_ORDER_FAILURE, error }
+  }
+}
+
+const edit: ActionCreator<Thunk> = (
   transaction: Transaction,
   transactionId: string
 ) => {
@@ -183,9 +211,7 @@ function finish(id: string) {
     return { type: transactionConsts.FINISH_FAILURE, error, id }
   }
 }
-const getAll: ActionCreator<ThunkAction<void, RootState, void>> = (
-  option: ListOptions
-) => {
+const getAll: ActionCreator<Thunk> = (option: ListOptions) => {
   return (dispatch: Dispatch<RootState>): void => {
     dispatch(request())
     transService
@@ -246,6 +272,7 @@ function addComment(id: string, comment: string) {
 }
 export const actionCreators = {
   new: _new,
+  newOrder,
   edit,
   getAll,
   getById,
