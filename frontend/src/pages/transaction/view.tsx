@@ -6,7 +6,7 @@ import {
   lightboxActionCreators,
   AuthInfo
 } from '../../actions'
-import { Transaction } from '../../models'
+import { Transaction, Goods } from '../../models'
 import { RootState } from '../../reducers'
 import { transactionConsts } from '../../constants'
 import { Row, Col, Icon, Input } from 'antd'
@@ -16,6 +16,7 @@ interface ViewProps extends RouteComponentProps<{ id: string }> {
   transaction: Transaction
   authInfo: AuthInfo
   loading: boolean
+  goods: Goods
 }
 interface ViewState {
   commentInputShowing: boolean
@@ -70,9 +71,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
     }
   }
   render() {
-    const { transaction, authInfo, loading } = this.props
+    const { transaction, authInfo, loading, goods } = this.props
     const { commentInputShowing, comment } = this.state
-    const goods = transaction.goods
     let imagePaths: string[]
     if (goods && goods.images) {
       imagePaths = goods.images.map(image => image.path)

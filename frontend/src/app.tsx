@@ -27,7 +27,7 @@ import {
   EditPage as GoodsEditPage,
   ViewPage as GoodsViewPage
 } from './pages/goods'
-import { ProfilePage, CompanyConfirmPage } from './pages/user'
+import { ProfilePage, CompanyConfirmPage, MyInventoryPage } from './pages/user'
 import { AdminPage, HomePage, AllListPage, MyListPage } from './pages'
 import { RootState, LightboxState, AuthState, AlertState } from './reducers'
 import { Layout, Alert, BackTop } from 'antd'
@@ -95,6 +95,7 @@ class App extends React.Component<AppProps, any> {
                 />
                 <PrivateRoute path="/goods/:id" component={GoodsViewPage} />
                 <PrivateRoute path="/profile" component={ProfilePage} />
+                <PrivateRoute path="/inventory" component={MyInventoryPage} />
                 <AdminRoute path="/admin" component={AdminPage} />
                 <AdminRoute
                   path="/company/confirm/:id"
