@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
-import ReactDOM from 'react-dom'
 import i18n from 'i18next'
 
 import { history } from './helpers/history'
