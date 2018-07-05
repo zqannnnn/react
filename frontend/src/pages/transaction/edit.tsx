@@ -109,7 +109,13 @@ class EditPage extends React.Component<TransProps, TransState> {
       imageUploading,
       certificateUploading
     } = this.state
-    if (transactionId && transProp && !submitted) {
+    if (
+      transactionId &&
+      transProp &&
+      !submitted &&
+      !imageUploading &&
+      !certificateUploading
+    ) {
       this.setState({
         transaction: {
           ...transaction,
@@ -141,7 +147,9 @@ class EditPage extends React.Component<TransProps, TransState> {
         })
       }
       this.props.dispatch(uploadActionCreators.clear())
-      this.setState({ imageUploading: false })
+      setTimeout(() => {
+        this.setState({ imageUploading: false })
+      }, 500)
     }
     if (image && certificateUploading) {
       if (transaction.certificates) {
@@ -160,7 +168,9 @@ class EditPage extends React.Component<TransProps, TransState> {
         })
       }
       this.props.dispatch(uploadActionCreators.clear())
-      this.setState({ certificateUploading: false })
+      setTimeout(() => {
+        this.setState({ certificateUploading: false })
+      }, 500)
     }
   }
   handleSelectChange = (value: string, name: string) => {
