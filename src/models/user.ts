@@ -31,12 +31,6 @@ export class User extends Model<User> {
   @Column
   public id: string
 
-  @BelongsTo(() => Currency)
-  public preferCurrency: Currency
-
-  @Column({ field: 'user_name' })
-  public userName: string
-
   @Column({ field: 'user_type' })
   public userType: number
 
