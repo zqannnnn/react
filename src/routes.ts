@@ -1,20 +1,20 @@
-import * as jwt from 'jsonwebtoken'
+import { Application, NextFunction, Request, Response } from 'express'
 import * as i18n from 'i18next'
-import * as qs from 'querystring'
-import { Application, Response, Request, NextFunction } from 'express'
+import * as jwt from 'jsonwebtoken'
 import { PassportStatic } from 'passport'
+import * as qs from 'querystring'
+import { AuthInfo } from '../frontend/src/actions'
+import { consts } from './config/static'
+import { User } from './models'
 import {
-  userRouter,
   categoryRouter,
   currencyRouter,
-  transactionRouter,
   goodsRouter,
   passRouter,
-  uploadRouter
+  transactionRouter,
+  uploadRouter,
+  userRouter
 } from './routes/index'
-import { User } from './models'
-import { consts } from './config/static'
-import { AuthInfo } from '../frontend/src/actions'
 
 // const handleSequelizeError = (res, error) => {
 //   console.error(error)
@@ -43,7 +43,7 @@ export const router = (app: Application, passport: PassportStatic) => {
         }),
         id: user.id
       }
-      if (user.userType == consts.USER_TYPE_ADMIN) {
+      if (user.userType === consts.USER_TYPE_ADMIN) {
         data.isAdmin = true
       }
       data.preferredCurrencyCode = user.preferredCurrencyCode
@@ -57,7 +57,7 @@ export const router = (app: Application, passport: PassportStatic) => {
     const key = req.param('key')
     if (email) {
       const user = await User.findOne({
-        where: { email: email },
+        where: { email },
         attributes: [
           'id',
           'userType',
@@ -66,7 +66,7 @@ export const router = (app: Application, passport: PassportStatic) => {
           'password'
         ]
       })
-      if (user != null && user.resetKey == key) {
+      if (user != null && user.resetKey === key) {
         const data = {
           token: jwt.sign(
             user.get({
@@ -81,7 +81,7 @@ export const router = (app: Application, passport: PassportStatic) => {
           licenseStatus: user.licenseStatus,
           route: 'resetPass'
         }
-        if (user.userType == consts.USER_TYPE_ADMIN) {
+        if (user.userType === consts.USER_TYPE_ADMIN) {
           data.isAdmin = true
         }
         return res.redirect('/#/reset/pass/?' + qs.stringify(data))

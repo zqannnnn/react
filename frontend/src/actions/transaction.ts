@@ -117,12 +117,13 @@ function getById(id: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request())
 
-    transService
-      .getById(id)
-      .then(
-        (transaction: Transaction) => dispatch(success(transaction)),
-        (error: string) => dispatch(failure(error))
-      )
+    transService.getById(id).then(
+      (transaction: Transaction) => dispatch(success(transaction)),
+      (error: string) => {
+        dispatch(failure(error))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
   }
 
   function request() {
@@ -150,12 +151,16 @@ function cancel(id: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request(id))
 
-    return transService
-      .cancel(id)
-      .then(
-        () => dispatch(success(id)),
-        (error: string) => dispatch(failure(error, id))
-      )
+    return transService.cancel(id).then(
+      () => {
+        dispatch(success(id))
+        dispatch(alertActionCreators.success('Cancel transaction successful'))
+      },
+      (error: string) => {
+        dispatch(failure(error, id))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
   }
 
   function request(id: string) {
@@ -171,12 +176,18 @@ function cancel(id: string) {
 function reactivate(transaction: Transaction) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request(transaction.id))
-    return transService
-      .reactivate(transaction)
-      .then(
-        () => dispatch(success(transaction.id)),
-        (error: string) => dispatch(failure(error, transaction.id))
-      )
+    return transService.reactivate(transaction).then(
+      () => {
+        dispatch(success(transaction.id))
+        dispatch(
+          alertActionCreators.success('Reactivate transaction successful')
+        )
+      },
+      (error: string) => {
+        dispatch(failure(error, transaction.id))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
   }
 
   function request(id: any) {
@@ -193,12 +204,16 @@ function finish(id: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request(id))
 
-    transService
-      .finish(id)
-      .then(
-        () => dispatch(success(id)),
-        (error: string) => dispatch(failure(error, id))
-      )
+    transService.finish(id).then(
+      () => {
+        dispatch(success(id))
+        dispatch(alertActionCreators.success('Finish transaction Successful'))
+      },
+      (error: string) => {
+        dispatch(failure(error, id))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
   }
 
   function request(id: string) {
@@ -214,13 +229,14 @@ function finish(id: string) {
 const getAll: ActionCreator<Thunk> = (option: ListOptions) => {
   return (dispatch: Dispatch<RootState>): void => {
     dispatch(request())
-    transService
-      .getAll(option)
-      .then(
-        (result: { transactions: Array<Transaction>; total: number }) =>
-          dispatch(success(result.transactions, result.total)),
-        (error: string) => dispatch(failure(error))
-      )
+    transService.getAll(option).then(
+      (result: { transactions: Array<Transaction>; total: number }) =>
+        dispatch(success(result.transactions, result.total)),
+      (error: string) => {
+        dispatch(failure(error))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
   }
 
   function request(): Action {
@@ -252,7 +268,12 @@ function addComment(id: string, comment: string) {
     dispatch(request(id))
 
     transService.addComment(id, comment).then(
-      () => dispatch(success(id, comment)),
+      () => {
+        dispatch(success(id, comment))
+        dispatch(
+          alertActionCreators.success('AddComment transactions successful')
+        )
+      },
       (error: string) => {
         dispatch(failure(id, error))
         dispatch(alertActionCreators.error(error))

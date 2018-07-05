@@ -1,5 +1,5 @@
-import { Strategy as LocalStrategy } from 'passport-local'
 import { PassportStatic } from 'passport'
+import { Strategy as LocalStrategy } from 'passport-local'
 import { User } from './models'
 
 export const passportConfig = (passport: PassportStatic) => {
@@ -18,7 +18,7 @@ export const passportConfig = (passport: PassportStatic) => {
 
         // asynchronous
         process.nextTick(async function() {
-          let user = await User.findOne({
+          const user = await User.findOne({
             where: { email },
             attributes: [
               'id',
@@ -32,7 +32,7 @@ export const passportConfig = (passport: PassportStatic) => {
             return done(null, false)
           }
 
-          let result = await user.validatePassword(password)
+          const result = await user.validatePassword(password)
           if (result) {
             return done(null, user.get())
           } else {

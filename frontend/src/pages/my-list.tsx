@@ -58,12 +58,6 @@ class List extends React.Component<ListProps, ListState> {
           <div className="banner-bg" />
           <div className="title">{i18n.t('My Transaction')}</div>
         </div>
-        {transaction.error && (
-          <span className="text-danger">
-            {i18n.t('ERROR: ')}
-            {transaction.error}
-          </span>
-        )}
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 20, offset: 2 }}
