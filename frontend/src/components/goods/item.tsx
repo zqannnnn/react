@@ -52,7 +52,12 @@ class Item extends React.Component<ItemProps> {
                 )}
               </div>
             </Link>
-            <div className="space-between content text-overflow" />
+            <div className="text-overflow" />
+            <div className="content">
+              <Link className="control-btn" to={'/transaction/new/' + goods.id}>
+                {i18n.t('Sell')}
+              </Link>
+            </div>
           </div>
         </Col>
       )
