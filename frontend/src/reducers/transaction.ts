@@ -23,6 +23,12 @@ export function transaction(
       return {}
     case transactionConsts.CREATE_FAILURE:
       return { error: action.error }
+    case transactionConsts.CREATE_ORDER_REQUEST:
+      return { processing: true }
+    case transactionConsts.CREATE_ORDER_SUCCESS:
+      return {}
+    case transactionConsts.CREATE_ORDER_FAILURE:
+      return { error: action.error }
     case transactionConsts.EDIT_REQUEST:
       return { processing: true }
     case transactionConsts.EDIT_SUCCESS:
@@ -124,10 +130,7 @@ export function transaction(
     case transactionConsts.COMMENT_REQUEST:
       return {
         ...state,
-        transData: {
-          ...state.transData,
-          processing: true
-        }
+        processing: true
       }
     case transactionConsts.COMMENT_SUCCESS:
       return {
@@ -141,10 +144,7 @@ export function transaction(
     case transactionConsts.COMMENT_FAILURE:
       return {
         ...state,
-        transData: {
-          ...state.transData,
-          error: action.error
-        }
+        error: action.error
       }
     case transactionConsts.GET_REQUEST:
       return { loading: true }

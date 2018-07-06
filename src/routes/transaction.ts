@@ -1,9 +1,9 @@
 import * as express from 'express'
 import * as i18n from 'i18next'
 import { consts } from '../config/static'
-import { authMiddleware } from '../middleware/auth'
+import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
-import { Currency, Image, Transaction } from '../models/'
+import { Currency, Goods, Image, Transaction } from '../models/'
 const router = express.Router()
 
 router.use(authMiddleware)
@@ -17,12 +17,14 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   const keyword = req.query.keyword
   const sorting = req.query.sorting
   const whereOption: {
-    userId?: string
+    makerId?: string
     status?: number
-    type?: string
-    title?: { $like: string }
+    isMakerSeller?: boolean
   } = {}
-
+  const goodsOption: {
+    title?: { $like: string }
+    category?: number
+  } = {}
   const pageOption: {
     offset?: number
     limit?: number
@@ -31,19 +33,19 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   let orderOption: string[] = ['createdAt', 'DESC']
 
   if (buy && !sell) {
-    whereOption.type = consts.TRANSACTION_TYPE_BUY
+    whereOption.isMakerSeller = true
   } else if (sell && !buy) {
-    whereOption.type = consts.TRANSACTION_TYPE_SELL
+    whereOption.isMakerSeller = false
   }
   if (pageSize && typeof page !== 'undefined') {
     pageOption.offset = (page - 1) * pageSize
     pageOption.limit = (page - 1) * pageSize + pageSize
   }
   if (typeof keyword !== 'undefined') {
-    whereOption.title = { $like: `%${keyword}%` }
+    goodsOption.title = { $like: `%${keyword}%` }
   }
   if (type === 'mine') {
-    whereOption.userId = req.userId
+    whereOption.makerId = req.userId
   } else if (type === 'finished') {
     whereOption.status = consts.TRANSACTION_STATUS_FINISHED
   } else {
@@ -61,8 +63,14 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
       },
       include: [
         {
-          model: Image,
-          attributes: ['path', 'type']
+          model: Goods,
+          where: { ...goodsOption },
+          include: [
+            {
+              model: Image,
+              attributes: ['path', 'type']
+            }
+          ]
         }
       ],
       ...pageOption,
@@ -74,33 +82,35 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   }
 })
 
+router.use(loginCheckMiddleware)
 router.post('/new', async (req: IRequest, res: express.Response) => {
   try {
     const transaction = new Transaction({
-      userId: req.userId,
+      makerId: req.userId,
       ...req.body
     })
     await transaction.save()
-    if (req.body.images) {
-      req.body.images.forEach((image: { path: string }) => {
-        const imageDb = new Image({
-          path: image.path,
-          transactionId: transaction.id,
-          type: consts.IMAGE_TYPE_MEDIE
-        })
-        imageDb.save()
-      })
-    }
-    if (req.body.certificates) {
-      req.body.certificates.forEach((certificate: { path: string }) => {
-        const imageDb = new Image({
-          path: certificate.path,
-          transactionId: transaction.id,
-          type: consts.IMAGE_TYPE_CERTIFICATE
-        })
-        imageDb.save()
-      })
-    }
+    return res.send({ success: true })
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
+router.post('/order/new', async (req: IRequest, res: express.Response) => {
+  try {
+    const goods = new Goods({
+      creatorId: req.userId,
+      ownerId: req.userId,
+      ...req.body.goods
+    })
+    await goods.save()
+    const transaction = new Transaction({
+      makerId: req.userId,
+      goodsId: goods.id,
+      price: req.body.price,
+      currencyCode: req.body.currencyCode
+    })
+    await transaction.save()
     return res.send({ success: true })
   } catch (e) {
     return res.status(500).send({ error: e.message })
@@ -125,6 +135,7 @@ router.get(
           .send({ error: i18n.t('Transaction does not exist.') })
       }
       transaction.status = consts.TRANSACTION_STATUS_FINISHED
+      transaction.takerId = req.body.takerId
       transaction.save()
       return res.send({ success: true })
     } catch (e) {
@@ -166,12 +177,11 @@ router
       },
       include: [
         {
-          model: Image,
-          attributes: ['path', 'type']
-        },
-        {
           model: Currency,
           attributes: ['code']
+        },
+        {
+          model: Goods
         }
       ]
     })
@@ -189,7 +199,7 @@ router
           id: req.params.transactionId
         }
       })
-      if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
+      if (transaction && transaction.makerId !== req.userId && !req.isAdmin) {
         return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
       if (!transaction) {
@@ -201,31 +211,6 @@ router
         (key: string) => (transaction[key] = req.body[key])
       )
       transaction.save()
-      await Image.destroy({
-        where: {
-          transactionId: req.params.transactionId
-        }
-      })
-      if (req.body.images) {
-        req.body.images.forEach((image: { path: string }) => {
-          const imageDb = new Image({
-            path: image.path,
-            transactionId: transaction.id,
-            type: consts.IMAGE_TYPE_MEDIE
-          })
-          imageDb.save()
-        })
-      }
-      if (req.body.certificates) {
-        req.body.certificates.forEach((certificate: { path: string }) => {
-          const imageDb = new Image({
-            path: certificate.path,
-            transactionId: transaction.id,
-            type: consts.IMAGE_TYPE_CERTIFICATE
-          })
-          imageDb.save()
-        })
-      }
       return res.send({ success: true })
     } catch (e) {
       return res.status(500).send({ error: e.message })
@@ -238,7 +223,7 @@ router
           id: req.params.transactionId
         }
       })
-      if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
+      if (transaction && transaction.makerId !== req.userId && !req.isAdmin) {
         return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
       if (!transaction) {

@@ -1,11 +1,10 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { transactionActionCreators } from '../actions'
-import { RootState, TransactionState } from '../reducers'
-import { AuthInfo } from '../actions'
-import { Transaction, ListItem } from '../models'
+import { RootState } from '../reducers'
+import { ListItem } from '../models'
 import { Item as TransactionItem } from './transaction/item'
 import { Item as CompanyItem } from './company/item'
+import { Item as GoodsItem } from './goods/item'
 interface ItemProps {
   dispatch: Dispatch<RootState>
   key: number
@@ -22,6 +21,8 @@ class Item extends React.Component<ItemProps> {
         return <TransactionItem transaction={item} />
       case 'Company':
         return <CompanyItem company={item} />
+      case 'Goods':
+        return <GoodsItem goods={item} />
       default:
         break
     }

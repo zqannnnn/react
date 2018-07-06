@@ -1,15 +1,15 @@
-import * as express from 'express'
-import * as path from 'path'
-import * as morgan from 'morgan'
 import * as bodyParser from 'body-parser'
+import * as express from 'express'
 import * as session from 'express-session'
+import * as morgan from 'morgan'
 import * as passport from 'passport'
+import * as path from 'path'
 
-import { setupDatabase } from './models'
-import { router } from './routes'
-import { passportConfig } from './passport'
 import { i18n, middleware } from './middleware/i18n'
 import { webpackMiddleware } from './middleware/webpack'
+import { setupDatabase } from './models'
+import { passportConfig } from './passport'
+import { router } from './routes'
 
 const app = express()
 webpackMiddleware(app)
@@ -42,13 +42,15 @@ app.use(passport.initialize())
 // routes
 router(app, passport) // load our routes and pass in our app and fully configured passport
 
-//static
+// static
 app.use('/static', express.static('./uploads'))
 
 // launch
 const port = process.env.PORT || 3000
 app.listen(port, (err: string) => {
-  if (err) console.log(err)
+  if (err) {
+    console.log(err)
+  }
   console.log(`⚡ Express started on port ${port}`)
 })
 export { app }

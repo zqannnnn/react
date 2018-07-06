@@ -24,14 +24,12 @@ export type Action = {
 type Thunk = ThunkAction<void, RootState, void>
 
 // prefixed function name with underscore because new is a reserved word in
-const _new: ActionCreator<ThunkAction<void, RootState, void>> = (
-  transaction: Transaction
-) => {
+const _new: ActionCreator<Thunk> = (transaction: Transaction) => {
   return (dispatch: Dispatch<RootState>): void => {
     dispatch(request())
 
     transService.new(transaction).then(
-      (transaction: Transaction) => {
+      () => {
         dispatch(success())
         dispatch(alertActionCreators.success('Create transaction successful'))
         setTimeout(function() {
@@ -54,7 +52,37 @@ const _new: ActionCreator<ThunkAction<void, RootState, void>> = (
     return { type: transactionConsts.CREATE_FAILURE, error }
   }
 }
-const edit: ActionCreator<ThunkAction<void, RootState, void>> = (
+
+const newOrder: ActionCreator<Thunk> = (transaction: Transaction) => {
+  return (dispatch: Dispatch<RootState>): void => {
+    dispatch(request())
+
+    transService.newOrder(transaction).then(
+      () => {
+        dispatch(success())
+        dispatch(alertActionCreators.success('Create order successful'))
+        setTimeout(function() {
+          history.replace('/transactions/my')
+        }, 1000)
+      },
+      (error: string) => {
+        dispatch(failure(error))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
+  }
+  function request(): Action {
+    return { type: transactionConsts.CREATE_ORDER_REQUEST }
+  }
+  function success(): Action {
+    return { type: transactionConsts.CREATE_ORDER_SUCCESS }
+  }
+  function failure(error: string): Action {
+    return { type: transactionConsts.CREATE_ORDER_FAILURE, error }
+  }
+}
+
+const edit: ActionCreator<Thunk> = (
   transaction: Transaction,
   transactionId: string
 ) => {
@@ -89,28 +117,29 @@ function getById(id: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request())
 
-    transService
-      .getById(id)
-      .then(
-        (transaction: Transaction) => dispatch(success(transaction)),
-        (error: string) => dispatch(failure(error))
-      )
+    transService.getById(id).then(
+      (transaction: Transaction) => dispatch(success(transaction)),
+      (error: string) => {
+        dispatch(failure(error))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
   }
 
   function request() {
     return { type: transactionConsts.GET_REQUEST }
   }
   function success(transaction: Transaction) {
-    if (transaction.images) {
-      let images = transaction.images.filter(
+    if (transaction.goods && transaction.goods.images) {
+      let images = transaction.goods.images.filter(
         image => image.type === transactionConsts.IMAGE_TYPE_MEDIE
       )
 
-      let certificates = transaction.images.filter(
+      let certificates = transaction.goods.images.filter(
         image => image.type === transactionConsts.IMAGE_TYPE_CERTIFICATE
       )
-      transaction.images = images
-      transaction.certificates = certificates
+      transaction.goods.images = images
+      transaction.goods.certificates = certificates
     }
     return { type: transactionConsts.GET_SUCCESS, data: transaction }
   }
@@ -122,12 +151,16 @@ function cancel(id: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request(id))
 
-    return transService
-      .cancel(id)
-      .then(
-        () => dispatch(success(id)),
-        (error: string) => dispatch(failure(error, id))
-      )
+    return transService.cancel(id).then(
+      () => {
+        dispatch(success(id))
+        dispatch(alertActionCreators.success('Cancel transaction successful'))
+      },
+      (error: string) => {
+        dispatch(failure(error, id))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
   }
 
   function request(id: string) {
@@ -143,12 +176,18 @@ function cancel(id: string) {
 function reactivate(transaction: Transaction) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request(transaction.id))
-    return transService
-      .reactivate(transaction)
-      .then(
-        () => dispatch(success(transaction.id)),
-        (error: string) => dispatch(failure(error, transaction.id))
-      )
+    return transService.reactivate(transaction).then(
+      () => {
+        dispatch(success(transaction.id))
+        dispatch(
+          alertActionCreators.success('Reactivate transaction successful')
+        )
+      },
+      (error: string) => {
+        dispatch(failure(error, transaction.id))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
   }
 
   function request(id: any) {
@@ -165,12 +204,16 @@ function finish(id: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request(id))
 
-    transService
-      .finish(id)
-      .then(
-        () => dispatch(success(id)),
-        (error: string) => dispatch(failure(error, id))
-      )
+    transService.finish(id).then(
+      () => {
+        dispatch(success(id))
+        dispatch(alertActionCreators.success('Finish transaction Successful'))
+      },
+      (error: string) => {
+        dispatch(failure(error, id))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
   }
 
   function request(id: string) {
@@ -183,18 +226,17 @@ function finish(id: string) {
     return { type: transactionConsts.FINISH_FAILURE, error, id }
   }
 }
-const getAll: ActionCreator<ThunkAction<void, RootState, void>> = (
-  option: ListOptions
-) => {
+const getAll: ActionCreator<Thunk> = (option: ListOptions) => {
   return (dispatch: Dispatch<RootState>): void => {
     dispatch(request())
-    transService
-      .getAll(option)
-      .then(
-        (result: { transactions: Array<Transaction>; total: number }) =>
-          dispatch(success(result.transactions, result.total)),
-        (error: string) => dispatch(failure(error))
-      )
+    transService.getAll(option).then(
+      (result: { transactions: Array<Transaction>; total: number }) =>
+        dispatch(success(result.transactions, result.total)),
+      (error: string) => {
+        dispatch(failure(error))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
   }
 
   function request(): Action {
@@ -203,15 +245,15 @@ const getAll: ActionCreator<ThunkAction<void, RootState, void>> = (
   function success(transactions: Array<Transaction>, total: number): Action {
     transactions.forEach(transaction => {
       transaction.itemType = 'Transaction'
-      if (transaction.images) {
-        let images = transaction.images.filter(
+      if (transaction.goods && transaction.goods.images) {
+        let images = transaction.goods.images.filter(
           image => image.type === transactionConsts.IMAGE_TYPE_MEDIE
         )
-        let certificates = transaction.images.filter(
+        let certificates = transaction.goods.images.filter(
           image => image.type === transactionConsts.IMAGE_TYPE_CERTIFICATE
         )
-        transaction.certificates = certificates
-        transaction.images = images
+        transaction.goods.certificates = certificates
+        transaction.goods.images = images
       }
     })
 
@@ -226,7 +268,12 @@ function addComment(id: string, comment: string) {
     dispatch(request(id))
 
     transService.addComment(id, comment).then(
-      () => dispatch(success(id, comment)),
+      () => {
+        dispatch(success(id, comment))
+        dispatch(
+          alertActionCreators.success('AddComment transactions successful')
+        )
+      },
       (error: string) => {
         dispatch(failure(id, error))
         dispatch(alertActionCreators.error(error))
@@ -246,6 +293,7 @@ function addComment(id: string, comment: string) {
 }
 export const actionCreators = {
   new: _new,
+  newOrder,
   edit,
   getAll,
   getById,

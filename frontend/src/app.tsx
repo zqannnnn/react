@@ -20,9 +20,14 @@ import {
 } from './pages/auth'
 import {
   EditPage as TransactionEditPage,
-  ViewPage as TransactionViewPage
+  ViewPage as TransactionViewPage,
+  OrderEditPage
 } from './pages/transaction'
-import { ProfilePage, CompanyConfirmPage } from './pages/user'
+import {
+  EditPage as GoodsEditPage,
+  ViewPage as GoodsViewPage
+} from './pages/goods'
+import { ProfilePage, CompanyConfirmPage, MyInventoryPage } from './pages/user'
 import { AdminPage, HomePage, AllListPage, MyListPage } from './pages'
 import { RootState, LightboxState, AuthState, AlertState } from './reducers'
 import { Layout, Alert, BackTop } from 'antd'
@@ -72,9 +77,10 @@ class App extends React.Component<AppProps, any> {
                 <PrivateRoute path="/transactions/my" component={MyListPage} />
                 <Route path="/transactions" component={AllListPage} />
                 <PrivateRoute
-                  path="/transaction/new"
+                  path="/transaction/new/:goodsId"
                   component={TransactionEditPage}
                 />
+                <PrivateRoute path="/order/new/" component={OrderEditPage} />
                 <PrivateRoute
                   path="/transaction/edit/:id"
                   component={TransactionEditPage}
@@ -83,7 +89,14 @@ class App extends React.Component<AppProps, any> {
                   path="/transaction/:id"
                   component={TransactionViewPage}
                 />
+                <PrivateRoute path="/goods/new" component={GoodsEditPage} />
+                <PrivateRoute
+                  path="/goods/edit/:id"
+                  component={GoodsEditPage}
+                />
+                <PrivateRoute path="/goods/:id" component={GoodsViewPage} />
                 <PrivateRoute path="/profile" component={ProfilePage} />
+                <PrivateRoute path="/inventory" component={MyInventoryPage} />
                 <AdminRoute path="/admin" component={AdminPage} />
                 <AdminRoute
                   path="/company/confirm/:id"

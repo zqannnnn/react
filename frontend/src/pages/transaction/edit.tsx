@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import {
+  goodsActionCreators,
   transactionActionCreators,
   categoryActionCreators,
   currencyActionCreators,
@@ -10,7 +11,7 @@ import {
   alertActionCreators,
   AuthInfo
 } from '../../actions'
-import { Transaction, Image } from '../../models'
+import { Transaction, Image, Goods } from '../../models'
 import { Category, CategoryDetails, Currency } from '../../models'
 import { RootState } from '../../reducers'
 import { transactionConsts, authConsts } from '../../constants'
@@ -26,17 +27,18 @@ import {
   Upload,
   Icon
 } from 'antd'
-import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface'
 import i18n from 'i18next'
 
 const Step = Steps.Step
 const { TextArea } = Input
 
-interface TransProps extends RouteComponentProps<{ id: string }> {
+interface TransProps
+  extends RouteComponentProps<{ id: string; goodsId: string }> {
   dispatch: Dispatch<RootState>
   loading: boolean
   processing: boolean
   transProp: Transaction
+  goodsProp: Goods
   categorys: Category[]
   currencys: Currency[]
   image: string
@@ -45,6 +47,8 @@ interface TransProps extends RouteComponentProps<{ id: string }> {
 interface TransState {
   transaction: Transaction
   transactionId?: string
+  goodsId?: string
+  goods?: Goods
   submitted: boolean
   imageUploading: boolean
   certificateUploading: boolean
@@ -57,8 +61,9 @@ class EditPage extends React.Component<TransProps, TransState> {
     this.state = {
       submitted: false,
       transaction: {
-        category: 'Beef',
-        currencyCode: 'USD'
+        currencyCode: 'USD',
+        isMakerSeller: true,
+        goods: {}
       },
       imageUploading: false,
       certificateUploading: false,
@@ -66,7 +71,7 @@ class EditPage extends React.Component<TransProps, TransState> {
     }
   }
   next() {
-    if (this.state.transaction.type) {
+    if (this.state.transaction) {
       const current = this.state.current + 1
       this.setState({ current })
     }
@@ -83,12 +88,19 @@ class EditPage extends React.Component<TransProps, TransState> {
         ...this.state,
         transactionId
       })
+    let goodsId = this.props.match.params.goodsId
+    goodsId &&
+      this.setState({
+        ...this.state,
+        goodsId
+      })
     if (!this.props.categorys)
       this.props.dispatch(categoryActionCreators.getAll())
     if (!this.props.currencys)
       this.props.dispatch(currencyActionCreators.getAll())
     transactionId &&
       this.props.dispatch(transactionActionCreators.getById(transactionId))
+    goodsId && this.props.dispatch(goodsActionCreators.getById(goodsId))
 
     if (this.props.authInfo && this.props.authInfo.preferredCurrencyCode) {
       const transaction = this.state.transaction
@@ -101,21 +113,10 @@ class EditPage extends React.Component<TransProps, TransState> {
     }
   }
   componentWillReceiveProps(nextProps: TransProps) {
-    const { transProp, image, categorys } = nextProps
-    const {
-      submitted,
-      transactionId,
-      transaction,
-      imageUploading,
-      certificateUploading
-    } = this.state
-    if (
-      transactionId &&
-      transProp &&
-      !submitted &&
-      !imageUploading &&
-      !certificateUploading
-    ) {
+    const { transProp, goodsProp, image, categorys } = nextProps
+    const { submitted, transactionId, goodsId, transaction } = this.state
+    const goods = transaction.goods
+    if (transactionId && transProp && !submitted) {
       this.setState({
         transaction: {
           ...transaction,
@@ -130,48 +131,19 @@ class EditPage extends React.Component<TransProps, TransState> {
         }
       })
     }
-    if (image && imageUploading) {
-      if (transaction.images) {
-        this.setState({
-          transaction: {
-            ...transaction,
-            images: [...transaction.images, { path: image }]
+    if (goodsId && goodsProp && !submitted) {
+      this.setState({
+        transaction: {
+          ...transaction,
+          goods: {
+            ...goods,
+            ...goodsProp
           }
-        })
-      } else {
-        this.setState({
-          transaction: {
-            ...transaction,
-            images: [{ path: image }]
-          }
-        })
-      }
-      this.props.dispatch(uploadActionCreators.clear())
-      setTimeout(() => {
-        this.setState({ imageUploading: false })
-      }, 500)
+        }
+      })
     }
-    if (image && certificateUploading) {
-      if (transaction.certificates) {
-        this.setState({
-          transaction: {
-            ...transaction,
-            certificates: [...transaction.certificates, { path: image }]
-          }
-        })
-      } else {
-        this.setState({
-          transaction: {
-            ...transaction,
-            certificates: [{ path: image }]
-          }
-        })
-      }
-      this.props.dispatch(uploadActionCreators.clear())
-      setTimeout(() => {
-        this.setState({ certificateUploading: false })
-      }, 500)
-    }
+    this.props.dispatch(uploadActionCreators.clear())
+    this.setState({ certificateUploading: false })
   }
   handleSelectChange = (value: string, name: string) => {
     const { transaction } = this.state
@@ -182,19 +154,6 @@ class EditPage extends React.Component<TransProps, TransState> {
       }
     })
   }
-  handleInputChange = (
-    e: React.FormEvent<HTMLInputElement> | React.FormEvent<HTMLTextAreaElement>
-  ) => {
-    const { value, name } = e.currentTarget
-    const { transaction } = this.state
-    this.setState({
-      transaction: {
-        ...transaction,
-        [name]: value
-      }
-    })
-  }
-
   handleInputNumber = (value: string | number, name: string | number) => {
     const { transaction } = this.state
     this.setState({
@@ -204,20 +163,10 @@ class EditPage extends React.Component<TransProps, TransState> {
       }
     })
   }
-
-  handleUpload = (uploadFile: UploadFile, isCertificate?: boolean) => {
-    let image = uploadFile.originFileObj
-    this.props.dispatch(uploadActionCreators.uploadImage(image))
-    if (isCertificate) {
-      this.setState({ certificateUploading: true })
-    } else {
-      this.setState({ imageUploading: true })
-    }
-  }
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     this.setState({ submitted: true })
-    if (this.state.transaction.type === 'Sell') {
+    if (this.state.transaction.isMakerSeller) {
       if (
         this.props.authInfo.licenseStatus !==
         authConsts.LICENSE_STATUS_CONFIRMED
@@ -231,14 +180,9 @@ class EditPage extends React.Component<TransProps, TransState> {
         return
       }
     }
-    const { transaction, transactionId } = this.state
+    const { transaction, transactionId, goodsId } = this.state
     const { dispatch } = this.props
-    if (
-      transaction.category &&
-      transaction.title &&
-      transaction.quantity &&
-      transaction.price
-    ) {
+    if (transaction.price) {
       if (transactionId)
         dispatch(transactionActionCreators.edit(transaction, transactionId))
       else dispatch(transactionActionCreators.new(transaction))
@@ -247,52 +191,15 @@ class EditPage extends React.Component<TransProps, TransState> {
     }
     window.scrollTo(0, 0)
   }
-  handleDeleteImage = (uploadFile: UploadFile) => {
-    const { transaction } = this.state
-    const { images } = transaction
-    const uid = uploadFile.uid
-    if (images) {
-      let newImages = images.filter((image: Image, index: number) => {
-        return uid != index
-      })
-      this.setState({
-        transaction: { ...transaction, images: newImages }
-      })
-      return true
-    }
-  }
-
-  handleDeleteCertificate = (uploadFile: UploadFile) => {
-    const { transaction } = this.state
-    const { certificates } = transaction
-    const uid = uploadFile.uid
-    if (certificates) {
-      let newCertificates = certificates.filter(
-        (image: Image, index: number) => {
-          return uid != index
-        }
-      )
-      this.setState({
-        transaction: { ...transaction, certificates: newCertificates }
-      })
-      return true
-    }
-  }
   openLightbox = (images: string[], index: number) => {
     this.props.dispatch(lightboxActionCreators.open(images, index))
   }
 
-  handlePreview = (file: UploadFile) => {
-    file.url && this.openLightbox([file.url], 0)
-  }
   //for render select input
   renderSelect(optionItems: Array<string>, field: keyof Transaction) {
     let selectValue = this.state.transaction[field] || ''
     return (
-      <Select
-        value={String(selectValue)}
-        onSelect={(value: string) => this.handleSelectChange(value, field)}
-      >
+      <Select value={String(selectValue)}>
         {optionItems.map((item, index) => (
           <Select.Option key={index} value={item}>
             {item}
@@ -301,69 +208,19 @@ class EditPage extends React.Component<TransProps, TransState> {
       </Select>
     )
   }
-
   customRequest = () => {
     return false
   }
 
   renderItem = (current: number) => {
-    let {
-      id,
-      type,
-      images,
-      certificates,
-      price,
-      bone,
-      title,
-      desc,
-      quantity,
-      primalCuts,
-      brand,
-      factoryNum,
-      deliveryTerm,
-      placeOfOrigin,
-      fed,
-      grainFedDays,
-      trimmings,
-      category,
-      currencyCode
-    } = this.state.transaction
+    const { price, status, currencyCode, goods } = this.state.transaction
     let { submitted } = this.state
-    let { processing, categorys, currencys } = this.props
-    let options = null
-    let currentCategory: Category =
-      categorys &&
-      categorys.filter((item: Category) => {
-        return item.type === category
-      })[0]
-
-    let imageList: UploadFile[]
-    if (this.state.transaction.images) {
-      imageList = this.state.transaction.images.map(
-        (image, index): UploadFile => ({
-          url: image.path,
-          name: '',
-          uid: index,
-          size: 200,
-          type: 'done'
-        })
-      )
+    let { processing, currencys } = this.props
+    let imagePaths: string[]
+    if (goods && goods.images) {
+      imagePaths = goods.images.map(image => image.path)
     } else {
-      imageList = []
-    }
-    let certificateList: UploadFile[]
-    if (this.state.transaction.certificates) {
-      certificateList = this.state.transaction.certificates.map(
-        (image, index): UploadFile => ({
-          url: image.path,
-          name: '',
-          uid: index,
-          size: 200,
-          type: 'done'
-        })
-      )
-    } else {
-      certificateList = []
+      imagePaths = []
     }
     switch (current) {
       case 0:
@@ -379,15 +236,15 @@ class EditPage extends React.Component<TransProps, TransState> {
               <h2>{i18n.t('Buy or Sell')}</h2>
               <Select
                 size="large"
-                value={this.state.transaction['type']}
+                value={String(this.state.transaction.isMakerSeller)}
                 onSelect={(value: string) =>
-                  this.handleSelectChange(value, 'type')
+                  this.handleSelectChange(value, 'isMakerSeller')
                 }
               >
-                <Select.Option key="Buy">
+                <Select.Option key="false">
                   {i18n.t(transactionConsts.TYPE_BUY)}
                 </Select.Option>
-                <Select.Option key="Sell">
+                <Select.Option key="true">
                   {i18n.t(transactionConsts.TYPE_SELL)}
                 </Select.Option>
               </Select>
@@ -396,378 +253,44 @@ class EditPage extends React.Component<TransProps, TransState> {
         )
       case 1:
         return (
-          <Row>
-            <Col className="container-upload" span={22} offset={1}>
-              <label>{i18n.t('Images')}</label>
-              <div className="upload-transactions-edit">
-                <div className="clearfix">
-                  <Upload
-                    accept="image/*"
-                    listType="picture-card"
-                    fileList={imageList}
-                    customRequest={this.customRequest}
-                    onChange={(file: UploadChangeParam) =>
-                      this.handleUpload(file.file)
-                    }
-                    onPreview={this.handlePreview}
-                    onRemove={this.handleDeleteImage}
-                  >
-                    <div>
-                      <Icon type="plus" />
-                      <div className="ant-upload-text">{i18n.t('Upload')}</div>
-                    </div>
-                  </Upload>
-                </div>
-              </div>
-              <label>{i18n.t('Certificates')}</label>
-              <div className="upload-transactions-edit">
-                <div className="clearfix">
-                  <Upload
-                    customRequest={this.customRequest}
-                    accept="image/*"
-                    listType="picture-card"
-                    fileList={certificateList}
-                    onChange={(file: UploadChangeParam) =>
-                      this.handleUpload(file.file, true)
-                    }
-                    onPreview={this.handlePreview}
-                    onRemove={this.handleDeleteCertificate}
-                  >
-                    <div>
-                      <Icon type="plus" />
-                      <div className="ant-upload-text">{i18n.t('Upload')}</div>
-                    </div>
-                  </Upload>
-                </div>
-              </div>
-            </Col>
-          </Row>
-        )
-      case 2:
-        return (
           <>
-            {this.state.transaction.type && (
+            {goods && (
               <div className="edits-input">
                 <Row>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
-                  >
-                    <label>{i18n.t('Category')}</label>
-                    <Select
-                      size="large"
-                      value={category}
-                      onSelect={(value: string) =>
-                        this.handleSelectChange(value, 'category')
-                      }
-                    >
-                      {transactionConsts.CATEGORY.map((item, index) => (
-                        <Select.Option key={index} value={item}>
-                          {item}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </Col>
                   <Col span={20} offset={2} className="edits-input">
-                    <div className={submitted && !title ? ' has-error' : ''}>
-                      <label className="edits-input">{i18n.t('Title')}</label>
-                      <Input
-                        placeholder=""
-                        type="text"
-                        name="title"
-                        value={title}
-                        onChange={this.handleInputChange}
-                        size="large"
-                      />
-                      {submitted &&
-                        !title && (
-                          <div className="invalid-feedback">
-                            {i18n.t('Title is required')}
-                          </div>
-                        )}
-                    </div>
+                    <label className="edits-input">{i18n.t('Title')}</label>
+                    <div>{goods.title}</div>
                   </Col>
                 </Row>
                 <Row>
                   <Col span={20} offset={2} className="edits-input">
                     <label>{i18n.t('Description')}</label>
-                    <TextArea
-                      placeholder=""
-                      name="desc"
-                      rows={4}
-                      value={desc}
-                      onChange={this.handleInputChange}
-                    />
+                    <div>{goods.desc}</div>
                   </Col>
                 </Row>
                 <Row>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
-                  >
-                    <label>{i18n.t('Bone')}</label>
-                    {currentCategory &&
-                      this.renderSelect(
-                        currentCategory.details['Bone'],
-                        'bone'
+                  <Col span={20} offset={2} className="view-top">
+                    <label>{i18n.t('Images')}:</label>
+                    <div className="message">
+                      {imagePaths && (
+                        <div className="images-container">
+                          {imagePaths.map((image, index) => (
+                            <div key={index} className="image-wrapper">
+                              <img
+                                className="image cursor-pointer"
+                                onClick={() =>
+                                  this.openLightbox(imagePaths, index)
+                                }
+                                src={image}
+                              />
+                            </div>
+                          ))}
+                        </div>
                       )}
-                  </Col>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
-                  >
-                    <label>{i18n.t('Storage')}</label>
-                    {currentCategory &&
-                      this.renderSelect(
-                        currentCategory.details['Storage'],
-                        'storage'
-                      )}
-                  </Col>
-                </Row>
-                <Row>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
-                  >
-                    <label>{i18n.t('Grade')}</label>
-                    {currentCategory &&
-                      this.renderSelect(
-                        currentCategory.details['Grade'],
-                        'grade'
-                      )}
-                  </Col>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
-                  >
-                    <label>{i18n.t('Slaughter Specification')}</label>
-                    {currentCategory &&
-                      this.renderSelect(
-                        currentCategory.details['Slaughter Specification'],
-                        'slaughterSpec'
-                      )}
-                  </Col>
-                </Row>
-                <Row>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
-                  >
-                    <label>{i18n.t('Marble Score')}</label>
-                    {currentCategory &&
-                      this.renderSelect(
-                        currentCategory.details['Marble Score'],
-                        'marbleScore'
-                      )}
-                  </Col>
-
-                  {currentCategory &&
-                    currentCategory.type != 'Sheep' && (
-                      <Col
-                        xs={{ span: 20, offset: 2 }}
-                        sm={{ span: 20, offset: 2 }}
-                        md={{ span: 9, offset: 2 }}
-                        lg={{ span: 9, offset: 2 }}
-                        className="edits-input"
-                      >
-                        <label>{i18n.t('Breed')}</label>
-                        {this.renderSelect(
-                          currentCategory.details['Breed'],
-                          'breed'
-                        )}
-                      </Col>
-                    )}
-                </Row>
-                <Row>
-                  {currentCategory &&
-                    currentCategory.type == 'Beef' && (
-                      <Col
-                        xs={{ span: 20, offset: 2 }}
-                        sm={{ span: 20, offset: 2 }}
-                        md={{ span: 9, offset: 2 }}
-                        lg={{ span: 9, offset: 2 }}
-                        className="edits-input"
-                      >
-                        <label>{i18n.t('Fed')}</label>
-                        {this.renderSelect(
-                          currentCategory.details['Fed'],
-                          'fed'
-                        )}
-                      </Col>
-                    )}
-
-                  {fed == 'Grain fed' && (
-                    <Col
-                      xs={{ span: 20, offset: 2 }}
-                      sm={{ span: 20, offset: 2 }}
-                      md={{ span: 9, offset: 2 }}
-                      lg={{ span: 9, offset: 2 }}
-                      className="edits-input"
-                    >
-                      <label>{i18n.t('Grain fed days')}</label>
-                      <div className="flex">
-                        <InputNumber
-                          min={0}
-                          max={100000}
-                          defaultValue={0}
-                          onChange={(value: number) =>
-                            this.handleInputNumber(value, 'grainFedDays')
-                          }
-                        />
-                        <div className="label-right">{i18n.t('Days')}</div>
-                      </div>
-                    </Col>
-                  )}
-                </Row>
-                <Row>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
-                  >
-                    <label>{i18n.t('Primal Cuts')}</label>
-                    <Input
-                      type="text"
-                      name="primalCuts"
-                      value={primalCuts}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
-                  >
-                    <label>{i18n.t('Trimmings')}</label>
-                    <div className="flex">
-                      <InputNumber
-                        min={0}
-                        max={100000}
-                        defaultValue={0}
-                        onChange={(value: number) =>
-                          this.handleInputNumber(value, 'trimmings')
-                        }
-                      />
-                      <div className="label-right">CL</div>
                     </div>
                   </Col>
                 </Row>
                 <Row>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
-                  >
-                    <label>{i18n.t('Brand')}</label>
-                    <Input
-                      type="text"
-                      name="brand"
-                      value={brand}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
-                  >
-                    <label>{i18n.t('Factory Number')}</label>
-                    <Input
-                      type="text"
-                      name="factoryNum"
-                      value={factoryNum}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
-                  >
-                    <label>{i18n.t('Place Of Origin')}</label>
-                    <Input
-                      type="text"
-                      name="placeOfOrigin"
-                      value={placeOfOrigin}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
-                  >
-                    <label>{i18n.t('Delivery Term')}</label>
-                    <Input
-                      type="text"
-                      name="deliveryTerm"
-                      value={deliveryTerm}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
-                  >
-                    <div className={submitted && !quantity ? 'has-error' : ''}>
-                      <label>{i18n.t('Quantity')}</label>
-                      <div className="flex">
-                        <InputNumber
-                          max={999999}
-                          defaultValue={1}
-                          min={1}
-                          value={quantity}
-                          onChange={(value: number) =>
-                            this.handleInputNumber(value, 'quantity')
-                          }
-                        />
-                        <div className="label-right">KG</div>
-                      </div>
-                      {submitted &&
-                        !quantity && (
-                          <div className="invalid-feedback">
-                            {i18n.t('Quantity is required')}
-                          </div>
-                        )}
-                    </div>
-                  </Col>
                   <Col
                     xs={{ span: 20, offset: 2 }}
                     sm={{ span: 20, offset: 2 }}
@@ -845,9 +368,6 @@ class EditPage extends React.Component<TransProps, TransState> {
       },
       {
         title: 'Second'
-      },
-      {
-        title: 'Last'
       }
     ]
     return (
@@ -890,13 +410,15 @@ class EditPage extends React.Component<TransProps, TransState> {
   }
 }
 function mapStateToProps(state: RootState) {
-  const { transaction, category, currency, upload, auth } = state
+  const { transaction, category, currency, upload, auth, goods } = state
   const { processing, loading, transData } = transaction
+  const { goodsData } = goods
   return {
     processing,
     categorys: category.items,
     currencys: currency.items,
     transProp: transData,
+    goodsProp: goodsData,
     image: upload.image,
     authInfo: auth.authInfo
   }

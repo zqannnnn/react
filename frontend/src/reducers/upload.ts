@@ -1,6 +1,5 @@
 import { uploadConsts } from '../constants'
 import { UploadAction } from '../actions'
-import { Transaction } from '../models'
 export type State = {
   uploading?: boolean
   image?: string

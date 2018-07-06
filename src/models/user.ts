@@ -1,8 +1,6 @@
 import * as bcrypt from 'bcrypt'
-import { DataTypeJSONB } from 'sequelize'
 import {
   BeforeCreate,
-  BeforeUpdate,
   BelongsTo,
   Column,
   CreatedAt,
@@ -18,7 +16,6 @@ import {
   Unique,
   UpdatedAt
 } from 'sequelize-typescript'
-import { consts } from '../config/static'
 import { Currency, Image, Transaction } from './'
 @Table({
   tableName: 'user',
