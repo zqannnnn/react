@@ -1,6 +1,6 @@
 export interface Currency {
   code: string
-  symbel: string
+  symbel?: string
   description: string
   rate: number
 }

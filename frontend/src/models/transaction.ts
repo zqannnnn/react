@@ -33,4 +33,6 @@ export class Transaction implements ListItem {
   processing?: boolean
   error?: string
   category?: string
+  createdAt?: string
+  updatedAt?: string
 }
