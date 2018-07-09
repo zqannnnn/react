@@ -5,25 +5,21 @@ import { transactionActionCreators, AuthInfo } from '../../actions'
 import { RootState } from '../../reducers'
 import { Transaction } from '../../models'
 import { transactionConsts } from '../../constants'
-import { Exchange } from '../exchange'
+import { Exchange } from '../'
 import { Col } from 'antd'
 import i18n from 'i18next'
-interface ItemProps {
+interface TransactionItemProps {
   dispatch: Dispatch<RootState>
   transaction: Transaction
   authInfo: AuthInfo
 }
-interface ItemState {
-  commentInputShowing: boolean
-  comment: string
-}
-class Item extends React.Component<ItemProps, ItemState> {
-  constructor(props: ItemProps) {
+interface TransactionItemState {}
+class TransactionItem extends React.Component<
+  TransactionItemProps,
+  TransactionItemState
+> {
+  constructor(props: TransactionItemProps) {
     super(props)
-    this.state = {
-      commentInputShowing: false,
-      comment: props.transaction.comment || ''
-    }
   }
   handleCancel = (id: string) => {
     let r = confirm(i18n.t('Are you sure?'))
@@ -146,7 +142,8 @@ class Item extends React.Component<ItemProps, ItemState> {
               >
                 {i18n.t('Read More')}
               </Link>
-              {(authInfo.id == transaction.makerId || authInfo.isAdmin) &&
+              {authInfo &&
+                (authInfo.id == transaction.makerId || authInfo.isAdmin) &&
                 transaction.status === transactionConsts.STATUS_CREATED && (
                   <>
                     <Link
@@ -165,7 +162,8 @@ class Item extends React.Component<ItemProps, ItemState> {
                     </div>
                   </>
                 )}
-              {(authInfo.id == transaction.makerId || authInfo.isAdmin) &&
+              {authInfo &&
+                (authInfo.id == transaction.makerId || authInfo.isAdmin) &&
                 transaction.status === transactionConsts.STATUS_CANCELLED && (
                   <>
                     <div
@@ -192,5 +190,5 @@ function mapStateToProps(state: RootState) {
   return { authInfo: auth.authInfo }
 }
 
-const connectedItem = connect(mapStateToProps)(Item)
-export { connectedItem as Item }
+const connectedTransactionItem = connect(mapStateToProps)(TransactionItem)
+export { connectedTransactionItem as Transaction }

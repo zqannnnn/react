@@ -5,7 +5,7 @@ import {
   withRouter,
   RouteComponentProps
 } from 'react-router-dom'
-import { CurrencyState, AuthState } from '../../reducers'
+import { CurrencyState, AuthState } from '../reducers'
 import throttle from 'lodash.throttle'
 import { Menu, Select } from 'antd'
 import i18n from 'i18next'

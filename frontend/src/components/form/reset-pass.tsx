@@ -142,4 +142,4 @@ class ResetPassForm extends React.Component<
 }
 
 const WrappedResetPassForm = Form.create()(ResetPassForm)
-export { WrappedResetPassForm as ResetPassForm }
+export { WrappedResetPassForm as ResetPass }

@@ -6,13 +6,13 @@ import { RootState } from '../../reducers'
 import { User } from '../../models'
 import i18n from 'i18next'
 import { Col } from 'antd'
-interface ItemProps {
+interface CompanyProps {
   dispatch: Dispatch<RootState>
   company: User
   authInfo: AuthInfo
 }
-class Item extends React.Component<ItemProps> {
-  constructor(props: ItemProps) {
+class Company extends React.Component<CompanyProps> {
+  constructor(props: CompanyProps) {
     super(props)
   }
 
@@ -52,5 +52,5 @@ function mapStateToProps(state: RootState) {
   return { authInfo: auth.authInfo }
 }
 
-const connectedItem = connect(mapStateToProps)(Item)
-export { connectedItem as Item }
+const connectedCompany = connect(mapStateToProps)(Company)
+export { connectedCompany as Company }

@@ -1,6 +1,6 @@
 ```jsx
-<Item transaction={
-      {
+<Transaction transaction={
+    {
         createdAt: "2018-07-06T05:13:28.204Z",
         currencyCode: "BTC",
         goodsId: "8da71249-32d7-4d05-a555-111c16ca3fba",

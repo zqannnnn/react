@@ -55,4 +55,4 @@ class LostPassForm extends React.Component<LostPassFormProps> {
 }
 
 const WrappedLostPassForm = Form.create()(LostPassForm)
-export { WrappedLostPassForm as LostPassForm }
+export { WrappedLostPassForm as LostPass }

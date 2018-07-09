@@ -77,4 +77,4 @@ class LoginForm extends React.Component<LoginFormProps> {
 }
 
 const WrappedLoginForm = Form.create()(LoginForm)
-export { WrappedLoginForm as LoginForm }
+export { WrappedLoginForm as Login }

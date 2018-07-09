@@ -7,13 +7,13 @@ import { Goods } from '../../models'
 import { Col } from 'antd'
 import i18n from 'i18next'
 
-interface ItemProps {
+interface GoodsItemProps {
   dispatch: Dispatch<RootState>
   goods: Goods
   authInfo: AuthInfo
 }
-class Item extends React.Component<ItemProps> {
-  constructor(props: ItemProps) {
+class GoodsItem extends React.Component<GoodsItemProps> {
+  constructor(props: GoodsItemProps) {
     super(props)
   }
   handleFinish = (id: string) => {
@@ -58,5 +58,5 @@ function mapStateToProps(state: RootState) {
   return { authInfo: auth.authInfo }
 }
 
-const connectedItem = connect(mapStateToProps)(Item)
-export { connectedItem as Item }
+const connectedGoodsItem = connect(mapStateToProps)(GoodsItem)
+export { connectedGoodsItem as Goods }

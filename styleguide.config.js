@@ -5,5 +5,5 @@ module.exports = {
   styleguideComponents: {
     Wrapper: path.join(__dirname, 'frontend/src/components/styleguide/wrapper')
   },
-  ignore: ['**/styleguide/*.tsx']
+  ignore: ['**/styleguide/*.tsx', '**/index.{ts,js}']
 }

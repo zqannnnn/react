@@ -15,7 +15,7 @@ const app = express()
 webpackMiddleware(app)
 app.use(middleware.handle(i18n))
 
-setupDatabase()
+// setupDatabase()
 // Get the exchange rate API
 // import { getApi as currencyApi } from './api/currency'
 // currencyApi()

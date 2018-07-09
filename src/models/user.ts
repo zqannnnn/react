@@ -72,8 +72,6 @@ export class User extends Model<User> {
   @BelongsTo(() => Currency, 'preferred_currency')
   public preferredCurrency: Currency
 
-  @Column public desc: string
-
   // fields for company
   @Column({ field: 'company_name' })
   public companyName: string

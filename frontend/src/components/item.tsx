@@ -2,15 +2,13 @@ import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducers'
 import { ListItem } from '../models'
-import { Item as TransactionItem } from './transaction/item'
-import { Item as CompanyItem } from './company/item'
-import { Item as GoodsItem } from './goods/item'
+import { TransactionItem, GoodsItem, CompanyItem } from './item/'
 interface ItemProps {
-  dispatch: Dispatch<RootState>
-  key: number
+  // dispatch: Dispatch<RootState>
   item: ListItem
 }
-class Item extends React.Component<ItemProps> {
+
+export class Item extends React.Component<ItemProps> {
   constructor(props: ItemProps) {
     super(props)
   }
@@ -33,5 +31,5 @@ class Item extends React.Component<ItemProps> {
   }
 }
 
-const connectedItem = connect()(Item)
-export { connectedItem as Item }
+// const connectedItem = connect()(Item)
+// export { connectedItem as Item }
