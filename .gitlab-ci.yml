@@ -1,0 +1,36 @@
+cache:
+  key: "$CI_BUILD_REF_NAME node:8-alpine"
+  paths:
+    - node_modules/
+
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  image: gitlab/dind:latest
+  only:
+    - "deploy"
+  environment: production
+  services:
+    - docker:dind
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo "$DEPLOY_SERVER_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/id_rsa
+    - ssh-keyscan -H $DEPLOYMENT_SERVER_IP >> ~/.ssh/known_hosts
+    - rm ./Dockerfile 
+    - mv ./production/Dockerfile ./Dockerfile    
+    - rm ./bin/yarn 
+    - mv ./production/yarn ./bin/yarn     
+    - rm ./docker-compose.yml
+    - mv ./production/docker-compose.yml ./docker-compose.yml    
+  script:
+    - scp -r ./webpack ./environments ./Dockerfile ./bin ./src ./frontend ./public root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
+    - scp -r ./docker-compose.yml ./package.json ./tslint.json ./package-lock.json ./tsconfig.json ./yarn.lock root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
+    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker-compose down;"
+    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; mkdir node_modules; chmod -R 777 node_modules; mkdir uploads; chmod -R 777 uploads;"
+    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; ./bin/yarn install;"
+    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker-compose build; docker-compose up -d;"

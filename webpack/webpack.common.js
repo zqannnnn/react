@@ -1,6 +1,6 @@
 const path = require('path')
-const base = path.join(__dirname, 'frontend/src')
-const dist = path.join(__dirname, 'public')
+const base = path.join(__dirname, '../frontend/src')
+const dist = path.join(__dirname, '../public')
 
 module.exports = {
   entry: 'index.tsx',
@@ -12,7 +12,7 @@ module.exports = {
   },
 
   resolve: {
-    modules: [base, path.join(__dirname, 'node_modules')],
+    modules: [base, path.join(__dirname, '../node_modules')],
     extensions: ['.js', '.ts', '.tsx']
   },
 
@@ -27,13 +27,5 @@ module.exports = {
         loader: 'style-loader!css-loader'
       }
     ]
-  },
-  devtool: 'source-map',
-  devServer: {
-    historyApiFallback: true,
-    inline: true,
-    stats: {
-      colors: true
-    }
   }
 }
