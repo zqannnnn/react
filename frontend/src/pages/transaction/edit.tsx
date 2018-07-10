@@ -16,7 +16,6 @@ import { Category, CategoryDetails, Currency } from '../../models'
 import { RootState } from '../../reducers'
 import { transactionConsts, authConsts } from '../../constants'
 import {
-  Steps,
   Button,
   message,
   Row,
@@ -29,7 +28,6 @@ import {
 } from 'antd'
 import i18n from 'i18next'
 
-const Step = Steps.Step
 const { TextArea } = Input
 
 interface TransProps
@@ -52,7 +50,6 @@ interface TransState {
   submitted: boolean
   imageUploading: boolean
   certificateUploading: boolean
-  current: number
 }
 
 class EditPage extends React.Component<TransProps, TransState> {
@@ -66,19 +63,8 @@ class EditPage extends React.Component<TransProps, TransState> {
         goods: {}
       },
       imageUploading: false,
-      certificateUploading: false,
-      current: 0
+      certificateUploading: false
     }
-  }
-  next() {
-    if (this.state.transaction) {
-      const current = this.state.current + 1
-      this.setState({ current })
-    }
-  }
-  prev() {
-    const current = this.state.current - 1
-    this.setState({ current })
   }
 
   componentDidMount() {
@@ -183,6 +169,7 @@ class EditPage extends React.Component<TransProps, TransState> {
     const { transaction, transactionId, goodsId } = this.state
     const { dispatch } = this.props
     if (transaction.price) {
+      transaction.goodsId = goodsId
       if (transactionId)
         dispatch(transactionActionCreators.edit(transaction, transactionId))
       else dispatch(transactionActionCreators.new(transaction))
@@ -212,7 +199,7 @@ class EditPage extends React.Component<TransProps, TransState> {
     return false
   }
 
-  renderItem = (current: number) => {
+  render() {
     const { price, status, currencyCode, goods } = this.state.transaction
     let { submitted } = this.state
     let { processing, currencys } = this.props
@@ -222,154 +209,6 @@ class EditPage extends React.Component<TransProps, TransState> {
     } else {
       imagePaths = []
     }
-    switch (current) {
-      case 0:
-        return (
-          <Row>
-            <Col
-              xs={{ span: 20, offset: 2 }}
-              sm={{ span: 20, offset: 2 }}
-              md={{ span: 9, offset: 2 }}
-              lg={{ span: 9, offset: 2 }}
-              className="edits-input"
-            >
-              <h2>{i18n.t('Buy or Sell')}</h2>
-              <Select
-                size="large"
-                value={String(this.state.transaction.isMakerSeller)}
-                onSelect={(value: string) =>
-                  this.handleSelectChange(value, 'isMakerSeller')
-                }
-              >
-                <Select.Option key="false">
-                  {i18n.t(transactionConsts.TYPE_BUY)}
-                </Select.Option>
-                <Select.Option key="true">
-                  {i18n.t(transactionConsts.TYPE_SELL)}
-                </Select.Option>
-              </Select>
-            </Col>
-          </Row>
-        )
-      case 1:
-        return (
-          <>
-            {goods && (
-              <div className="edits-input">
-                <Row>
-                  <Col span={20} offset={2} className="edits-input">
-                    <label className="edits-input">{i18n.t('Title')}</label>
-                    <div>{goods.title}</div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={20} offset={2} className="edits-input">
-                    <label>{i18n.t('Description')}</label>
-                    <div>{goods.desc}</div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={20} offset={2} className="view-top">
-                    <label>{i18n.t('Images')}:</label>
-                    <div className="message">
-                      {imagePaths && (
-                        <div className="images-container">
-                          {imagePaths.map((image, index) => (
-                            <div key={index} className="image-wrapper">
-                              <img
-                                className="image cursor-pointer"
-                                onClick={() =>
-                                  this.openLightbox(imagePaths, index)
-                                }
-                                src={image}
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 9, offset: 2 }}
-                    lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
-                    offset={2}
-                  >
-                    <label>{i18n.t('Price')}</label>
-                    {currencys && (
-                      <div className="flex">
-                        <div className={submitted && !price ? 'has-error' : ''}>
-                          <InputNumber
-                            min={0}
-                            max={99999}
-                            defaultValue={0}
-                            value={price}
-                            onChange={(value: number) =>
-                              this.handleInputNumber(value, 'price')
-                            }
-                          />
-                          {submitted &&
-                            !price && (
-                              <div className="invalid-feedback">
-                                {i18n.t('Price is required')}
-                              </div>
-                            )}
-                        </div>
-                        <Select
-                          className="label-right"
-                          value={currencyCode}
-                          onSelect={(value: string) =>
-                            this.handleSelectChange(value, 'currencyCode')
-                          }
-                        >
-                          {currencys.map((item, index) => (
-                            <Select.Option key={index} value={item.code}>
-                              {item.code}
-                            </Select.Option>
-                          ))}
-                        </Select>
-                        <div className="label-right">/KG</div>
-                      </div>
-                    )}
-                  </Col>
-                </Row>
-                <Row>
-                  <Col sm={20} md={8} lg={8} offset={2} className="edits-input">
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      className="button-margin"
-                    >
-                      {i18n.t('Submit')}
-                    </Button>
-                    {processing && <Icon type="loading" />}
-                    <Button>
-                      <Link to="/">{i18n.t('Cancel')}</Link>
-                    </Button>
-                  </Col>
-                </Row>
-              </div>
-            )}
-          </>
-        )
-      default:
-        break
-    }
-  }
-  render() {
-    const { current } = this.state
-    const steps = [
-      {
-        title: 'First'
-      },
-      {
-        title: 'Second'
-      }
-    ]
     return (
       <Row className="edit-page">
         <Col
@@ -384,23 +223,114 @@ class EditPage extends React.Component<TransProps, TransState> {
               : i18n.t('Create Transaction Page')}
           </h2>
           <form name="form" onSubmit={this.handleSubmit}>
-            <Steps current={current}>
-              {steps.map(item => <Step key={item.title} title={item.title} />)}
-            </Steps>
             <div className="steps-content">
-              {this.renderItem(this.state.current)}
-            </div>
-            <div className="steps-action">
-              {this.state.current < steps.length - 1 && (
-                <Button type="primary" onClick={() => this.next()}>
-                  {i18n.t('Next')}
-                </Button>
-              )}
-
-              {this.state.current > 0 && (
-                <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-                  {i18n.t('Previous')}
-                </Button>
+              {goods && (
+                <div className="edits-input">
+                  <Row>
+                    <Col span={20} offset={2} className="edits-input">
+                      <label className="edits-input">{i18n.t('Title')}</label>
+                      <div>{goods.title}</div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={20} offset={2} className="edits-input">
+                      <label>{i18n.t('Description')}</label>
+                      <div>{goods.desc}</div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={20} offset={2} className="view-top">
+                      <label>{i18n.t('Images')}:</label>
+                      <div className="message">
+                        {imagePaths && (
+                          <div className="images-container">
+                            {imagePaths.map((image, index) => (
+                              <div key={index} className="image-wrapper">
+                                <img
+                                  className="image cursor-pointer"
+                                  onClick={() =>
+                                    this.openLightbox(imagePaths, index)
+                                  }
+                                  src={image}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col
+                      xs={{ span: 20, offset: 2 }}
+                      sm={{ span: 20, offset: 2 }}
+                      md={{ span: 9, offset: 2 }}
+                      lg={{ span: 9, offset: 2 }}
+                      className="edits-input"
+                      offset={2}
+                    >
+                      <label>{i18n.t('Price')}</label>
+                      {currencys && (
+                        <div className="flex">
+                          <div
+                            className={submitted && !price ? 'has-error' : ''}
+                          >
+                            <InputNumber
+                              min={0}
+                              max={99999}
+                              defaultValue={0}
+                              value={price}
+                              onChange={(value: number) =>
+                                this.handleInputNumber(value, 'price')
+                              }
+                            />
+                            {submitted &&
+                              !price && (
+                                <div className="invalid-feedback">
+                                  {i18n.t('Price is required')}
+                                </div>
+                              )}
+                          </div>
+                          <Select
+                            className="label-right"
+                            value={currencyCode}
+                            onSelect={(value: string) =>
+                              this.handleSelectChange(value, 'currencyCode')
+                            }
+                          >
+                            {currencys.map((item, index) => (
+                              <Select.Option key={index} value={item.code}>
+                                {item.code}
+                              </Select.Option>
+                            ))}
+                          </Select>
+                          <div className="label-right">/KG</div>
+                        </div>
+                      )}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col
+                      sm={20}
+                      md={8}
+                      lg={8}
+                      offset={2}
+                      className="edits-input"
+                    >
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        className="button-margin"
+                      >
+                        {i18n.t('Submit')}
+                      </Button>
+                      {processing && <Icon type="loading" />}
+                      <Button>
+                        <Link to="/">{i18n.t('Cancel')}</Link>
+                      </Button>
+                    </Col>
+                  </Row>
+                </div>
               )}
             </div>
           </form>
