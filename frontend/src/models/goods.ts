@@ -1,4 +1,4 @@
-import { ListItem, Image } from '.'
+import { ListItem, Image, Transaction } from '.'
 
 export class Goods implements ListItem {
   id?: string
@@ -15,6 +15,8 @@ export class Goods implements ListItem {
   title?: string
   desc?: string
   fed?: string
+  transaction?: Transaction
+  selling?: boolean
   grainFedDays?: number
   brand?: string
   factoryNum?: string

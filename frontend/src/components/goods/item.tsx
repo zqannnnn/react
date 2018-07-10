@@ -22,10 +22,6 @@ class Item extends React.Component<ItemProps> {
   constructor(props: ItemProps) {
     super(props)
   }
-  handleFinish = (id: string) => {
-    let r = confirm(i18n.t('Are you sure?'))
-    if (r) this.props.dispatch(transactionActionCreators.finish(id))
-  }
   render() {
     const { authInfo, goods } = this.props
 
@@ -53,10 +49,29 @@ class Item extends React.Component<ItemProps> {
               </div>
             </Link>
             <div className="text-overflow" />
-            <div className="content">
-              <Link className="control-btn" to={'/transaction/new/' + goods.id}>
-                {i18n.t('Sell')}
-              </Link>
+            <div className="content menu">
+              {!goods.selling && (
+                <>
+                  <Link
+                    to={'/transaction/new/' + goods.id}
+                    className="control-btn"
+                  >
+                    {i18n.t('Sell')}
+                  </Link>
+                </>
+              )}
+              {goods.transaction &&
+                goods.selling && (
+                  <>
+                    {i18n.t('Selling')}
+                    <Link
+                      to={'/transaction/' + goods.transaction.id}
+                      className="control-btn"
+                    >
+                      {i18n.t('To offer')}
+                    </Link>
+                  </>
+                )}
             </div>
           </div>
         </Col>

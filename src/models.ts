@@ -12,7 +12,7 @@ const initDatabase = async () => {
     if (!user) {
       insertInitialData()
       const currencyApi = require('./api/currency')
-      currencyApi.getApi()      
+      currencyApi.getApi()
     }
   })
 }

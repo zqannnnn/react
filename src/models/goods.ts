@@ -6,13 +6,14 @@ import {
   Default,
   ForeignKey,
   HasMany,
+  HasOne,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { Image, User } from './'
+import { Image, Transaction, User } from './'
 @Table({
   tableName: 'goods',
   underscored: true
@@ -33,6 +34,9 @@ export class Goods extends Model<Goods> {
 
   @BelongsTo(() => User)
   public owner: User
+
+  @HasOne(() => Transaction, 'goods_id')
+  public transaction: Transaction
 
   @ForeignKey(() => User)
   @Column({ field: 'creator_id' })
@@ -87,6 +91,10 @@ export class Goods extends Model<Goods> {
   @Column public price: number
 
   @Column public trimmings: number
+
+  @Default(false)
+  @Column
+  public selling: boolean
 
   @HasMany(() => Image, 'goods_id')
   public images: Image[]

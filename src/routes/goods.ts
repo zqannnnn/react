@@ -3,7 +3,7 @@ import * as i18n from 'i18next'
 import { consts } from '../config/static'
 import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
-import { Goods, Image } from '../models/'
+import { Goods, Image, Transaction } from '../models/'
 const router = express.Router()
 
 router.use(authMiddleware)
@@ -24,6 +24,8 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
     offset?: number
     limit?: number
   } = {}
+
+  whereOption.ownerId = req.userId
 
   let orderOption: string[] = ['createdAt', 'DESC']
 
@@ -48,7 +50,8 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
         {
           model: Image,
           attributes: ['path', 'type']
-        }
+        },
+        { model: Transaction }
       ],
       ...pageOption,
       order: [orderOption]
