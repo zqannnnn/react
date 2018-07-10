@@ -305,7 +305,7 @@ html {
   max-width: 100%;
 }
 
-.block img {
+.block-img {
   width: 100%;
   max-height: 150px;
   height: 100%;
@@ -550,4 +550,63 @@ html {
 .ant-layout-sider-zero-width-trigger {
   top: 0px;
   z-index: 1;
+}
+.comment {
+  margin: 0 12px;
+  padding-top: 8px;
+  padding-bottom: 4px;
+  display: inline-block;
+  word-break: break-all;
+}
+.comment .comment-wrapper .speak .main,
+.comment .comment-wrapper .reply .main {
+  display: inline-block;
+  width: 80%;
+}
+.reply {
+  padding-left: 40px;
+}
+.speak .main,
+.reply .main {
+  background-color: #eff1f3;
+  border-radius: 20px;
+  line-height: 32px;
+  font-size: 13px;
+  padding: 0 12px;
+}
+.speak .main .userid,
+.reply .main .userid {
+  color: #365899;
+  font-weight: bold;
+}
+.speak .main .content,
+.reply .main .content {
+  padding-right: 12px;
+}
+.features {
+  margin-left: 60px;
+  margin-bottom: 3px;
+  padding-top: 3px;
+}
+.features span {
+  color: #365899;
+  font-size: 14px;
+  line-height: 25px;
+  padding-right: 10px;
+}
+.click:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.avatar,
+.Speak {
+  float: left;
+}
+.avatar {
+  padding-right: 15px;
+}
+.avatar-image {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
 }

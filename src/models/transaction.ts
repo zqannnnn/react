@@ -5,6 +5,7 @@ import {
   DataType,
   Default,
   ForeignKey,
+  HasMany,
   IsUUID,
   Model,
   PrimaryKey,
@@ -12,7 +13,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { consts } from '../config/static'
-import { Currency, User } from './'
+import { Comment, Currency, User } from './'
 import { Goods } from './goods'
 @Table({
   tableName: 'transaction',
@@ -64,6 +65,9 @@ export class Transaction extends Model<Transaction> {
 
   @BelongsTo(() => Currency)
   public currency: Currency
+
+  @HasMany(() => Comment, 'transaction_id')
+  public comments: Comment[]
 
   @Column({ field: 'is_maker_seller' })
   public isMakerSeller: boolean

@@ -114,11 +114,18 @@ export function transaction(
         processing: true
       }
     case transactionConsts.COMMENT_SUCCESS:
-      return {
-        ...state,
-        transData: {
-          ...state.transData,
-          comment: action.comment
+      if (state.items && action.comment) {
+        let items = state.items.filter(item => item.id !== action.id)
+        let item = state.items.filter(item => item.id === action.id)[0]
+        if (item.comments) {
+          item.comments.push(action.comment)
+        } else {
+          item.comments = [action.comment]
+        }
+        items.push(item)
+        return {
+          ...state,
+          items: items
         }
       }
 

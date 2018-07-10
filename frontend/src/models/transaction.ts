@@ -1,6 +1,5 @@
 import { Currency, ListItem } from '.'
-import { Goods } from '.'
-import { User } from '../../../src/models';
+import { Goods, Comment, User } from '.'
 
 export class Transaction implements ListItem {
   id?: string
@@ -16,7 +15,5 @@ export class Transaction implements ListItem {
   taker?:User
   maker?:User
   isMakerSeller?: boolean
-  comment?: string
-  createdAt?: string
-  updatedAt?: string
+  comments?: Comment[]
 }

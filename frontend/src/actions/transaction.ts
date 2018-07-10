@@ -8,7 +8,7 @@ import { Dispatch } from 'react-redux'
 import { ActionCreator } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 import { RootState } from '../reducers'
-import { ListOptions } from '../models'
+import { ListOptions, Comment } from '../models'
 
 export type Action = {
   type: string
@@ -17,7 +17,7 @@ export type Action = {
   transactions?: Array<Transaction>
   data?: Transaction
   imagePath?: string
-  comment?: string
+  comment?: Comment
   total?: number
 }
 
@@ -79,6 +79,46 @@ const newOrder: ActionCreator<Thunk> = (transaction: Transaction) => {
   }
   function failure(error: string): Action {
     return { type: transactionConsts.CREATE_ORDER_FAILURE, error }
+  }
+}
+
+const comment: ActionCreator<Thunk> = (comment: Comment) => {
+  return (dispatch: Dispatch<RootState>): void => {
+    dispatch(request())
+
+    transService.comment(comment).then(
+      comment => {
+        dispatch(success(comment))
+        dispatch(alertActionCreators.success('Create comment successful'))
+        setTimeout(function() {
+          history.replace('/')
+        }, 1000)
+      },
+      (error: string) => {
+        dispatch(failure(error))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
+  }
+  function request(): Action {
+    return {
+      type: transactionConsts.COMMENT_REQUEST,
+      id: comment.transactionId
+    }
+  }
+  function success(comment: Comment): Action {
+    return {
+      type: transactionConsts.COMMENT_SUCCESS,
+      comment,
+      id: comment.transactionId
+    }
+  }
+  function failure(error: string): Action {
+    return {
+      type: transactionConsts.COMMENT_FAILURE,
+      error,
+      id: comment.transactionId
+    }
   }
 }
 
@@ -266,42 +306,14 @@ const getAll: ActionCreator<Thunk> = (option: ListOptions) => {
   }
 }
 
-function addComment(id: string, comment: string) {
-  return (dispatch: (action: Action) => void) => {
-    dispatch(request(id))
-
-    transService.addComment(id, comment).then(
-      () => {
-        dispatch(success(id, comment))
-        dispatch(
-          alertActionCreators.success('AddComment transactions successful')
-        )
-      },
-      (error: string) => {
-        dispatch(failure(id, error))
-        dispatch(alertActionCreators.error(error))
-      }
-    )
-  }
-
-  function request(id: string) {
-    return { type: transactionConsts.COMMENT_REQUEST, id }
-  }
-  function success(id: string, comment: string) {
-    return { type: transactionConsts.COMMENT_SUCCESS, id, comment }
-  }
-  function failure(id: string, error: string) {
-    return { type: transactionConsts.COMMENT_FAILURE, error, id }
-  }
-}
 export const actionCreators = {
   new: _new,
   newOrder,
+  comment,
   edit,
   getAll,
   getById,
   cancel,
   reactivate,
-  addComment,
   buy
 }

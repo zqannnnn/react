@@ -35,9 +35,9 @@ class GoodsItem extends React.Component<GoodsItemProps> {
             <Link to={'/goods/' + goods.id}>
               <div className="image-wr">
                 {goods.images && goods.images[0] ? (
-                  <img src={goods.images[0].path} />
+                  <img src={goods.images[0].path} className="block-img" />
                 ) : (
-                  <img src="/asset/no-image.jpg" />
+                  <img src="/asset/no-image.jpg" className="block-img" />
                 )}
               </div>
             </Link>

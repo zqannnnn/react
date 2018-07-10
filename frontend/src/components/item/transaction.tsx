@@ -7,23 +7,30 @@ import {
   AuthInfo
 } from '../../actions'
 import { RootState } from '../../reducers'
-import { Transaction } from '../../models'
+import { Transaction, Comment } from '../../models'
 import { transactionConsts } from '../../constants'
-import { Exchange } from '../'
-import { Col } from 'antd'
+import { Exchange } from '../exchange'
+import { Col, Icon, Collapse, Input, Button } from 'antd'
 import i18n from 'i18next'
-interface TransactionItemProps {
+const Panel = Collapse.Panel
+interface ItemProps {
   dispatch: Dispatch<RootState>
   transaction: Transaction
   authInfo: AuthInfo
 }
-interface TransactionItemState {}
-class TransactionItem extends React.Component<
-  TransactionItemProps,
-  TransactionItemState
-> {
-  constructor(props: TransactionItemProps) {
+interface ItemState {
+  commentInputShowing: boolean
+  currentComment: string
+  currentReply: string
+}
+class Item extends React.Component<ItemProps, ItemState> {
+  constructor(props: ItemProps) {
     super(props)
+    this.state = {
+      currentComment: '',
+      currentReply: '',
+      commentInputShowing: false
+    }
   }
   handleCancel = (id: string) => {
     let r = confirm(i18n.t('Are you sure?'))
@@ -31,6 +38,37 @@ class TransactionItem extends React.Component<
       this.props
         .dispatch(transactionActionCreators.cancel(id))
         .then(() => this.forceUpdate())
+  }
+  handleCommentInputChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget
+    this.setState({
+      currentComment: value
+    })
+  }
+  handleReplyInputChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget
+    this.setState({
+      currentReply: value
+    })
+  }
+  handleClick = () => {
+    this.setState({ commentInputShowing: !this.state.commentInputShowing })
+  }
+  componentWillReceiveProps(nextProps: ItemProps) {}
+  submitComment = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    let { currentComment } = this.state
+    const { dispatch, transaction } = this.props
+    const comment: Comment = {
+      content: currentComment,
+      transactionId: transaction.id
+    }
+    if (currentComment) {
+      dispatch(transactionActionCreators.comment(comment))
+    }
+    this.setState({
+      currentComment: ''
+    })
   }
   handleReactivate = (id: string) => {
     let r = confirm(i18n.t('Are you sure?'))
@@ -81,6 +119,7 @@ class TransactionItem extends React.Component<
   }
   render() {
     const { transaction, authInfo } = this.props
+    const { currentComment, currentReply } = this.state
     const goods = transaction.goods
     const taker = transaction.taker
     // const { commentInputShowing, comment } = this.state
@@ -115,9 +154,9 @@ class TransactionItem extends React.Component<
             <Link to={'/transaction/' + transaction.id}>
               <div className="image-wr">
                 {goods.images && goods.images[0] ? (
-                  <img src={goods.images[0].path} />
+                  <img src={goods.images[0].path} className="block-img" />
                 ) : (
-                  <img src="/asset/no-image.jpg" />
+                  <img src="/asset/no-image.jpg" className="block-img" />
                 )}
               </div>
             </Link>
@@ -216,6 +255,153 @@ class TransactionItem extends React.Component<
                   </>
                 )}
             </div>
+
+            <div>
+              <Collapse>
+                <Panel header="Comment" key="1">
+                  <div className="comment">
+                    {transaction.comments &&
+                      transaction.comments.map((comment, index) => (
+                        <div key={index} className="comment-wrapper">
+                          <div className="speak">
+                            <div className="avatar">
+                              <img
+                                src="/asset/no-image.jpg"
+                                alt="avatar"
+                                className="avatar-image"
+                              />
+                            </div>
+                            <div className="main">
+                              <span className="userid click">
+                                {comment.userId}
+                              </span>
+                              <span className="content">{comment.content}</span>
+                            </div>
+                            <div className="features">
+                              <span className="click">{i18n.t('praise')}</span>
+                              <span
+                                className="click"
+                                onClick={() => this.handleClick()}
+                              >
+                                {i18n.t('reply')}
+                              </span>
+                              <span className="click">{i18n.t('time')}</span>
+                            </div>
+                          </div>
+                          {comment.replyTo && (
+                            <div className="reply">
+                              <div className="avatar">
+                                <img
+                                  src="/asset/no-image.jpg"
+                                  alt="avatar"
+                                  className="avatar-image"
+                                />
+                              </div>
+                              <div className="main">
+                                <span className="userid click">
+                                  {comment.userId}
+                                </span>
+                                <span className="content">
+                                  {comment.content}
+                                </span>
+                              </div>
+                              <div className="features">
+                                <span className="click">
+                                  {i18n.t('praise')}
+                                </span>
+                                <span
+                                  className="click"
+                                  onClick={() => this.handleClick()}
+                                >
+                                  {i18n.t('reply')}
+                                </span>
+                                <span className="click">{i18n.t('time')}</span>
+                              </div>
+                              {this.state.commentInputShowing && (
+                                <form name="form">
+                                  <Input
+                                    placeholder="reply..."
+                                    type="text"
+                                    name="replyTo"
+                                    value={currentReply}
+                                    onChange={this.handleReplyInputChange}
+                                    suffix={
+                                      <Icon
+                                        type="enter"
+                                        style={{ color: 'rgba(0,0,0,.25)' }}
+                                      />
+                                    }
+                                    prefix={
+                                      <Icon
+                                        type="user"
+                                        style={{ color: 'rgba(0,0,0,.25)' }}
+                                      />
+                                    }
+                                  />
+                                  <Button type="primary" htmlType="submit">
+                                    {i18n.t('Submit')}
+                                  </Button>
+                                </form>
+                              )}
+                            </div>
+                          )}
+                          {this.state.commentInputShowing && (
+                            <form name="form">
+                              <Input
+                                placeholder="reply..."
+                                type="text"
+                                name="replyTo"
+                                value={currentReply}
+                                onChange={this.handleReplyInputChange}
+                                suffix={
+                                  <Icon
+                                    type="enter"
+                                    style={{ color: 'rgba(0,0,0,.25)' }}
+                                  />
+                                }
+                                prefix={
+                                  <Icon
+                                    type="user"
+                                    style={{ color: 'rgba(0,0,0,.25)' }}
+                                  />
+                                }
+                              />
+                              <Button type="primary" htmlType="submit">
+                                {i18n.t('Submit')}
+                              </Button>
+                            </form>
+                          )}
+                        </div>
+                      ))}
+
+                    <form name="form" onSubmit={this.submitComment}>
+                      <Input
+                        placeholder="Write a Review..."
+                        type="text"
+                        name="comment"
+                        value={currentComment}
+                        onChange={this.handleCommentInputChange}
+                        suffix={
+                          <Icon
+                            type="enter"
+                            style={{ color: 'rgba(0,0,0,.25)' }}
+                          />
+                        }
+                        prefix={
+                          <Icon
+                            type="user"
+                            style={{ color: 'rgba(0,0,0,.25)' }}
+                          />
+                        }
+                      />
+                      <Button type="primary" htmlType="submit">
+                        {i18n.t('Submit')}
+                      </Button>
+                    </form>
+                  </div>
+                </Panel>
+              </Collapse>
+            </div>
           </div>
         </Col>
       )
@@ -228,5 +414,5 @@ function mapStateToProps(state: RootState) {
   return { authInfo: auth.authInfo }
 }
 
-const connectedTransactionItem = connect(mapStateToProps)(TransactionItem)
+const connectedTransactionItem = connect(mapStateToProps)(Item)
 export { connectedTransactionItem as Transaction }

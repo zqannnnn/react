@@ -40,12 +40,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
     transactionId &&
       this.props.dispatch(transactionActionCreators.getById(transactionId))
   }
-  componentWillReceiveProps(nextProps: ViewProps) {
-    const { transaction } = nextProps
-    if (transaction && transaction.comment) {
-      this.setState({ comment: transaction.comment })
-    }
-  }
+
   openLightbox = (image: string) => {
     this.props.dispatch(lightboxActionCreators.open(image))
   }
@@ -59,15 +54,6 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
       ...this.state,
       [name]: value
     })
-  }
-  sendComment = () => {
-    const transId = this.state.transactionId
-    if (transId) {
-      this.props.dispatch(
-        transactionActionCreators.addComment(transId, this.state.comment)
-      )
-      this.setState({ commentInputShowing: false })
-    }
   }
   render() {
     const { transaction, authInfo, loading } = this.props

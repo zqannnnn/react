@@ -30,9 +30,12 @@ class Company extends React.Component<CompanyProps> {
           <Link to={'/company/confirm/' + company.id}>
             <div className="image-wr">
               {company.businessLicenses && company.businessLicenses[0] ? (
-                <img src={company.businessLicenses[0].path} />
+                <img
+                  src={company.businessLicenses[0].path}
+                  className="block-img"
+                />
               ) : (
-                <img src="/asset/no-image.jpg" />
+                <img src="/asset/no-image.jpg" className="block-img" />
               )}
             </div>
           </Link>

@@ -3,7 +3,7 @@ import * as i18n from 'i18next'
 import { consts } from '../config/static'
 import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
-import { Currency, Goods, Image, Transaction, User } from '../models/'
+import { Comment, Currency, Goods, Image, Transaction, User } from '../models/'
 const router = express.Router()
 
 router.use(authMiddleware)
@@ -170,7 +170,6 @@ router.get(
     }
   }
 )
-
 router.get(
   '/buy/:transactionId',
   async (req: IRequest, res: express.Response) => {
@@ -196,31 +195,18 @@ router.get(
   }
 )
 
-router.post(
-  '/comment/:transactionId',
-  async (req: IRequest, res: express.Response) => {
-    try {
-      if (!req.isAdmin) {
-        return res.status(500).send({ error: i18n.t('Permission denied.') })
-      }
-      const transaction = await Transaction.find({
-        where: {
-          id: req.params.transactionId
-        }
-      })
-      if (!transaction) {
-        return res
-          .status(500)
-          .send({ error: i18n.t('Transaction does not exist.') })
-      }
-      transaction.comment = req.body.comment
-      transaction.save()
-      return res.send({ success: true })
-    } catch (e) {
-      return res.status(500).send({ error: e.message })
-    }
+router.post('/comment', async (req: IRequest, res: express.Response) => {
+  try {
+    const comment = new Comment({
+      userId: req.userId,
+      ...req.body
+    })
+    await comment.save()
+    return res.send(comment)
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
   }
-)
+})
 router
   .route('/:transactionId')
   .get(async (req: express.Request, res: express.Response) => {

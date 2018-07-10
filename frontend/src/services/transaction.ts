@@ -1,17 +1,16 @@
 import { authHeader } from '../helpers/auth'
-import { Transaction } from '../models'
-import { ListOptions } from '../models'
+import { Transaction, ListOptions, Comment } from '../models'
 export const transService = {
   new: _new,
   newOrder: newOrder,
+  comment,
   edit,
   getById,
   getAll,
   cancel,
   reactivate,
   finish,
-  buy,
-  addComment
+  buy
 }
 function _new(transaction: Transaction) {
   const requestOptions = {
@@ -34,6 +33,17 @@ function newOrder(transaction: Transaction) {
     body: JSON.stringify(transaction)
   }
   return fetch('/transaction/order/new', requestOptions).then(handleResponse)
+}
+function comment(comment: Comment) {
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(comment)
+  }
+  return fetch('/transaction/comment', requestOptions).then(handleResponse)
 }
 function edit(transaction: Transaction, transactionId: string) {
   const requestOptions = {
@@ -85,6 +95,7 @@ function finish(id: string) {
 
   return fetch('/transaction/finish/' + id, requestOptions).then(handleResponse)
 }
+
 function buy(id: string) {
   const requestOptions = {
     method: 'GET',
@@ -94,20 +105,6 @@ function buy(id: string) {
   return fetch('/transaction/buy/' + id, requestOptions).then(handleResponse)
 }
 
-function addComment(id: string, comment: string) {
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      ...authHeader(),
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ comment })
-  }
-
-  return fetch('/transaction/comment/' + id, requestOptions).then(
-    handleResponse
-  )
-}
 function renderQuery(options: ListOptions) {
   let query: string = ''
   for (const key in options) {
