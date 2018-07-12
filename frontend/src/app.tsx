@@ -9,8 +9,7 @@ import {
   PrivateRoute,
   AdminRoute,
   NavBar,
-  Lightbox,
-  Search
+  Lightbox
 } from './components'
 import {
   LoginPage,

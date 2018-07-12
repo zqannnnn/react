@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { AuthState } from '../reducers'
+import { AuthState } from '../../reducers'
 import { Menu } from 'antd'
 import i18n from 'i18next'
 
