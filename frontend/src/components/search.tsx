@@ -21,12 +21,13 @@ class Search extends React.Component<ItemProps> {
 
   render() {
     return (
-      <Searchfor
-        placeholder="Search"
-        onSearch={this.handleSearch}
-        className="nav-search"
-        enterButton
-      />
+      <div className="nav-search">
+        <Searchfor
+          placeholder="Search"
+          onSearch={this.handleSearch}
+          enterButton
+        />
+      </div>
     )
   }
 }

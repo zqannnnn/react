@@ -1,20 +1,13 @@
 import * as React from 'react'
-import {
-  NavLink,
-  Link,
-  withRouter,
-  RouteComponentProps
-} from 'react-router-dom'
-import { CurrencyState, AuthState } from '../reducers'
-import throttle from 'lodash.throttle'
-import { Menu, Select } from 'antd'
+import { Link } from 'react-router-dom'
+import { AuthState } from '../reducers'
+import { Menu } from 'antd'
 import i18n from 'i18next'
 
 const { Item } = Menu
 
 interface MenuMarkupProps {
   auth: AuthState
-  currency: CurrencyState
   mobileVersion?: boolean
   menuClassName?: string
   activeLinkKey?: string
@@ -38,7 +31,7 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
   renderItem = (ReducedItem: ItemOptions) => {
     const onLinkClick = this.props.onLinkClick
     return (
-      <Item key={ReducedItem.to} onClick={this.props.onLinkClick}>
+      <Item key={ReducedItem.to} onClick={onLinkClick}>
         <Link to={ReducedItem.to} onClick={ReducedItem.onClick}>
           {i18n.t(ReducedItem.defaultMessage)}
         </Link>
@@ -46,13 +39,7 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
     )
   }
   render() {
-    let {
-      auth,
-      currency,
-      mobileVersion,
-      menuClassName,
-      activeLinkKey
-    } = this.props
+    let { auth, mobileVersion, menuClassName, activeLinkKey } = this.props
     const { loggedIn, authInfo } = auth
     let menu: JSX.Element
     if (loggedIn) {
@@ -60,7 +47,7 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
         <>
           <div
             className={
-              'home-menu ' + (this.props.activeLinkKey === '/' ? 'active' : '')
+              'home ' + (this.props.activeLinkKey === '/' ? 'active' : '')
             }
             onClick={this.props.onLinkClick}
           >
@@ -120,26 +107,28 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
       )
     } else {
       menu = (
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          style={{ lineHeight: '64px', float: 'right' }}
-          selectable={false}
-        >
-          <Item style={{ position: 'absolute', left: 30 }}>
+        <>
+          <div className="home">
             <Link to="/">{i18n.t('Home')}</Link>
-          </Item>
-          {this.renderItem({
-            to: '/login',
-            id: 'navbar.login',
-            defaultMessage: 'Login'
-          })}
-          {this.renderItem({
-            to: '/register',
-            id: 'navbar.signup',
-            defaultMessage: 'Sign Up'
-          })}
-        </Menu>
+          </div>
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            style={{ lineHeight: '64px', float: 'right' }}
+            selectable={false}
+          >
+            {this.renderItem({
+              to: '/login',
+              id: 'navbar.login',
+              defaultMessage: 'Login'
+            })}
+            {this.renderItem({
+              to: '/register',
+              id: 'navbar.signup',
+              defaultMessage: 'Sign Up'
+            })}
+          </Menu>
+        </>
       )
     }
     return menu

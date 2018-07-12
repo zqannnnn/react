@@ -1,16 +1,15 @@
 //https://webpack.js.org/guides/production/
-const merge = require('webpack-merge');
-const common = require('./webpack.common.js');
+const merge = require('webpack-merge')
+const common = require('./webpack.common.js')
 
 module.exports = merge(common, {
-    devtool: 'inline-source-map',
+  devtool: 'inline-source-map',
 
-    devServer: {
-        historyApiFallback: true,
-        inline: true,
-        stats: {
-            colors: true
-        }
+  devServer: {
+    historyApiFallback: true,
+    inline: true,
+    stats: {
+      colors: true
     }
-        
-});
+  }
+})

@@ -1,0 +1,133 @@
+@media (min-width: 1200px) {
+  .nav-search {
+    margin-left: 50px;
+    width: 300px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .nav-search {
+    margin-left: 50px;
+    width: 220px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .nav-search {
+    margin-left: 20px;
+    width: 250px;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+  .nav-search {
+    margin-left: 20px;
+    width: 175px;
+  }
+}
+
+@media (max-width: 369px) {
+  .nav-search {
+    margin-left: 30px;
+    width: 165px;
+  }
+}
+
+.nav-bar {
+  position: relative;
+  display: inline;
+  padding: 0 15px;
+}
+.nav-bar .menu {
+  display: inline-block;
+  width: 24px;
+  height: 16px;
+  position: relative;
+  cursor: pointer;
+}
+.nav-bar .menu .icon {
+  z-index: 1000;
+  width: 24px;
+  position: absolute;
+  height: 16px;
+}
+
+.nav-bar .menu .icon:before {
+  background: #777;
+  border-radius: 2px;
+  box-shadow: 0 6px 0 0 #777, 0 12px 0 0 #777;
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 24px;
+  top: 4px;
+}
+
+.nav-bar .home {
+  display: inline;
+  padding: 0 16px;
+}
+
+.nav-bar .home a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.nav-bar .home a:hover {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 1);
+}
+.nav-pop .home {
+  padding: 0 16px;
+  margin-bottom: 8px;
+  line-height: 40px;
+  height: 40px;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+.nav-pop .home a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.nav-pop .home a:link {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.nav-pop .home a:visited {
+  text-decoration: none;
+}
+
+.nav-pop .home a:hover {
+  text-decoration: none;
+  color: #1890ff;
+}
+
+.nav-pop .home a:active {
+  text-decoration: none;
+  color: #1890ff;
+}
+
+.nav-pop .home.active {
+  background-color: #e6f7ff;
+}
+
+.nav-pop .home.active a:link {
+  color: #1890ff;
+}
+
+.nav-pop .home.active a:visited {
+  color: #1890ff;
+}
+
+.nav-pop .home.active a:hover {
+  color: #1890ff;
+}
+
+.nav-pop .home.active a:active {
+  color: #1890ff;
+}
+.nav-search {
+  display: inline-block;
+}

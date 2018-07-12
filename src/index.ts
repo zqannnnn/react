@@ -15,7 +15,7 @@ const app = express()
 webpackMiddleware(app)
 app.use(middleware.handle(i18n))
 
-initDatabase()
+// initDatabase()
 // Get the exchange rate API
 // import { getApi as currencyApi } from './api/currency'
 // currencyApi()
@@ -49,6 +49,8 @@ app.use('/static', express.static('./uploads'))
 const port = process.env.PORT || 3000
 app.listen(port, (err: string) => {
   if (err) console.log(err)
-  console.log(`⚡ Express started on port ${port}, in ${process.env.NODE_ENV} mode`)
+  console.log(
+    `⚡ Express started on port ${port}, in ${process.env.NODE_ENV} mode`
+  )
 })
 export { app }

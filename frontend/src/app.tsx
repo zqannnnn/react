@@ -62,12 +62,9 @@ class App extends React.Component<AppProps, any> {
       <Layout>
         <Router history={history}>
           <div>
-            <Layout.Header>
-              <Search />
-              <NavBar mobileBreakPoint={1057} placement="bottomLeft" />
-            </Layout.Header>
+            <NavBar mobileBreakPoint={1050} placement="bottomLeft" />
             {lightbox.showing && <Lightbox />}
-            <Layout.Content>
+            <Layout.Content className="page-wr">
               {alert.message && (
                 <Alert message={alert.message} type={alert.type} />
               )}

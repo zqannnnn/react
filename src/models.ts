@@ -11,23 +11,19 @@ const initDatabase = async () => {
   User.findOne({ where: { email: 'admin@admin.com' } }).then(user => {
     if (!user) {
       insertInitialData()
-      const currencyApi = require('./api/currency')
-      currencyApi.getApi()      
+      // const currencyApi = require('./api/currency')
+      // currencyApi.getApi()
     }
   })
 }
 
 const insertInitialData = () => {
-  User.findOne({ where: { email: 'admin@admin.com' } }).then(user => {
-    if (!user) {
-      const newUser = new User({
-        email: 'admin@admin.com',
-        password: 'admin',
-        userType: consts.USER_TYPE_ADMIN
-      })
-      newUser.save()
-    }
+  const newUser = new User({
+    email: 'admin@admin.com',
+    password: 'admin',
+    userType: consts.USER_TYPE_ADMIN
   })
+  newUser.save()
   Category.findOne({ where: { type: 'Beef' } }).then(categoryBeef => {
     if (!categoryBeef) {
       categoryBeef = new Category({

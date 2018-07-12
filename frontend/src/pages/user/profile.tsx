@@ -176,7 +176,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
       licenseList = []
     }
     return (
-      <Row className="profile-page">
+      <Row className="profile-page page">
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 16, offset: 4 }}

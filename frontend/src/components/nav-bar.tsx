@@ -1,16 +1,16 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { RouteComponentProps } from 'react-router-dom'
 import { authActionCreators, currencyActionCreators } from '../actions'
 import { RootState, CurrencyState, AuthState } from '../reducers'
 import { MenuMarkup } from './menu-markup'
+import { Search } from '.'
 import { throttle } from 'lodash'
-import { Menu, Select, Popover, Icon } from 'antd'
-const { Item } = Menu
+import { Popover, Layout } from 'antd'
+import './nav-bar.css'
+
 interface NavProps {
   dispatch: Dispatch<RootState>
   auth: AuthState
-  currency: CurrencyState
   mobileBreakPoint: number
   applyViewportChange?: number
   placement: 'bottom' | 'bottomLeft' | 'top'
@@ -54,15 +54,13 @@ class ReNavBar extends React.Component<NavProps> {
   handleMenuVisibility = (menuVisible: boolean) => {
     this.setState({ menuVisible })
   }
-
-  render() {
-    const { auth, currency, mobileBreakPoint } = this.props
+  renderMenu() {
+    const { auth, mobileBreakPoint } = this.props
     const { viewportWidth } = this.state
     if (viewportWidth > mobileBreakPoint || !this.props.auth.loggedIn) {
       return (
         <MenuMarkup
           auth={auth}
-          currency={currency}
           handleSelect={this.handleSelect}
           logout={this.logout}
         />
@@ -73,7 +71,6 @@ class ReNavBar extends React.Component<NavProps> {
         content={
           <MenuMarkup
             auth={auth}
-            currency={currency}
             handleSelect={this.handleSelect}
             logout={this.logout}
             onLinkClick={() => this.handleMenuVisibility(false)}
@@ -86,16 +83,28 @@ class ReNavBar extends React.Component<NavProps> {
         placement={this.props.placement}
         visible={this.state.menuVisible}
         onVisibleChange={this.handleMenuVisibility}
-        overlayClassName="pop"
+        overlayClassName="nav-pop"
       >
-        <Icon type="menu-unfold" className="icon-menu" />
+        <div className="menu">
+          <div className="icon" />
+        </div>
       </Popover>
+    )
+  }
+  render() {
+    return (
+      <Layout.Header>
+        <div className="nav-bar">
+          {this.renderMenu()}
+          <Search />
+        </div>
+      </Layout.Header>
     )
   }
 }
 function mapStateToProps(state: RootState) {
-  const { auth, currency } = state
-  return { auth, currency }
+  const { auth } = state
+  return { auth }
 }
 
 const connectedReNavBar = connect(mapStateToProps)(ReNavBar)

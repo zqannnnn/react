@@ -210,7 +210,7 @@ class EditPage extends React.Component<TransProps, TransState> {
       imagePaths = []
     }
     return (
-      <Row className="edit-page">
+      <Row className="edit-page page">
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 22, offset: 1 }}
