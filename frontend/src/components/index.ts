@@ -1,6 +1,5 @@
-export { AdminRoute } from './admin-route'
+export { AdminRoute, PrivateRoute } from './route'
 export { NavBar } from './nav-bar'
-export { PrivateRoute } from './private-route'
 export { Item } from './item'
 export { List } from './list'
 export { Lightbox } from './lightbox'

@@ -9,6 +9,6 @@ module.exports = {
   styleguideComponents: {
     Wrapper: path.join(__dirname, 'frontend/src/components/styleguide/wrapper')
   },
-  ignore: ['**/styleguide/*.tsx', '**/index.{ts,js}'],
+  ignore: ['**/styleguide/*.tsx', '**/index.{ts,js}', '**/route/*'],
   webpackConfig: require('./webpack/webpack.common.js')
 }

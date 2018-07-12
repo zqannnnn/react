@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Route, Redirect, RouteProps } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
-import { RootState } from '../reducers'
+import { RootState } from '../../reducers'
 
 interface AdminRouteProps extends RouteProps {
   dispatch: Dispatch<RootState>

@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { Route, Redirect, RouteProps } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
-import { authActionCreators } from '../actions'
-import { history } from '../helpers/history'
+import { authActionCreators } from '../../actions'
+import { history } from '../../helpers/history'
 import * as QS from 'query-string'
-import { RootState } from '../reducers'
+import { RootState } from '../../reducers'
 interface PrivateRouteProps extends RouteProps {
   dispatch: Dispatch<RootState>
   loggedIn: boolean
