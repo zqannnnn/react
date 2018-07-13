@@ -3,7 +3,7 @@ import { connect, Dispatch } from 'react-redux'
 import { lightboxActionCreators } from '../actions'
 import { RootState, LightboxState } from '../reducers'
 import { Icon } from 'antd'
-import { lightbox } from '../reducers/lightbox'
+import './lightbox.css'
 
 interface LightboxProps {
   dispatch: Dispatch<RootState>
@@ -30,11 +30,11 @@ class Lightbox extends React.Component<LightboxProps> {
     const { images, currentIdx } = state
 
     return (
-      <div className="modal">
+      <div className="light-box">
         <div className="close" onClick={this.close}>
           <Icon type="close" />
         </div>
-        <div className="modal-content">
+        <div className="content">
           <div className="mySlides">
             <div className="numbertext">
               {currentIdx + 1 + ' / ' + images.length}

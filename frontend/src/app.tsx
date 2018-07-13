@@ -5,12 +5,7 @@ import i18n from 'i18next'
 
 import { history } from './helpers/history'
 import { alertActionCreators, authActionCreators } from './actions'
-import {
-  PrivateRoute,
-  AdminRoute,
-  NavBar,
-  Lightbox
-} from './components'
+import { PrivateRoute, AdminRoute, NavBar, Lightbox } from './components'
 import {
   LoginPage,
   RegisterPage,

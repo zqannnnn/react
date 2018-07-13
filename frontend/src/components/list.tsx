@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducers'
-import { AuthInfo } from '../actions'
 import { ListItem } from '../models'
 import { Item } from '.'
 import { Row } from 'antd'

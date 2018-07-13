@@ -3,7 +3,7 @@ module.exports = {
   components: 'frontend/src/components/**/*.{ts,tsx}',
   require: [
     path.join(__dirname, 'frontend/src/app.css'),
-    path.join(__dirname, 'frontend/src/components/nav-bar.css'),
+    path.join(__dirname, 'frontend/src/components/nav/nav-bar.css'),
     path.join(__dirname, 'frontend/src/components/styleguide/nav-bar.css')
   ],
   styleguideComponents: {
