@@ -3,9 +3,6 @@ import { TransactionAction } from '../actions'
 import { Transaction } from '../models'
 export type State = {
   processing?: boolean
-  CANCELError?: string
-  finishing?: boolean
-  finishError?: string
   loading?: boolean
   error?: string
   transData?: Transaction
@@ -83,49 +80,33 @@ export function transaction(
           items: items
         }
       }
-    case transactionConsts.FINISH_REQUEST:
+    case transactionConsts.BUY_REQUEST:
       if (state.items)
         return {
           ...state,
+          processing: true
+        }
+    case transactionConsts.BUY_SUCCESS:
+      if (state.items)
+        return {
+          ...state,
+          processing: false,
           items: state.items.map(
             item =>
               item.id === action.id
                 ? {
                     ...item,
-                    finishing: true
+                    status: transactionConsts.STATUS_TAKING
                   }
                 : item
           )
         }
-    case transactionConsts.FINISH_SUCCESS:
+    case transactionConsts.BUY_FAILURE:
       if (state.items)
         return {
           ...state,
-          items: state.items.map(
-            item =>
-              item.id === action.id
-                ? {
-                    ...item,
-                    status: transactionConsts.STATUS_FINISHED
-                  }
-                : item
-          )
-        }
-
-    case transactionConsts.FINISH_FAILURE:
-      if (state.items)
-        return {
-          ...state,
-          items: state.items.map(
-            item =>
-              item.id === action.id
-                ? {
-                    ...item,
-                    finishing: false,
-                    finishError: action.error
-                  }
-                : item
-          )
+          processing: false,
+          error: action.error
         }
     case transactionConsts.COMMENT_REQUEST:
       return {

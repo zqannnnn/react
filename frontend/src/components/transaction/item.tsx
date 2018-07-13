@@ -1,7 +1,11 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
-import { transactionActionCreators, AuthInfo } from '../../actions'
+import {
+  adminActionCreators,
+  transactionActionCreators,
+  AuthInfo
+} from '../../actions'
 import { RootState } from '../../reducers'
 import { Transaction } from '../../models'
 import { transactionConsts } from '../../constants'
@@ -41,7 +45,11 @@ class Item extends React.Component<ItemProps, ItemState> {
   }
   handleFinish = (id: string) => {
     let r = confirm(i18n.t('Are you sure?'))
-    if (r) this.props.dispatch(transactionActionCreators.finish(id))
+    if (r) this.props.dispatch(adminActionCreators.finish(id))
+  }
+  handleBuy = (id: string) => {
+    let r = confirm(i18n.t('Are you sure?'))
+    if (r) this.props.dispatch(transactionActionCreators.buy(id))
   }
   renderStatus = (
     isMakerSeller: boolean = false,
@@ -126,7 +134,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                 )}
               {authInfo &&
               authInfo.isAdmin &&
-              transaction.status != transactionConsts.STATUS_FINISHED ? (
+              transaction.status === transactionConsts.STATUS_TAKING ? (
                 <div
                   className="control-btn"
                   onClick={() => {
@@ -134,6 +142,22 @@ class Item extends React.Component<ItemProps, ItemState> {
                   }}
                 >
                   {i18n.t('Set Finish')}
+                </div>
+              ) : (
+                ''
+              )}
+              {authInfo &&
+              !authInfo.isAdmin &&
+              transaction.goods &&
+              transaction.goods.ownerId != authInfo.id &&
+              transaction.status == transactionConsts.STATUS_CREATED ? (
+                <div
+                  className="control-btn"
+                  onClick={() => {
+                    if (transaction.id) this.handleBuy(transaction.id)
+                  }}
+                >
+                  {i18n.t('Buy')}
                 </div>
               ) : (
                 ''

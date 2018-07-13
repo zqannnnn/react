@@ -9,7 +9,6 @@ import i18n from 'i18next'
 
 interface AdminProps {
   dispatch: Dispatch<RootState>
-  transaction: TransactionState
   admin: AdminState
 }
 
@@ -18,11 +17,16 @@ class AdminPage extends React.Component<AdminProps> {
     super(props)
   }
   componentDidMount() {
-    this.props.dispatch(transactionActionCreators.getAll({ type: 'finished' }))
+    this.props.dispatch(
+      adminActionCreators.getFinishedTransactions({ type: 'finished' })
+    )
     this.props.dispatch(adminActionCreators.listUnconfirmedCompanies())
+    this.props.dispatch(
+      adminActionCreators.getWaittingTransactions({ type: 'waitting' })
+    )
   }
   render() {
-    const { transaction, admin } = this.props
+    const { admin } = this.props
     return (
       <div className="page">
         <div className="banner">
@@ -37,10 +41,22 @@ class AdminPage extends React.Component<AdminProps> {
             lg={{ span: 16, offset: 4 }}
           >
             <div className="list-container ">
-              {transaction.items && (
-                <List items={transaction.items} title="Finished Transactions" />
+              {admin.toFinishTransactions && (
+                <List
+                  items={admin.toFinishTransactions}
+                  title="Waitting Finish"
+                />
               )}
             </div>
+            <div className="list-container ">
+              {admin.finishedTransactions && (
+                <List
+                  items={admin.finishedTransactions}
+                  title="Finished Transactions"
+                />
+              )}
+            </div>
+
             <div className="list-container">
               {admin.unconfirmedCompanies && (
                 <List
@@ -57,8 +73,8 @@ class AdminPage extends React.Component<AdminProps> {
 }
 
 function mapStateToProps(state: RootState) {
-  const { transaction, admin } = state
-  return { transaction, admin }
+  const { admin } = state
+  return { admin }
 }
 
 const connectedHomePage = connect(mapStateToProps)(AdminPage)

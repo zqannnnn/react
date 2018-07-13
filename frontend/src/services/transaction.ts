@@ -10,6 +10,7 @@ export const transService = {
   cancel,
   reactivate,
   finish,
+  buy,
   addComment
 }
 function _new(transaction: Transaction) {
@@ -84,6 +85,15 @@ function finish(id: string) {
 
   return fetch('/transaction/finish/' + id, requestOptions).then(handleResponse)
 }
+function buy(id: string) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch('/transaction/buy/' + id, requestOptions).then(handleResponse)
+}
+
 function addComment(id: string, comment: string) {
   const requestOptions = {
     method: 'POST',
@@ -109,6 +119,17 @@ function renderQuery(options: ListOptions) {
   return query
 }
 function getAll(options: ListOptions) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  let query = renderQuery(options)
+  return fetch('/transaction/list?' + query, requestOptions).then(
+    handleResponse
+  )
+}
+
+function getwaitting(options: ListOptions) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
