@@ -89,10 +89,6 @@ const comment: ActionCreator<Thunk> = (comment: Comment) => {
     transService.comment(comment).then(
       comment => {
         dispatch(success(comment))
-        dispatch(alertActionCreators.success('Create comment successful'))
-        setTimeout(function() {
-          history.replace('/')
-        }, 1000)
       },
       (error: string) => {
         dispatch(failure(error))

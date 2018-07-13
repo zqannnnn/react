@@ -1,12 +1,13 @@
 import { transactionConsts } from '../constants'
 import { TransactionAction } from '../actions'
-import { Transaction } from '../models'
+import { Transaction, Comment } from '../models'
 export type State = {
   processing?: boolean
   loading?: boolean
   error?: string
   transData?: Transaction
   items?: Array<Transaction>
+  replys?: Array<Comment>
   total?: number
 }
 export function transaction(
@@ -125,7 +126,15 @@ export function transaction(
         items.push(item)
         return {
           ...state,
-          items: items
+          items: state.items.map(
+            item =>
+              item.id === action.id
+                ? {
+                    ...item,
+                    items
+                  }
+                : item
+          )
         }
       }
 

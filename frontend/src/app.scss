@@ -552,32 +552,45 @@ html {
   z-index: 1;
 }
 .comment {
-  margin: 0 12px;
+  width: 100%;
   padding-top: 8px;
   padding-bottom: 4px;
   display: inline-block;
   word-break: break-all;
 }
-.comment .comment-wrapper .speak .main,
-.comment .comment-wrapper .reply .main {
+.comment-wrapper {
+  overflow: hidden;
+}
+.comment > div {
+  margin: 0 12px;
+}
+.comment .comment-wrapper .speak .main {
   display: inline-block;
   width: 80%;
 }
+.comment .comment-wrapper .reply .main {
+  display: inline-block;
+  width: 75%;
+}
 .reply {
-  padding-left: 40px;
+  padding-left: 20%;
+}
+.reply-input {
+  width: 80%;
+  float: right;
 }
 .speak .main,
 .reply .main {
   background-color: #eff1f3;
   border-radius: 20px;
-  line-height: 32px;
-  font-size: 13px;
+  line-height: 20px;
+  font-size: 14px;
   padding: 0 12px;
 }
 .speak .main .userid,
 .reply .main .userid {
   color: #365899;
-  font-weight: bold;
+  font-weight: 600;
 }
 .speak .main .content,
 .reply .main .content {
@@ -591,7 +604,7 @@ html {
 .features span {
   color: #365899;
   font-size: 14px;
-  line-height: 25px;
+  line-height: 20px;
   padding-right: 10px;
 }
 .click:hover {
@@ -609,4 +622,11 @@ html {
   width: 32px;
   height: 32px;
   border-radius: 50%;
+}
+.submitReply {
+  padding-left: 20%;
+  padding-bottom: 10px;
+}
+.clear-float {
+  overflow: hidden;
 }

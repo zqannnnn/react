@@ -4,4 +4,5 @@ export interface Comment {
   replyTo?: string
   transactionId?: string
   userId?: string
+  replys?: Comment[]
 }
