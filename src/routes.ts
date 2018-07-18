@@ -14,7 +14,8 @@ import {
   passRouter,
   transactionRouter,
   uploadRouter,
-  userRouter
+  userRouter,
+  consigneeRouter
 } from './routes/index'
 
 // const handleSequelizeError = (res, error) => {
@@ -92,4 +93,5 @@ export const router = (app: Application, passport: PassportStatic) => {
   app.use('/upload', uploadRouter)
   app.use('/currency', currencyRouter)
   app.use('/goods', goodsRouter)
+  app.use('/consignee', consigneeRouter)
 }

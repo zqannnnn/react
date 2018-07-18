@@ -17,6 +17,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { Currency, Image, Transaction } from './'
+import { Consignee } from './consignee'
 @Table({
   tableName: 'user',
   underscored: true
@@ -84,6 +85,9 @@ export class User extends Model<User> {
 
   @Column({ field: 'license_status' })
   public licenseStatus: number
+
+  @HasMany(() => Consignee, 'user_id')
+  public consignees: Consignee[]
 
   // class methods
   @BeforeCreate

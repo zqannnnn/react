@@ -17,7 +17,7 @@ import { UserForm, UserValuesProps, CompanyForm, CompanyValuesProps } from '../.
 
 interface ProfileProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
-  userState: UserState
+  userProp: UserState
   authInfo: AuthInfo
   currencies: Currency[]
 }
@@ -151,6 +151,18 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     dispatch(userActionCreators.update(newUser))
     this.setState({ user: newUser })
   }
+
+  handleSubmitConsignee = (values: ConsigneeValuesProps) => {
+    const { dispatch } = this.props
+    // const { userType } = this.state.user
+    let consignee: Consignee = {
+      name: values.name,
+      email: values.email,
+      phoneNum: values.phoneNum,
+      address: values.address
+    }
+    dispatch(consigneeActionCreators.new(consignee))
+  }
   //for render select input
   renderCurrencySelect = () => {
     let preferCurrency = this.state.user.preferredCurrencyCode || ''
@@ -178,7 +190,10 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   openLightbox = (image: string) => {
     this.props.dispatch(lightboxActionCreators.open(image))
   }
-
+  handleAddress = (value: any) => {
+    this.setState({ submitted: true })
+    this.props.dispatch(authActionCreators.login(value.email, value.password))
+  }
   render() {
     const { user, userSelf } = this.state
     let imagePaths: string[]
@@ -277,7 +292,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
 function mapStateToProps(state: RootState) {
   const { user, auth, currency } = state
   return {
-    userState: user,
+    userProp: user,
     authInfo: auth.authInfo,
     currencies: currency.items
   }

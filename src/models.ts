@@ -3,10 +3,26 @@ import * as fs from 'fs'
 import { Sequelize } from 'sequelize-typescript'
 import { config } from './config/db'
 import { beefOptions, consts, sheepOptions, vealOptions } from './config/static'
-import { Category, Currency, Goods, Image, Transaction, User } from './models/'
+import {
+  Category,
+  Currency,
+  Goods,
+  Image,
+  Transaction,
+  User,
+  Consignee
+} from './models/'
 
 const sequelize = new Sequelize(config)
-sequelize.addModels([User, Transaction, Goods, Category, Image, Currency])
+sequelize.addModels([
+  User,
+  Transaction,
+  Goods,
+  Category,
+  Image,
+  Currency,
+  Consignee
+])
 
 const initDatabase = async () => {
   await sequelize.sync({force:true})

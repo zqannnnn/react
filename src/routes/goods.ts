@@ -1,3 +1,4 @@
+import { EMLINK } from 'constants'
 import * as express from 'express'
 import * as i18n from 'i18next'
 import { consts } from '../config/static'
