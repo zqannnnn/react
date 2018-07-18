@@ -1,6 +1,5 @@
-/* The Modal (background) */
-
 .light-box {
+  /* The Modal (background) */
   display: block;
   position: fixed;
   z-index: 20;
@@ -11,18 +10,80 @@
   height: 100%;
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.9);
-}
 
-/* Modal Content */
+  /* Modal Content */
+  & .content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    width: 90%;
+    max-width: 1200px;
+    animation: PicMove 0.5s;
+  }
 
-.light-box .content {
-  position: relative;
-  background-color: #fefefe;
-  margin: auto;
-  padding: 0;
-  width: 90%;
-  max-width: 1200px;
-  animation: PicMove 0.5s;
+  & .numbertext {
+    color: #f2f2f2;
+    font-size: 18px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+  }
+
+  & img {
+    margin-bottom: -4px;
+    width: 100%;
+  }
+
+  /* The Close Button */
+  & .close {
+    color: white;
+    position: fixed;
+    top: 10px;
+    right: 25px;
+    font-size: 35px;
+    font-weight: bold;
+    opacity: 1;
+    z-index: 30;
+  }
+
+  & .close:hover,
+  & .close:focus {
+    color: #999;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Next & previous buttons */
+  & .prev,
+  & .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+    z-index: 30;
+  }
+
+  /* Position the "next button" to the right */
+  & .next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+  }
+
+  /* On hover, add a black background color with a little bit see-through */
+  & .prev:hover,
+  & .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
 }
 
 @keyframes PicMove {
@@ -41,74 +102,4 @@
   100% {
     transform: translateX(-100%) scale(0);
   }
-}
-.light-box .numbertext {
-  color: #f2f2f2;
-  font-size: 18px;
-  padding: 8px 12px;
-  position: absolute;
-  top: 0;
-}
-
-.light-box img {
-  margin-bottom: -4px;
-  width: 100%;
-}
-
-/* The Close Button */
-
-.light-box .close {
-  color: white;
-  position: fixed;
-  top: 10px;
-  right: 25px;
-  font-size: 35px;
-  font-weight: bold;
-  opacity: 1;
-  z-index: 30;
-}
-
-.light-box .close:hover,
-.light-box .close:focus {
-  color: #999;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.cursor {
-  cursor: pointer;
-}
-
-/* Next & previous buttons */
-
-.light-box .prev,
-.light-box .next {
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  width: auto;
-  padding: 16px;
-  margin-top: -50px;
-  color: white;
-  font-weight: bold;
-  font-size: 20px;
-  transition: 0.6s ease;
-  border-radius: 0 3px 3px 0;
-  user-select: none;
-  -webkit-user-select: none;
-  z-index: 30;
-}
-
-/* Position the "next button" to the right */
-
-.light-box .next {
-  right: 0;
-  border-radius: 3px 0 0 3px;
-}
-
-/* On hover, add a black background color with a little bit see-through */
-
-.light-box .prev:hover,
-.light-box .next:hover {
-  background-color: rgba(0, 0, 0, 0.8);
 }

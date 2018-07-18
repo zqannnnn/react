@@ -8,6 +8,7 @@ sequelize.addModels([User, Transaction, Goods, Category, Image, Currency])
 
 const initDatabase = async () => {
   await sequelize.sync()
+
   User.findOne({ where: { email: 'admin@admin.com' } }).then(user => {
     if (!user) {
       insertInitialData()
