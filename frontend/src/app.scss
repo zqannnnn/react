@@ -341,7 +341,7 @@ html {
 }
 
 .control-btn {
-  @apply --cursor-pointer ;
+  cursor: pointer;
 }
 
 .font-bold {

@@ -48,7 +48,7 @@
   }
 
   .close:hover,
-    .close:focus {
+  .close:focus {
     color: #999;
     text-decoration: none;
     cursor: pointer;
@@ -56,7 +56,7 @@
 
   /* Next & previous buttons */
   .prev,
-    .next {
+  .next {
     cursor: pointer;
     position: absolute;
     top: 50%;
