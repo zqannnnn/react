@@ -6,7 +6,7 @@ import { MenuMarkup } from './menu-markup'
 import { Search } from './search'
 import { throttle } from 'lodash'
 import { Popover, Layout } from 'antd'
-import './nav-bar.css'
+import './nav-bar.scss'
 
 interface NavProps {
   dispatch: Dispatch<RootState>

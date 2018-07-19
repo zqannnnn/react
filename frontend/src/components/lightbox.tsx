@@ -3,7 +3,7 @@ import { connect, Dispatch } from 'react-redux'
 import { lightboxActionCreators } from '../actions'
 import { RootState, LightboxState } from '../reducers'
 import { Icon } from 'antd'
-import './lightbox.css'
+import './lightbox.scss'
 
 interface LightboxProps {
   dispatch: Dispatch<RootState>

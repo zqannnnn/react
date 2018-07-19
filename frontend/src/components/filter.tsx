@@ -64,12 +64,12 @@ class Filter extends React.Component<ItemProps, ItemState> {
           <Select
             defaultValue={i18n.t('New to old')}
             onChange={this.handleSelectSort}
-            className="sorting-left margin-bottom media-width"
+            className="sorting-left margin-bottom filter--select"
           >
             <Option value="new">{i18n.t('New to old')}</Option>
             <Option value="old">{i18n.t('Old to new')}</Option>
           </Select>
-          <div className="float-right">
+          <div className="filter--checkbox">
             <Checkbox.Group
               onChange={this.handleChangeType}
               className="margin-bottom"
@@ -88,7 +88,7 @@ class Filter extends React.Component<ItemProps, ItemState> {
             <Select
               value={currency.currentCurrency}
               onChange={this.handleSelectCurrency}
-              className="media-width"
+              className="filter--select"
             >
               {currency.items
                 ? currency.items.map((item, index) => (

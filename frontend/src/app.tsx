@@ -25,7 +25,7 @@ import { ProfilePage, CompanyConfirmPage, MyInventoryPage } from './pages/user'
 import { AdminPage, HomePage, AllListPage, MyListPage } from './pages'
 import { RootState, LightboxState, AuthState, AlertState } from './reducers'
 import { Layout, Alert, BackTop } from 'antd'
-import './app.css'
+import './app.scss'
 
 interface AppProps {
   dispatch: (action: any) => void

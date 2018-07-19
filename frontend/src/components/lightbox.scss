@@ -12,7 +12,7 @@
   background-color: rgba(0, 0, 0, 0.9);
 
   /* Modal Content */
-  & .content {
+  .content {
     position: relative;
     background-color: #fefefe;
     margin: auto;
@@ -22,7 +22,7 @@
     animation: PicMove 0.5s;
   }
 
-  & .numbertext {
+  .numbertext {
     color: #f2f2f2;
     font-size: 18px;
     padding: 8px 12px;
@@ -30,13 +30,13 @@
     top: 0;
   }
 
-  & img {
+  img {
     margin-bottom: -4px;
     width: 100%;
   }
 
   /* The Close Button */
-  & .close {
+  .close {
     color: white;
     position: fixed;
     top: 10px;
@@ -47,16 +47,16 @@
     z-index: 30;
   }
 
-  & .close:hover,
-  & .close:focus {
+  .close:hover,
+    .close:focus {
     color: #999;
     text-decoration: none;
     cursor: pointer;
   }
 
   /* Next & previous buttons */
-  & .prev,
-  & .next {
+  .prev,
+    .next {
     cursor: pointer;
     position: absolute;
     top: 50%;
@@ -74,14 +74,14 @@
   }
 
   /* Position the "next button" to the right */
-  & .next {
+  .next {
     right: 0;
     border-radius: 3px 0 0 3px;
   }
 
   /* On hover, add a black background color with a little bit see-through */
-  & .prev:hover,
-  & .next:hover {
+  .prev:hover,
+  .next:hover {
     background-color: rgba(0, 0, 0, 0.8);
   }
 }

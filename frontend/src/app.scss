@@ -40,15 +40,12 @@
   .filter .margin-right {
     margin-right: 10px;
   }
-  .list .list__content .list__subtitle {
-    font-size: 14px;
-  }
   .list-container .header .subtitle .des,
   .list-container .header .subtitle .link {
     font-size: 13px;
   }
-  .media-width,
-  .float-right {
+  .filter--select,
+  .filter--checkbox {
     width: 100%;
   }
   .ant-menu-item {
@@ -106,10 +103,9 @@ html {
   font-size: 25px;
   text-align: center;
 }
-.control-btn {
-  cursor: pointer;
+.filter--checkbox {
+  float: right;
 }
-
 .list-container {
   margin-bottom: 30px;
 }
@@ -344,17 +340,14 @@ html {
   justify-content: space-between;
 }
 
-.float-right {
-  float: right;
+.control-btn {
+  @apply --cursor-pointer ;
 }
 
 .font-bold {
   font-weight: bold;
 }
 
-.cursor-pointer {
-  cursor: pointer;
-}
 .relative {
   position: relative;
 }
