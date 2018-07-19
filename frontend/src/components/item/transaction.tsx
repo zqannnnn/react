@@ -21,7 +21,9 @@ interface ItemState {
   currentComment: string
   currentReply?: string
   currentReplyTo?: string
+  currentReplys?: string
   replyInputShowing: boolean
+  replysInputShowing: boolean
   allCommentShowing: boolean
   comments?: Comment[]
 }
@@ -31,6 +33,7 @@ class Item extends React.Component<ItemProps, ItemState> {
     this.state = {
       currentComment: '',
       replyInputShowing: false,
+      replysInputShowing: false,
       allCommentShowing: false,
       comments: props.transaction.comments
     }
@@ -57,7 +60,20 @@ class Item extends React.Component<ItemProps, ItemState> {
 
   handleReply = (replyTo?: string) => {
     if (replyTo) {
-      this.setState({ currentReplyTo: replyTo, replyInputShowing: true })
+      this.setState({
+        currentReplyTo: replyTo,
+        replyInputShowing: true,
+        replysInputShowing: false
+      })
+    }
+  }
+  handleReplys = (replys?: string) => {
+    if (replys) {
+      this.setState({
+        currentReplys: replys,
+        replyInputShowing: false,
+        replysInputShowing: true
+      })
     }
   }
   ViewAllComments = () => {
@@ -72,21 +88,38 @@ class Item extends React.Component<ItemProps, ItemState> {
       })
     }
   }
+  submitReplys = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    let { currentReply, currentReplys } = this.state
+    const { dispatch, transaction } = this.props
+    const replys: Comment = {
+      content: currentReply,
+      replyTo: currentReplys,
+      transactionId: transaction.id
+    }
+    dispatch(transactionActionCreators.comment(replys))
+
+    this.setState({
+      currentReply: '',
+      replyInputShowing: false,
+      replysInputShowing: false
+    })
+  }
   submitReply = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    let { currentReply, currentReplyTo, comments } = this.state
+    let { currentReply, currentReplyTo } = this.state
     const { dispatch, transaction } = this.props
     const reply: Comment = {
       content: currentReply,
       replyTo: currentReplyTo,
-      transactionId: transaction.id,
-      replys: comments
+      transactionId: transaction.id
     }
     dispatch(transactionActionCreators.comment(reply))
 
     this.setState({
       currentReply: '',
-      replyInputShowing: false
+      replyInputShowing: false,
+      replysInputShowing: false
     })
   }
   submitComment = (event: React.FormEvent<HTMLFormElement>) => {
@@ -159,7 +192,9 @@ class Item extends React.Component<ItemProps, ItemState> {
       currentComment,
       currentReply,
       replyInputShowing,
+      replysInputShowing,
       currentReplyTo,
+      currentReplys,
       comments,
       allCommentShowing
     } = this.state
@@ -311,75 +346,102 @@ class Item extends React.Component<ItemProps, ItemState> {
                     {comments &&
                       comments.map((comment, index) => (
                         <div key={index} className="comment-wrapper">
-                          {comment.content &&
-                            !comment.replyTo && (
-                              <div className="speak">
-                                <div className="avatar">
-                                  <img
-                                    src="/asset/no-image.jpg"
-                                    alt="avatar"
-                                    className="avatar-image"
-                                  />
-                                </div>
-                                <div className="main">
-                                  <span className="userid click">
-                                    {comment.userId}
-                                  </span>
-                                  <span className="content">
-                                    {comment.content}
-                                  </span>
-                                </div>
-                                <div className="features">
-                                  <span className="click">
-                                    {i18n.t('praise')}
-                                  </span>
-                                  <span
-                                    className="click"
-                                    onClick={() => {
-                                      if (comment.id)
-                                        this.handleReply(comment.id)
-                                    }}
-                                  >
-                                    {i18n.t('reply')}
-                                  </span>
-                                  <span className="click">
-                                    {i18n.t('time')}
-                                  </span>
-                                </div>
-                              </div>
-                            )}
-
-                          {comment.replyTo && (
-                            <div className="reply">
-                              <div className="avatar">
-                                <img
-                                  src="/asset/no-image.jpg"
-                                  alt="avatar"
-                                  className="avatar-image"
-                                />
-                              </div>
-                              <div className="main">
-                                <span className="userid click">
-                                  {comment.userId}
-                                </span>
-                                <span className="content">
-                                  {comment.content}
-                                </span>
-                              </div>
-                              <div className="features">
-                                <span className="click">
-                                  {i18n.t('praise')}
-                                </span>
-                                <span
-                                  className="click"
-                                  onClick={() => this.handleReply(comment.id)}
-                                >
-                                  {i18n.t('reply')}
-                                </span>
-                                <span className="click">{i18n.t('time')}</span>
-                              </div>
+                          <div className="speak">
+                            <div className="avatar">
+                              <img
+                                src="/asset/no-image.jpg"
+                                alt="avatar"
+                                className="avatar-image"
+                              />
                             </div>
-                          )}
+                            <div className="main">
+                              <span className="userid click">
+                                {comment.userId}
+                              </span>
+                              <span className="content">{comment.content}</span>
+                            </div>
+                            <div className="features">
+                              <span className="click">{i18n.t('praise')}</span>
+                              <span
+                                className="click"
+                                onClick={() => {
+                                  if (comment.id) this.handleReply(comment.id)
+                                }}
+                              >
+                                {i18n.t('reply')}
+                              </span>
+                              <span className="click">{comment.createdAt}</span>
+                            </div>
+                          </div>
+
+                          {comment.replys &&
+                            comment.replys.map((replys, index) => (
+                              <div key={index} className="reply-wrapper">
+                                <div className="reply">
+                                  <div className="avatar">
+                                    <img
+                                      src="/asset/no-image.jpg"
+                                      alt="avatar"
+                                      className="avatar-image"
+                                    />
+                                  </div>
+                                  <div className="main">
+                                    <span className="userid click">
+                                      {replys.userId}
+                                    </span>
+                                    <span className="content">
+                                      {replys.content}
+                                    </span>
+                                  </div>
+                                  <div className="features">
+                                    <span className="click">
+                                      {i18n.t('praise')}
+                                    </span>
+                                    <span
+                                      className="click"
+                                      onClick={() => {
+                                        if (replys.id) {
+                                          this.handleReplys(replys.id)
+                                        }
+                                      }}
+                                    >
+                                      {i18n.t('reply')}
+                                    </span>
+                                    <span className="click">
+                                      {replys.createdAt}
+                                    </span>
+                                  </div>
+                                </div>
+                                {replysInputShowing &&
+                                  currentReplys === replys.id && (
+                                    <Input
+                                      className="reply-input"
+                                      placeholder="reply..."
+                                      type="text"
+                                      name="replyTo"
+                                      value={currentReply}
+                                      onChange={this.handleReplyInputChange}
+                                      style={{
+                                        paddingTop: 5,
+                                        paddingBottom: 5
+                                      }}
+                                      suffix={
+                                        <Icon
+                                          type="enter"
+                                          style={{ color: 'rgba(0,0,0,.25)' }}
+                                          onClick={this.submitReplys}
+                                        />
+                                      }
+                                      prefix={
+                                        <Icon
+                                          type="user"
+                                          style={{ color: 'rgba(0,0,0,.25)' }}
+                                        />
+                                      }
+                                    />
+                                  )}
+                              </div>
+                            ))}
 
                           {replyInputShowing &&
                             currentReplyTo === comment.id && (
@@ -390,6 +452,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                                 name="replyTo"
                                 value={currentReply}
                                 onChange={this.handleReplyInputChange}
+                                style={{ paddingTop: 5, paddingBottom: 5 }}
                                 suffix={
                                   <Icon
                                     type="enter"
@@ -416,6 +479,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                   name="comment"
                   value={currentComment}
                   onChange={this.handleCommentInputChange}
+                  style={{ paddingLeft: 5, paddingRight: 5 }}
                   suffix={
                     <Icon
                       type="enter"

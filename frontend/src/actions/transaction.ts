@@ -21,6 +21,25 @@ export type Action = {
   total?: number
 }
 
+const commentReduce = (comments: Comment[]): Comment[] => {
+  let firstLevel = comments.filter(comment => !comment.replyTo)
+  let firstLevelIds = firstLevel.map(comment => comment.id)
+  let restComments = comments.filter(comment => comment.replyTo)
+  if (restComments.length === 0) {
+    return comments
+  } else {
+    restComments.forEach(comment => {
+      firstLevel.forEach(firstComment => {
+        if (comment.replyTo === firstComment.id) {
+          if (firstComment.replys) firstComment.replys.push(comment)
+          else firstComment.replys = [comment]
+        }
+      })
+    })
+    return firstLevel
+  }
+}
+
 type Thunk = ThunkAction<void, RootState, void>
 
 // prefixed function name with underscore because new is a reserved word in
@@ -292,6 +311,8 @@ const getAll: ActionCreator<Thunk> = (option: ListOptions) => {
         )
         transaction.goods.certificates = certificates
         transaction.goods.images = images
+        if (transaction.comments)
+          transaction.comments = commentReduce(transaction.comments)
       }
     })
 

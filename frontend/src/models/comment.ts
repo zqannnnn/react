@@ -5,4 +5,5 @@ export interface Comment {
   transactionId?: string
   userId?: string
   replys?: Comment[]
+  createdAt?: string
 }
