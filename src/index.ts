@@ -5,11 +5,11 @@ import * as morgan from 'morgan'
 import * as passport from 'passport'
 import * as path from 'path'
 
-import { initDatabase } from './models'
-import { router } from './routes'
-import { passportConfig } from './passport'
 import { i18n, middleware } from './middleware/i18n'
 import { webpackMiddleware } from './middleware/webpack'
+import { initDatabase } from './models'
+import { passportConfig } from './passport'
+import { router } from './routes'
 
 const app = express()
 webpackMiddleware(app)
@@ -48,7 +48,9 @@ app.use('/static', express.static('./uploads'))
 // launch
 const port = process.env.PORT || 3000
 app.listen(port, (err: string) => {
-  if (err) console.log(err)
+  if (err) {
+    console.log(err)
+  }
   console.log(
     `⚡ Express started on port ${port}, in ${process.env.NODE_ENV} mode`
   )

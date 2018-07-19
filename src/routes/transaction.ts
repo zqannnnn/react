@@ -29,7 +29,6 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
     offset?: number
     limit?: number
   } = {}
-
   let orderOption: string[] = ['createdAt', 'DESC']
 
   if (buy && !sell) {
@@ -48,6 +47,8 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
     whereOption.makerId = req.userId
   } else if (type === 'finished') {
     whereOption.status = consts.TRANSACTION_STATUS_FINISHED
+  } else if (type === 'waitting') {
+    whereOption.status = consts.TRANSACTION_STATUS_TAKING
   } else {
     whereOption.status = consts.TRANSACTION_STATUS_CREATED
   }
@@ -90,6 +91,16 @@ router.post('/new', async (req: IRequest, res: express.Response) => {
       ...req.body
     })
     await transaction.save()
+    Goods.find({
+      where: { id: req.body.goodsId }
+    }).then(goods => {
+      if (!goods) {
+        return res.status(500).send({ error: i18n.t('Goods does not exist.') })
+      }
+      goods.selling = true
+      goods.save()
+    })
+
     return res.send({ success: true })
   } catch (e) {
     return res.status(500).send({ error: e.message })
@@ -124,6 +135,7 @@ router.get(
       if (!req.isAdmin) {
         return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
+
       const transaction = await Transaction.find({
         where: {
           id: req.params.transactionId
@@ -135,14 +147,50 @@ router.get(
           .send({ error: i18n.t('Transaction does not exist.') })
       }
       transaction.status = consts.TRANSACTION_STATUS_FINISHED
-      transaction.takerId = req.body.takerId
       transaction.save()
+
+      const goods = await Goods.find({
+        where: { id: transaction.goodsId }
+      })
+      if (!goods) {
+        return res.status(500).send({ error: i18n.t('Goods does not exist.') })
+      }
+      goods.selling = false
+      goods.ownerId = transaction.takerId
+      goods.save()
+
       return res.send({ success: true })
     } catch (e) {
       return res.status(500).send({ error: e.message })
     }
   }
 )
+
+router.get(
+  '/buy/:transactionId',
+  async (req: IRequest, res: express.Response) => {
+    try {
+      const transaction = await Transaction.find({
+        where: {
+          id: req.params.transactionId
+        }
+      })
+      if (!transaction) {
+        return res
+          .status(500)
+          .send({ error: i18n.t('Transaction does not exist.') })
+      }
+      transaction.status = consts.TRANSACTION_STATUS_TAKING
+      transaction.takerId = req.userId
+      transaction.save()
+
+      return res.send({ success: true })
+    } catch (e) {
+      return res.status(500).send({ error: e.message })
+    }
+  }
+)
+
 router.post(
   '/comment/:transactionId',
   async (req: IRequest, res: express.Response) => {

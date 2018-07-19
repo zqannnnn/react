@@ -1,4 +1,4 @@
-import { transactionConsts } from '../constants'
+import { transactionConsts, adminConsts } from '../constants'
 import { transService } from '../services'
 import { alertActionCreators } from '.'
 import { history } from '../helpers/history'
@@ -200,14 +200,15 @@ function reactivate(transaction: Transaction) {
     return { type: transactionConsts.REACTIVATE_FAILURE, error, id }
   }
 }
-function finish(id: string) {
+
+function buy(id: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request(id))
 
-    transService.finish(id).then(
+    transService.buy(id).then(
       () => {
         dispatch(success(id))
-        dispatch(alertActionCreators.success('Finish transaction Successful'))
+        dispatch(alertActionCreators.success('buy Successful'))
       },
       (error: string) => {
         dispatch(failure(error, id))
@@ -217,15 +218,16 @@ function finish(id: string) {
   }
 
   function request(id: string) {
-    return { type: transactionConsts.FINISH_REQUEST, id }
+    return { type: transactionConsts.BUY_REQUEST, id }
   }
   function success(id: string) {
-    return { type: transactionConsts.FINISH_SUCCESS, id }
+    return { type: transactionConsts.BUY_SUCCESS, id }
   }
   function failure(error: string, id: string) {
-    return { type: transactionConsts.FINISH_FAILURE, error, id }
+    return { type: transactionConsts.BUY_FAILURE, error, id }
   }
 }
+
 const getAll: ActionCreator<Thunk> = (option: ListOptions) => {
   return (dispatch: Dispatch<RootState>): void => {
     dispatch(request())
@@ -263,6 +265,7 @@ const getAll: ActionCreator<Thunk> = (option: ListOptions) => {
     return { type: transactionConsts.GETALL_FAILURE, error }
   }
 }
+
 function addComment(id: string, comment: string) {
   return (dispatch: (action: Action) => void) => {
     dispatch(request(id))
@@ -299,6 +302,6 @@ export const actionCreators = {
   getById,
   cancel,
   reactivate,
-  finish,
-  addComment
+  addComment,
+  buy
 }
