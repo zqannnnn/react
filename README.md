@@ -198,3 +198,21 @@ to run tests:
 ```sh
 yarn test
 ```
+
+### React components library
+
+For viewing all components in library page [React StyleGuidist library](https://github.com/styleguidist/react-styleguidist).
+
+To add component into library page
+
+First, create a component.md file, filename is same with the component you want to add,and put into same folder
+
+Second, add example in md file according to [here](https://react-styleguidist.js.org/docs/documenting.html#usage-examples-and-readme-files)
+
+to run styleguidist server:
+
+```sh
+npx styleguidist server
+```
+
+PS: there is a wrapper file in components/styleguide/, contain whole rootState for all examples
