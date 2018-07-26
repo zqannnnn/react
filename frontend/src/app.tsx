@@ -1,11 +1,17 @@
 import * as React from 'react'
 import { Router, Route, Switch } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { connect, Dispatch } from 'react-redux'
 import i18n from 'i18next'
-
+import Layouts from './layout'
 import { history } from './helpers/history'
 import { alertActionCreators, authActionCreators } from './actions'
-import { PrivateRoute, AdminRoute, NavBar, Lightbox } from './components'
+import {
+  PrivateRoute,
+  AdminRoute,
+  NavBar,
+  Lightbox,
+  SiderNav
+} from './components'
 import {
   LoginPage,
   RegisterPage,
@@ -26,12 +32,16 @@ import { AdminPage, HomePage, AllListPage, MyListPage } from './pages'
 import { RootState, LightboxState, AuthState, AlertState } from './reducers'
 import { Layout, Alert, BackTop } from 'antd'
 import './app.scss'
+import { router } from '../../src/routes/upload'
 
 interface AppProps {
   dispatch: (action: any) => void
   alert: AlertState
   lightbox: LightboxState
   auth: AuthState
+  mobileBreakPoint: number
+  applyViewportChange?: number
+  placement: 'bottom' | 'bottomLeft' | 'top'
 }
 class App extends React.Component<AppProps, any> {
   constructor(props: AppProps) {
@@ -52,12 +62,13 @@ class App extends React.Component<AppProps, any> {
     };
     */
     const { alert, lightbox } = this.props
+
     return (
-      <Layout>
-        <Router history={history}>
-          <div>
-            <NavBar mobileBreakPoint={1050} placement="bottomLeft" />
-            {lightbox.showing && <Lightbox />}
+      <Router history={history}>
+        <Layout>
+          <Layouts mobileBreakPoint={800} placement="bottomLeft" />
+          {lightbox.showing && <Lightbox />}
+          <Layout>
             <Layout.Content className="page-wr">
               {alert.message && (
                 <Alert message={alert.message} type={alert.type} />
@@ -101,12 +112,12 @@ class App extends React.Component<AppProps, any> {
                 <div className="ant-back-top-inner">UP</div>
               </BackTop>
             </Layout.Content>
-          </div>
-        </Router>
-        <Layout.Footer style={{ textAlign: 'center' }}>
-          {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
-        </Layout.Footer>
-      </Layout>
+            <Layout.Footer style={{ textAlign: 'center' }}>
+              {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
+            </Layout.Footer>
+          </Layout>
+        </Layout>
+      </Router>
     )
   }
 }
