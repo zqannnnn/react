@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import i18n from 'i18next'
+import * as socketIOClient from 'socket.io-client' //1532692062 chat
 
 import { history } from './helpers/history'
 import { alertActionCreators, authActionCreators } from './actions'
@@ -43,9 +44,36 @@ class App extends React.Component<AppProps, any> {
       dispatch(alertActionCreators.clear())
     })
     if (auth.loggedIn) dispatch(authActionCreators.refresh())
-  }
+    //1532692062 chat
+    this.state = {
+      endpoint: "http://localhost:3000" // this is where we are connecting to with sockets
+    }
 
+  }
+  send = () => {
+    
+    const socket = socketIOClient(this.state.endpoint)
+    
+    // this emits an event to the socket (your server) with an argument of 'red'
+    // you can make the argument any color you would like, or any kind of data you want to send.
+    
+    socket.emit('change color', 'red') 
+    // socket.emit('change color', 'red', 'yellow') | you can have multiple arguments
+    
+  }
   render() {
+    // Within the render method, we will be checking for any sockets.
+    // We do it in the render method because it is ran very often.
+    const socket = socketIOClient(this.state.endpoint)
+    
+    // socket.on is another method that checks for incoming events from the server
+    // This method is looking for the event 'change color'
+    // socket.on takes a callback function for the first argument
+    socket.on('change color', (color: any) => {
+      // setting the color of our button
+      document.body.style.backgroundColor = color
+    })
+
     /*
     const changeLanguage = (lng: string) => {
       i18n.changeLanguage(lng);
@@ -103,7 +131,7 @@ class App extends React.Component<AppProps, any> {
             </Layout.Content>
           </div>
         </Router>
-        <Layout.Footer style={{ textAlign: 'center' }}>
+        <Layout.Footer style={{ textAlign: 'center' }} onClick={() => this.send()}>
           {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
         </Layout.Footer>
       </Layout>
