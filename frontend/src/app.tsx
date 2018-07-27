@@ -51,7 +51,7 @@ class App extends React.Component<AppProps, any> {
 
   }
   send = () => {
-    
+    //1532692062 chat
     const socket = socketIOClient(this.state.endpoint)
     
     // this emits an event to the socket (your server) with an argument of 'red'
@@ -62,6 +62,7 @@ class App extends React.Component<AppProps, any> {
     
   }
   render() {
+    //1532692062 chat
     // Within the render method, we will be checking for any sockets.
     // We do it in the render method because it is ran very often.
     const socket = socketIOClient(this.state.endpoint)
