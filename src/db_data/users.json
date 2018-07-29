@@ -1,0 +1,18 @@
+[
+    {
+        "userType": 0,
+        "email": "chekst@gmail.com",
+        "isActive": 1,
+        "first_name": "chekst",
+        "last_name": "chekst",
+        "password": "q1w2e3r4"
+    },
+    {
+        "userType": 0,
+        "email": "israel.gavriel@gmail.com",
+        "isActive": 1,
+        "first_name": "israel",
+        "last_name": "israel",
+        "password": "q1w2e3r4"
+    }
+]
