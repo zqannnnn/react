@@ -40,13 +40,6 @@ const addCurrencyIfNoExists = (currencyObj: any) => {
 }
 
 const insertInitialData = () => {
-  const newUser = new User({
-    email: 'admin@admin.com',
-    password: 'admin',
-    userType: consts.USER_TYPE_ADMIN
-  })
-  newUser.save()
-
    //1532692062 chat test users
   let usersDataFile = path.join(__dirname, './db_data/users.json')
   if (fs.existsSync(usersDataFile)) {
