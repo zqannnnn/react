@@ -6,7 +6,7 @@ import * as socketIOClient from 'socket.io-client' //1532692062 chat
 
 import { history } from './helpers/history'
 import { alertActionCreators, authActionCreators } from './actions'
-import { PrivateRoute, AdminRoute, NavBar, Lightbox } from './components'
+import { PrivateRoute, AdminRoute, NavBar, Lightbox, Chat } from './components'
 import {
   LoginPage,
   RegisterPage,
@@ -132,6 +132,8 @@ class App extends React.Component<AppProps, any> {
             </Layout.Content>
           </div>
         </Router>
+        {/* //1532692062 chat */}
+        <Chat />
         <Layout.Footer style={{ textAlign: 'center' }} onClick={() => this.send()}>
           {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
         </Layout.Footer>
