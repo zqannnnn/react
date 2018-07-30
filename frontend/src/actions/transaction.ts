@@ -19,6 +19,7 @@ export type Action = {
   imagePath?: string
   comment?: Comment
   total?: number
+  comments?: Array<Comment>
 }
 
 const commentReduce = (comments: Comment[]): Comment[] => {
@@ -98,42 +99,6 @@ const newOrder: ActionCreator<Thunk> = (transaction: Transaction) => {
   }
   function failure(error: string): Action {
     return { type: transactionConsts.CREATE_ORDER_FAILURE, error }
-  }
-}
-
-const comment: ActionCreator<Thunk> = (comment: Comment) => {
-  return (dispatch: Dispatch<RootState>): void => {
-    dispatch(request())
-
-    transService.comment(comment).then(
-      comment => {
-        dispatch(success(comment))
-      },
-      (error: string) => {
-        dispatch(failure(error))
-        dispatch(alertActionCreators.error(error))
-      }
-    )
-  }
-  function request(): Action {
-    return {
-      type: transactionConsts.COMMENT_REQUEST,
-      id: comment.transactionId
-    }
-  }
-  function success(comment: Comment): Action {
-    return {
-      type: transactionConsts.COMMENT_SUCCESS,
-      comment,
-      id: comment.transactionId
-    }
-  }
-  function failure(error: string): Action {
-    return {
-      type: transactionConsts.COMMENT_FAILURE,
-      error,
-      id: comment.transactionId
-    }
   }
 }
 
@@ -323,14 +288,81 @@ const getAll: ActionCreator<Thunk> = (option: ListOptions) => {
   }
 }
 
+const createComment: ActionCreator<Thunk> = (comment: Comment) => {
+  return (dispatch: Dispatch<RootState>): void => {
+    dispatch(request())
+
+    transService.createComment(comment).then(
+      comment => {
+        dispatch(success(comment))
+      },
+      (error: string) => {
+        dispatch(failure(error))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
+  }
+  function request(): Action {
+    return {
+      type: transactionConsts.COMMENT_CREATE_REQUEST,
+      id: comment.transactionId
+    }
+  }
+  function success(comment: Comment): Action {
+    return {
+      type: transactionConsts.COMMENT_CREATE_SUCCESS,
+      comment,
+      id: comment.transactionId
+    }
+  }
+  function failure(error: string): Action {
+    return {
+      type: transactionConsts.COMMENT_CREATE_FAILURE,
+      error,
+      id: comment.transactionId
+    }
+  }
+}
+
+const listComment: ActionCreator<Thunk> = (
+  id: string,
+  option?: ListOptions
+) => {
+  return (dispatch: Dispatch<RootState>): void => {
+    dispatch(request())
+    transService
+      .listComment(id, option)
+      .then(
+        (result: { comments: Array<Comment>; total: number }) =>
+          dispatch(success(result.comments, result.total, id)),
+        (error: string) => dispatch(failure(error))
+      )
+  }
+
+  function request(): Action {
+    return { type: transactionConsts.COMMENT_LIST_REQUEST }
+  }
+  function success(
+    comments: Array<Comment>,
+    total: number,
+    id: string
+  ): Action {
+    return { type: transactionConsts.COMMENT_LIST_SUCCESS, comments, total, id }
+  }
+  function failure(error: string): Action {
+    return { type: transactionConsts.COMMENT_LIST_FAILURE, error }
+  }
+}
+
 export const actionCreators = {
   new: _new,
   newOrder,
-  comment,
   edit,
   getAll,
   getById,
   cancel,
   reactivate,
-  buy
+  buy,
+  createComment,
+  listComment
 }

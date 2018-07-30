@@ -21,7 +21,14 @@ class GoodsItem extends React.Component<GoodsItemProps> {
 
     return (
       goods && (
-        <Col key={goods.id} xs={12} sm={11} md={10} lg={9} className="block">
+        <Col
+          key={goods.id}
+          xs={24}
+          sm={11}
+          md={10}
+          lg={9}
+          className="block goods"
+        >
           <div className="boxmain">
             <div className="title text-overflow">{goods.title}</div>
             <div className="desc content text-overflow">

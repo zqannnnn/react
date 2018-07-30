@@ -3,6 +3,7 @@ import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducers'
 import { ListItem } from '../models'
 import { TransactionItem, GoodsItem, CompanyItem } from './item/'
+import './item.scss'
 interface ItemProps {
   // dispatch: Dispatch<RootState>
   item: ListItem

@@ -19,7 +19,7 @@ class Company extends React.Component<CompanyProps> {
   render() {
     const { company, authInfo } = this.props
     return (
-      <Col className="block" xs={12} sm={11} md={10} lg={9}>
+      <Col className="block company" xs={24} sm={11} md={10} lg={9}>
         <div className="boxmain">
           <div className="title text-overflow">{company.companyName}</div>
           <div className="desc text-overflow">

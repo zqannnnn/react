@@ -195,6 +195,34 @@ router.get(
   }
 )
 
+router.get('/list/comment', async (req: IRequest, res: express.Response) => {
+  const page = Number(req.query.page)
+  const pageSize = Number(req.query.pageSize)
+  const transactionId = String(req.query.transactionId)
+  const pageOption: {
+    offset?: number
+    limit?: number
+  } = {}
+  const orderOption: string[] = ['createdAt', 'DESC']
+
+  if (pageSize && typeof page !== 'undefined') {
+    pageOption.offset = (page - 1) * pageSize
+    pageOption.limit = (page - 1) * pageSize + pageSize
+  }
+  try {
+    const result = await Comment.findAndCount({
+      where: {
+        transactionId
+      },
+      ...pageOption,
+      order: [orderOption]
+    })
+    return res.send({ comments: result.rows, total: result.count })
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
 router.post('/comment', async (req: IRequest, res: express.Response) => {
   try {
     const comment = new Comment({

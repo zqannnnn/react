@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "tslint src/**/*.ts --fix --project tsconfig.json" ,
     "run": "ts-node src/index",
-    "watch": "nodemon -e js,ts,tsx -w src/ -w frontend/ -x ts-node src/index",
+    "watch": "nodemon -e js,ts,tsx,scss -w src/ -w frontend/ -x ts-node src/index",
     "test": "jest"
   },
   "jest": {

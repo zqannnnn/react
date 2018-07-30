@@ -109,12 +109,12 @@ export function transaction(
           processing: false,
           error: action.error
         }
-    case transactionConsts.COMMENT_REQUEST:
+    case transactionConsts.COMMENT_CREATE_REQUEST:
       return {
         ...state,
         processing: true
       }
-    case transactionConsts.COMMENT_SUCCESS:
+    case transactionConsts.COMMENT_CREATE_SUCCESS:
       if (state.items && action.comment) {
         let items = state.items.filter(item => item.id !== action.id)
         let item = state.items.filter(item => item.id === action.id)[0]
@@ -138,23 +138,48 @@ export function transaction(
         }
       }
 
-    case transactionConsts.COMMENT_FAILURE:
+    case transactionConsts.COMMENT_CREATE_FAILURE:
       return {
         ...state,
         error: action.error
       }
+    case transactionConsts.COMMENT_LIST_REQUEST:
+      return { ...state, loading: true }
+    case transactionConsts.COMMENT_LIST_SUCCESS:
+      if (state.items && action.comments) {
+        let items = state.items.filter(item => item.id !== action.id)
+        let item = state.items.filter(item => item.id === action.id)[0]
+        item.comments = action.comments
+        items.push(item)
+        return {
+          ...state,
+          items: state.items.map(
+            item =>
+              item.id === action.id
+                ? {
+                    ...item,
+                    items
+                  }
+                : item
+          ),
+          total: action.total
+        }
+      }
+    // return { items: action.comments, total: action.total }
+    case transactionConsts.COMMENT_LIST_FAILURE:
+      return { ...state, error: action.error }
     case transactionConsts.GET_REQUEST:
-      return { loading: true }
+      return { ...state, loading: true }
     case transactionConsts.GET_SUCCESS:
-      return { transData: action.data }
+      return { ...state, transData: action.data }
     case transactionConsts.GET_FAILURE:
-      return { error: action.error }
+      return { ...state, error: action.error }
     case transactionConsts.GETALL_REQUEST:
-      return { loading: true }
+      return { ...state, loading: true }
     case transactionConsts.GETALL_SUCCESS:
-      return { items: action.transactions, total: action.total }
+      return { ...state, items: action.transactions, total: action.total }
     case transactionConsts.GETALL_FAILURE:
-      return { error: action.error }
+      return { ...state, error: action.error }
     default:
       return state
   }

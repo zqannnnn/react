@@ -3,14 +3,15 @@ import { Transaction, ListOptions, Comment } from '../models'
 export const transService = {
   new: _new,
   newOrder: newOrder,
-  comment,
   edit,
   getById,
   getAll,
   cancel,
   reactivate,
   finish,
-  buy
+  buy,
+  createComment,
+  listComment
 }
 function _new(transaction: Transaction) {
   const requestOptions = {
@@ -33,17 +34,6 @@ function newOrder(transaction: Transaction) {
     body: JSON.stringify(transaction)
   }
   return fetch('/transaction/order/new', requestOptions).then(handleResponse)
-}
-function comment(comment: Comment) {
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      ...authHeader(),
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(comment)
-  }
-  return fetch('/transaction/comment', requestOptions).then(handleResponse)
 }
 function edit(transaction: Transaction, transactionId: string) {
   const requestOptions = {
@@ -135,6 +125,33 @@ function getwaitting(options: ListOptions) {
   return fetch('/transaction/list?' + query, requestOptions).then(
     handleResponse
   )
+}
+
+function createComment(comment: Comment) {
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(comment)
+  }
+  return fetch('/transaction/comment', requestOptions).then(handleResponse)
+}
+
+function listComment(id: string, options?: ListOptions) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  let query = ''
+  if (options) {
+    query = renderQuery(options)
+  }
+  return fetch(
+    '/transaction/list/comment?transactionId=' + id + query,
+    requestOptions
+  ).then(handleResponse)
 }
 
 function handleResponse(response: Response) {
