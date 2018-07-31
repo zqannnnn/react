@@ -87,6 +87,31 @@ To format code use:
 ./bin/yarn run format
 ```
 
+### database migration
+
+#### For development
+
+To create a new migration use:
+
+```sh
+docker exec bmp-app yarn sequelize migration:create --name :migration-name 
+```
+
+A migration js file will created in db/migrations/, then edit this js file to record your changes in database, use [this api](http://docs.sequelizejs.com/class/lib/query-interface.js~QueryInterface.html) 
+
+To use newest migration:
+
+```sh
+docker exec bmp-app yarn sequelize db:migrate 
+```
+
+To undo newest migration:
+
+```sh
+docker exec bmp-app yarn sequelize db:migrate:undo
+```
+
+More information check [here](http://docs.sequelizejs.com/manual/tutorial/migrations.html)
 
 ### i18n solution
 
