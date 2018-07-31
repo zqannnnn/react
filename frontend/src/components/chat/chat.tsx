@@ -1,6 +1,9 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../../reducers'
+import { Collapse } from 'antd'
+import './chat.scss'
+//import Collapse from 'rc-collapse'
 //import { AuthInfo } from '../actions'
 //import { Currency } from '../models'
 interface ItemProps {
@@ -16,8 +19,15 @@ class Chat extends React.Component<ItemProps> {
   render() {
     //const { price, currencyCode } = this.props
     //let newPrice = this.exchangeCurrency(price, currencyCode)
+    const Panel = Collapse.Panel
     return (
-      <div>Chat</div>
+      <div id="chat">
+        <Collapse accordion>
+          <Panel header="Chat" key="1">
+            <p>Hoi</p>
+          </Panel>
+        </Collapse>  
+      </div>   
     )
   }
 }
