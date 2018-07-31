@@ -71,6 +71,17 @@ io.on('connection', socket => {
     console.log('Color Changed to: ', color)
     io.sockets.emit('change color', color)
   })
+  socket.on('get-users', (nothing) => {
+    // once we get a 'change color' event from one of our clients, we will send it to the rest of the clients
+    // we make use of the socket.emit method again with the argument given to use from the callback function above
+    //let clients = io.sockets.clients()
+    io.sockets.clients((error :any, clients :any) => {
+      //if (error) throw error;
+      console.log(clients); // => [PZDoMHjiu8PYfRiKAAAF, Anw2LatarvGVVXEIAAAD]
+    });    
+    //console.log('Users: ', clients)
+    //io.sockets.emit('get-users', clients)
+  })
   
   // disconnect is fired when a client leaves the server
   socket.on('disconnect', () => {
