@@ -2,16 +2,9 @@ import * as React from 'react'
 import { Router, Route, Switch } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import i18n from 'i18next'
-import Layouts from './layout'
 import { history } from './helpers/history'
 import { alertActionCreators, authActionCreators } from './actions'
-import {
-  PrivateRoute,
-  AdminRoute,
-  NavBar,
-  Lightbox,
-  SiderNav
-} from './components'
+import { PrivateRoute, AdminRoute, NavBar, Lightbox } from './components'
 import {
   LoginPage,
   RegisterPage,
@@ -32,16 +25,12 @@ import { AdminPage, HomePage, AllListPage, MyListPage } from './pages'
 import { RootState, LightboxState, AuthState, AlertState } from './reducers'
 import { Layout, Alert, BackTop } from 'antd'
 import './app.scss'
-import { router } from '../../src/routes/upload'
 
 interface AppProps {
   dispatch: (action: any) => void
   alert: AlertState
   lightbox: LightboxState
   auth: AuthState
-  mobileBreakPoint: number
-  applyViewportChange?: number
-  placement: 'bottom' | 'bottomLeft' | 'top'
 }
 class App extends React.Component<AppProps, any> {
   constructor(props: AppProps) {
@@ -66,7 +55,7 @@ class App extends React.Component<AppProps, any> {
     return (
       <Router history={history}>
         <Layout>
-          <Layouts mobileBreakPoint={800} placement="bottomLeft" />
+          <NavBar mobileBreakPoint={768} placement="bottomLeft" />
           {lightbox.showing && <Lightbox />}
           <Layout>
             <Layout.Content className="page-wr">

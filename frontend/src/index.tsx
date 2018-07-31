@@ -10,7 +10,7 @@ const store = configureStore()
 ReactDOM.render(
   <Provider store={store}>
     <I18nextProvider i18n={i18n}>
-      <App mobileBreakPoint={800} placement="bottomLeft" />
+      <App />
     </I18nextProvider>
   </Provider>,
   document.getElementById('main')

@@ -205,7 +205,13 @@ html {
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
     0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
-
+#main {
+  height: 100%;
+}
+.ant-layout {
+  min-height: 100%;
+  min-width: 400px;
+}
 .boxmain .menu {
   font-weight: bold;
   padding: 0 10px;
@@ -376,6 +382,11 @@ html {
 .page-wr {
   padding-top: 64px;
 }
+@media (min-width: 0px) and (max-width: 768px) {
+  .page-wr {
+    padding: 0px;
+  }
+}
 .page .subtitle {
   font-size: 16px;
   font-weight: bold;
@@ -544,19 +555,6 @@ html {
   height: 100%;
 }
 .ant-layout-sider-zero-width-trigger {
-  position: absolute;
-  top: 64px;
-  right: -36px;
-  text-align: center;
-  width: 36px;
-  height: 42px;
-  line-height: 42px;
-  background: #001529;
-  color: #fff;
-  font-size: 18px;
-  border-radius: 0 4px 4px 0;
-  cursor: pointer;
-  -webkit-transition: background 0.3s ease;
-  transition: background 0.3s ease;
+  top: 0px;
   z-index: 1;
 }

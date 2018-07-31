@@ -7,27 +7,29 @@
 
 @media (min-width: 992px) and (max-width: 1199px) {
   .nav-search {
+    margin-left: 30px;
     width: 200px;
   }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
   .nav-search {
+    margin-left: 10px;
     width: 200px;
   }
 }
 
 @media (min-width: 320px) and (max-width: 767px) {
   .nav-search {
-    // margin-left: 20px;
-    width: 200px;
+    margin-top: 10px;
+    padding: 0 10px;
   }
 }
 
 @media (max-width: 369px) {
   .nav-search {
-    // margin-left: 30px;
-    width: 200px;
+    margin-top: 10px;
+    padding: 0 10px;
   }
 }
 
@@ -62,7 +64,8 @@
 }
 
 .nav-bar .home {
-  display: inline;
+  height: 100%;
+  display: inline-block;
   padding: 0 16px;
 }
 
@@ -128,4 +131,7 @@
 }
 .nav-search {
   display: inline-block;
+}
+.active {
+  background-color: #1890ff;
 }
