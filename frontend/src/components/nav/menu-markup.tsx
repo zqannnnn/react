@@ -11,7 +11,6 @@ interface MenuMarkupProps {
   activeLinkKey?: string
   onLinkClick?: () => void
   logout: () => void
-  handleSelect: (value: string) => void
 }
 interface ItemOptions {
   to: string

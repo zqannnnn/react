@@ -25,10 +25,6 @@ class ReNavBar extends React.Component<NavProps> {
     this.props.dispatch(authActionCreators.logout())
   }
 
-  handleSelect = (value: string) => {
-    this.props.dispatch(currencyActionCreators.upCurrencystatus(value))
-  }
-
   componentDidMount() {
     this.props.dispatch(currencyActionCreators.getAll())
     this.saveViewportDimensions()
@@ -56,7 +52,6 @@ class ReNavBar extends React.Component<NavProps> {
       return (
         <MenuMarkup
           auth={auth}
-          handleSelect={this.handleSelect}
           activeLinkKey={location.hash.substring(1)}
           mobileVersion={false}
           logout={this.logout}
@@ -67,7 +62,6 @@ class ReNavBar extends React.Component<NavProps> {
       return (
         <MenuMarkup
           auth={auth}
-          handleSelect={this.handleSelect}
           logout={this.logout}
           mobileVersion={true}
           onLinkClick={this.onclick}
