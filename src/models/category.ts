@@ -16,13 +16,7 @@ export class Category extends Model<Category> {
   // only allow string keys to do some iteration :)
   [key: string]: any
 
-  @IsUUID(4)
   @PrimaryKey
-  @Default(DataType.UUIDV4)
-  @Column
-  public id: string
-
-  @Unique
   @Column({ field: 'type' })
   public type: string
 
