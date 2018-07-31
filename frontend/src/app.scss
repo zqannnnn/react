@@ -64,6 +64,7 @@ html {
   height: 200px;
   position: relative;
   margin-bottom: 20px;
+  // z-index: -1;
 }
 
 .banner-bg {
@@ -204,7 +205,13 @@ html {
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
     0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
-
+#main {
+  height: 100%;
+}
+.ant-layout {
+  min-height: 100%;
+  min-width: 400px;
+}
 .boxmain .menu {
   font-weight: bold;
   padding: 0 10px;
@@ -375,6 +382,11 @@ html {
 .page-wr {
   padding-top: 64px;
 }
+@media (min-width: 0px) and (max-width: 768px) {
+  .page-wr {
+    padding: 0px;
+  }
+}
 .page .subtitle {
   font-size: 16px;
   font-weight: bold;
@@ -541,4 +553,8 @@ html {
 .ant-upload-list-item-info span {
   width: 100%;
   height: 100%;
+}
+.ant-layout-sider-zero-width-trigger {
+  top: 0px;
+  z-index: 1;
 }

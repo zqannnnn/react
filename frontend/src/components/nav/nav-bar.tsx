@@ -5,9 +5,9 @@ import { RootState, CurrencyState, AuthState } from '../../reducers'
 import { MenuMarkup } from './menu-markup'
 import { Search } from './search'
 import { throttle } from 'lodash'
-import { Popover, Layout } from 'antd'
+import { Layout, Menu } from 'antd'
 import './nav-bar.scss'
-
+const { Sider } = Layout
 interface NavProps {
   dispatch: Dispatch<RootState>
   auth: AuthState
@@ -16,23 +16,13 @@ interface NavProps {
   placement: 'bottom' | 'bottomLeft' | 'top'
 }
 class ReNavBar extends React.Component<NavProps> {
-  public static defaultProps: Partial<NavProps> = {
-    mobileBreakPoint: 575,
-    applyViewportChange: 250,
-    placement: 'bottom'
-  }
-
   state = {
-    viewportWidth: 0,
-    menuVisible: false
+    isMobile: false,
+    collapsed: false
   }
 
   logout = () => {
     this.props.dispatch(authActionCreators.logout())
-  }
-
-  handleSelect = (value: string) => {
-    this.props.dispatch(currencyActionCreators.upCurrencystatus(value))
   }
 
   componentDidMount() {
@@ -44,68 +34,73 @@ class ReNavBar extends React.Component<NavProps> {
   componentWillUnmount() {
     window.removeEventListener('resize', this.saveViewportDimensions)
   }
-
-  saveViewportDimensions = throttle(() => {
+  onclick = () => {
     this.setState({
-      viewportWidth: window.innerWidth
+      collapsed: !this.state.collapsed
+    })
+  }
+  saveViewportDimensions = throttle(() => {
+    const { mobileBreakPoint } = this.props
+    this.setState({
+      isMobile: window.innerWidth > mobileBreakPoint
     })
   }, this.props.applyViewportChange)
-
-  handleMenuVisibility = (menuVisible: boolean) => {
-    this.setState({ menuVisible })
-  }
   renderMenu() {
-    const { auth, mobileBreakPoint } = this.props
-    const { viewportWidth } = this.state
-    if (viewportWidth > mobileBreakPoint || !this.props.auth.loggedIn) {
+    const { auth } = this.props
+    const { isMobile } = this.state
+    if (isMobile) {
       return (
         <MenuMarkup
           auth={auth}
-          handleSelect={this.handleSelect}
+          activeLinkKey={location.hash.substring(1)}
+          mobileVersion={false}
           logout={this.logout}
+          onLinkClick={this.onclick}
+        />
+      )
+    } else {
+      return (
+        <MenuMarkup
+          auth={auth}
+          logout={this.logout}
+          mobileVersion={true}
+          onLinkClick={this.onclick}
+          activeLinkKey={location.hash.substring(1)}
         />
       )
     }
-    return (
-      <Popover
-        content={
-          <MenuMarkup
-            auth={auth}
-            handleSelect={this.handleSelect}
-            logout={this.logout}
-            onLinkClick={() => this.handleMenuVisibility(false)}
-            activeLinkKey={location.hash.substring(1)}
-            mobileVersion={true}
-            menuClassName="desktop-navigation"
-          />
-        }
-        trigger="click"
-        placement={this.props.placement}
-        visible={this.state.menuVisible}
-        onVisibleChange={this.handleMenuVisibility}
-        overlayClassName="nav-pop"
-      >
-        <div className="menu">
-          <div className="icon" />
-        </div>
-      </Popover>
-    )
   }
   render() {
-    return (
-      <Layout.Header>
-        <div className="nav-bar">
-          {this.renderMenu()}
+    const { isMobile, collapsed } = this.state
+    if (isMobile) {
+      return (
+        <Layout.Header>
+          <div className="nav-bar">
+            {this.renderMenu()}
+            <Search />
+          </div>
+        </Layout.Header>
+      )
+    } else {
+      return (
+        <Sider
+          breakpoint="md"
+          collapsedWidth="0"
+          collapsed={collapsed}
+          onCollapse={() => this.onclick()}
+        >
           <Search />
-        </div>
-      </Layout.Header>
-    )
+          <Menu theme="dark" mode="inline">
+            {this.renderMenu()}
+          </Menu>
+        </Sider>
+      )
+    }
   }
 }
 function mapStateToProps(state: RootState) {
   const { auth } = state
   return { auth }
 }
-
 const connectedReNavBar = connect(mapStateToProps)(ReNavBar)
 export { connectedReNavBar as NavBar }
