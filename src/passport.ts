@@ -24,6 +24,8 @@ export const passportConfig = (passport: PassportStatic) => {
               'id',
               'userType',
               'password',
+              'firstName',
+              'lastName',
               'licenseStatus',
               'preferredCurrencyCode'
             ]
