@@ -33,9 +33,6 @@ function register(user: User) {
 
     authService.register(user).then(
       (authInfo: AuthInfo) => {
-        //console.log('!!!!!!!!!!!!!!!!!')
-        //console.log(user)
-        //authInfo['username'] = user['email']
         dispatch(alertActionCreators.success('Create user succeed'))
         dispatch(success(authInfo))
         setTimeout(function() {
@@ -65,7 +62,6 @@ function login(username: string, password: string) {
 
     return authService.login(username, password).then(
       (authInfo: AuthInfo) => {
-        //authInfo['username'] = username
         dispatch(success(authInfo))
       },
       (error: string) => {
@@ -91,7 +87,6 @@ function refresh() {
       (authInfo: AuthInfo) => {
         let oldAuth = auth.getAuth()
         authInfo.token = oldAuth.token
-        //authInfo.username = oldAuth.username
         dispatch(success(authInfo))
         dispatch(setAuth(authInfo))
         if (authInfo.licenseStatus === authConsts.LICENSE_STATUS_DENIED) {

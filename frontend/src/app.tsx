@@ -43,9 +43,7 @@ class App extends React.Component<AppProps, any> {
       dispatch(alertActionCreators.clear())
     })
     if (auth.loggedIn) dispatch(authActionCreators.refresh())
-
   }
-  
   
   render() {
     const { auth } = this.props
