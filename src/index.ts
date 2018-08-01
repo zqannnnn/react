@@ -61,6 +61,31 @@ const server = app.listen(port, (err: string) => {
 })
 //1532692062 chat
 const io = socket(server)
+export interface IHash {
+  [details: string] : string;
+}
+let users: IHash = {};
+io.sockets.on('connection', function (socket) {
+  socket.on('set nickname', function (name) {
+    console.log('!!!!!!!!!! set nickname')
+    console.log(name)
+    //console.log(socket.id)
+    users[socket.id] = name
+    //console.log(socket.nsp.sockets[socket.id])
+    //console.log(Object.keys(socket.nsp.sockets));
+    //io.sockets.sockets['nickname'] = name;
+    //socket.set('nickname', name, function () { socket.emit('ready'); })
+  })
+})
+/*
+io.sockets.on('connection',function(socket){ 
+  io.sockets.sockets['nickname'] = socket.id;
+  client.on("chat", function(data) {      
+      var sock_id = io.sockets.sockets['nickname']
+      io.sockets.sockets[sock_id].emit("private", "message");
+  });    
+});
+*/
 io.on('connection', socket => {
   console.log('New client connected')
   
@@ -71,13 +96,19 @@ io.on('connection', socket => {
     console.log('Color Changed to: ', color)
     io.sockets.emit('change color', color)
   })
+  /*
+  socket.on('set nickname', function (name) {
+    socket.set('nickname', name, function () { socket.emit('ready'); });
+  });  
+  */
   socket.on('get-users', (nothing) => {
     // once we get a 'change color' event from one of our clients, we will send it to the rest of the clients
     // we make use of the socket.emit method again with the argument given to use from the callback function above
     //let clients = io.sockets.clients()
+    console.log(users)
     io.sockets.clients((error :any, clients :any) => {
       //if (error) throw error;
-      console.log(clients); // => [PZDoMHjiu8PYfRiKAAAF, Anw2LatarvGVVXEIAAAD]
+      //console.log(clients); // => [PZDoMHjiu8PYfRiKAAAF, Anw2LatarvGVVXEIAAAD]
     });    
     //console.log('Users: ', clients)
     //io.sockets.emit('get-users', clients)
