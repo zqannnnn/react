@@ -23,7 +23,7 @@ class Chat extends React.Component<ItemProps> {
 
     const socket = socketIOClient("http://localhost:3000")    
     socket.on('connect', function () {
-      if ( authInfo !== undefined ) socket.emit('get-users', authInfo['email']) 
+      if ( authInfo !== undefined ) socket.emit('get-users', authInfo) 
       socket.on('get-users', (users: any) => {
         console.log(users)
       })      

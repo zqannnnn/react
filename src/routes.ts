@@ -42,7 +42,7 @@ export const router = (app: Application, passport: PassportStatic) => {
           expiresIn: consts.EXPIRE_IN
         }),
         id: user.id,
-        email: user.email
+        name: user.firstName + ' ' + user.lastName
       }
       if (user.userType === consts.USER_TYPE_ADMIN) {
         data.isAdmin = true

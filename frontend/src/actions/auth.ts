@@ -10,7 +10,7 @@ export type AuthInfo = {
   isAdmin?: boolean
   preferredCurrencyCode?: string
   licenseStatus?: number
-  email?: string
+  name?: string
 }
 export const actionCreators = {
   login,
