@@ -66,11 +66,11 @@ export interface IHash {
 }
 let users: IHash = {};
 io.sockets.on('connection', function (socket) {
-  socket.on('set nickname', function (name) {
+  socket.on('set email', function (email) {
     console.log('!!!!!!!!!! set nickname')
-    console.log(name)
+    //console.log(name)
     //console.log(socket.id)
-    users[socket.id] = name
+    users[socket.id] = email
     //console.log(socket.nsp.sockets[socket.id])
     //console.log(Object.keys(socket.nsp.sockets));
     //io.sockets.sockets['nickname'] = name;
