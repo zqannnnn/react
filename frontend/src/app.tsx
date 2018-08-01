@@ -50,6 +50,7 @@ class App extends React.Component<AppProps, any> {
     }
 
   }
+  
   send = () => {
     //1532692062 chat
     const socket = socketIOClient(this.state.endpoint)
@@ -61,20 +62,21 @@ class App extends React.Component<AppProps, any> {
     // socket.emit('change color', 'red', 'yellow') | you can have multiple arguments
     
   }
+  
   render() {
     const { auth } = this.props
     //1532692062 chat
     // Within the render method, we will be checking for any sockets.
     // We do it in the render method because it is ran very often.
-    const socket = socketIOClient(this.state.endpoint)
+    //const socket = socketIOClient(this.state.endpoint)
     
     // socket.on is another method that checks for incoming events from the server
     // This method is looking for the event 'change color'
     // socket.on takes a callback function for the first argument
-    socket.on('change color', (color: any) => {
+    //socket.on('change color', (color: any) => {
       // setting the color of our button
-      document.body.style.backgroundColor = color
-    })
+    //  document.body.style.backgroundColor = color
+    //})
 
     /*
     const changeLanguage = (lng: string) => {

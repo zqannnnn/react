@@ -29,13 +29,30 @@ class Chat extends React.Component<ItemProps> {
     //console.log(AuthState)
     let { auth } = this.props
     const { loggedIn, authInfo } = auth
-    //console.log(auth)
+    //console.log('!!!!!!!!!!!!!!!!!')
+    //console.log(authInfo)
     //const { loggedIn, authInfo } = auth
     //console.log('loggedIn: ' + loggedIn)
     //1532692062 chat
     // Within the render method, we will be checking for any sockets.
     // We do it in the render method because it is ran very often.
+    //1532692062 chat
+    //const socket = socketIOClient(this.state.endpoint)
     const socket = socketIOClient("http://localhost:3000")    
+    //socket.set('nickname', authInfo['username']);
+    //socket.nickname = authInfo['username'];
+    socket.on('connect', function () {
+      if ( authInfo !== undefined && authInfo['username'] !== undefined ) {
+        console.log('!!!!!!!!!! send nickname')
+        console.log(authInfo)
+        //console.log(authInfo['username'])
+        socket.emit('set nickname', authInfo['username']);
+      }
+      //socket.on('ready', function () {
+      //  console.log('Connected !');
+      //  socket.emit('msg', 'Static Message'));
+      //});
+    });    
     socket.emit('get-users', '') 
 
     //var clients = socket.clients();
