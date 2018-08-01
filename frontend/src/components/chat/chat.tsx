@@ -20,11 +20,10 @@ class Chat extends React.Component<ItemProps> {
   render() {
     let { auth } = this.props
     const { loggedIn, authInfo } = auth
+
     const socket = socketIOClient("http://localhost:3000")    
     socket.on('connect', function () {
-      if ( authInfo !== undefined && authInfo['email'] !== undefined ) {
-        socket.emit('get-users', authInfo['email']) 
-      }
+      if ( authInfo !== undefined ) socket.emit('get-users', authInfo['email']) 
       socket.on('get-users', (users: any) => {
         console.log(users)
       })      

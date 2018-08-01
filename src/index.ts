@@ -11,9 +11,6 @@ import { webpackMiddleware } from './middleware/webpack'
 import { initDatabase } from './models'
 import { passportConfig } from './passport'
 import { router } from './routes'
-import * as socket from 'socket.io' //1532692062 chat
-//https://socket.io/get-started/chat/
-//https://codeburst.io/isomorphic-web-app-react-js-express-socket-io-e2f03a469cd3
 
 const app = express()
 webpackMiddleware(app)
@@ -60,25 +57,7 @@ const server = app.listen(port, (err: string) => {
   )
 })
 
-
-//1532692062 chat
-const io = socket(server)
-export interface IHash {
-  [details: string] : string;
-}
-let users: IHash = {};
-io.sockets.on('connection', function (socket) {
-})
-io.on('connection', socket => {
-  socket.on('get-users', (email) => {
-    //io.sockets.clients((error :any, clients :any) => {
-    //});    
-    users[socket.id] = email
-    io.sockets.emit('get-users', users)
-  })  
-  socket.on('disconnect', () => {
-    delete users[socket.id]
-  })
-})
+const socketIO = require('./api/socketio')
+socketIO.startSocket(server)
 
 export { app }
