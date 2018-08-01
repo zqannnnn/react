@@ -42,7 +42,7 @@ router.post('/new', async (req, res) => {
       licenseStatus: 0,
       isAdmin: user.userType === consts.USER_TYPE_ADMIN,
       preferredCurrencyCode: user.preferredCurrencyCode,
-      email: user.email
+      name: user.firstName + ' ' + user.lastName
     }
     return res.send(data)
   } catch (e) {
@@ -66,7 +66,7 @@ router.get('/refresh/auth', async (req: IRequest, res: express.Response) => {
       id: req.userId,
       preferredCurrencyCode: user.preferredCurrencyCode,
       licenseStatus: user.licenseStatus,
-      email: user.email
+      name: user.firstName + ' ' + user.lastName
     }
     if (user.userType === consts.USER_TYPE_ADMIN) {
       authInfo.isAdmin = true
