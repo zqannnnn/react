@@ -57,6 +57,7 @@ const server = app.listen(port, (err: string) => {
   )
 })
 
+/* //1532692062 chat */
 const socketIO = require('./api/socketio')
 socketIO.startSocket(server)
 
