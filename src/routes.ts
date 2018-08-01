@@ -41,7 +41,8 @@ export const router = (app: Application, passport: PassportStatic) => {
         token: jwt.sign(user, app.get('secretKey'), {
           expiresIn: consts.EXPIRE_IN
         }),
-        id: user.id
+        id: user.id,
+        email: user.email
       }
       if (user.userType === consts.USER_TYPE_ADMIN) {
         data.isAdmin = true

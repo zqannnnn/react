@@ -42,11 +42,11 @@ class Chat extends React.Component<ItemProps> {
     //socket.set('nickname', authInfo['username']);
     //socket.nickname = authInfo['username'];
     socket.on('connect', function () {
-      if ( authInfo !== undefined && authInfo['username'] !== undefined ) {
+      if ( authInfo !== undefined && authInfo['email'] !== undefined ) {
         console.log('!!!!!!!!!! send nickname')
         console.log(authInfo)
         //console.log(authInfo['username'])
-        socket.emit('set nickname', authInfo['username']);
+        socket.emit('set email', authInfo['email']);
       }
       //socket.on('ready', function () {
       //  console.log('Connected !');

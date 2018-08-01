@@ -42,7 +42,8 @@ router.post('/new', async (req, res) => {
       id: user.id,
       licenseStatus: 0,
       isAdmin: user.userType === consts.USER_TYPE_ADMIN,
-      preferredCurrencyCode: user.preferredCurrencyCode
+      preferredCurrencyCode: user.preferredCurrencyCode,
+      email: user.email
     }
     return res.send(data)
   } catch (e) {
@@ -55,7 +56,7 @@ router.use(loginCheckMiddleware)
 router.get('/refresh/auth', async (req: IRequest, res: express.Response) => {
   User.findOne({
     where: { id: req.userId },
-    attributes: ['userType', 'licenseStatus', 'preferredCurrencyCode']
+    attributes: ['userType', 'licenseStatus', 'preferredCurrencyCode', 'email']
   }).then(user => {
     if (!user) {
       return res
@@ -65,7 +66,8 @@ router.get('/refresh/auth', async (req: IRequest, res: express.Response) => {
     const authInfo: AuthInfo = {
       id: req.userId,
       preferredCurrencyCode: user.preferredCurrencyCode,
-      licenseStatus: user.licenseStatus
+      licenseStatus: user.licenseStatus,
+      email: user.email
     }
     if (user.userType === consts.USER_TYPE_ADMIN) {
       authInfo.isAdmin = true
