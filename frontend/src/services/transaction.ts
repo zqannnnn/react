@@ -127,7 +127,7 @@ function getwaitting(options: ListOptions) {
   )
 }
 
-function createComment(comment: Comment) {
+function createComment(comment: Comment, options?: ListOptions) {
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -136,7 +136,13 @@ function createComment(comment: Comment) {
     },
     body: JSON.stringify(comment)
   }
-  return fetch('/transaction/comment', requestOptions).then(handleResponse)
+  let query = ''
+  if (options) {
+    query = renderQuery(options)
+  }
+  return fetch('/transaction/comment?' + query, requestOptions).then(
+    handleResponse
+  )
 }
 
 function listComment(id: string, options?: ListOptions) {
@@ -149,7 +155,7 @@ function listComment(id: string, options?: ListOptions) {
     query = renderQuery(options)
   }
   return fetch(
-    '/transaction/list/comment?transactionId=' + id + query,
+    '/transaction/list/comment?transactionId=' + id + '&' + query,
     requestOptions
   ).then(handleResponse)
 }

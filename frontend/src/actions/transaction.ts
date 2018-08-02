@@ -288,38 +288,49 @@ const getAll: ActionCreator<Thunk> = (option: ListOptions) => {
   }
 }
 
-const createComment: ActionCreator<Thunk> = (comment: Comment) => {
+const createComment: ActionCreator<Thunk> = (
+  comment: Comment,
+  options?: ListOptions
+) => {
   return (dispatch: Dispatch<RootState>): void => {
-    dispatch(request())
+    comment.transactionId && dispatch(request(comment.transactionId))
 
-    transService.createComment(comment).then(
-      comment => {
-        dispatch(success(comment))
-      },
-      (error: string) => {
-        dispatch(failure(error))
-        dispatch(alertActionCreators.error(error))
-      }
-    )
+    transService
+      .createComment(comment, options)
+      .then(
+        (result: { comments: Array<Comment>; total: number }) =>
+          comment.transactionId &&
+          dispatch(
+            success(comment.transactionId, result.comments, result.total)
+          ),
+        (error: string) =>
+          comment.transactionId &&
+          dispatch(failure(comment.transactionId, error))
+      )
   }
-  function request(): Action {
+  function request(id: string): Action {
     return {
       type: transactionConsts.COMMENT_CREATE_REQUEST,
-      id: comment.transactionId
+      id
     }
   }
-  function success(comment: Comment): Action {
+  function success(
+    id: string,
+    comments: Array<Comment>,
+    total: number
+  ): Action {
     return {
       type: transactionConsts.COMMENT_CREATE_SUCCESS,
-      comment,
-      id: comment.transactionId
+      comments,
+      total,
+      id
     }
   }
-  function failure(error: string): Action {
+  function failure(id: string, error: string): Action {
     return {
       type: transactionConsts.COMMENT_CREATE_FAILURE,
       error,
-      id: comment.transactionId
+      id
     }
   }
 }

@@ -50,5 +50,6 @@ export const consts = {
   IMAGE_TYPE_MEDIE: 1,
   IMAGE_TYPE_CERTIFICATE: 2,
 
-  LIST_PAGE_SIZE: 9
+  LIST_PAGE_SIZE: 9,
+  COMMENT_LIST_SIZE: 3
 }

@@ -115,14 +115,11 @@ export function transaction(
         processing: true
       }
     case transactionConsts.COMMENT_CREATE_SUCCESS:
-      if (state.items && action.comment) {
+      if (state.items && action.comments) {
         let items = state.items.filter(item => item.id !== action.id)
         let item = state.items.filter(item => item.id === action.id)[0]
-        if (item.comments) {
-          item.comments.push(action.comment)
-        } else {
-          item.comments = [action.comment]
-        }
+        item.comments = action.comments
+        item.totalComment = action.total
         items.push(item)
         return {
           ...state,
@@ -150,6 +147,7 @@ export function transaction(
         let items = state.items.filter(item => item.id !== action.id)
         let item = state.items.filter(item => item.id === action.id)[0]
         item.comments = action.comments
+        item.totalComment = action.total
         items.push(item)
         return {
           ...state,
@@ -161,11 +159,9 @@ export function transaction(
                     items
                   }
                 : item
-          ),
-          total: action.total
+          )
         }
       }
-    // return { items: action.comments, total: action.total }
     case transactionConsts.COMMENT_LIST_FAILURE:
       return { ...state, error: action.error }
     case transactionConsts.GET_REQUEST:

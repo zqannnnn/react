@@ -40,6 +40,7 @@ class List extends React.Component<ListProps, ListState> {
         ...options
       })
     )
+    window.scrollTo(0, 0)
   }
   onOptionsChange = (newOptions: ListOptions) => {
     const oldOptions = this.state.options

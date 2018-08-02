@@ -38,7 +38,7 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   }
   if (pageSize && typeof page !== 'undefined') {
     pageOption.offset = (page - 1) * pageSize
-    pageOption.limit = (page - 1) * pageSize + pageSize
+    pageOption.limit = pageSize
   }
   if (typeof keyword !== 'undefined') {
     goodsOption.title = { $like: `%${keyword}%` }
@@ -207,7 +207,7 @@ router.get('/list/comment', async (req: IRequest, res: express.Response) => {
 
   if (pageSize && typeof page !== 'undefined') {
     pageOption.offset = (page - 1) * pageSize
-    pageOption.limit = (page - 1) * pageSize + pageSize
+    pageOption.limit = pageSize
   }
   try {
     const result = await Comment.findAndCount({
@@ -230,7 +230,28 @@ router.post('/comment', async (req: IRequest, res: express.Response) => {
       ...req.body
     })
     await comment.save()
-    return res.send(comment)
+
+    const page = Number(req.query.page)
+    const pageSize = Number(req.query.pageSize)
+    const transactionId = comment.transactionId
+    const pageOption: {
+      offset?: number
+      limit?: number
+    } = {}
+    if (pageSize && typeof page !== 'undefined') {
+      pageOption.offset = (page - 1) * pageSize
+      pageOption.limit = pageSize
+    }
+    const orderOption: string[] = ['createdAt', 'DESC']
+    const result = await Comment.findAndCount({
+      where: {
+        transactionId
+      },
+      ...pageOption,
+      order: [orderOption]
+    })
+
+    return res.send({ comments: result.rows, total: result.count })
   } catch (e) {
     return res.status(500).send({ error: e.message })
   }

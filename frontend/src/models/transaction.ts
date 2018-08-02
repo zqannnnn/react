@@ -16,4 +16,7 @@ export class Transaction implements ListItem {
   maker?:User
   isMakerSeller?: boolean
   comments?: Comment[]
+  createdAt?: string
+  updatedAt?: string
+  totalComment?: number
 }
