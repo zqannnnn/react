@@ -8,51 +8,51 @@ import { AuthState } from '../../reducers'
 import { Collapse } from 'antd'
 import './chat.scss'
 interface ItemProps {
-  auth: AuthState
+	auth: AuthState
 }
 class Chat extends React.Component<ItemProps> {
-  constructor(props: ItemProps) {
-    super(props)
-    //this.state = {
-    //  endpoint: "http://localhost:3000" // this is where we are connecting to with sockets
-    //}
-  }
-  render() {
-    let { auth } = this.props
-    const { loggedIn, authInfo } = auth
+	constructor(props: ItemProps) {
+		super(props)
+		//this.state = {
+		//  endpoint: "http://localhost:3000" // this is where we are connecting to with sockets
+		//}
+	}
+	render() {
+		let { auth } = this.props
+		const { loggedIn, authInfo } = auth
 
-    const socket = socketIOClient("http://localhost:3000")    
-    socket.on('connect', function () {
-      if ( authInfo !== undefined ) socket.emit('get-users', authInfo) 
-      socket.on('get-users', (users: any) => {
-        console.log(users)
-      })      
-    });    
+		const socket = socketIOClient("http://localhost:3000")
+		socket.on('connect', function () {
+			if (authInfo !== undefined) socket.emit('get-users', authInfo)
+			socket.on('get-users', (users: any) => {
+				//console.log(users)
+			})
+		});
 
-    const Panel = Collapse.Panel
-    let chat: JSX.Element
-    if (loggedIn) {
-      chat = (
-        <>
-        <div id="chat">
-          <Collapse accordion>
-            <Panel header="Chat" key="1">
-              <p>Hoi</p>
-            </Panel>
-          </Collapse>  
-        </div>   
-        </>
-      )
-    } else {
-      chat = (
-        <>
-        <div id="chat">
-        </div>   
-        </>
-      )
-    }
-    return chat
-  }
+		const Panel = Collapse.Panel
+		let chat: JSX.Element
+		if (loggedIn) {
+			chat = (
+				<>
+					<div id="chat">
+						<Collapse accordion>
+							<Panel header="Chat" key="1">
+								<p>Hoi</p>
+							</Panel>
+						</Collapse>
+					</div>
+				</>
+			)
+		} else {
+			chat = (
+				<>
+					<div id="chat">
+					</div>
+				</>
+			)
+		}
+		return chat
+	}
 }
 
 export { Chat }
