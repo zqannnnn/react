@@ -10,7 +10,7 @@ import { RootState } from '../../reducers'
 import { Transaction, Comment } from '../../models'
 import { transactionConsts } from '../../constants'
 import { Exchange } from '../exchange'
-import { Col, Icon, Input, Avatar, Pagination } from 'antd'
+import { Col, Icon, Input, Avatar, Pagination, Spin } from 'antd'
 import { ListOptions } from '../../models'
 import i18n from 'i18next'
 interface ItemProps {
@@ -25,6 +25,8 @@ interface ItemState {
   currentReplys?: string
   replyInputShowing: boolean
   replysInputShowing: boolean
+  viewAllCommentShowing: boolean
+  commentSubmitted: boolean
   comments?: Comment[]
   options: ListOptions
 }
@@ -41,7 +43,9 @@ class Item extends React.Component<ItemProps, ItemState> {
     options: {
       page: 1,
       pageSize: transactionConsts.COMMENT_LIST_SIZE
-    }
+    },
+    viewAllCommentShowing: true,
+    commentSubmitted: false
   }
   formatTime = (time: string) => {
     let timeSplit = Date.parse(time)
@@ -122,9 +126,11 @@ class Item extends React.Component<ItemProps, ItemState> {
 
   ViewAllComments = () => {
     const { options } = this.state
+    this.setState({ commentSubmitted: true })
     this.props.dispatch(
       transactionActionCreators.listComment(this.props.transaction.id, options)
     )
+    this.setState({ viewAllCommentShowing: false })
   }
 
   onPageChange = (current: number, defaultPageSize: number) => {
@@ -133,6 +139,7 @@ class Item extends React.Component<ItemProps, ItemState> {
     options.page = current
     options.pageSize = defaultPageSize
     this.setState({ options })
+    this.setState({ commentSubmitted: true })
     this.props.dispatch(
       transactionActionCreators.listComment(transaction.id, {
         ...options
@@ -142,10 +149,16 @@ class Item extends React.Component<ItemProps, ItemState> {
 
   componentWillReceiveProps(nextProps: ItemProps) {
     const { transaction } = nextProps
-    if (transaction) {
+    const { commentSubmitted } = this.state
+    if (!commentSubmitted) {
       this.setState({
         ...this.defaultState,
         comments: transaction.comments
+      })
+    } else {
+      this.setState({
+        comments: transaction.comments,
+        commentSubmitted: false
       })
     }
   }
@@ -160,12 +173,6 @@ class Item extends React.Component<ItemProps, ItemState> {
       transactionId: transaction.id
     }
     dispatch(transactionActionCreators.createComment(reply))
-
-    this.setState({
-      currentReply: '',
-      replyInputShowing: false,
-      replysInputShowing: false
-    })
   }
 
   submitComment = (event: React.FormEvent<HTMLInputElement>) => {
@@ -180,9 +187,6 @@ class Item extends React.Component<ItemProps, ItemState> {
     if (currentComment) {
       dispatch(transactionActionCreators.createComment(comment, options))
     }
-    this.setState({
-      currentComment: ''
-    })
   }
 
   handleReactivate = (id: string) => {
@@ -244,7 +248,9 @@ class Item extends React.Component<ItemProps, ItemState> {
       replysInputShowing,
       currentReplyTo,
       currentReplys,
-      comments
+      comments,
+      viewAllCommentShowing,
+      commentSubmitted
     } = this.state
     const goods = transaction.goods
     const taker = transaction.taker
@@ -384,15 +390,18 @@ class Item extends React.Component<ItemProps, ItemState> {
 
             <div>
               <div className="comment">
-                <div>
-                  <span
-                    className="control-btn click"
-                    onClick={() => this.ViewAllComments()}
-                  >
-                    {i18n.t('View all comments')}
-                  </span>
-                </div>
-                {this.props.transaction.totalComment === 0 && (
+                {viewAllCommentShowing && (
+                  <div>
+                    <span
+                      className="control-btn click"
+                      onClick={() => this.ViewAllComments()}
+                    >
+                      {i18n.t('View all comments')}
+                    </span>
+                    {transaction.commentLoading && <Spin />}
+                  </div>
+                )}
+                {transaction.totalComment === 0 && (
                   <div className="release">
                     <span>{i18n.t("Let's comment on it.")}</span>
                   </div>

@@ -141,13 +141,31 @@ export function transaction(
         error: action.error
       }
     case transactionConsts.COMMENT_LIST_REQUEST:
-      return { ...state, loading: true }
+      if (state.items && action.id) {
+        let items = state.items.filter(item => item.id !== action.id)
+        let item = state.items.filter(item => item.id === action.id)[0]
+        item.commentLoading = true
+        items.push(item)
+        return {
+          ...state,
+          items: state.items.map(
+            item =>
+              item.id === action.id
+                ? {
+                    ...item,
+                    items
+                  }
+                : item
+          )
+        }
+      }
     case transactionConsts.COMMENT_LIST_SUCCESS:
       if (state.items && action.comments) {
         let items = state.items.filter(item => item.id !== action.id)
         let item = state.items.filter(item => item.id === action.id)[0]
         item.comments = action.comments
         item.totalComment = action.total
+        item.commentLoading = false
         items.push(item)
         return {
           ...state,
@@ -163,7 +181,24 @@ export function transaction(
         }
       }
     case transactionConsts.COMMENT_LIST_FAILURE:
-      return { ...state, error: action.error }
+      if (state.items && action.id) {
+        let items = state.items.filter(item => item.id !== action.id)
+        let item = state.items.filter(item => item.id === action.id)[0]
+        item.commentLoading = false
+        items.push(item)
+        return {
+          ...state,
+          items: state.items.map(
+            item =>
+              item.id === action.id
+                ? {
+                    ...item,
+                    items
+                  }
+                : item
+          )
+        }
+      }
     case transactionConsts.GET_REQUEST:
       return { ...state, loading: true }
     case transactionConsts.GET_SUCCESS:

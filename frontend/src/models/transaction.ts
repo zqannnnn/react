@@ -19,4 +19,5 @@ export class Transaction implements ListItem {
   createdAt?: string
   updatedAt?: string
   totalComment?: number
+  commentLoading?: boolean
 }
