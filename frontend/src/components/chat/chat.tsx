@@ -3,8 +3,8 @@ import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import * as socketIOClient from 'socket.io-client' //1532692062 chat
 import { AuthState } from '../../reducers'
-import { IHash } from '../../actions'
 import { UserItem } from './user-item'
+import { HashOfStringKeyHash } from '../../../../src/interfaces'
 
 //https://ant.design/components/collapse/
 //https://github.com/ant-design/ant-design/blob/master/components/collapse/demo/accordion.md
@@ -12,10 +12,10 @@ import { Collapse } from 'antd'
 import './chat.scss'
 interface ItemProps {
     auth: AuthState
-    users: IHash
+    users: HashOfStringKeyHash
 }
 interface ItemState {
-    users: IHash
+    users: HashOfStringKeyHash
 }
 class Chat extends React.Component<ItemProps, ItemState> {
 	constructor(props: ItemProps) {

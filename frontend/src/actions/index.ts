@@ -26,8 +26,6 @@ export {
   actionCreators as authActionCreators,
   Action as AuthAction,
   AuthInfo,
-  SHash,
-  IHash
 } from './auth'
 export {
   actionCreators as uploadActionCreators,
