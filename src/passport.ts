@@ -1,6 +1,15 @@
 import { PassportStatic } from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { User } from './models'
+export const UserFields = [
+        'id',
+        'userType',
+        'password',
+        'firstName',
+        'lastName',
+        'licenseStatus',
+        'preferredCurrencyCode'
+    ]
 
 export const passportConfig = (passport: PassportStatic) => {
   passport.use(
@@ -20,15 +29,7 @@ export const passportConfig = (passport: PassportStatic) => {
         process.nextTick(async function() {
           const user = await User.findOne({
             where: { email },
-            attributes: [
-              'id',
-              'userType',
-              'password',
-              'firstName',
-              'lastName',
-              'licenseStatus',
-              'preferredCurrencyCode'
-            ]
+            attributes: UserFields
           })
           if (!user) {
             return done(null, false)
