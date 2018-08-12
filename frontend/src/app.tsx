@@ -44,7 +44,6 @@ class App extends React.Component<AppProps, any> {
     })
     if (auth.loggedIn) dispatch(authActionCreators.refresh())
   }
-  
   render() {
     const { auth } = this.props
     /*
@@ -105,7 +104,7 @@ class App extends React.Component<AppProps, any> {
           </div>
         </Router>
         {/* //1532692062 chat */}
-        <Chat auth={auth} />
+        <Chat auth={auth} users={{}} />
         <Layout.Footer style={{ textAlign: 'center' }}>
           {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
         </Layout.Footer>
