@@ -16,6 +16,9 @@ interface ItemProps {
 }
 interface ItemState {
     users: HashOfStringKeyHash
+    //socket: SocketIOClient.Socket
+    socket: any
+    newMessage: any
 }
 class Chat extends React.Component<ItemProps, ItemState> {
 	constructor(props: ItemProps) {
@@ -24,7 +27,9 @@ class Chat extends React.Component<ItemProps, ItemState> {
 		//  endpoint: "http://localhost:3000" // this is where we are connecting to with sockets
         //}
         this.state = {
-            users: props.users
+            users: props.users,
+            socket: undefined,
+            newMessage: undefined
         }
 	}
     componentWillMount() {
@@ -33,32 +38,19 @@ class Chat extends React.Component<ItemProps, ItemState> {
         const that = this;
 		const socket = socketIOClient("http://localhost:3000")
 		socket.on('connect', function () {
+            that.setState({socket: socket})
 			if (authInfo !== undefined) socket.emit('get-users', authInfo)
 			socket.on('get-users', (users: any) => {
                 that.setState({users: users})
                 for (let key in users) {  
                     if (authInfo !== undefined) {
-                        if ( users[key].id != authInfo.id ) {
-                            //console.log('Send private to ' + users[key].name)
-                            //socket.emit("private", { msg: 'Hihi', to: key });
-                        }
-                        /*
-                        if ( users[key].id == authInfo.id ) {
-                            if ( users[key]['io-ids'] == undefined ) users[key]['io-ids'] = []
-                            if(users[key]['io-ids'].indexOf(key) === -1) {
-                                users[key]['io-ids'].push(key);
-                                console.log(users[key]['io-ids']);
-                            }                                                        
-                        }
-                        */
-                    }
-                    
+                        //if ( users[key].id == authInfo.id ) console.log('YOU ARE ' + key )                        
+                    }                    
                 }
+                that.setState({users: users})
             })
             socket.on("private", function(data: any) {    
-                //if (data.from )
-                //console.log('_________________on private________________')
-                //console.log(data)
+                that.setState({newMessage: data})
             })
 		});
     }
@@ -76,12 +68,11 @@ class Chat extends React.Component<ItemProps, ItemState> {
                                     Object.keys(this.state.users).map((key, index) => {
                                         return (
                                             <Panel header={this.state.users[key].name} key={key}> 
-                                                <UserItem user={this.state.users[key]} key={key} /> 
+                                                <UserItem user={this.state.users[key]} userKey={key} socket={this.state.socket} msg={this.state.newMessage} /> 
                                             </Panel>
                                         )
                                     })
-                                }
-                            
+                                }                            
 						</Collapse>
 					</div>
 				</>
