@@ -19,6 +19,7 @@ interface ItemState {
     //socket: SocketIOClient.Socket
     socket: any
     newMessage: any
+    userKey: string
 }
 class Chat extends React.Component<ItemProps, ItemState> {
 	constructor(props: ItemProps) {
@@ -29,7 +30,8 @@ class Chat extends React.Component<ItemProps, ItemState> {
         this.state = {
             users: props.users,
             socket: undefined,
-            newMessage: undefined
+            newMessage: undefined,
+            userKey: ''
         }
 	}
     componentWillMount() {
@@ -44,7 +46,10 @@ class Chat extends React.Component<ItemProps, ItemState> {
                 that.setState({users: users})
                 for (let key in users) {  
                     if (authInfo !== undefined) {
-                        //if ( users[key].id == authInfo.id ) console.log('YOU ARE ' + key )                        
+                        if ( users[key].id == authInfo.id ) {
+                            //console.log('YOU ARE ' + key )                        
+                            that.setState({userKey: key})
+                        }
                     }                    
                 }
                 that.setState({users: users})
@@ -66,11 +71,13 @@ class Chat extends React.Component<ItemProps, ItemState> {
 						<Collapse accordion>
                                 {
                                     Object.keys(this.state.users).map((key, index) => {
-                                        return (
-                                            <Panel header={this.state.users[key].name} key={key}> 
-                                                <UserItem user={this.state.users[key]} userKey={key} socket={this.state.socket} msg={this.state.newMessage} /> 
-                                            </Panel>
-                                        )
+                                        if (this.state.userKey != key) {
+                                            return (
+                                                <Panel header={this.state.users[key].name} key={key}> 
+                                                    <UserItem user={this.state.users[key]} userKey={key} socket={this.state.socket} msg={this.state.newMessage} /> 
+                                                </Panel>
+                                            )    
+                                        }
                                     })
                                 }                            
 						</Collapse>
