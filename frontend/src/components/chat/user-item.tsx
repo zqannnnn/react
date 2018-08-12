@@ -1,4 +1,3 @@
-
 //1532692062 chat
 import * as React from 'react'
 import { StringKeyHash } from '../../../../src/interfaces'
@@ -8,7 +7,7 @@ interface ItemProps {
     user: StringKeyHash
     userKey: string
     socket: any
-    msg: any
+    messages: StringKeyHash
 }
 interface ItemState {
     value: string
@@ -21,21 +20,16 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         super(props)
         this.state = {
             value: '',
-            messages: {},
+            messages: this.props.messages,
             socket: this.props.socket
         }
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
     componentWillReceiveProps(nextProps: any) {
-        const msg = nextProps.msg
-        if ( msg !== undefined ) {
-            if ( msg.from == this.props.userKey ) {
-                let messages = this.state.messages
-                const timestamp = new Date().valueOf().toString()
-                messages[timestamp] = msg
-                this.setState({ messages: messages });    
-            }
+        if ( nextProps.messages !== undefined ) {
+            const messages = Object.assign(this.state.messages, nextProps.messages);
+            this.setState({ messages: messages });    
         }
     }
     handleChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -56,11 +50,13 @@ class UserItem extends React.Component<ItemProps, ItemState> {
                 <div className='chat-log'>
                     {
                         Object.keys(this.state.messages).map((key, index) => {
-                            return (
-                                <p key={key}>
-                                    {this.state.messages[key].msg}
-                                </p>
-                            )
+                            if ( (this.state.messages[key].from == this.props.userKey) || (this.state.messages[key].to == this.props.userKey) ) {
+                                return (
+                                    <p key={key}>
+                                        {this.state.messages[key].msg}
+                                    </p>
+                                )
+                            }
                         })
                     }
                 </div>
