@@ -65,17 +65,23 @@ class Chat extends React.Component<ItemProps, ItemState> {
 	render() {
 		let { auth } = this.props
 		const { loggedIn, authInfo } = auth
+		const Panel = Collapse.Panel
         let chat: JSX.Element
         if (loggedIn) {
 			chat = (
 				<>
 					<div id="chat">
 						<Collapse accordion>
-                            {
-                                Object.keys(this.state.users).map((key, index) => {
-                                    return <UserItem user={this.state.users[key]} key={key} />
-                                })
-                            }
+                                {
+                                    Object.keys(this.state.users).map((key, index) => {
+                                        return (
+                                            <Panel header={this.state.users[key].name} key={key}> 
+                                                <UserItem user={this.state.users[key]} key={key} /> 
+                                            </Panel>
+                                        )
+                                    })
+                                }
+                            
 						</Collapse>
 					</div>
 				</>
