@@ -1,6 +1,6 @@
 //1532692062 chat
 import * as React from 'react'
-import { connect, Dispatch } from 'react-redux'
+//import { connect, Dispatch } from 'react-redux'
 import * as socketIOClient from 'socket.io-client' //1532692062 chat
 import { AuthState } from '../../reducers'
 import { UserItem } from './user-item'
