@@ -12,7 +12,7 @@ const startSocket = async (server: any) => {
         });*/
         socket.on("private", function(data) {     
             const privateMsg = { from: socket.id, to: data.to, msg: data.msg }
-            //io.to(`${data.to}`).emit('private', privateMsg );
+            io.to(`${data.to}`).emit('private', privateMsg );
 
 
             //io.sockets.sockets[data.to].emit("private", privateMsg)
