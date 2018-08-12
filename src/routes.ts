@@ -6,6 +6,7 @@ import * as qs from 'querystring'
 import { AuthInfo } from '../frontend/src/actions'
 import { consts } from './config/static'
 import { User } from './models'
+import { UserFields } from './passport'
 import {
   categoryRouter,
   currencyRouter,
@@ -59,13 +60,7 @@ export const router = (app: Application, passport: PassportStatic) => {
     if (email) {
       const user = await User.findOne({
         where: { email },
-        attributes: [
-          'id',
-          'userType',
-          'licenseStatus',
-          'preferredCurrencyCode',
-          'password'
-        ]
+        attributes: UserFields
       })
       if (user != null && user.resetKey === key) {
         const data = {

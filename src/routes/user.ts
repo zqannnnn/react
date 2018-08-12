@@ -7,6 +7,7 @@ import { app } from '../index'
 import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
 import { Image, User } from '../models'
+import { UserFields } from '../passport'
 const router = express.Router()
 router.use(authMiddleware)
 router.post('/new', async (req, res) => {
@@ -55,8 +56,8 @@ router.use(loginCheckMiddleware)
 router.get('/refresh/auth', async (req: IRequest, res: express.Response) => {
   User.findOne({
     where: { id: req.userId },
-    attributes: ['userType', 'licenseStatus', 'preferredCurrencyCode', 'email', 'firstName', 'lastName']
-  }).then(user => {
+    attributes: UserFields
+}).then(user => {
     if (!user) {
       return res
         .status(401)
