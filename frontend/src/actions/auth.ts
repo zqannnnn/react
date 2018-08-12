@@ -4,6 +4,14 @@ import { alertActionCreators } from '.'
 import { history } from '../helpers/history'
 import * as auth from '../helpers/auth'
 import { User } from '../models'
+
+//https://stackoverflow.com/questions/42211175/typescript-hashmap-dictionary-interface
+export interface SHash {
+	[details: string]: any;
+}
+export interface IHash {
+	[details: string]: SHash;
+}
 export type AuthInfo = {
     id?: string
     token?: string

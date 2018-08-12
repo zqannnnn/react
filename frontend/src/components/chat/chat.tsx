@@ -3,41 +3,81 @@ import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import * as socketIOClient from 'socket.io-client' //1532692062 chat
 import { AuthState } from '../../reducers'
+import { IHash } from '../../actions'
+import { UserItem } from './user-item'
+
 //https://ant.design/components/collapse/
 //https://github.com/ant-design/ant-design/blob/master/components/collapse/demo/accordion.md
 import { Collapse } from 'antd'
 import './chat.scss'
 interface ItemProps {
-	auth: AuthState
+    auth: AuthState
+    users: IHash
 }
-class Chat extends React.Component<ItemProps> {
+interface ItemState {
+    users: IHash
+}
+class Chat extends React.Component<ItemProps, ItemState> {
 	constructor(props: ItemProps) {
 		super(props)
 		//this.state = {
 		//  endpoint: "http://localhost:3000" // this is where we are connecting to with sockets
-		//}
+        //}
+        this.state = {
+            users: props.users
+        }
 	}
-	render() {
+    componentWillMount() {
 		let { auth } = this.props
-		const { loggedIn, authInfo } = auth
-
+		const { authInfo } = auth
+        const that = this;
 		const socket = socketIOClient("http://localhost:3000")
 		socket.on('connect', function () {
 			if (authInfo !== undefined) socket.emit('get-users', authInfo)
 			socket.on('get-users', (users: any) => {
-				//console.log(users)
-			})
+                that.setState({users: users})
+                for (let key in users) {  
+                    if (authInfo !== undefined) {
+                        if ( users[key].id != authInfo.id ) {
+                            //console.log('Send private to ' + users[key].name)
+                            //socket.emit("private", { msg: 'Hihi', to: key });
+                        }
+                        /*
+                        if ( users[key].id == authInfo.id ) {
+                            if ( users[key]['io-ids'] == undefined ) users[key]['io-ids'] = []
+                            if(users[key]['io-ids'].indexOf(key) === -1) {
+                                users[key]['io-ids'].push(key);
+                                console.log(users[key]['io-ids']);
+                            }                                                        
+                        }
+                        */
+                    }
+                    
+                }
+            })
+            socket.on("private", function(data: any) {    
+                //if (data.from )
+                //console.log('_________________on private________________')
+                //console.log(data)
+            })
 		});
-
+    }
+	render() {
+		let { auth } = this.props
+		const { loggedIn, authInfo } = auth
 		const Panel = Collapse.Panel
-		let chat: JSX.Element
-		if (loggedIn) {
+        let chat: JSX.Element
+        if (loggedIn) {
 			chat = (
 				<>
 					<div id="chat">
 						<Collapse accordion>
 							<Panel header="Chat" key="1">
-								<p>Hoi</p>
+                                {
+                                    Object.keys(this.state.users).map((key, index) => {
+                                        return <UserItem user={this.state.users[key]} />
+                                    })
+                                }
 							</Panel>
 						</Collapse>
 					</div>
