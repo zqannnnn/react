@@ -4,7 +4,7 @@ import * as React from 'react'
 import * as socketIOClient from 'socket.io-client' //1532692062 chat
 import { AuthState } from '../../reducers'
 import { UserItem } from './user-item'
-import { HashOfStringKeyHash } from '../../../../src/interfaces'
+import { HashOfStringKeyHash, StringKeyHash } from '../../../../src/interfaces'
 
 //https://ant.design/components/collapse/
 //https://github.com/ant-design/ant-design/blob/master/components/collapse/demo/accordion.md
@@ -18,8 +18,8 @@ interface ItemState {
     users: HashOfStringKeyHash
     //socket: SocketIOClient.Socket
     socket: any
-    newMessage: any
     userKey: string
+    messages: StringKeyHash
 }
 class Chat extends React.Component<ItemProps, ItemState> {
 	constructor(props: ItemProps) {
@@ -30,7 +30,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
         this.state = {
             users: props.users,
             socket: undefined,
-            newMessage: undefined,
+            messages: {},
             userKey: ''
         }
 	}
@@ -54,8 +54,11 @@ class Chat extends React.Component<ItemProps, ItemState> {
                 }
                 that.setState({users: users})
             })
-            socket.on("private", function(data: any) {    
-                that.setState({newMessage: data})
+            socket.on("private", function(msg: any) {    
+                let messages = that.state.messages
+                const timestamp = new Date().valueOf().toString()
+                messages[timestamp] = msg
+                that.setState({ messages: messages });    
             })
 		});
     }
@@ -74,7 +77,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
                                         if (this.state.userKey != key) {
                                             return (
                                                 <Panel header={this.state.users[key].name} key={key}> 
-                                                    <UserItem user={this.state.users[key]} userKey={key} socket={this.state.socket} msg={this.state.newMessage} /> 
+                                                    <UserItem user={this.state.users[key]} userKey={key} socket={this.state.socket} messages={this.state.messages} /> 
                                                 </Panel>
                                             )    
                                         }
