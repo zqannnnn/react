@@ -1,8 +1,9 @@
 //1532692062 chat
 import * as React from 'react'
-import { SHash } from '../../actions'
+import { StringKeyHash } from '../../../../src/interfaces'
+
 interface ItemProps {
-    user: SHash
+    user: StringKeyHash
 }
 class UserItem extends React.Component<ItemProps> {
 	constructor(props: ItemProps) {
