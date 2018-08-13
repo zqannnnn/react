@@ -5,6 +5,7 @@ import i18n from 'i18next'
 import * as socketIOClient from 'socket.io-client' //1532692062 chat
 import { AuthState } from '../../reducers'
 import { UserItem } from './user-item'
+import { PanelHead } from './panel-header'
 import { HashOfStringKeyHash, StringKeyHash } from '../../../../src/interfaces'
 
 //https://ant.design/components/collapse/
@@ -53,7 +54,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
                         }
                     }                    
                 }
-                that.setState({users: users})
+                //that.setState({users: users})
             })
             socket.on("private", function(msg: any) {    
                 let messages = that.state.messages
@@ -79,7 +80,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
                                             Object.keys(this.state.users).map((key, index) => {
                                                 if (this.state.userKey != key) {
                                                     return (
-                                                        <Panel header={this.state.users[key].name} key={key}> 
+                                                        <Panel header={<PanelHead user={this.state.users[key]} userKey={key} />} key={key}> 
                                                             <UserItem user={this.state.users[key]} userKey={key} socket={this.state.socket} messages={this.state.messages} /> 
                                                         </Panel>
                                                     )    
