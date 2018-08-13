@@ -1,5 +1,6 @@
 //1532692062 chat
 import * as React from 'react'
+import i18n from 'i18next'
 //import { connect, Dispatch } from 'react-redux'
 import * as socketIOClient from 'socket.io-client' //1532692062 chat
 import { AuthState } from '../../reducers'
@@ -72,17 +73,21 @@ class Chat extends React.Component<ItemProps, ItemState> {
 				<>
 					<div id="chat">
 						<Collapse accordion>
-                                {
-                                    Object.keys(this.state.users).map((key, index) => {
-                                        if (this.state.userKey != key) {
-                                            return (
-                                                <Panel header={this.state.users[key].name} key={key}> 
-                                                    <UserItem user={this.state.users[key]} userKey={key} socket={this.state.socket} messages={this.state.messages} /> 
-                                                </Panel>
-                                            )    
-                                        }
-                                    })
-                                }                            
+                            <Panel header={i18n.t('Chat')} key='chat'> 
+                                <Collapse accordion>
+                                        {
+                                            Object.keys(this.state.users).map((key, index) => {
+                                                if (this.state.userKey != key) {
+                                                    return (
+                                                        <Panel header={this.state.users[key].name} key={key}> 
+                                                            <UserItem user={this.state.users[key]} userKey={key} socket={this.state.socket} messages={this.state.messages} /> 
+                                                        </Panel>
+                                                    )    
+                                                }
+                                            })
+                                        }                            
+                                </Collapse>
+                            </Panel>
 						</Collapse>
 					</div>
 				</>

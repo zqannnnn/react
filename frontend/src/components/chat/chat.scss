@@ -3,4 +3,32 @@
     bottom: 0;
     right: 0;
     width: 300px;
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        .chat-log {
+            height: auto;
+            p {
+                border-radius: 4px;
+                padding: 4px;
+                &.incoming {
+                    background-color: #f3cd87;
+                }
+                &.outcoming {
+                    background-color: #e8e0e0;
+                    &::before { 
+                        content: "You: ";
+                    }
+                }
+            }
+        }
+        .chat-input {
+            textarea {
+                float: left;
+            }
+            input {
+                float: right;
+            }
+        }
+    }
 }

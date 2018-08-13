@@ -51,8 +51,9 @@ class UserItem extends React.Component<ItemProps, ItemState> {
                     {
                         Object.keys(this.state.messages).map((key, index) => {
                             if ( (this.state.messages[key].from == this.props.userKey) || (this.state.messages[key].to == this.props.userKey) ) {
+                                let cssClass = (this.state.messages[key].from == this.props.userKey) ? 'incoming' : 'outcoming'
                                 return (
-                                    <p key={key}>
+                                    <p key={key} className={cssClass} >
                                         {this.state.messages[key].msg}
                                     </p>
                                 )
