@@ -3,6 +3,12 @@ import { Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import i18n from 'i18next'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStroopwafel, faEnvelope, faKey, faTimes } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faStroopwafel,faEnvelope,faKey, faTimes)
+
 import { history } from './helpers/history'
 import { alertActionCreators, authActionCreators } from './actions'
 import { PrivateRoute, AdminRoute, NavBar, Lightbox, Chat } from './components'
