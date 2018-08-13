@@ -4,11 +4,17 @@
     right: 0;
     width: 300px;
     .ant-collapse-header {
+        display: flex;
+        flex-direction: column;
+        label div {
+            float: right;
+            width: 36px;            
+        }
         svg {
             float: right;
             right: 14px;
             position: relative;
-            top: 4px;            
+            top: 0px;            
         }
     }
     .chat-container {

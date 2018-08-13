@@ -3,8 +3,6 @@ import * as React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { StringKeyHash } from '../../../../src/interfaces'
 
-//import * as socketIOClient from 'socket.io-client' //1532692062 chat
-
 interface ItemProps {
     user: StringKeyHash
     userKey: string
@@ -14,35 +12,22 @@ class PanelHead extends React.Component<ItemProps> {
         super(props)
         this.state = {
         }
-        //this.handleChange = this.handleChange.bind(this)
-        //this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleClick = this.handleClick.bind(this)
     }
-    /*
-    componentWillReceiveProps(nextProps: any) {
-        if ( nextProps.messages !== undefined ) {
-        }
-    }
-    handleChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
-        this.setState({ value: event.target.value });
-    }
-    handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-        const msg = { msg: this.state.value, to: this.props.userKey }
-        if (this.state.socket !== undefined) this.state.socket.emit("private", msg);
-        let messages = this.state.messages
-        const timestamp = new Date().valueOf().toString()
-        messages[timestamp] = msg
-        this.setState({ messages: messages, value: '' });
-    }
-    */
+    handleClick(event: React.FormEvent<HTMLDivElement>) {
+        event.preventDefault()
+        event.stopPropagation()
+        console.log('The link was clicked.');
+    }   
     render() {
         return (
             <label className='user-header'>
                 {this.props.user.name}
-                <FontAwesomeIcon icon="times" />
+                <div  onClick={this.handleClick}>
+                    <FontAwesomeIcon icon="times" />
+                </div>
             </label>
         )
-
     }
 }
 
