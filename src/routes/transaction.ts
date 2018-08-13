@@ -214,6 +214,12 @@ router.get('/list/comment', async (req: IRequest, res: express.Response) => {
       where: {
         transactionId
       },
+      include: [
+        {
+          model: User,
+          attributes: ['firstName', 'lastName']
+        }
+      ],
       ...pageOption,
       order: [orderOption]
     })
@@ -231,6 +237,11 @@ router.post('/comment', async (req: IRequest, res: express.Response) => {
     })
     await comment.save()
 
+    if (!comment.replyTo) {
+      comment.rootId = comment.id
+      await comment.save()
+    }
+
     const page = Number(req.query.page)
     const pageSize = Number(req.query.pageSize)
     const transactionId = comment.transactionId
@@ -247,6 +258,12 @@ router.post('/comment', async (req: IRequest, res: express.Response) => {
       where: {
         transactionId
       },
+      include: [
+        {
+          model: User,
+          attributes: ['firstName', 'lastName']
+        }
+      ],
       ...pageOption,
       order: [orderOption]
     })

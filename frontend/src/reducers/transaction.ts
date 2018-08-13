@@ -7,8 +7,25 @@ export type State = {
   error?: string
   transData?: Transaction
   items?: Array<Transaction>
-  replys?: Array<Comment>
+  rowComments?: Array<Comment>
   total?: number
+}
+const commentReduce = (comments: Comment[]): Comment[] => {
+  let firstLevel = comments.filter(comment => !comment.replyTo)
+  let restComments = comments.filter(comment => comment.replyTo)
+  if (restComments.length === 0) {
+    return comments
+  } else {
+    restComments.forEach(comment => {
+      firstLevel.forEach(firstComment => {
+        if (comment.rootId === firstComment.id) {
+          if (firstComment.replys) firstComment.replys.push(comment)
+          else firstComment.replys = [comment]
+        }
+      })
+    })
+    return firstLevel
+  }
 }
 export function transaction(
   state: State = {},
@@ -116,13 +133,15 @@ export function transaction(
       }
     case transactionConsts.COMMENT_CREATE_SUCCESS:
       if (state.items && action.comments) {
+        let comments = commentReduce(action.comments)
         let items = state.items.filter(item => item.id !== action.id)
         let item = state.items.filter(item => item.id === action.id)[0]
-        item.comments = action.comments
+        item.comments = comments
         item.totalComment = action.total
         items.push(item)
         return {
           ...state,
+          rowComments: action.comments,
           items: state.items.map(
             item =>
               item.id === action.id
@@ -161,14 +180,16 @@ export function transaction(
       }
     case transactionConsts.COMMENT_LIST_SUCCESS:
       if (state.items && action.comments) {
+        let comments = commentReduce(action.comments)
         let items = state.items.filter(item => item.id !== action.id)
         let item = state.items.filter(item => item.id === action.id)[0]
-        item.comments = action.comments
+        item.comments = comments
         item.totalComment = action.total
         item.commentLoading = false
         items.push(item)
         return {
           ...state,
+          rowComments: action.comments,
           items: state.items.map(
             item =>
               item.id === action.id

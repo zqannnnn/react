@@ -49,6 +49,10 @@ export class Comment extends Model<Comment> {
   @BelongsTo(() => Comment)
   public replyToComment: Comment
 
+  @ForeignKey(() => Comment)
+  @Column({ field: 'root_id' })
+  public rootId: string
+
   @CreatedAt
   @Column({ field: 'created_at' })
   public createdAt: Date

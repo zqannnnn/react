@@ -17,12 +17,13 @@ interface ItemProps {
   dispatch: Dispatch<RootState>
   transaction: Transaction
   authInfo: AuthInfo
+  rowComments: Comment[]
 }
 interface ItemState {
   currentComment: string
-  currentReply?: string
+  currentReply: string
   currentReplyTo?: string
-  currentReplys?: string
+  currentReplyRoot?: string
   replyInputShowing: boolean
   replysInputShowing: boolean
   viewAllCommentShowing: boolean
@@ -37,6 +38,7 @@ class Item extends React.Component<ItemProps, ItemState> {
   }
   defaultState = {
     currentComment: '',
+    currentReply: '',
     replyInputShowing: false,
     replysInputShowing: false,
     comments: this.props.transaction.comments,
@@ -105,21 +107,16 @@ class Item extends React.Component<ItemProps, ItemState> {
   }
 
   handleReply = (replyTo?: string) => {
-    if (replyTo) {
+    const { rowComments } = this.props
+    if (replyTo && rowComments) {
+      const lastComment = rowComments.filter(
+        comment => comment.id === replyTo
+      )[0]
       this.setState({
         currentReplyTo: replyTo,
+        currentReplyRoot: lastComment.rootId,
         replyInputShowing: true,
         replysInputShowing: false
-      })
-    }
-  }
-
-  handleReplys = (replys?: string) => {
-    if (replys) {
-      this.setState({
-        currentReplys: replys,
-        replyInputShowing: false,
-        replysInputShowing: true
       })
     }
   }
@@ -138,8 +135,7 @@ class Item extends React.Component<ItemProps, ItemState> {
     const options = this.state.options
     options.page = current
     options.pageSize = defaultPageSize
-    this.setState({ options })
-    this.setState({ commentSubmitted: true })
+    this.setState({ options, commentSubmitted: true })
     this.props.dispatch(
       transactionActionCreators.listComment(transaction.id, {
         ...options
@@ -149,8 +145,8 @@ class Item extends React.Component<ItemProps, ItemState> {
 
   componentWillReceiveProps(nextProps: ItemProps) {
     const { transaction } = nextProps
-    const { commentSubmitted } = this.state
-    if (!commentSubmitted) {
+    const { commentSubmitted, viewAllCommentShowing } = this.state
+    if (!commentSubmitted && viewAllCommentShowing) {
       this.setState({
         ...this.defaultState,
         comments: transaction.comments
@@ -158,35 +154,33 @@ class Item extends React.Component<ItemProps, ItemState> {
     } else {
       this.setState({
         comments: transaction.comments,
-        commentSubmitted: false
+        commentSubmitted: false,
+        currentComment: '',
+        currentReply: ''
       })
     }
   }
 
-  submitReply = (event: React.FormEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    let { currentReply, currentReplyTo } = this.state
-    const { dispatch, transaction } = this.props
-    const reply: Comment = {
-      content: currentReply,
-      replyTo: currentReplyTo,
-      transactionId: transaction.id
-    }
-    dispatch(transactionActionCreators.createComment(reply))
-  }
-
   submitComment = (event: React.FormEvent<HTMLInputElement>) => {
     event.preventDefault()
-    let { currentComment } = this.state
+    let {
+      currentComment,
+      currentReply,
+      currentReplyTo,
+      currentReplyRoot
+    } = this.state
     const { dispatch, transaction } = this.props
     const { options } = this.state
-    const comment: Comment = {
-      content: currentComment,
+    let comment: Comment
+    comment = {
+      content: currentReplyTo ? currentReply : currentComment,
+      replyTo: currentReplyTo,
+      rootId: currentReplyRoot,
       transactionId: transaction.id
     }
-    if (currentComment) {
-      dispatch(transactionActionCreators.createComment(comment, options))
-    }
+
+    this.setState({ viewAllCommentShowing: false })
+    dispatch(transactionActionCreators.createComment(comment, options))
   }
 
   handleReactivate = (id: string) => {
@@ -239,6 +233,71 @@ class Item extends React.Component<ItemProps, ItemState> {
     }
     return finalStatus
   }
+  renderComment = (comment: Comment) => {
+    const {
+      currentComment,
+      replyInputShowing,
+      currentReplyTo,
+      currentReplyRoot,
+      currentReply
+    } = this.state
+    return (
+      <div key={comment.id} className="reply-wrapper">
+        <div className="reply">
+          <div className="avatar">
+            <Avatar icon="user" />
+          </div>
+          <div className="main-comment">
+            <span className="userid click">
+              {comment.user && comment.user.firstName} {i18n.t('reply to')}{' '}
+              {comment.user && comment.user.firstName}
+            </span>
+            <span className="reply-content">{comment.content}</span>
+          </div>
+          <div className="features">
+            <span className="click">{i18n.t('praise')}</span>
+            <span
+              className="click"
+              onClick={() => {
+                this.handleReply(comment.id)
+              }}
+            >
+              {i18n.t('reply')}
+            </span>
+            <span className="click">
+              {comment.createdAt && this.formatTime(comment.createdAt)}
+            </span>
+          </div>
+        </div>
+        {replyInputShowing &&
+          currentReplyTo === comment.id && (
+            <Input
+              className="reply-input"
+              autoFocus
+              placeholder="reply..."
+              type="text"
+              name="replyTo"
+              onPressEnter={this.submitComment}
+              value={currentReply}
+              onChange={this.handleReplyInputChange}
+              style={{
+                paddingTop: 5,
+                paddingBottom: 5
+              }}
+              suffix={
+                <Icon
+                  type="enter"
+                  style={{ color: 'rgba(0,0,0,.25)' }}
+                  onClick={this.submitComment}
+                  className="icon-click"
+                />
+              }
+              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+            />
+          )}
+      </div>
+    )
+  }
   render() {
     const { transaction, authInfo } = this.props
     const {
@@ -247,10 +306,9 @@ class Item extends React.Component<ItemProps, ItemState> {
       replyInputShowing,
       replysInputShowing,
       currentReplyTo,
-      currentReplys,
       comments,
       viewAllCommentShowing,
-      commentSubmitted
+      currentReplyRoot
     } = this.state
     const goods = transaction.goods
     const taker = transaction.taker
@@ -401,11 +459,13 @@ class Item extends React.Component<ItemProps, ItemState> {
                     {transaction.commentLoading && <Spin />}
                   </div>
                 )}
+
                 {transaction.totalComment === 0 && (
                   <div className="release">
                     <span>{i18n.t("Let's comment on it.")}</span>
                   </div>
                 )}
+
                 {comments &&
                   comments.map((comment, index) => (
                     <div key={index} className="comment-wrapper">
@@ -414,7 +474,9 @@ class Item extends React.Component<ItemProps, ItemState> {
                           <Avatar icon="user" />
                         </div>
                         <div className="main-comment">
-                          <span className="userid click">{comment.userId}</span>
+                          <span className="userid click">
+                            {comment.user && comment.user.firstName}
+                          </span>
                           <span className="comment-content">
                             {comment.content}
                           </span>
@@ -424,7 +486,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                           <span
                             className="click"
                             onClick={() => {
-                              if (comment.id) this.handleReply(comment.id)
+                              this.handleReply(comment.id)
                             }}
                           >
                             {i18n.t('reply')}
@@ -436,75 +498,6 @@ class Item extends React.Component<ItemProps, ItemState> {
                         </div>
                       </div>
 
-                      {comment.replys &&
-                        comment.replys.map((replys, index) => (
-                          <div key={index} className="reply-wrapper">
-                            <div className="reply">
-                              <div className="avatar">
-                                <Avatar icon="user" />
-                              </div>
-                              <div className="main-comment">
-                                <span className="userid click">
-                                  {replys.userId}
-                                </span>
-                                <span className="reply-content">
-                                  {replys.content}
-                                </span>
-                              </div>
-                              <div className="features">
-                                <span className="click">
-                                  {i18n.t('praise')}
-                                </span>
-                                <span
-                                  className="click"
-                                  onClick={() => {
-                                    if (replys.id) {
-                                      this.handleReplys(replys.id)
-                                    }
-                                  }}
-                                >
-                                  {i18n.t('reply')}
-                                </span>
-                                <span className="click">
-                                  {comment.createdAt &&
-                                    this.formatTime(comment.createdAt)}
-                                </span>
-                              </div>
-                            </div>
-                            {replysInputShowing &&
-                              currentReplys === replys.id && (
-                                <Input
-                                  className="reply-input"
-                                  autoFocus
-                                  placeholder="reply..."
-                                  type="text"
-                                  name="replyTo"
-                                  onPressEnter={this.submitReply}
-                                  value={currentReply}
-                                  onChange={this.handleReplyInputChange}
-                                  style={{
-                                    paddingTop: 5,
-                                    paddingBottom: 5
-                                  }}
-                                  suffix={
-                                    <Icon
-                                      type="enter"
-                                      style={{ color: 'rgba(0,0,0,.25)' }}
-                                      onClick={this.submitReply}
-                                      className="icon-click"
-                                    />
-                                  }
-                                  prefix={
-                                    <Icon
-                                      type="user"
-                                      style={{ color: 'rgba(0,0,0,.25)' }}
-                                    />
-                                  }
-                                />
-                              )}
-                          </div>
-                        ))}
-
                       {replyInputShowing &&
                         currentReplyTo === comment.id && (
                           <div>
@@ -514,7 +507,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                               placeholder="reply..."
                               type="text"
                               name="replyTo"
-                              onPressEnter={this.submitReply}
+                              onPressEnter={this.submitComment}
                               value={currentReply}
                               onChange={this.handleReplyInputChange}
                               style={{ paddingTop: 5, paddingBottom: 5 }}
@@ -522,7 +515,7 @@ class Item extends React.Component<ItemProps, ItemState> {
                                 <Icon
                                   type="enter"
                                   style={{ color: 'rgba(0,0,0,.25)' }}
-                                  onClick={this.submitReply}
+                                  onClick={this.submitComment}
                                   className="icon-click"
                                 />
                               }
@@ -535,6 +528,9 @@ class Item extends React.Component<ItemProps, ItemState> {
                             />
                           </div>
                         )}
+
+                      {comment.replys &&
+                        comment.replys.map(reply => this.renderComment(reply))}
                     </div>
                   ))}
 
@@ -585,8 +581,8 @@ class Item extends React.Component<ItemProps, ItemState> {
 }
 
 function mapStateToProps(state: RootState) {
-  const { auth } = state
-  return { authInfo: auth.authInfo }
+  const { auth, transaction } = state
+  return { authInfo: auth.authInfo, rowComments: transaction.rowComments }
 }
 
 const connectedTransactionItem = connect(mapStateToProps)(Item)

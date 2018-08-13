@@ -150,11 +150,9 @@
 }
 .comment .comment-wrapper .speak .main-comment {
     display: inline-block;
-    width: 80%;
 }
 .comment .comment-wrapper .reply .main-comment {
     display: inline-block;
-    width: 75%;
 }
 .reply {
     padding-left: 15%;
@@ -167,7 +165,7 @@
 .reply .main-comment {
     background-color: #eff1f3;
     border-radius: 20px;
-    line-height: 20px;
+    line-height: 32px;
     font-size: 14px;
     padding: 0 12px;
 }
@@ -198,7 +196,7 @@
     cursor: pointer;
 }
 .avatar,
-.speak {
+ {
     float: left;
 }
 .avatar {
