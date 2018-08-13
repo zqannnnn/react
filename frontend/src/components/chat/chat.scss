@@ -3,6 +3,14 @@
     bottom: 0;
     right: 0;
     width: 300px;
+    .ant-collapse-header {
+        svg {
+            float: right;
+            right: 14px;
+            position: relative;
+            top: 4px;            
+        }
+    }
     .chat-container {
         display: flex;
         flex-direction: column;

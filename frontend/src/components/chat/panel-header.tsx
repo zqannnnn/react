@@ -1,6 +1,8 @@
 //1532692062 chat
 import * as React from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { StringKeyHash } from '../../../../src/interfaces'
+
 //import * as socketIOClient from 'socket.io-client' //1532692062 chat
 
 interface ItemProps {
@@ -37,6 +39,7 @@ class PanelHead extends React.Component<ItemProps> {
         return (
             <label className='user-header'>
                 {this.props.user.name}
+                <FontAwesomeIcon icon="times" />
             </label>
         )
 
