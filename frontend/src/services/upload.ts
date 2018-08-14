@@ -5,7 +5,7 @@ export const uploadService = {
 }
 function uploadImage(file: File) {
   const formData = new FormData()
-  formData.append('image', file)
+  formData.append('file', file)
   const requestOptions = {
     method: 'POST',
     headers: {

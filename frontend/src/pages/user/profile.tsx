@@ -1,39 +1,66 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import {
   userActionCreators,
   AuthInfo,
   currencyActionCreators,
-  uploadActionCreators,
   lightboxActionCreators,
   authActionCreators
 } from '../../actions'
 import { RootState, UserState, UploadState } from '../../reducers'
 import { User, Currency, Image } from '../../models'
-import { authConsts } from '../../constants'
-import { Row, Col, Input, Select, Button, Icon, Upload } from 'antd'
-import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface'
+import { Row, Col, Select } from 'antd'
+import { UploadFile } from 'antd/lib/upload/interface'
 import i18n from 'i18next'
+import { UserForm, UserValuesProps } from '../../components/form/personal-modal'
+import {
+  CompanyForm,
+  CompanyValuesProps
+} from '../../components/form/company-modal'
 
 interface ProfileProps {
   dispatch: Dispatch<RootState>
   userState: UserState
   authInfo: AuthInfo
   currencys: Currency[]
+  curencyCode: Currency
   upload: UploadState
 }
 interface ProfileState {
   user: User
-  submitted: boolean
+  userSelf: boolean
+  personalVisible: boolean
+  modalVisible: boolean
 }
 class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   constructor(props: ProfileProps) {
     super(props)
     this.state = {
       user: {},
-      submitted: false
+      userSelf: true,
+      personalVisible: false,
+      modalVisible: false
     }
+  }
+  showPersonalModal = () => {
+    this.setState({
+      personalVisible: true
+    })
+  }
+  showCompanyModal = () => {
+    this.setState({
+      modalVisible: true
+    })
+  }
+  hideCompanyModal = () => {
+    this.setState({
+      modalVisible: false
+    })
+  }
+  hidePersonalModal = () => {
+    this.setState({
+      personalVisible: false
+    })
   }
   componentDidMount() {
     this.props.authInfo.id &&
@@ -45,52 +72,16 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     const { userState, upload } = nextProps
     const { userData } = userState
     const { image } = upload
-    const { submitted, user } = this.state
-    if (userData && !submitted) {
+    const { authInfo } = this.props
+    const { user } = this.state
+    if (userData) {
       this.setState({
         user: {
           ...userData,
           ...user
-        }
+        },
+        userSelf: userData.id === authInfo.id
       })
-    }
-    if (image) {
-      if (user.businessLicenses) {
-        this.setState({
-          user: {
-            ...user,
-            businessLicenses: [...user.businessLicenses, { path: image }]
-          }
-        })
-      } else {
-        this.setState({
-          user: {
-            ...user,
-            businessLicenses: [{ path: image }]
-          }
-        })
-      }
-      this.props.dispatch(uploadActionCreators.clear())
-    }
-  }
-  handleUpload = (uploadFile: UploadFile) => {
-    let license = uploadFile.originFileObj
-    this.props.dispatch(uploadActionCreators.uploadImage(license))
-  }
-  handleDeleteImage = (uploadFile: UploadFile) => {
-    const { user } = this.state
-    const { businessLicenses } = user
-    const uid = uploadFile.uid
-    if (businessLicenses) {
-      let newBusinessLicenses = businessLicenses.filter(
-        (image: Image, index: number) => {
-          return uid != index
-        }
-      )
-      this.setState({
-        user: { ...user, businessLicenses: newBusinessLicenses }
-      })
-      return true
     }
   }
   handleChange = (event: React.FormEvent<HTMLInputElement>) => {
@@ -113,23 +104,36 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     })
     this.props.dispatch(currencyActionCreators.upCurrencystatus(value))
   }
-  handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  personalSubmit = (values: UserValuesProps) => {
+    const { user } = this.state
     const { dispatch } = this.props
-    this.setState({ submitted: true })
-    let user = this.state.user
-    if (user.firstName && user.lastName && user.email) {
-      if (user.companyName) {
-        user.licenseStatus = authConsts.LICENSE_STATUS_UNCONFIRMED
-      }
-      dispatch(userActionCreators.update(user))
+    let newUser = {
+      ...user,
+      firstName: values.firstName,
+      email: values.email,
+      lastName: values.lastName
     }
-    window.scrollTo(0, 0)
-    setTimeout(() => dispatch(authActionCreators.refresh()), 1000)
+    dispatch(userActionCreators.update(newUser))
+    this.setState({ user: newUser })
+  }
+  companySubmit = (values: CompanyValuesProps, fileList: UploadFile[]) => {
+    const { user } = this.state
+    const { dispatch } = this.props
+    let businessLicenses: Image[] = []
+    fileList.forEach((file: any) => businessLicenses.push({ path: file.url }))
+    let newUser = {
+      ...user,
+      companyName: values.companyName,
+      companyAddress: values.companyAddress,
+      businessLicenses
+    }
+    dispatch(userActionCreators.update(newUser))
+    this.setState({ user: newUser })
   }
   //for render select input
-  renderCurrencySelect = (optionItems: Currency[]) => {
+  renderCurrencySelect = () => {
     let preferCurrency = this.state.user.preferredCurrencyCode || ''
+    const { currencys } = this.props
     return (
       <Select
         value={String(preferCurrency)}
@@ -137,159 +141,144 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
           this.handleSelect(value, 'preferredCurrencyCode')
         }
       >
-        {optionItems.map((item, index) => (
-          <Select.Option key={index} value={item.code}>
-            {item.code}({item.description})
-          </Select.Option>
-        ))}
+        {currencys &&
+          currencys.map((item, index) => (
+            <Select.Option key={index} value={item.code}>
+              {item.code}({item.description})
+            </Select.Option>
+          ))}
       </Select>
     )
   }
   handlePreview = (file: UploadFile) => {
-    file.url && this.openLightbox([file.url], 0)
+    file.url && this.openLightbox(file.url)
   }
 
-  openLightbox = (images: string[], index: number) => {
-    this.props.dispatch(lightboxActionCreators.open(images, index))
-  }
-
-  customRequest = () => {
-    return false
+  openLightbox = (image: string) => {
+    this.props.dispatch(lightboxActionCreators.open(image))
   }
 
   render() {
-    const { userState, currencys } = this.props
-    const { processing } = userState
-    const { user, submitted } = this.state
-    let licenseList: UploadFile[]
-    if (user.businessLicenses) {
-      licenseList = user.businessLicenses.map(
-        (license, index): UploadFile => ({
-          url: license.path,
-          name: '',
-          uid: index,
-          size: 200,
-          type: 'done'
-        })
-      )
+    const { user, userSelf } = this.state
+    let imagePaths: string[]
+    if (user && user.businessLicenses) {
+      imagePaths = user.businessLicenses.map(image => image.path)
     } else {
-      licenseList = []
+      imagePaths = []
     }
     return (
-      <Row className="profile-page page">
-        <Col
-          xs={{ span: 22, offset: 1 }}
-          sm={{ span: 16, offset: 4 }}
-          md={{ span: 12, offset: 6 }}
-          lg={{ span: 10, offset: 7 }}
-        >
-          <div className="header-center">{i18n.t('User Profile')}</div>
-          <div className="subtitle">{i18n.t('Personal Information')}</div>
-          <form name="form" onSubmit={this.handleSubmit}>
-            <div className={submitted && !user.firstName ? ' has-error' : ''}>
-              <label>{i18n.t('First Name')}</label>
-              <Input
-                type="text"
-                name="firstName"
-                value={user.firstName || ''}
-                onChange={this.handleChange}
-              />{' '}
-              {submitted &&
-                !user.firstName && (
-                  <div className="invalid-feedback">
-                    {i18n.t('First Name is required')}
-                  </div>
-                )}
-            </div>
-            <div className={submitted && !user.lastName ? ' has-error' : ''}>
-              <label>{i18n.t('Last Name')}</label>
-              <Input
-                type="text"
-                name="lastName"
-                value={user.lastName || ''}
-                onChange={this.handleChange}
-              />{' '}
-              {submitted &&
-                !user.lastName && (
-                  <div className="invalid-feedback">
-                    {i18n.t('Last Name is required')}
-                  </div>
-                )}
-            </div>
-            <div>
-              <label>{i18n.t('Email')}</label>
-              <Input
-                type="text"
-                name="email"
-                value={user.email || ''}
-                disabled={true}
-              />
-            </div>
-            <div>
-              <label>{i18n.t('Preferred Currency')}</label>
-              {currencys && this.renderCurrencySelect(currencys)}
-            </div>
-            <div className="subtitle">{i18n.t('Company Information')}</div>
-            {user.licenseStatus !== authConsts.LICENSE_STATUS_CONFIRMED && (
-              <div className="tips">
-                {i18n.t('Please fulfill company information for adding offer')}
-              </div>
-            )}
-            <div>
-              <label>{i18n.t('Company Name')}</label>
-              <Input
-                type="text"
-                name="companyName"
-                value={user.companyName || ''}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div>
-              <label>{i18n.t('Company Address')}</label>
-              <Input
-                type="text"
-                name="companyAddress"
-                value={user.companyAddress || ''}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div>
-              <div>
-                <label>{i18n.t('Business License')}</label>
-                <div className="upload-profile clearfix">
-                  <Upload
-                    listType="picture-card"
-                    fileList={licenseList}
-                    accept="image/*"
-                    customRequest={this.customRequest}
-                    onChange={(file: UploadChangeParam) =>
-                      this.handleUpload(file.file)
-                    }
-                    onPreview={this.handlePreview}
-                    onRemove={this.handleDeleteImage}
-                  >
-                    <div>
-                      <Icon type="plus" />
-                      <div className="ant-upload-text">{i18n.t('Upload')}</div>
-                    </div>
-                  </Upload>
-                </div>
-              </div>
-            </div>
-            <div>
-              <Button
-                htmlType="submit"
-                type="primary"
-                className="button-margin"
+      <Row type="flex" justify="space-around" align="middle">
+        <Col span={20}>
+          <h2 className="header-center">{i18n.t('User Profile')}</h2>
+          <div className="subtitle">
+            {i18n.t('Personal Information')}
+            <span className={userSelf ? 'edit' : 'none'}>
+              <a onClick={this.showPersonalModal}>{i18n.t('Edit')}</a>
+            </span>
+            <UserForm
+              handleSubmit={this.personalSubmit}
+              user={user}
+              visible={this.state.personalVisible}
+              handleCancel={this.hidePersonalModal}
+              renderCurrencySelect={this.renderCurrencySelect}
+            />
+          </div>
+          <div className="view-content">
+            <Row>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 17, offset: 5 }}
               >
-                {i18n.t('Submit')}
-              </Button>
-              {processing && <Icon type="loading" />}
-              <Button>
-                <Link to="/">{i18n.t('Cancel')}</Link>
-              </Button>
-            </div>
-          </form>
+                <label>{i18n.t('Name')}:</label>
+                <div className="message">
+                  {user.firstName} {user.lastName}
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 17, offset: 5 }}
+              >
+                <label>{i18n.t('Email')}:</label>
+                <div className="message">{user.email}</div>
+              </Col>
+            </Row>
+            <Row className={userSelf ? '' : 'none'}>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 17, offset: 5 }}
+              >
+                <label>{i18n.t('Preferred Currency')}</label>
+                <div className={userSelf ? 'message' : 'none'}>
+                  {user.preferredCurrencyCode}
+                </div>
+              </Col>
+            </Row>
+          </div>
+          <div className="subtitle">
+            {i18n.t('Company Information')}
+            <span className={userSelf ? ' edit' : 'none'}>
+              <a onClick={this.showCompanyModal}>{i18n.t('Edit')}</a>
+            </span>
+
+            <CompanyForm
+              handleSubmit={this.companySubmit}
+              user={user}
+              modalVisible={this.state.modalVisible}
+              handleCancel={this.hideCompanyModal}
+              handlePreview={this.handlePreview}
+            />
+          </div>
+          <div className="view-content">
+            <Row>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 17, offset: 5 }}
+              >
+                <label>{i18n.t('Company Name')}:</label>
+                <div className="message">{user.companyName}</div>
+              </Col>
+            </Row>
+            <Row>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 17, offset: 5 }}
+              >
+                <label>{i18n.t('Company Address')}:</label>
+                <div className="message">{user.companyAddress}</div>
+              </Col>
+            </Row>
+            <Row>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 17, offset: 5 }}
+              >
+                <label>{i18n.t('Business License')}:</label>
+                <div className="image-wr">
+                  {imagePaths && (
+                    <div className="images-container">
+                      {imagePaths.map((image, index) => (
+                        <div key={index} className="image-wrapper">
+                          <img
+                            className="image cursor-pointer"
+                            onClick={() => this.openLightbox(imagePaths[index])}
+                            src={image}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Col>
+            </Row>
+          </div>
         </Col>
       </Row>
     )
@@ -305,6 +294,5 @@ function mapStateToProps(state: RootState) {
     upload
   }
 }
-
 const connectedProfilePage = connect(mapStateToProps)(ProfilePage)
 export { connectedProfilePage as ProfilePage }
