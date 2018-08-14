@@ -76,9 +76,8 @@ const initialState: RootState = {
     ]
   },
   lightbox: {
-    showing: false,
-    images: [],
-    currentIdx: 0
+    visible: false,
+    image: ''
   },
   transaction: {
     items: [

@@ -178,8 +178,8 @@ class EditPage extends React.Component<TransProps, TransState> {
     }
     window.scrollTo(0, 0)
   }
-  openLightbox = (images: string[], index: number) => {
-    this.props.dispatch(lightboxActionCreators.open(images, index))
+  openLightbox = (image: string) => {
+    this.props.dispatch(lightboxActionCreators.open(image))
   }
 
   //for render select input
@@ -249,7 +249,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                                 <img
                                   className="image cursor-pointer"
                                   onClick={() =>
-                                    this.openLightbox(imagePaths, index)
+                                    this.openLightbox(imagePaths[index])
                                   }
                                   src={image}
                                 />

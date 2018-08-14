@@ -161,7 +161,7 @@ router
           imageDb.save()
         })
       }
-      return res.send({ success: true })
+      return res.send(user)
     } catch (e) {
       return res.status(500).send({ error: e.message })
     }

@@ -449,11 +449,17 @@ html {
   color: black;
   text-align: center;
 }
-.profile-page .subtitle {
+.subtitle {
   font: 17px bold;
-  margin: 6px 0;
+  margin: 6px 112px;
   color: black;
   margin-top: 20px;
+}
+.edit {
+  margin-left: 20px;
+}
+.none {
+  display: none;
 }
 .profile-page .tips {
   font-size: 14px;
@@ -557,4 +563,15 @@ html {
 .ant-layout-sider-zero-width-trigger {
   top: 0px;
   z-index: 1;
+}
+.Name {
+  font-size: 20px;
+  font-weight: 800;
+  margin-right: 20px;
+}
+.ant-modal-wrap {
+  z-index: 0;
+}
+.ant-modal-mask {
+  z-index: 0;
 }

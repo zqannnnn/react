@@ -30,8 +30,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
     goodsId && this.props.dispatch(goodsActionCreators.getById(goodsId))
   }
 
-  openLightbox = (images: string[], index: number) => {
-    this.props.dispatch(lightboxActionCreators.open(images, index))
+  openLightbox = (image: string) => {
+    this.props.dispatch(lightboxActionCreators.open(image))
   }
 
   render() {
@@ -279,7 +279,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                               <img
                                 className="image cursor-pointer"
                                 onClick={() =>
-                                  this.openLightbox(imagePaths, index)
+                                  this.openLightbox(imagePaths[index])
                                 }
                                 src={image}
                               />

@@ -238,12 +238,12 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       return true
     }
   }
-  openLightbox = (images: string[], index: number) => {
-    this.props.dispatch(lightboxActionCreators.open(images, index))
+  openLightbox = (image: string) => {
+    this.props.dispatch(lightboxActionCreators.open(image))
   }
 
   handlePreview = (file: UploadFile) => {
-    file.url && this.openLightbox([file.url], 0)
+    file.url && this.openLightbox(file.url)
   }
   //for render select input
   renderSelect(optionItems: Array<string>, field: keyof Goods) {

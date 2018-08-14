@@ -56,7 +56,7 @@ class App extends React.Component<AppProps, any> {
       <Router history={history}>
         <Layout>
           <NavBar mobileBreakPoint={768} placement="bottomLeft" />
-          {lightbox.showing && <Lightbox />}
+          <Lightbox />
           <Layout>
             <Layout.Content className="page-wr">
               {alert.message && (

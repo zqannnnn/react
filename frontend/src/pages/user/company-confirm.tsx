@@ -32,8 +32,8 @@ class ConfirmPage extends React.Component<ConfirmProps> {
   handleDisconfirm = (id: string) => {
     this.props.dispatch(adminActionCreators.disconfirm(id))
   }
-  openLightbox = (images: string[], index: number) => {
-    this.props.dispatch(lightboxActionCreators.open(images, index))
+  openLightbox = (image: string) => {
+    this.props.dispatch(lightboxActionCreators.open(image))
   }
   render() {
     const { comfirmingCompany, loading, processing } = this.props
@@ -75,7 +75,7 @@ class ConfirmPage extends React.Component<ConfirmProps> {
                     <div key={index} className="image-wrapper">
                       <img
                         className="image cursor-pointer"
-                        onClick={() => this.openLightbox(licensePaths, index)}
+                        onClick={() => this.openLightbox(licensePaths[index])}
                         src={image}
                       />
                     </div>

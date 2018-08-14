@@ -9,7 +9,7 @@
     "format": "prettier --write ./**/*.{js,ts,tsx,json,scss}",
     "tslint": "tslint src/**/*.ts --fix",
     "run": "ts-node src/index",
-    "watch": "nodemon -e js,ts,jsx -w src/ -w frontend/ -x ts-node src/index",
+    "watch": "nodemon -e js,ts,tsx -w src/ -w frontend/ -x ts-node src/index",
     "test": "jest"
   },
   "jest": {
