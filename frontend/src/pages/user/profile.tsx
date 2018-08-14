@@ -4,8 +4,7 @@ import {
   userActionCreators,
   AuthInfo,
   currencyActionCreators,
-  lightboxActionCreators,
-  authActionCreators
+  lightboxActionCreators
 } from '../../actions'
 import { RootState, UserState } from '../../reducers'
 import { User, Currency, Image } from '../../models'
@@ -24,10 +23,6 @@ interface ProfileProps {
   authInfo: AuthInfo
   currencys: Currency[]
   curencyCode: Currency
-<<<<<<< HEAD
-=======
-  upload: UploadState
->>>>>>> 25317d0627b9dc6cde9c9ff88e3aa48c4ca0391a
 }
 interface ProfileState {
   user: User
@@ -74,10 +69,6 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   componentWillReceiveProps(nextProps: ProfileProps) {
     const { userState } = nextProps
     const { userData } = userState
-<<<<<<< HEAD
-=======
-    const { image } = upload
->>>>>>> 25317d0627b9dc6cde9c9ff88e3aa48c4ca0391a
     const { authInfo } = this.props
     const { user } = this.state
     if (userData) {

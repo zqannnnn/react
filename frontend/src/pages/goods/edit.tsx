@@ -85,7 +85,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
     goodsId && this.props.dispatch(goodsActionCreators.getById(goodsId))
   }
   componentWillReceiveProps(nextProps: GoodsProps) {
-    const { goodsProp, categorys } = nextProps
+    const { goodsProp } = nextProps
     const { submitted, goodsId, goods } = this.state
     if (goodsId && goodsProp && !submitted) {
       this.setState({
@@ -210,40 +210,6 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
     }
     window.scrollTo(0, 0)
   }
-<<<<<<< HEAD
-=======
-  handleDeleteImage = (uploadFile: UploadFile) => {
-    const { goods } = this.state
-    const { images } = goods
-    const uid = uploadFile.uid
-    if (images) {
-      let newImages = images.filter((image: Image, index: number) => {
-        return uid != index
-      })
-      this.setState({
-        goods: { ...goods, images: newImages }
-      })
-      return true
-    }
-  }
-
-  handleDeleteCertificate = (uploadFile: UploadFile) => {
-    const { goods } = this.state
-    const { certificates } = goods
-    const uid = uploadFile.uid
-    if (certificates) {
-      let newCertificates = certificates.filter(
-        (image: Image, index: number) => {
-          return uid != index
-        }
-      )
-      this.setState({
-        goods: { ...goods, certificates: newCertificates }
-      })
-      return true
-    }
-  }
->>>>>>> 25317d0627b9dc6cde9c9ff88e3aa48c4ca0391a
   openLightbox = (image: string) => {
     this.props.dispatch(lightboxActionCreators.open(image))
   }
