@@ -6,7 +6,6 @@ import { authHeader } from '../../helpers/auth'
 import { User } from '../../models'
 import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface'
 const FormItem = Form.Item
-import { lightboxActionCreators } from '../../actions'
 export interface CompanyValuesProps {
   companyName: string
   companyAddress: string
@@ -41,7 +40,6 @@ class UserForm extends React.Component<CompanyFormProps, ProfileState> {
   }
 
   handleChange = (fileParam: UploadChangeParam) => {
-    const { user } = this.props
     let fileList = fileParam.fileList
     fileList = fileList.map(file => {
       if (file.response) {

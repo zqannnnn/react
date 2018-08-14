@@ -6,7 +6,6 @@ import {
   transactionActionCreators,
   categoryActionCreators,
   currencyActionCreators,
-  uploadActionCreators,
   lightboxActionCreators,
   alertActionCreators,
   AuthInfo
@@ -128,8 +127,6 @@ class EditPage extends React.Component<TransProps, TransState> {
         }
       })
     }
-    this.props.dispatch(uploadActionCreators.clear())
-    this.setState({ certificateUploading: false })
   }
   handleSelectChange = (value: string, name: string) => {
     const { transaction } = this.state
@@ -340,7 +337,7 @@ class EditPage extends React.Component<TransProps, TransState> {
   }
 }
 function mapStateToProps(state: RootState) {
-  const { transaction, category, currency, upload, auth, goods } = state
+  const { transaction, category, currency, auth, goods } = state
   const { processing, loading, transData } = transaction
   const { goodsData } = goods
   return {
@@ -349,7 +346,6 @@ function mapStateToProps(state: RootState) {
     currencys: currency.items,
     transProp: transData,
     goodsProp: goodsData,
-    image: upload.image,
     authInfo: auth.authInfo
   }
 }

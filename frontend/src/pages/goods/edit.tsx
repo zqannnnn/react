@@ -4,7 +4,6 @@ import { connect, Dispatch } from 'react-redux'
 import {
   goodsActionCreators,
   categoryActionCreators,
-  uploadActionCreators,
   lightboxActionCreators,
   AuthInfo
 } from '../../actions'
@@ -12,6 +11,7 @@ import { Goods, Image } from '../../models'
 import { Category } from '../../models'
 import { RootState } from '../../reducers'
 import { goodsConsts } from '../../constants'
+import { authHeader } from '../../helpers/auth'
 import {
   Steps,
   Button,
@@ -42,9 +42,9 @@ interface GoodsState {
   goods: Goods
   goodsId?: string
   submitted: boolean
-  imageUploading: boolean
-  certificateUploading: boolean
   current: number
+  fileList: UploadFile[]
+  certificateList: UploadFile[]
 }
 
 class EditPage extends React.Component<GoodsProps, GoodsState> {
@@ -52,13 +52,13 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
     super(props)
     this.state = {
       submitted: false,
-      imageUploading: false,
-      certificateUploading: false,
       goods: {
         category: 'Beef',
         ifExist: true
       },
-      current: 0
+      current: 0,
+      fileList: [],
+      certificateList: []
     }
   }
   next() {
@@ -85,21 +85,9 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
     goodsId && this.props.dispatch(goodsActionCreators.getById(goodsId))
   }
   componentWillReceiveProps(nextProps: GoodsProps) {
-    const { goodsProp, image, categorys } = nextProps
-    const {
-      submitted,
-      goodsId,
-      goods,
-      imageUploading,
-      certificateUploading
-    } = this.state
-    if (
-      goodsId &&
-      goodsProp &&
-      !submitted &&
-      !imageUploading &&
-      !certificateUploading
-    ) {
+    const { goodsProp, categorys } = nextProps
+    const { submitted, goodsId, goods } = this.state
+    if (goodsId && goodsProp && !submitted) {
       this.setState({
         goods: {
           ...goods,
@@ -107,50 +95,29 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
         }
       })
     }
-    if (!goodsId && categorys) {
-      this.setState({
-        goods: {
-          ...goods
-        }
-      })
+    if (goods && goods.images) {
+      let licenseList = goods.images.map(
+        (license, index): UploadFile => ({
+          url: license.path,
+          name: '',
+          uid: index,
+          size: 200,
+          type: 'done'
+        })
+      )
+      this.setState({ fileList: licenseList })
     }
-    if (image && imageUploading) {
-      if (goods.images) {
-        this.setState({
-          goods: {
-            ...goods,
-            images: [...goods.images, { path: image }]
-          }
+    if (goods && goods.certificates) {
+      let licenseList = goods.certificates.map(
+        (license, index): UploadFile => ({
+          url: license.path,
+          name: '',
+          uid: index,
+          size: 200,
+          type: 'done'
         })
-      } else {
-        this.setState({
-          goods: {
-            ...goods,
-            images: [{ path: image }]
-          }
-        })
-      }
-      this.props.dispatch(uploadActionCreators.clear())
-      setTimeout(() => this.setState({ imageUploading: false }), 500)
-    }
-    if (image && certificateUploading) {
-      if (goods.certificates) {
-        this.setState({
-          goods: {
-            ...goods,
-            certificates: [...goods.certificates, { path: image }]
-          }
-        })
-      } else {
-        this.setState({
-          goods: {
-            ...goods,
-            certificates: [{ path: image }]
-          }
-        })
-      }
-      this.props.dispatch(uploadActionCreators.clear())
-      setTimeout(() => this.setState({ certificateUploading: false }), 500)
+      )
+      this.setState({ certificateList: licenseList })
     }
   }
   handleSelectChange = (value: string, name: string) => {
@@ -174,7 +141,40 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       }
     })
   }
+  handleChange = (fileParam: UploadChangeParam) => {
+    let fileList = fileParam.fileList
+    fileList = fileList.map(file => {
+      if (file.response) {
+        file.url = file.response.path
+      }
+      return file
+    })
+    fileList = fileList.filter(file => {
+      if (file.response) {
+        return file.status === 'done'
+      }
+      return true
+    })
 
+    this.setState({ fileList })
+  }
+  certificateChange = (fileParam: UploadChangeParam) => {
+    let fileList = fileParam.fileList
+    fileList = fileList.map(file => {
+      if (file.response) {
+        file.url = file.response.path
+      }
+      return file
+    })
+    fileList = fileList.filter(file => {
+      if (file.response) {
+        return file.status === 'done'
+      }
+      return true
+    })
+
+    this.setState({ certificateList: fileList })
+  }
   handleInputNumber = (value: string | number, name: string | number) => {
     const { goods } = this.state
     this.setState({
@@ -185,58 +185,30 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
     })
   }
 
-  handleUpload = (uploadFile: UploadFile, isCertificate?: boolean) => {
-    let image = uploadFile.originFileObj
-    this.props.dispatch(uploadActionCreators.uploadImage(image))
-    if (isCertificate) {
-      this.setState({ certificateUploading: true })
-    } else {
-      this.setState({ imageUploading: true })
-    }
-  }
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     this.setState({ submitted: true })
-    const { goods, goodsId } = this.state
+    const { goods, goodsId, fileList, certificateList } = this.state
+
     const { dispatch } = this.props
     if (goods.category && goods.title && goods.quantity) {
-      if (goodsId) dispatch(goodsActionCreators.edit(goods, goodsId))
-      else dispatch(goodsActionCreators.new(goods))
+      let images: Image[] = []
+      let certificates: Image[] = []
+      fileList.forEach((file: any) => images.push({ path: file.url }))
+      certificateList.forEach((file: any) =>
+        certificates.push({ path: file.url })
+      )
+      let newGoods = {
+        ...goods,
+        certificates: certificates,
+        images: images
+      }
+      if (goodsId) dispatch(goodsActionCreators.edit(newGoods, goodsId))
+      else dispatch(goodsActionCreators.new(newGoods))
     } else {
       //dispatch(alertActionCreators.error(""));
     }
     window.scrollTo(0, 0)
-  }
-  handleDeleteImage = (uploadFile: UploadFile) => {
-    const { goods } = this.state
-    const { images } = goods
-    const uid = uploadFile.uid
-    if (images) {
-      let newImages = images.filter((image: Image, index: number) => {
-        return uid != index
-      })
-      this.setState({
-        goods: { ...goods, images: newImages }
-      })
-      return true
-    }
-  }
-
-  handleDeleteCertificate = (uploadFile: UploadFile) => {
-    const { goods } = this.state
-    const { certificates } = goods
-    const uid = uploadFile.uid
-    if (certificates) {
-      let newCertificates = certificates.filter(
-        (image: Image, index: number) => {
-          return uid != index
-        }
-      )
-      this.setState({
-        goods: { ...goods, certificates: newCertificates }
-      })
-      return true
-    }
   }
   openLightbox = (image: string) => {
     this.props.dispatch(lightboxActionCreators.open(image))
@@ -262,14 +234,8 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
     )
   }
 
-  customRequest = () => {
-    return false
-  }
-
   renderItem = (current: number) => {
     let {
-      images,
-      certificates,
       title,
       desc,
       quantity,
@@ -283,42 +249,13 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       trimmings,
       category
     } = this.state.goods
-    let { submitted } = this.state
+    let { submitted, fileList, certificateList } = this.state
     let { processing, categorys } = this.props
     let currentCategory: Category =
       categorys &&
       categorys.filter((item: Category) => {
         return item.type === category
       })[0]
-
-    let imageList: UploadFile[]
-    if (images) {
-      imageList = images.map(
-        (image, index): UploadFile => ({
-          url: image.path,
-          name: '',
-          uid: index,
-          size: 200,
-          type: 'done'
-        })
-      )
-    } else {
-      imageList = []
-    }
-    let certificateList: UploadFile[]
-    if (certificates) {
-      certificateList = certificates.map(
-        (image, index): UploadFile => ({
-          url: image.path,
-          name: '',
-          uid: index,
-          size: 200,
-          type: 'done'
-        })
-      )
-    } else {
-      certificateList = []
-    }
     switch (current) {
       case 0:
         return (
@@ -355,15 +292,13 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
               <div className="upload-transactions-edit">
                 <div className="clearfix">
                   <Upload
+                    action="/upload/image"
+                    headers={authHeader()}
                     accept="image/*"
                     listType="picture-card"
-                    fileList={imageList}
-                    customRequest={this.customRequest}
-                    onChange={(file: UploadChangeParam) =>
-                      this.handleUpload(file.file)
-                    }
+                    fileList={fileList}
+                    onChange={this.handleChange}
                     onPreview={this.handlePreview}
-                    onRemove={this.handleDeleteImage}
                   >
                     <div>
                       <Icon type="plus" />
@@ -376,15 +311,13 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
               <div className="upload-transactions-edit">
                 <div className="clearfix">
                   <Upload
-                    customRequest={this.customRequest}
+                    action="/upload/image"
+                    headers={authHeader()}
                     accept="image/*"
                     listType="picture-card"
                     fileList={certificateList}
-                    onChange={(file: UploadChangeParam) =>
-                      this.handleUpload(file.file, true)
-                    }
+                    onChange={this.certificateChange}
                     onPreview={this.handlePreview}
-                    onRemove={this.handleDeleteCertificate}
                   >
                     <div>
                       <Icon type="plus" />
@@ -768,13 +701,12 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
   }
 }
 function mapStateToProps(state: RootState) {
-  const { goods, category, upload, auth } = state
+  const { goods, category, auth } = state
   const { processing, goodsData } = goods
   return {
     processing,
     categorys: category.items,
     goodsProp: goodsData,
-    image: upload.image,
     authInfo: auth.authInfo
   }
 }

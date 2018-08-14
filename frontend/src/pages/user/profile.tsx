@@ -7,7 +7,7 @@ import {
   lightboxActionCreators,
   authActionCreators
 } from '../../actions'
-import { RootState, UserState, UploadState } from '../../reducers'
+import { RootState, UserState } from '../../reducers'
 import { User, Currency, Image } from '../../models'
 import { Row, Col, Select } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
@@ -24,7 +24,6 @@ interface ProfileProps {
   authInfo: AuthInfo
   currencys: Currency[]
   curencyCode: Currency
-  upload: UploadState
 }
 interface ProfileState {
   user: User
@@ -69,9 +68,8 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
       this.props.dispatch(currencyActionCreators.getAll())
   }
   componentWillReceiveProps(nextProps: ProfileProps) {
-    const { userState, upload } = nextProps
+    const { userState } = nextProps
     const { userData } = userState
-    const { image } = upload
     const { authInfo } = this.props
     const { user } = this.state
     if (userData) {
@@ -286,12 +284,11 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
 }
 
 function mapStateToProps(state: RootState) {
-  const { user, auth, currency, upload } = state
+  const { user, auth, currency } = state
   return {
     userState: user,
     authInfo: auth.authInfo,
-    currencys: currency.items,
-    upload
+    currencys: currency.items
   }
 }
 const connectedProfilePage = connect(mapStateToProps)(ProfilePage)
