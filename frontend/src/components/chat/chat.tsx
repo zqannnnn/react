@@ -35,6 +35,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
             messages: {},
             userKey: ''
         }
+        this.onUserItemClose = this.onUserItemClose.bind(this)
 	}
     componentWillMount() {
 		let { auth } = this.props
@@ -64,6 +65,11 @@ class Chat extends React.Component<ItemProps, ItemState> {
             })
 		});
     }
+	onUserItemClose(userKey: any) {
+        let users = this.state.users
+        users[userKey]['status'] = 'closed'
+        this.setState({users: users})
+    }
 	render() {
 		let { auth } = this.props
 		const { loggedIn, authInfo } = auth
@@ -78,9 +84,9 @@ class Chat extends React.Component<ItemProps, ItemState> {
                                 <Collapse accordion>
                                         {
                                             Object.keys(this.state.users).map((key, index) => {
-                                                if (this.state.userKey != key) {
+                                                if (this.state.userKey != key && this.state.users[key]['status'] != 'closed') {
                                                     return (
-                                                        <Panel header={<PanelHead user={this.state.users[key]} userKey={key} />} key={key}> 
+                                                        <Panel header={<PanelHead onUserItemClose={this.onUserItemClose} user={this.state.users[key]} userKey={key} />} key={key}> 
                                                             <UserItem user={this.state.users[key]} userKey={key} socket={this.state.socket} messages={this.state.messages} /> 
                                                         </Panel>
                                                     )    
