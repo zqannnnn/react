@@ -110,22 +110,24 @@ class UserForm extends React.Component<CompanyFormProps, ProfileState> {
               ]
             })(<Input />)}
           </FormItem>
-          <div className="upload-profile clearfix">
-            <Upload
-              action="/upload/image"
-              headers={authHeader()}
-              listType="picture-card"
-              fileList={fileList}
-              accept="image/*"
-              onChange={this.handleChange}
-              onPreview={this.props.handlePreview}
-            >
-              <div>
-                <Icon type="plus" />
-                <div className="ant-upload-text">{i18n.t('Upload')}</div>
-              </div>
-            </Upload>
-          </div>
+          <FormItem label="Business License">
+            <div className="upload-profile clearfix">
+              <Upload
+                action="/upload/image"
+                headers={authHeader()}
+                listType="picture-card"
+                fileList={fileList}
+                accept="image/*"
+                onChange={this.handleChange}
+                onPreview={this.props.handlePreview}
+              >
+                <div>
+                  <Icon type="plus" />
+                  <div className="ant-upload-text">{i18n.t('Upload')}</div>
+                </div>
+              </Upload>
+            </div>
+          </FormItem>
         </Form>
       </Modal>
     )
