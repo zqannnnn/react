@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
+import { RouteComponentProps } from 'react-router-dom'
 import {
   userActionCreators,
   AuthInfo,
@@ -17,7 +18,7 @@ import {
   CompanyValuesProps
 } from '../../components/form/company-modal'
 
-interface ProfileProps {
+interface ProfileProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
   userState: UserState
   authInfo: AuthInfo
@@ -25,6 +26,7 @@ interface ProfileProps {
   curencyCode: Currency
 }
 interface ProfileState {
+  userId: string
   user: User
   userSelf: boolean
   personalVisible: boolean
@@ -35,9 +37,26 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     super(props)
     this.state = {
       user: {},
+      userId: '',
       userSelf: true,
       personalVisible: false,
       modalVisible: false
+    }
+  }
+  componentDidMount() {
+    let userId = this.props.match.params.id
+    if (userId) {
+      userId &&
+        this.setState({
+          ...this.state,
+          userId
+        })
+      userId && this.props.dispatch(userActionCreators.getById(userId))
+    } else {
+      this.props.authInfo.id &&
+        this.props.dispatch(userActionCreators.getById(this.props.authInfo.id))
+      if (!this.props.currencys)
+        this.props.dispatch(currencyActionCreators.getAll())
     }
   }
   showPersonalModal = () => {
@@ -60,12 +79,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
       personalVisible: false
     })
   }
-  componentDidMount() {
-    this.props.authInfo.id &&
-      this.props.dispatch(userActionCreators.getById(this.props.authInfo.id))
-    if (!this.props.currencys)
-      this.props.dispatch(currencyActionCreators.getAll())
-  }
+
   componentWillReceiveProps(nextProps: ProfileProps) {
     const { userState } = nextProps
     const { userData } = userState
