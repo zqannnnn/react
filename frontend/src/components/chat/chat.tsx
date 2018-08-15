@@ -36,6 +36,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
             userKey: ''
         }
         this.onUserItemClose = this.onUserItemClose.bind(this)
+        this.onNewMessage = this.onNewMessage.bind(this)
 	}
     componentWillMount() {
 		let { auth } = this.props
@@ -70,6 +71,12 @@ class Chat extends React.Component<ItemProps, ItemState> {
         users[userKey]['status'] = 'closed'
         this.setState({users: users})
     }
+	onNewMessage(userKey: any) {
+        //console.log('onNewMessage')
+        //let users = this.state.users
+        //users[userKey]['status'] = 'closed'
+        //this.setState({users: users})
+    }
 	render() {
 		let { auth } = this.props
 		const { loggedIn, authInfo } = auth
@@ -87,7 +94,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
                                                 if (this.state.userKey != key && this.state.users[key]['status'] != 'closed') {
                                                     return (
                                                         <Panel header={<PanelHead onUserItemClose={this.onUserItemClose} user={this.state.users[key]} userKey={key} />} key={key}> 
-                                                            <UserItem user={this.state.users[key]} userKey={key} socket={this.state.socket} messages={this.state.messages} /> 
+                                                            <UserItem onNewMessage={this.onNewMessage} user={this.state.users[key]} userKey={key} socket={this.state.socket} messages={this.state.messages} /> 
                                                         </Panel>
                                                     )    
                                                 }

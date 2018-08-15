@@ -8,6 +8,7 @@ interface ItemProps {
     userKey: string
     socket: any
     messages: StringKeyHash
+    onNewMessage: any
 }
 interface ItemState {
     value: string
@@ -17,10 +18,11 @@ interface ItemState {
 }
 class UserItem extends React.Component<ItemProps, ItemState> {
     constructor(props: ItemProps) {
+        console.log('Init')
         super(props)
         this.state = {
             value: '',
-            messages: this.props.messages,
+            messages: {},
             socket: this.props.socket
         }
         this.handleChange = this.handleChange.bind(this)
@@ -28,8 +30,28 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     }
     componentWillReceiveProps(nextProps: any) {
         if ( nextProps.messages !== undefined ) {
+            /*
+            let relatedMsgs:StringKeyHash = {}
+            Object.keys(nextProps.messages).map((key, index) => {
+                if ( (nextProps.messages[key].from == this.props.userKey) || (nextProps.messages[key].to == this.props.userKey) ) {
+                    relatedMsgs[key] = nextProps.messages[key]
+                    console.log(this.state.messages[key])
+                    //if (this.state.messages[key] == unde) {
+
+                    //}
+                }
+            })
+            */
+            const oldMsgs = JSON.stringify(this.state.messages);
             const messages = Object.assign(this.state.messages, nextProps.messages);
-            this.setState({ messages: messages });    
+            const newMsgs = JSON.stringify(messages);
+            //this.setState({ messages: messages });  
+            //console.log('New msg')
+            //console.log(oldMsgs)
+            //console.log(newMsgs)
+            if (oldMsgs != newMsgs) {
+                this.props.onNewMessage(this.props.userKey)
+            }  
         }
     }
     handleChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
