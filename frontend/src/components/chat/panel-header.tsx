@@ -6,6 +6,7 @@ import { StringKeyHash } from '../../../../src/interfaces'
 interface ItemProps {
     user: StringKeyHash
     userKey: string
+    onUserItemClose: any
 }
 class PanelHead extends React.Component<ItemProps> {
     constructor(props: ItemProps) {
@@ -17,7 +18,7 @@ class PanelHead extends React.Component<ItemProps> {
     handleClick(event: React.FormEvent<HTMLDivElement>) {
         event.preventDefault()
         event.stopPropagation()
-        console.log('The link was clicked.');
+        this.props.onUserItemClose(this.props.userKey)
     }   
     render() {
         return (
