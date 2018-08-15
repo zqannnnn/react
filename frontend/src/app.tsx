@@ -56,7 +56,7 @@ class App extends React.Component<AppProps, any> {
       <Router history={history}>
         <Layout>
           <NavBar mobileBreakPoint={768} placement="bottomLeft" />
-          {lightbox.showing && <Lightbox />}
+          <Lightbox />
           <Layout>
             <Layout.Content className="page-wr">
               {alert.message && (
@@ -87,6 +87,7 @@ class App extends React.Component<AppProps, any> {
                 />
                 <PrivateRoute path="/goods/:id" component={GoodsViewPage} />
                 <PrivateRoute path="/profile" component={ProfilePage} />
+                <PrivateRoute path="/user/:id" component={ProfilePage} />
                 <PrivateRoute path="/inventory" component={MyInventoryPage} />
                 <AdminRoute path="/admin" component={AdminPage} />
                 <AdminRoute
