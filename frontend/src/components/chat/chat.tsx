@@ -103,13 +103,13 @@ class Chat extends React.Component<ItemProps, ItemState> {
 				<>
 					<div id="chat">
 						<Collapse accordion onChange={this.onOpenChat}>
-                            <Panel header={i18n.t('Chat')} key='chat'> 
+                            <Panel header={<PanelHead onUserItemClose='' user={{}} userKey='none' text={i18n.t('Chat')} showClose={false} />} key='chat'> 
                                 <Collapse accordion>
                                         {
                                             Object.keys(this.state.users).map((key, index) => {
                                                 if (this.state.userKey != key && this.state.users[key]['status'] != 'closed') {
                                                     return (
-                                                        <Panel header={<PanelHead onUserItemClose={this.onUserItemClose} user={this.state.users[key]} userKey={key} />} key={key}> 
+                                                        <Panel header={<PanelHead onUserItemClose={this.onUserItemClose} user={this.state.users[key]} userKey={key} text='' showClose={true} />} key={key}> 
                                                             <UserItem onNewMessage={this.onNewMessage} user={this.state.users[key]} userKey={key} socket={this.state.socket} messages={this.state.messages} /> 
                                                         </Panel>
                                                     )    
