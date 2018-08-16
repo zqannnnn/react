@@ -22,6 +22,8 @@ interface ItemState {
     socket: any
     userKey: string
     messages: StringKeyHash
+    newMsg: boolean
+    opened: boolean
 }
 class Chat extends React.Component<ItemProps, ItemState> {
 	constructor(props: ItemProps) {
@@ -33,10 +35,13 @@ class Chat extends React.Component<ItemProps, ItemState> {
             users: props.users,
             socket: undefined,
             messages: {},
-            userKey: ''
+            userKey: '',
+            newMsg: false,
+            opened: false
         }
         this.onUserItemClose = this.onUserItemClose.bind(this)
         this.onNewMessage = this.onNewMessage.bind(this)
+        this.onOpenChat = this.onOpenChat.bind(this)
 	}
     componentWillMount() {
 		let { auth } = this.props
@@ -72,10 +77,21 @@ class Chat extends React.Component<ItemProps, ItemState> {
         this.setState({users: users})
     }
 	onNewMessage(userKey: any) {
+        let users = this.state.users
         //console.log('onNewMessage')
         //let users = this.state.users
-        //users[userKey]['status'] = 'closed'
+        users[userKey]['newMsg'] = true
+        this.setState({users: users})
+        if ( !this.state.opened ) this.setState({newMsg: true})
         //this.setState({users: users})
+    }
+	onOpenChat(panel: any) {
+        if (panel != undefined) {
+            this.setState({opened: true})
+            this.setState({newMsg: false})
+        } else {
+            this.setState({opened: false})
+        }
     }
 	render() {
 		let { auth } = this.props
@@ -86,7 +102,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
 			chat = (
 				<>
 					<div id="chat">
-						<Collapse accordion>
+						<Collapse accordion onChange={this.onOpenChat}>
                             <Panel header={i18n.t('Chat')} key='chat'> 
                                 <Collapse accordion>
                                         {
