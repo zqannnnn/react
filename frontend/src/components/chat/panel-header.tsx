@@ -7,6 +7,8 @@ interface ItemProps {
     user: StringKeyHash
     userKey: string
     onUserItemClose: any
+    text: string
+    showClose: boolean
 }
 class PanelHead extends React.Component<ItemProps> {
     constructor(props: ItemProps) {
@@ -16,17 +18,18 @@ class PanelHead extends React.Component<ItemProps> {
         this.handleClick = this.handleClick.bind(this)
     }
     handleClick(event: React.FormEvent<HTMLDivElement>) {
-        event.preventDefault()
-        event.stopPropagation()
+        //event.preventDefault()
+        //event.stopPropagation()
         this.props.onUserItemClose(this.props.userKey)
     }   
     render() {
+        let closeBtn;
+        if (this.props.showClose) closeBtn = <div  onClick={this.handleClick}><FontAwesomeIcon icon="times" /></div>
+        let title = this.props.text != '' ? this.props.text : this.props.user.name
         return (
             <label className='user-header'>
-                {this.props.user.name}
-                <div  onClick={this.handleClick}>
-                    <FontAwesomeIcon icon="times" />
-                </div>
+                {title}
+                {closeBtn}
             </label>
         )
     }
