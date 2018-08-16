@@ -68,23 +68,10 @@ docker exec -u postgres -i bmp-db psql < dump.sql
 
 ### Using tslint
 
-To check for stylistic errors, use:
+tslint now will do both checking for stylistic errors and format code, use:
 
 ```sh
-./bin/tslint
-```
-
-Also try to automagically fix them like so:
-
-```sh
-./bin/tslint --fix
-```
-
-### Format code
-
-To format code use:
-```sh
-./bin/yarn run format
+./bin/yarn run lint
 ```
 
 ### database migration

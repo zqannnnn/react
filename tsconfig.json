@@ -5,6 +5,8 @@
     "moduleResolution": "node",
     "noImplicitAny": true,
     "strictNullChecks": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowJs": true,

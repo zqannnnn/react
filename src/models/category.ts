@@ -1,12 +1,9 @@
 import {
   Column,
   DataType,
-  Default,
-  IsUUID,
   Model,
   PrimaryKey,
-  Table,
-  Unique
+  Table
 } from 'sequelize-typescript'
 @Table({
   tableName: 'category',
