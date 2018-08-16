@@ -144,6 +144,10 @@
 }
 .comment-wrapper {
     overflow: hidden;
+    padding: 3px 0;
+}
+.reply-wrapper{
+    padding: 3px 0;
 }
 .comment > div {
     margin: 0 10px;
@@ -169,8 +173,8 @@
     font-size: 14px;
     padding: 0 12px;
 }
-.speak .main-comment .userid,
-.reply .main-comment .userid {
+.speak .main-comment .user-id,
+.reply .main-comment .user-id {
     color: #365899;
     font-weight: 600;
 }
@@ -181,7 +185,7 @@
     padding-left: 10px;
 }
 .features {
-    margin-left: 55px;
+    margin-left: 50px;
     margin-bottom: 3px;
     padding-top: 3px;
 }
@@ -200,7 +204,7 @@
     float: left;
 }
 .avatar {
-    padding-right: 15px;
+    padding-right: 5px;
 }
 .submitReply {
     padding-left: 20%;
@@ -218,4 +222,16 @@
     color: #90949c;
     font-family: inherit;
     font-size: 10px;
+}
+.comment-flex{
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+}
+.icon-rollback{
+    transform: rotate(180deg);
+    padding-left: 3px;
+}
+.features span.createdAt{
+    color: #616770;
 }

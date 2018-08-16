@@ -11,7 +11,8 @@ export const transService = {
   finish,
   buy,
   createComment,
-  listComment
+  listComment,
+  listReplys
 }
 function _new(transaction: Transaction) {
   const requestOptions = {
@@ -156,6 +157,26 @@ function listComment(id: string, options?: ListOptions) {
   }
   return fetch(
     '/transaction/list/comment?transactionId=' + id + '&' + query,
+    requestOptions
+  ).then(handleResponse)
+}
+
+function listReplys(id: string, transactionId: string, options?: ListOptions) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  let query = ''
+  if (options) {
+    query = renderQuery(options)
+  }
+  return fetch(
+    '/transaction/list/reply?commentId=' +
+      id +
+      '&' +
+      transactionId +
+      '&' +
+      query,
     requestOptions
   ).then(handleResponse)
 }

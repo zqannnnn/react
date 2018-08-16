@@ -204,7 +204,6 @@ router.get('/list/comment', async (req: IRequest, res: express.Response) => {
     limit?: number
   } = {}
   const orderOption: string[] = ['createdAt', 'DESC']
-
   if (pageSize && typeof page !== 'undefined') {
     pageOption.offset = (page - 1) * pageSize
     pageOption.limit = pageSize
@@ -212,7 +211,8 @@ router.get('/list/comment', async (req: IRequest, res: express.Response) => {
   try {
     const result = await Comment.findAndCount({
       where: {
-        transactionId
+        transactionId,
+        replyTo: null
       },
       include: [
         {
@@ -229,6 +229,40 @@ router.get('/list/comment', async (req: IRequest, res: express.Response) => {
   }
 })
 
+router.get('/list/reply', async (req: IRequest, res: express.Response) => {
+  const page = Number(req.query.page)
+  const pageSize = Number(req.query.pageSize)
+  const rootId = String(req.query.commentId)
+  const pageOption: {
+    offset?: number
+    limit?: number
+  } = {}
+  const orderOption: string[] = ['createdAt', 'DESC']
+  if (pageSize && typeof page !== 'undefined') {
+    pageOption.offset = (page - 1) * pageSize
+    pageOption.limit = pageSize
+  }
+  try {
+    const result = await Comment.findAndCount({
+      where: {
+        rootId
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['firstName', 'lastName']
+        }
+      ],
+      ...pageOption,
+      order: [orderOption]
+    })
+    const replys = result.rows.filter(comment => comment.id !== rootId)
+    return res.send({ replys: replys, total: result.count })
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
 router.post('/comment', async (req: IRequest, res: express.Response) => {
   try {
     const comment = new Comment({
@@ -236,10 +270,20 @@ router.post('/comment', async (req: IRequest, res: express.Response) => {
       ...req.body
     })
     await comment.save()
-
     if (!comment.replyTo) {
       comment.rootId = comment.id
       await comment.save()
+    }
+    if (comment.replyTo) {
+      const rootComment = await Comment.findById(comment.rootId)
+      if (rootComment) {
+        if (rootComment.totalReply)
+          rootComment.totalReply = rootComment.totalReply + 1
+        else {
+          rootComment.totalReply = 1
+        }
+        await rootComment.save()
+      }
     }
 
     const page = Number(req.query.page)

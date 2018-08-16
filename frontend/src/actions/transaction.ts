@@ -14,12 +14,14 @@ export type Action = {
   type: string
   error?: string
   id?: string
+  transactionId?: string
   transactions?: Array<Transaction>
   data?: Transaction
   imagePath?: string
   comment?: Comment
   total?: number
   comments?: Array<Comment>
+  replys?: Array<Comment>
 }
 
 type Thunk = ThunkAction<void, RootState, void>
@@ -344,6 +346,39 @@ const listComment: ActionCreator<Thunk> = (
   }
 }
 
+const listReplys: ActionCreator<Thunk> = (
+  id: string,
+  transactionId: string,
+  option?: ListOptions
+) => {
+  return (dispatch: Dispatch<RootState>): void => {
+    dispatch(request())
+    transService
+      .listReplys(id, transactionId, option)
+      .then(
+        (result: { replys: Array<Comment>; total: number }) =>
+          dispatch(success(result.replys, result.total)),
+        (error: string) => dispatch(failure(error))
+      )
+  }
+
+  function request(): Action {
+    return { type: transactionConsts.REPLY_LIST_REQUEST }
+  }
+  function success(replys: Array<Comment>, total: number): Action {
+    return {
+      type: transactionConsts.REPLY_LIST_SUCCESS,
+      replys,
+      total,
+      id,
+      transactionId
+    }
+  }
+  function failure(error: string): Action {
+    return { type: transactionConsts.REPLY_LIST_FAILURE, error }
+  }
+}
+
 export const actionCreators = {
   new: _new,
   newOrder,
@@ -354,5 +389,6 @@ export const actionCreators = {
   reactivate,
   buy,
   createComment,
-  listComment
+  listComment,
+  listReplys
 }

@@ -53,6 +53,10 @@ export class Comment extends Model<Comment> {
   @Column({ field: 'root_id' })
   public rootId: string
 
+  @ForeignKey(() => Comment)
+  @Column({ field: 'total_reply' })
+  public totalReply: number
+
   @CreatedAt
   @Column({ field: 'created_at' })
   public createdAt: Date

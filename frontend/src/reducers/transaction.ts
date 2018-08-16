@@ -220,6 +220,43 @@ export function transaction(
           )
         }
       }
+
+    case transactionConsts.REPLY_LIST_REQUEST:
+      return {
+        ...state,
+        loading: true
+      }
+    case transactionConsts.REPLY_LIST_SUCCESS:
+      if (state.items && action.replys && state.rowComments) {
+        let merge = state.rowComments.concat(action.replys)
+        let comments = commentReduce(merge)
+        let items = state.items.filter(item => item.id !== action.transactionId)
+        let item = state.items.filter(
+          item => item.id === action.transactionId
+        )[0]
+        item.comments = comments
+        items.push(item)
+        return {
+          ...state,
+          rowComments: merge,
+          loading: false,
+          items: state.items.map(
+            item =>
+              item.id === action.id
+                ? {
+                    ...item,
+                    items
+                  }
+                : item
+          )
+        }
+      }
+    case transactionConsts.REPLY_LIST_FAILURE:
+      return {
+        ...state,
+        loading: false
+      }
+
     case transactionConsts.GET_REQUEST:
       return { ...state, loading: true }
     case transactionConsts.GET_SUCCESS:
