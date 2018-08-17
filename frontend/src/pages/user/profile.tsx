@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { RouteComponentProps } from 'react-router-dom'
+import {consts} from "../../../../src/config/static"
 import {
   userActionCreators,
   AuthInfo,
@@ -132,11 +133,12 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     const { dispatch } = this.props
     let businessLicenses: Image[] = []
     fileList.forEach((file: any) => businessLicenses.push({ path: file.url }))
-    let newUser = {
+    let newUser:User = {
       ...user,
       companyName: values.companyName,
       companyAddress: values.companyAddress,
-      businessLicenses
+      businessLicenses,
+      licenseStatus:consts.LICENSE_STATUS_UNCONFIRMED
     }
     dispatch(userActionCreators.update(newUser))
     this.setState({ user: newUser })
@@ -178,7 +180,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
       imagePaths = []
     }
     return (
-      <Row type="flex" justify="space-around" align="middle">
+      <Row type="flex" justify="space-around" align="middle" className="profile-page">
         <Col span={20}>
           <h2 className="header-center">{i18n.t('User Profile')}</h2>
           <div className="subtitle">
