@@ -73,7 +73,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
     const { transaction, authInfo, loading } = this.props
     const { commentInputShowing, comment } = this.state
     let goods
-    if (transaction) {
+    if (transaction) { 
       goods = transaction.goods
     }
     let imagePaths: string[]
@@ -89,7 +89,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
           {!goods ? (
             <Icon type="loading" />
           ) : (
-            <div className="view-content">
+            <div>
               <Row>
                 <Col
                   xs={{ span: 20, offset: 2 }}
