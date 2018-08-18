@@ -7,8 +7,8 @@ interface ItemProps {
     user: StringKeyHash
     userKey: string
     socket: any
-    messages: StringKeyHash
-    onNewMessage: any
+    messages: StringKeyHash    
+    onSendMsg: any
 }
 interface ItemState {
     value: string
@@ -30,17 +30,25 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     componentWillReceiveProps(nextProps: any) {
         if ( nextProps.messages !== undefined ) {
             let relatedMsgs:StringKeyHash = {}
-            Object.keys(nextProps.messages).map((key, index) => {
-                if ( (nextProps.messages[key].from == this.props.userKey) || (nextProps.messages[key].to == this.props.userKey) ) {
-                    if ( this.state.messages[key] == undefined ) relatedMsgs[key] = nextProps.messages[key]
-                }
-            })            
-            const oldMsgsStamp = JSON.stringify(this.state.messages)
             let messages = this.state.messages
+            Object.keys(nextProps.user.messages).map((key, index) => {
+                if ( messages[key] == undefined ) relatedMsgs[key] = nextProps.user.messages[key]
+            })       
             messages = Object.assign(messages, relatedMsgs);
-            const newMsgsStamp = JSON.stringify(messages);
-            this.setState({ messages: messages });  
-            if (oldMsgsStamp != newMsgsStamp) this.props.onNewMessage(this.props.userKey)
+            let msgsKeys = []
+            for (let k in messages) {
+                if (messages.hasOwnProperty(k)) {
+                    msgsKeys.push(k);
+                }
+            }        
+            msgsKeys.sort()
+            const len = msgsKeys.length
+            let orderededMessages:StringKeyHash = {}
+            for (let i = 0; i < len; i++) {
+                let msgKey = msgsKeys[i]
+                orderededMessages[msgKey] = messages[msgKey]
+            }
+            this.setState({ messages: orderededMessages });  
         }
     }
     handleChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -50,10 +58,8 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         event.preventDefault();
         const msg = { msg: this.state.value, to: this.props.userKey }
         if (this.state.socket !== undefined) this.state.socket.emit("private", msg);
-        let messages = this.state.messages
-        const timestamp = new Date().valueOf().toString()
-        messages[timestamp] = msg
-        this.setState({ messages: messages, value: '' });
+        this.setState({value: '' });
+        this.props.onSendMsg(msg)
     }
     render() {
         return (
@@ -80,7 +86,6 @@ class UserItem extends React.Component<ItemProps, ItemState> {
                 </div>
             </div>
         )
-
     }
 }
 
