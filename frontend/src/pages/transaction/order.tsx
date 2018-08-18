@@ -2,12 +2,9 @@ import * as React from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import {
-  goodsActionCreators,
   transactionActionCreators,
   categoryActionCreators,
   currencyActionCreators,
-  uploadActionCreators,
-  lightboxActionCreators,
   AuthInfo
 } from '../../actions'
 import { Goods, Image, Transaction } from '../../models'

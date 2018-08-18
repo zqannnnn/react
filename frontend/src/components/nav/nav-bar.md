@@ -1,3 +1,3 @@
 ```jsx
-    <NavBar mobileBreakPoint={1050} placement="bottomLeft" />
+    <NavBar mobileBreakPoint={768} placement="bottomLeft" />
 ```

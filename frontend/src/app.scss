@@ -64,6 +64,7 @@ html {
   height: 200px;
   position: relative;
   margin-bottom: 20px;
+  // z-index: -1;
 }
 
 .banner-bg {
@@ -204,7 +205,13 @@ html {
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
     0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
-
+#main {
+  height: 100%;
+}
+.ant-layout {
+  min-height: 100%;
+  min-width: 400px;
+}
 .boxmain .menu {
   font-weight: bold;
   padding: 0 10px;
@@ -375,6 +382,11 @@ html {
 .page-wr {
   padding-top: 64px;
 }
+@media (min-width: 0px) and (max-width: 768px) {
+  .page-wr {
+    padding: 0px;
+  }
+}
 .page .subtitle {
   font-size: 16px;
   font-weight: bold;
@@ -417,17 +429,7 @@ html {
 .edits-top {
   margin-top: 10px;
 }
-.view-content {
-  font-size: 18px;
-  color: rgba(0, 0, 0, 0.8);
-}
-.view-content label {
-  font-weight: bold;
-}
-.view-content .message {
-  font-size: 16px;
-  color: rgba(0, 0, 0, 0.65);
-}
+
 .view-top {
   margin-top: 20px;
 }
@@ -437,16 +439,38 @@ html {
   color: black;
   text-align: center;
 }
-.profile-page .subtitle {
-  font: 17px bold;
-  margin: 6px 0;
-  color: black;
-  margin-top: 20px;
-}
-.profile-page .tips {
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.65);
-}
+.profile-page {
+  .subtitle {
+    font: 20px bold;
+    margin: 6px 112px;
+    color: black;
+    margin-top: 20px;
+  }
+  .edit {
+    margin-left: 20px;
+  }
+  .none {
+    display: none;
+  }
+  .tips {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.65);
+  }
+  label {
+    font-weight: bold;
+    font-size:16px;
+  }
+  .view-content {
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .view-content .message {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.65);
+    min-height:24px;
+  }
+} 
 .button-margin {
   margin-right: 10px;
 }
@@ -541,4 +565,19 @@ html {
 .ant-upload-list-item-info span {
   width: 100%;
   height: 100%;
+}
+.ant-layout-sider-zero-width-trigger {
+  top: 0px;
+  z-index: 1;
+}
+.Name {
+  font-size: 20px;
+  font-weight: 800;
+  margin-right: 20px;
+}
+.ant-modal-wrap {
+  z-index: 0;
+}
+.ant-modal-mask {
+  z-index: 0;
 }

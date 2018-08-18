@@ -1,14 +1,15 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended"],
+  "extends": ["tslint-config-blvd/react", "tslint-config-prettier"],
   "jsRules": {},
+  "rulesDirectory": ["tslint-plugin-prettier"],
   "rules": {
+    "prettier": true,
     "quotemark": [true, "single"],
     "semicolon": [true, "never"],
     "trailing-comma": [true, { "multiline": "never", "singleline": "never" }],
     "member-ordering": [true, { "order": "fields-first" }],
     "object-literal-sort-keys": false,
     "arrow-parens": [true, "ban-single-arg-parens"]
-  },
-  "rulesDirectory": []
+  }
 }

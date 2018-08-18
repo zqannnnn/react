@@ -17,7 +17,7 @@ function makeRandomName(originalname: string) {
 
 router.post(
   '/image',
-  upload.single('image'),
+  upload.single('file'),
   async (req: express.Request, res: express.Response) => {
     const fileName = makeRandomName(req.file.originalname)
     fs.rename(req.file.path, 'uploads/' + fileName, err => {

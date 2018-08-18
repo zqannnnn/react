@@ -1,12 +1,9 @@
 import {
   Column,
   DataType,
-  Default,
-  IsUUID,
   Model,
   PrimaryKey,
-  Table,
-  Unique
+  Table
 } from 'sequelize-typescript'
 @Table({
   tableName: 'category',
@@ -16,13 +13,7 @@ export class Category extends Model<Category> {
   // only allow string keys to do some iteration :)
   [key: string]: any
 
-  @IsUUID(4)
   @PrimaryKey
-  @Default(DataType.UUIDV4)
-  @Column
-  public id: string
-
-  @Unique
   @Column({ field: 'type' })
   public type: string
 

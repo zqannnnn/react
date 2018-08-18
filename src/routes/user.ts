@@ -12,13 +12,12 @@ const router = express.Router()
 router.use(authMiddleware)
 router.post('/new', async (req, res) => {
   try {
-    User.findOne({
+    const userData = await User.findOne({
       where: { email: req.body.email }
-    }).then(user => {
-      if (user) {
-        return res.status(401).send({ error: i18n.t('Email has been used.') })
-      }
     })
+    if (userData) {
+      return res.status(401).send({ error: i18n.t('Email has been used.') })
+    }
     const user = new User({
       email: req.body.email,
       password: req.body.password,
@@ -164,7 +163,7 @@ router
           imageDb.save()
         })
       }
-      return res.send({ success: true })
+      return res.send(user)
     } catch (e) {
       return res.status(500).send({ error: e.message })
     }

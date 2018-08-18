@@ -68,25 +68,37 @@ docker exec -u postgres -i bmp-db psql < dump.sql
 
 ### Using tslint
 
-To check for stylistic errors, use:
+tslint now will do both checking for stylistic errors and format code, use:
 
 ```sh
-./bin/tslint
+./bin/yarn run lint
 ```
 
-Also try to automagically fix them like so:
+### database migration
+
+#### For development
+
+To create a new migration use:
 
 ```sh
-./bin/tslint --fix
+docker exec bmp-app yarn sequelize migration:create --name :migration-name 
 ```
 
-### Format code
+A migration js file will created in db/migrations/, then edit this js file to record your changes in database, use [this api](http://docs.sequelizejs.com/class/lib/query-interface.js~QueryInterface.html) 
 
-To format code use:
+To use newest migration:
+
 ```sh
-./bin/yarn run format
+docker exec bmp-app yarn sequelize db:migrate 
 ```
 
+To undo newest migration:
+
+```sh
+docker exec bmp-app yarn sequelize db:migrate:undo
+```
+
+More information check [here](http://docs.sequelizejs.com/manual/tutorial/migrations.html)
 
 ### i18n solution
 

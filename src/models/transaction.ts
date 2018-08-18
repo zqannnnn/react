@@ -12,7 +12,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { consts } from '../config/static'
-import { Currency, Image, User } from './'
+import { Currency, User } from './'
 import { Goods } from './goods'
 @Table({
   tableName: 'transaction',

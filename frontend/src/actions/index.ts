@@ -28,10 +28,6 @@ export {
   AuthInfo,
 } from './auth'
 export {
-  actionCreators as uploadActionCreators,
-  Action as UploadAction
-} from './upload'
-export {
   actionCreators as lightboxActionCreators,
   Action as LightboxAction
 } from './lightbox'

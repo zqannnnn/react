@@ -46,8 +46,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
       this.setState({ comment: transaction.comment })
     }
   }
-  openLightbox = (images: string[], index: number) => {
-    this.props.dispatch(lightboxActionCreators.open(images, index))
+  openLightbox = (image: string) => {
+    this.props.dispatch(lightboxActionCreators.open(image))
   }
   triggerCommentInput = () => {
     let value = this.state.commentInputShowing
@@ -73,7 +73,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
     const { transaction, authInfo, loading } = this.props
     const { commentInputShowing, comment } = this.state
     let goods
-    if (transaction) {
+    if (transaction) { 
       goods = transaction.goods
     }
     let imagePaths: string[]
@@ -89,7 +89,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
           {!goods ? (
             <Icon type="loading" />
           ) : (
-            <div className="view-content">
+            <div>
               <Row>
                 <Col
                   xs={{ span: 20, offset: 2 }}
@@ -324,7 +324,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                             <img
                               className="image cursor-pointer"
                               onClick={() =>
-                                this.openLightbox(imagePaths, index)
+                                this.openLightbox(imagePaths[index])
                               }
                               src={image}
                             />

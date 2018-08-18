@@ -76,9 +76,8 @@ const initialState: RootState = {
     ]
   },
   lightbox: {
-    showing: false,
-    images: [],
-    currentIdx: 0
+    visible: false,
+    image: ''
   },
   transaction: {
     items: [
@@ -131,7 +130,6 @@ const initialState: RootState = {
       }
     ]
   },
-  upload: {},
   user: {
     userData: {
       businessLicenses: [{ path: 'http://localhost:3000/static/jFRAMAkM.jpg' }],

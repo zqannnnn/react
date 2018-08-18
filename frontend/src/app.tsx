@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Router, Route, Switch } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { connect, Dispatch } from 'react-redux'
 import i18n from 'i18next'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -62,12 +62,13 @@ class App extends React.Component<AppProps, any> {
     };
     */
     const { alert, lightbox } = this.props
+
     return (
-      <Layout>
-        <Router history={history}>
-          <div>
-            <NavBar mobileBreakPoint={1050} placement="bottomLeft" />
-            {lightbox.showing && <Lightbox />}
+      <Router history={history}>
+        <Layout>
+          <NavBar mobileBreakPoint={768} placement="bottomLeft" />
+          <Lightbox />
+          <Layout>              
             <Layout.Content className="page-wr">
               {alert.message && (
                 <Alert message={alert.message} type={alert.type} />
@@ -97,6 +98,7 @@ class App extends React.Component<AppProps, any> {
                 />
                 <PrivateRoute path="/goods/:id" component={GoodsViewPage} />
                 <PrivateRoute path="/profile" component={ProfilePage} />
+                <PrivateRoute path="/user/:id" component={ProfilePage} />
                 <PrivateRoute path="/inventory" component={MyInventoryPage} />
                 <AdminRoute path="/admin" component={AdminPage} />
                 <AdminRoute
@@ -111,14 +113,14 @@ class App extends React.Component<AppProps, any> {
                 <div className="ant-back-top-inner">UP</div>
               </BackTop>
             </Layout.Content>
-          </div>
-        </Router>
-        {/* //1532692062 chat */}
-        <Chat auth={auth} ref={(Chat) => {window.Chat = Chat}} />
-        <Layout.Footer style={{ textAlign: 'center' }}>
-          {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
-        </Layout.Footer>
-      </Layout>
+            {/* //1532692062 chat */}
+            <Chat auth={auth} ref={(Chat) => {window.Chat = Chat}} />   
+            <Layout.Footer style={{ textAlign: 'center' }}>
+              {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
+            </Layout.Footer>
+          </Layout>
+        </Layout>
+      </Router>
     )
   }
 }
