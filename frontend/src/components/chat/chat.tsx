@@ -40,7 +40,6 @@ class Chat extends React.Component<ItemProps, ItemState> {
             opened: false
         }
         this.onUserItemClose = this.onUserItemClose.bind(this)
-        //this.onNewMessage = this.onNewMessage.bind(this)
         this.onOpenChat = this.onOpenChat.bind(this)
         this.onOpenUserItem = this.onOpenUserItem.bind(this)
         this.onSendMsg = this.onSendMsg.bind(this)
@@ -92,15 +91,13 @@ class Chat extends React.Component<ItemProps, ItemState> {
         const timestamp = new Date().valueOf().toString()
         messages[timestamp] = msg
         that.setState({ messages: messages }); 
-        let users = that.state.users   
-        for (let userKey in users) {  
+        for (let userKey in that.state.users) {  
             if ( userKey != that.state.userKey) {
                 if ( (msg.from == userKey) || (msg.to == userKey) ) {
                     this.updateUserMsgs(userKey)
                 }
             }
         }
-        that.setState({users: users})
     }
 	onUserItemClose(userKey: any) {
         let users = this.state.users
