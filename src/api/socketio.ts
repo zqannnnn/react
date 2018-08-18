@@ -7,23 +7,11 @@ const startSocket = async (server: any) => {
 	const io = socket(server)
 	let users: HashOfStringKeyHash = {}
 	io.on('connection', socket => {
-        /*socket.on("join", function(name){
-            people[socket.id] = name;
-        });*/
         socket.on("private", function(data) {     
             const privateMsg = { from: socket.id, to: data.to, msg: data.msg }
             io.to(`${data.to}`).emit('private', privateMsg );
-
-
-            //io.sockets.sockets[data.to].emit("private", privateMsg)
-            //socket.emit("private", { from: socket.id, to: data.to, msg: data.msg })
-            //console.log(privateMsg)
-
         });
 		socket.on('get-users', (authInfo: AuthInfo) => {
-			/*io.sockets.clients((error :any, clients :any) => {
-			  console.log(clients)
-			});*/
 			let keyForRemove = null
 			for (var key in users) {
 				if ( users[key]['id'] == authInfo.id ) {
@@ -47,7 +35,6 @@ const startSocket = async (server: any) => {
 				delete users[keyForRemove]
 			}
             io.sockets.emit('get-users', users)
-            //io.to(`${socket.id}`).emit('get-users', users );            
 		})
 		socket.on('disconnect', () => {
 			delete users[socket.id]
