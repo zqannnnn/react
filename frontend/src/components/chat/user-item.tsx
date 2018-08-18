@@ -1,7 +1,6 @@
 //1532692062 chat
 import * as React from 'react'
 import { StringKeyHash } from '../../../../src/interfaces'
-//import * as socketIOClient from 'socket.io-client' //1532692062 chat
 
 interface ItemProps {
     user: StringKeyHash
@@ -13,8 +12,6 @@ interface ItemProps {
 interface ItemState {
     value: string
     messages: StringKeyHash
-    //socket: SocketIOClient.Socket
-    socket: any
 }
 class UserItem extends React.Component<ItemProps, ItemState> {
     constructor(props: ItemProps) {
@@ -22,7 +19,6 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         this.state = {
             value: '',
             messages: {},
-            socket: this.props.socket
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -61,7 +57,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const msg = { msg: this.state.value, to: this.props.userKey }
-        if (this.state.socket !== undefined) this.state.socket.emit("private", msg);
+        if (this.props.socket !== undefined) this.props.socket.emit("private", msg);
         this.setState({value: '' });
         this.props.onSendMsg(msg)
     }
