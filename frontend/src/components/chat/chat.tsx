@@ -23,6 +23,7 @@ interface ItemState {
     messages: StringKeyHash
     newMsg: boolean
     opened: boolean
+    activePanel: string
 }
 class Chat extends React.Component<ItemProps, ItemState> {
 	constructor(props: ItemProps) {
@@ -36,13 +37,27 @@ class Chat extends React.Component<ItemProps, ItemState> {
             messages: {},
             userKey: '',
             newMsg: false,
-            opened: false
+            opened: false,
+            activePanel: ''
         }
         this.onUserItemClose = this.onUserItemClose.bind(this)
         this.onOpenChat = this.onOpenChat.bind(this)
         this.onOpenUserItem = this.onOpenUserItem.bind(this)
         this.onSendMsg = this.onSendMsg.bind(this)
-	}
+    }
+    openChat(id: string) {
+        let users = this.state.users
+        for (let userKey in users) {  
+            if (users[userKey].id == id) {
+                this.setState({opened: true})
+                this.setState({activePanel: userKey})
+                users[userKey]['panelStatus'] = 'expended'
+                users[userKey]['status'] = 'inlist'
+                users[userKey]['newMsg'] = false
+            }
+        }
+        this.setState({users: users})
+    }    
     componentWillMount() {
 		let { auth } = this.props
 		const { authInfo } = auth
@@ -114,8 +129,11 @@ class Chat extends React.Component<ItemProps, ItemState> {
             users[userKey]['panelStatus'] = 'collapsed'
         }
         if (panel != undefined) {
+            this.setState({activePanel: panel})
             users[panel]['panelStatus'] = 'expended'
             users[panel]['newMsg'] = false
+        } else {
+            this.setState({activePanel: ''})
         }
         this.setState({users: users})
     }
@@ -132,14 +150,16 @@ class Chat extends React.Component<ItemProps, ItemState> {
 		const { loggedIn, authInfo } = auth
         const Panel = Collapse.Panel        
         let chat: JSX.Element
+        let chatActiveKey = ''
+        if (this.state.opened) chatActiveKey = 'chat'
         const that = this
         if (loggedIn) {
 			chat = (
 				<>
 					<div id="chat">
-						<Collapse accordion onChange={this.onOpenChat}>
+						<Collapse activeKey={chatActiveKey} accordion onChange={this.onOpenChat}>
                             <Panel className={chatCssClass} header={<PanelHead onUserItemClose='' user={{}} userKey='none' text={i18n.t('Chat')} showClose={false} />} key='chat'> 
-                                <Collapse accordion onChange={that.onOpenUserItem}>
+                                <Collapse activeKey={this.state.activePanel} accordion onChange={that.onOpenUserItem}>
                                         {
                                             Object.keys(this.state.users).map((key, index) => {
                                                 if (this.state.userKey != key && this.state.users[key]['status'] != 'notInList') {
