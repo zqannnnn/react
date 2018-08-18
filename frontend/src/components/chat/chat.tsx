@@ -155,7 +155,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
                                                     if (this.state.users[key]['newMsg']) cssClass = 'new-msg'
                                                     return (
                                                         <Panel className={cssClass} header={<PanelHead onUserItemClose={this.onUserItemClose} user={this.state.users[key]} userKey={key} text='' showClose={true} />} key={key}> 
-                                                            <UserItem user={this.state.users[key]} userKey={key} socket={this.state.socket} messages={this.state.messages} onSendMsg={this.onSendMsg} /> 
+                                                            <UserItem user={this.state.users[key]} userKey={key} socket={this.state.socket} onSendMsg={this.onSendMsg} /> 
                                                         </Panel>
                                                     )    
                                                 }

@@ -6,7 +6,6 @@ interface ItemProps {
     user: StringKeyHash
     userKey: string
     socket: any
-    messages: StringKeyHash    
     onSendMsg: any
 }
 interface ItemState {
