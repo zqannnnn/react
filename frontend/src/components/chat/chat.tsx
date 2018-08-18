@@ -56,8 +56,9 @@ class Chat extends React.Component<ItemProps, ItemState> {
                 that.setState({users: users})
                 for (let key in users) {  
                     if (users[key]['messages'] == undefined) users[key]['messages'] = {}
-                    if (users[key]['panelStatus'] == undefined) users[key]['panelStatus'] = 'closed'
+                    if (users[key]['panelStatus'] == undefined) users[key]['panelStatus'] = 'collapsed'
                     if (users[key]['status'] == undefined) users[key]['status'] = 'inlist'
+                    if (users[key]['newMsg'] == undefined) users[key]['newMsg'] = false
                     if (authInfo !== undefined) {
                         if ( users[key].id == authInfo.id ) {
                             //console.log('YOU ARE ' + key )                        
@@ -79,8 +80,8 @@ class Chat extends React.Component<ItemProps, ItemState> {
         for (let msgKey in messages) {  
             if ( (messages[msgKey].from == userKey) || (messages[msgKey].to == userKey) ) users[userKey]['messages'][msgKey] = messages[msgKey]
         }
-        if (users[userKey]['panelStatus'] == 'closed' || users[userKey]['status'] == 'closed') {
-            users[userKey]['status'] = 'inlist'
+        if (users[userKey]['panelStatus'] == 'collapsed' || users[userKey]['status'] == 'notInList') {
+            users[userKey]['status'] = 'inList'
             users[userKey]['newMsg'] = true
         }
         this.setState({users: users})
@@ -97,7 +98,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
     }
 	onUserItemClose(userKey: any) {
         let users = this.state.users
-        users[userKey]['status'] = 'closed'
+        users[userKey]['status'] = 'notInList'
         this.setState({users: users})
     }
 	onOpenChat(panel: any) {
@@ -109,13 +110,12 @@ class Chat extends React.Component<ItemProps, ItemState> {
         }
     }
 	onOpenUserItem(panel: any) {
-        console.log('onOpenUserItem')
         let users = this.state.users
         for (let userKey in users) {  
-            users[userKey]['panelStatus'] = 'closed'
+            users[userKey]['panelStatus'] = 'collapsed'
         }
         if (panel != undefined) {
-            users[panel]['panelStatus'] = 'opened'
+            users[panel]['panelStatus'] = 'expended'
             users[panel]['newMsg'] = false
         }
         this.setState({users: users})
@@ -143,7 +143,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
                                 <Collapse accordion onChange={that.onOpenUserItem}>
                                         {
                                             Object.keys(this.state.users).map((key, index) => {
-                                                if (this.state.userKey != key && this.state.users[key]['status'] != 'closed') {
+                                                if (this.state.userKey != key && this.state.users[key]['status'] != 'notInList') {
                                                     let cssClass = ''
                                                     if (this.state.users[key]['newMsg']) cssClass = 'new-msg'
                                                     return (
