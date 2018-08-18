@@ -26,30 +26,58 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+    }    
+    renderMsgs(props: any) {
+        let relatedMsgs:StringKeyHash = {}
+        let messages = this.state.messages
+        Object.keys(props.user.messages).map((key, index) => {
+            if ( messages[key] == undefined ) relatedMsgs[key] = props.user.messages[key]
+        })       
+        messages = Object.assign(messages, relatedMsgs);
+        let msgsKeys = []
+        for (let k in messages) {
+            if (messages.hasOwnProperty(k)) {
+                msgsKeys.push(k);
+            }
+        }        
+        msgsKeys.sort()
+        const len = msgsKeys.length
+        let orderededMessages:StringKeyHash = {}
+        for (let i = 0; i < len; i++) {
+            let msgKey = msgsKeys[i]
+            orderededMessages[msgKey] = messages[msgKey]
+        }
+        this.setState({ messages: orderededMessages });  
+    }
+    componentDidMount() {
+        this.renderMsgs(this.props)
     }
     componentWillReceiveProps(nextProps: any) {
-        if ( nextProps.messages !== undefined ) {
-            let relatedMsgs:StringKeyHash = {}
-            let messages = this.state.messages
-            Object.keys(nextProps.user.messages).map((key, index) => {
-                if ( messages[key] == undefined ) relatedMsgs[key] = nextProps.user.messages[key]
-            })       
-            messages = Object.assign(messages, relatedMsgs);
-            let msgsKeys = []
-            for (let k in messages) {
-                if (messages.hasOwnProperty(k)) {
-                    msgsKeys.push(k);
-                }
-            }        
-            msgsKeys.sort()
-            const len = msgsKeys.length
-            let orderededMessages:StringKeyHash = {}
-            for (let i = 0; i < len; i++) {
-                let msgKey = msgsKeys[i]
-                orderededMessages[msgKey] = messages[msgKey]
+        console.log('componentWillReceiveProps ')
+        console.log(nextProps)
+        this.renderMsgs(nextProps)
+        /*
+        let relatedMsgs:StringKeyHash = {}
+        let messages = this.state.messages
+        Object.keys(nextProps.user.messages).map((key, index) => {
+            if ( messages[key] == undefined ) relatedMsgs[key] = nextProps.user.messages[key]
+        })       
+        messages = Object.assign(messages, relatedMsgs);
+        let msgsKeys = []
+        for (let k in messages) {
+            if (messages.hasOwnProperty(k)) {
+                msgsKeys.push(k);
             }
-            this.setState({ messages: orderededMessages });  
+        }        
+        msgsKeys.sort()
+        const len = msgsKeys.length
+        let orderededMessages:StringKeyHash = {}
+        for (let i = 0; i < len; i++) {
+            let msgKey = msgsKeys[i]
+            orderededMessages[msgKey] = messages[msgKey]
         }
+        this.setState({ messages: orderededMessages });  
+        */
     }
     handleChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
         this.setState({ value: event.target.value });
