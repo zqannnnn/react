@@ -73,17 +73,33 @@ class Chat extends React.Component<ItemProps, ItemState> {
             })
 		});
     }
+    updateUserMsgs(userKey: string) {
+        console.log('updateUserMsgs ' + userKey)
+        const messages = this.state.messages
+        let users = this.state.users 
+        users[userKey]['messages'] = {}
+        for (let msgKey in messages) {  
+            if ( (messages[msgKey].from == userKey) || (messages[msgKey].to == userKey) ) users[userKey]['messages'][msgKey] = messages[msgKey]
+        }
+        if (users[userKey]['panelStatus'] == 'closed' || users[userKey]['status'] == 'closed') {
+            users[userKey]['status'] = 'inlist'
+            users[userKey]['newMsg'] = true
+        }
+        this.setState({users: users})
+    }
+    
 	onPrivateMsg(msg: any) {
         const that = this;
         let messages = that.state.messages
         const timestamp = new Date().valueOf().toString()
         messages[timestamp] = msg
-        console.log(messages)
         that.setState({ messages: messages }); 
         let users = that.state.users   
         for (let userKey in users) {  
             if ( userKey != that.state.userKey) {
                 if ( (msg.from == userKey) || (msg.to == userKey) ) {
+                    this.updateUserMsgs(userKey)
+                    /*
                     users[userKey]['messages'] = {}
                     for (let msgKey in messages) {  
                         if ( (messages[msgKey].from == userKey) || (messages[msgKey].to == userKey) ) users[userKey]['messages'][msgKey] = messages[msgKey]
@@ -92,6 +108,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
                         users[userKey]['status'] = 'inlist'
                         users[userKey]['newMsg'] = true
                     }
+                    */
                 }
             }
         }
@@ -111,11 +128,16 @@ class Chat extends React.Component<ItemProps, ItemState> {
         }
     }
 	onOpenUserItem(panel: any) {
+        console.log('onOpenUserItem')
         let users = this.state.users
         for (let userKey in users) {  
             users[userKey]['panelStatus'] = 'closed'
         }
-        if (panel != undefined) users[panel]['panelStatus'] = 'opened'
+        if (panel != undefined) {
+            console.log('onOpenUserItem ' + panel)
+            users[panel]['panelStatus'] = 'opened'
+            this.updateUserMsgs(panel)
+        }
         this.setState({users: users})
     }
 	onSendMsg(msg: any) {
