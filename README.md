@@ -211,6 +211,10 @@ to run tests:
 yarn test
 ```
 
+### Chat
+
+To open chat with an user, execute window.Chat.openChat("<user-id>")
+
 ### React components library
 
 For viewing all components in library page [React StyleGuidist library](https://github.com/styleguidist/react-styleguidist).
