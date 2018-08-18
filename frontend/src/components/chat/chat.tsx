@@ -74,7 +74,6 @@ class Chat extends React.Component<ItemProps, ItemState> {
 		});
     }
     updateUserMsgs(userKey: string) {
-        console.log('updateUserMsgs ' + userKey)
         const messages = this.state.messages
         let users = this.state.users 
         users[userKey]['messages'] = {}
@@ -99,16 +98,6 @@ class Chat extends React.Component<ItemProps, ItemState> {
             if ( userKey != that.state.userKey) {
                 if ( (msg.from == userKey) || (msg.to == userKey) ) {
                     this.updateUserMsgs(userKey)
-                    /*
-                    users[userKey]['messages'] = {}
-                    for (let msgKey in messages) {  
-                        if ( (messages[msgKey].from == userKey) || (messages[msgKey].to == userKey) ) users[userKey]['messages'][msgKey] = messages[msgKey]
-                    }
-                    if (users[userKey]['panelStatus'] == 'closed' || users[userKey]['status'] == 'closed') {
-                        users[userKey]['status'] = 'inlist'
-                        users[userKey]['newMsg'] = true
-                    }
-                    */
                 }
             }
         }
@@ -134,9 +123,9 @@ class Chat extends React.Component<ItemProps, ItemState> {
             users[userKey]['panelStatus'] = 'closed'
         }
         if (panel != undefined) {
-            console.log('onOpenUserItem ' + panel)
             users[panel]['panelStatus'] = 'opened'
-            this.updateUserMsgs(panel)
+            //this.updateUserMsgs(panel)
+            users[panel]['newMsg'] = false
         }
         this.setState({users: users})
     }
@@ -159,8 +148,10 @@ class Chat extends React.Component<ItemProps, ItemState> {
                                         {
                                             Object.keys(this.state.users).map((key, index) => {
                                                 if (this.state.userKey != key && this.state.users[key]['status'] != 'closed') {
+                                                    let cssClass = ''
+                                                    if (this.state.users[key]['newMsg']) cssClass = 'new-msg'
                                                     return (
-                                                        <Panel header={<PanelHead onUserItemClose={this.onUserItemClose} user={this.state.users[key]} userKey={key} text='' showClose={true} />} key={key}> 
+                                                        <Panel className={cssClass} header={<PanelHead onUserItemClose={this.onUserItemClose} user={this.state.users[key]} userKey={key} text='' showClose={true} />} key={key}> 
                                                             <UserItem user={this.state.users[key]} userKey={key} socket={this.state.socket} messages={this.state.messages} onSendMsg={this.onSendMsg} /> 
                                                         </Panel>
                                                     )    
