@@ -3,7 +3,7 @@ import * as React from 'react'
 import { StringKeyHash } from '../../../../src/interfaces'
 
 interface ItemProps {
-    user: StringKeyHash
+    messages: StringKeyHash
     userKey: string
     socket: any
     onSendMsg: any
@@ -26,8 +26,8 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     renderMsgs(props: any) {
         let relatedMsgs:StringKeyHash = {}
         let messages = this.state.messages
-        Object.keys(props.user.messages).map((key, index) => {
-            if ( messages[key] == undefined ) relatedMsgs[key] = props.user.messages[key]
+        Object.keys(props.messages).map((key, index) => {
+            if ( messages[key] == undefined ) relatedMsgs[key] = props.messages[key]
         })       
         messages = Object.assign(messages, relatedMsgs)
         let msgsKeys = []
