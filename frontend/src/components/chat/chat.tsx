@@ -85,8 +85,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
             users[userKey]['newMsg'] = true
         }
         this.setState({users: users})
-    }
-    
+    }    
 	onPrivateMsg(msg: any) {
         const that = this;
         let messages = that.state.messages
@@ -124,7 +123,6 @@ class Chat extends React.Component<ItemProps, ItemState> {
         }
         if (panel != undefined) {
             users[panel]['panelStatus'] = 'opened'
-            //this.updateUserMsgs(panel)
             users[panel]['newMsg'] = false
         }
         this.setState({users: users})
@@ -133,9 +131,14 @@ class Chat extends React.Component<ItemProps, ItemState> {
         this.onPrivateMsg(msg)
     }
 	render() {
+        let users = this.state.users   
+        let chatCssClass = ''
+        for (let userKey in users) {  
+            if (users[userKey]['newMsg']) chatCssClass = 'new-msg'
+        }
 		let { auth } = this.props
 		const { loggedIn, authInfo } = auth
-		const Panel = Collapse.Panel
+        const Panel = Collapse.Panel        
         let chat: JSX.Element
         const that = this
         if (loggedIn) {
@@ -143,7 +146,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
 				<>
 					<div id="chat">
 						<Collapse accordion onChange={this.onOpenChat}>
-                            <Panel header={<PanelHead onUserItemClose='' user={{}} userKey='none' text={i18n.t('Chat')} showClose={false} />} key='chat'> 
+                            <Panel className={chatCssClass} header={<PanelHead onUserItemClose='' user={{}} userKey='none' text={i18n.t('Chat')} showClose={false} />} key='chat'> 
                                 <Collapse accordion onChange={that.onOpenUserItem}>
                                         {
                                             Object.keys(this.state.users).map((key, index) => {
