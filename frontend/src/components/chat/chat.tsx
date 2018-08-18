@@ -14,7 +14,6 @@ import { Collapse } from 'antd'
 import './chat.scss'
 interface ItemProps {
     auth: AuthState
-    users: HashOfStringKeyHash
 }
 interface ItemState {
     users: HashOfStringKeyHash
@@ -32,7 +31,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
 		//  endpoint: "http://localhost:3000" // this is where we are connecting to with sockets
         //}
         this.state = {
-            users: props.users,
+            users: {},
             socket: undefined,
             messages: {},
             userKey: '',

@@ -110,7 +110,7 @@ class App extends React.Component<AppProps, any> {
           </div>
         </Router>
         {/* //1532692062 chat */}
-        <Chat auth={auth} users={{}} />
+        <Chat auth={auth} />
         <Layout.Footer style={{ textAlign: 'center' }}>
           {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
         </Layout.Footer>
