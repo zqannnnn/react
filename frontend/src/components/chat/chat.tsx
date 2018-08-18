@@ -160,19 +160,19 @@ class Chat extends React.Component<ItemProps, ItemState> {
 						<Collapse activeKey={chatActiveKey} accordion onChange={this.onOpenChat}>
                             <Panel className={chatCssClass} header={<PanelHead onUserItemClose='' user={{}} userKey='none' text={i18n.t('Chat')} showClose={false} />} key='chat'> 
                                 <Collapse activeKey={this.state.activePanel} accordion onChange={that.onOpenUserItem}>
-                                        {
-                                            Object.keys(this.state.users).map((userKey, index) => {
-                                                if (this.state.userKey != userKey && this.state.users[userKey]['status'] != 'notInList') {
-                                                    let cssClass = ''
-                                                    if (this.state.users[userKey]['newMsg']) cssClass = 'new-msg'
-                                                    return (
-                                                        <Panel className={cssClass} header={<PanelHead onUserItemClose={this.onUserItemClose} user={this.state.users[userKey]} userKey={userKey} text='' showClose={true} />} key={userKey}> 
-                                                            <UserItem messages={this.state.users[userKey]['messages']} userKey={userKey} socket={this.state.socket} onSendMsg={this.onSendMsg} /> 
-                                                        </Panel>
-                                                    )    
-                                                }
-                                            })
-                                        }                            
+                                    {
+                                        Object.keys(this.state.users).map((userKey, index) => {
+                                            if (this.state.userKey != userKey && this.state.users[userKey]['status'] != 'notInList') {
+                                                let cssClass = ''
+                                                if (this.state.users[userKey]['newMsg']) cssClass = 'new-msg'
+                                                return (
+                                                    <Panel className={cssClass} header={<PanelHead onUserItemClose={this.onUserItemClose} user={this.state.users[userKey]} userKey={userKey} text='' showClose={true} />} key={userKey}> 
+                                                        <UserItem messages={this.state.users[userKey]['messages']} userKey={userKey} socket={this.state.socket} onSendMsg={this.onSendMsg} /> 
+                                                    </Panel>
+                                                )    
+                                            }
+                                        })
+                                    }                            
                                 </Collapse>
                             </Panel>
 						</Collapse>
