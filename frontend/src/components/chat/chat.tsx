@@ -103,7 +103,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
 	onPrivateMsg(msg: any) {
         const that = this;
         let messages = that.state.messages
-        const timestamp = new Date().valueOf().toString()
+        const timestamp = new Date().getTime().toString()
         messages[timestamp] = msg
         that.setState({ messages: messages }); 
         for (let userKey in that.state.users) {  
