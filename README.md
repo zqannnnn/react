@@ -213,7 +213,7 @@ yarn test
 
 ### Chat
 
-To open chat with an user, execute window.Chat.openChat("<user-id>")
+To open chat with an user, execute window.Chat.openChat("user-id")
 
 ### React components library
 
