@@ -21,6 +21,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleKeyUp = this.handleKeyUp.bind(this)
     }    
     renderMsgs(props: any) {
         let relatedMsgs:StringKeyHash = {}
@@ -28,7 +29,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         Object.keys(props.user.messages).map((key, index) => {
             if ( messages[key] == undefined ) relatedMsgs[key] = props.user.messages[key]
         })       
-        messages = Object.assign(messages, relatedMsgs);
+        messages = Object.assign(messages, relatedMsgs)
         let msgsKeys = []
         for (let k in messages) {
             if (messages.hasOwnProperty(k)) {
@@ -54,11 +55,19 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         this.setState({ value: event.target.value });
     }
     handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-        const msg = { msg: this.state.value, to: this.props.userKey }
-        if (this.props.socket !== undefined) this.props.socket.emit("private", msg);
-        this.setState({value: '' });
-        this.props.onSendMsg(msg)
+        event.preventDefault()
+        this.submit()
+    }
+    handleKeyUp(event: any) {
+        if (event.keyCode == 13) this.submit()
+    }
+    submit() {
+        if (this.state.value.length > 0) {
+            const msg = { msg: this.state.value, to: this.props.userKey }
+            if (this.props.socket !== undefined) this.props.socket.emit("private", msg);
+            this.setState({value: '' })
+            this.props.onSendMsg(msg)    
+        }
     }
     render() {
         return (
@@ -79,7 +88,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
                 </div>
                 <div className='chat-input'>
                     <form onSubmit={this.handleSubmit}>
-                        <textarea value={this.state.value} onChange={this.handleChange} />
+                        <textarea value={this.state.value} onChange={this.handleChange} onKeyUp={this.handleKeyUp} />
                         <input type="submit" value="Submit" />
                     </form>
                 </div>
