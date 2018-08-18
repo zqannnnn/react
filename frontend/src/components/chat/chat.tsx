@@ -92,11 +92,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
         messages[timestamp] = msg
         that.setState({ messages: messages }); 
         for (let userKey in that.state.users) {  
-            if ( userKey != that.state.userKey) {
-                if ( (msg.from == userKey) || (msg.to == userKey) ) {
-                    this.updateUserMsgs(userKey)
-                }
-            }
+            if ( (userKey != that.state.userKey) && ((msg.from == userKey) || (msg.to == userKey)) ) this.updateUserMsgs(userKey)
         }
     }
 	onUserItemClose(userKey: any) {
