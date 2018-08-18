@@ -40,8 +40,10 @@ class Chat extends React.Component<ItemProps, ItemState> {
             opened: false
         }
         this.onUserItemClose = this.onUserItemClose.bind(this)
-        this.onNewMessage = this.onNewMessage.bind(this)
+        //this.onNewMessage = this.onNewMessage.bind(this)
         this.onOpenChat = this.onOpenChat.bind(this)
+        this.onOpenUserItem = this.onOpenUserItem.bind(this)
+        this.onSendMsg = this.onSendMsg.bind(this)
 	}
     componentWillMount() {
 		let { auth } = this.props
@@ -54,6 +56,9 @@ class Chat extends React.Component<ItemProps, ItemState> {
 			socket.on('get-users', (users: any) => {
                 that.setState({users: users})
                 for (let key in users) {  
+                    if (users[key]['messages'] == undefined) users[key]['messages'] = {}
+                    if (users[key]['panelStatus'] == undefined) users[key]['panelStatus'] = 'closed'
+                    if (users[key]['status'] == undefined) users[key]['status'] = 'inlist'
                     if (authInfo !== undefined) {
                         if ( users[key].id == authInfo.id ) {
                             //console.log('YOU ARE ' + key )                        
@@ -61,29 +66,41 @@ class Chat extends React.Component<ItemProps, ItemState> {
                         }
                     }                    
                 }
-                //that.setState({users: users})
+                that.setState({users: users})
             })
             socket.on("private", function(msg: any) {    
-                let messages = that.state.messages
-                const timestamp = new Date().valueOf().toString()
-                messages[timestamp] = msg
-                that.setState({ messages: messages });    
+                that.onPrivateMsg(msg)
             })
 		});
+    }
+	onPrivateMsg(msg: any) {
+        const that = this;
+        let messages = that.state.messages
+        const timestamp = new Date().valueOf().toString()
+        messages[timestamp] = msg
+        console.log(messages)
+        that.setState({ messages: messages }); 
+        let users = that.state.users   
+        for (let userKey in users) {  
+            if ( userKey != that.state.userKey) {
+                if ( (msg.from == userKey) || (msg.to == userKey) ) {
+                    users[userKey]['messages'] = {}
+                    for (let msgKey in messages) {  
+                        if ( (messages[msgKey].from == userKey) || (messages[msgKey].to == userKey) ) users[userKey]['messages'][msgKey] = messages[msgKey]
+                    }
+                    if (users[userKey]['panelStatus'] == 'closed' || users[userKey]['status'] == 'closed') {
+                        users[userKey]['status'] = 'inlist'
+                        users[userKey]['newMsg'] = true
+                    }
+                }
+            }
+        }
+        that.setState({users: users})
     }
 	onUserItemClose(userKey: any) {
         let users = this.state.users
         users[userKey]['status'] = 'closed'
         this.setState({users: users})
-    }
-	onNewMessage(userKey: any) {
-        let users = this.state.users
-        //console.log('onNewMessage')
-        //let users = this.state.users
-        users[userKey]['newMsg'] = true
-        this.setState({users: users})
-        if ( !this.state.opened ) this.setState({newMsg: true})
-        //this.setState({users: users})
     }
 	onOpenChat(panel: any) {
         if (panel != undefined) {
@@ -93,24 +110,36 @@ class Chat extends React.Component<ItemProps, ItemState> {
             this.setState({opened: false})
         }
     }
+	onOpenUserItem(panel: any) {
+        let users = this.state.users
+        for (let userKey in users) {  
+            users[userKey]['panelStatus'] = 'closed'
+        }
+        if (panel != undefined) users[panel]['panelStatus'] = 'opened'
+        this.setState({users: users})
+    }
+	onSendMsg(msg: any) {
+        this.onPrivateMsg(msg)
+    }
 	render() {
 		let { auth } = this.props
 		const { loggedIn, authInfo } = auth
 		const Panel = Collapse.Panel
         let chat: JSX.Element
+        const that = this
         if (loggedIn) {
 			chat = (
 				<>
 					<div id="chat">
 						<Collapse accordion onChange={this.onOpenChat}>
                             <Panel header={<PanelHead onUserItemClose='' user={{}} userKey='none' text={i18n.t('Chat')} showClose={false} />} key='chat'> 
-                                <Collapse accordion>
+                                <Collapse accordion onChange={that.onOpenUserItem}>
                                         {
                                             Object.keys(this.state.users).map((key, index) => {
                                                 if (this.state.userKey != key && this.state.users[key]['status'] != 'closed') {
                                                     return (
                                                         <Panel header={<PanelHead onUserItemClose={this.onUserItemClose} user={this.state.users[key]} userKey={key} text='' showClose={true} />} key={key}> 
-                                                            <UserItem onNewMessage={this.onNewMessage} user={this.state.users[key]} userKey={key} socket={this.state.socket} messages={this.state.messages} /> 
+                                                            <UserItem user={this.state.users[key]} userKey={key} socket={this.state.socket} messages={this.state.messages} onSendMsg={this.onSendMsg} /> 
                                                         </Panel>
                                                     )    
                                                 }
