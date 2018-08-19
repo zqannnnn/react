@@ -13,6 +13,7 @@ interface ItemState {
     messages: StringKeyHash
 }
 class UserItem extends React.Component<ItemProps, ItemState> {
+    private chatBottom: React.RefObject<HTMLDivElement>;
     constructor(props: ItemProps) {
         super(props)
         this.state = {
@@ -22,6 +23,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleKeyUp = this.handleKeyUp.bind(this)
+        this.chatBottom = React.createRef();
     }    
     renderMsgs(props: any) {
         let relatedMsgs:StringKeyHash = {}
@@ -45,8 +47,14 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         }
         this.setState({ messages: orderededMessages });  
     }
+    scrollBottom() {
+        if ( this.chatBottom.current != null ) this.chatBottom.current.scrollIntoView({ behavior: "smooth" })
+    }
     componentDidMount() {
-        this.renderMsgs(this.props)
+        this.scrollBottom()
+    }
+    componentDidUpdate() {
+        this.scrollBottom()
     }
     componentWillReceiveProps(nextProps: any) {
         this.renderMsgs(nextProps)
@@ -85,6 +93,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
                             }
                         })
                     }
+                    <div ref={this.chatBottom}></div>
                 </div>
                 <div className='chat-input'>
                     <form onSubmit={this.handleSubmit}>
