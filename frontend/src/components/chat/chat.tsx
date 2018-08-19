@@ -12,6 +12,9 @@ import { HashOfStringKeyHash, StringKeyHash } from '../../../../src/interfaces'
 //https://github.com/ant-design/ant-design/blob/master/components/collapse/demo/accordion.md
 import { Collapse } from 'antd'
 import './chat.scss'
+declare global {
+    interface Window { Chat: any; }
+}
 interface ItemProps {
     auth: AuthState
 }

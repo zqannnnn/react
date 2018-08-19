@@ -3,6 +3,7 @@
     bottom: 0;
     right: 0;
     width: 300px;
+    max-height: 100vh;
     .ant-collapse-header {
         display: flex;
         flex-direction: column;
@@ -25,6 +26,9 @@
         flex-direction: column;
         .chat-log {
             height: auto;
+            max-height: 50vh;
+            overflow: scroll;
+            margin-bottom: 10px;            
             p {
                 border-radius: 4px;
                 padding: 4px;

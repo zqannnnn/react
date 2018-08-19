@@ -33,10 +33,6 @@ import { RootState, LightboxState, AuthState, AlertState } from './reducers'
 import { Layout, Alert, BackTop } from 'antd'
 import './app.scss'
 
-declare global {
-    interface Window { Chat: any; }
-}
-
 interface AppProps {
   dispatch: (action: any) => void
   alert: AlertState
