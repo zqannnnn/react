@@ -64,12 +64,11 @@ class App extends React.Component<AppProps, any> {
     const { alert, lightbox } = this.props
 
     return (
-      <Layout>
-        <Router history={history}>
-          <div>
+      <Router history={history}>
+        <Layout>
           <NavBar mobileBreakPoint={768} placement="bottomLeft" />
           <Lightbox />
-          
+          <Layout>
             <Layout.Content className="page-wr">
               {alert.message && (
                 <Alert message={alert.message} type={alert.type} />
@@ -114,14 +113,14 @@ class App extends React.Component<AppProps, any> {
                 <div className="ant-back-top-inner">UP</div>
               </BackTop>
             </Layout.Content>
-            </div>
-        </Router>
-        {/* //1532692062 chat */}
-        <Chat auth={auth} ref={(Chat) => {window.Chat = Chat}} />
-        <Layout.Footer style={{ textAlign: 'center' }}>
-          {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
-        </Layout.Footer>
-      </Layout>
+            {/* //1532692062 chat */}
+            <Chat auth={auth} ref={(Chat) => {window.Chat = Chat}} />
+            <Layout.Footer style={{ textAlign: 'center' }}>
+              {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
+            </Layout.Footer>
+          </Layout>
+        </Layout>
+      </Router>
     )
   }
 }
