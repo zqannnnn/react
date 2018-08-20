@@ -1,30 +1,21 @@
 import * as React from 'react'
-import { connect, Dispatch } from 'react-redux'
-import { transactionActionCreators, AuthInfo } from '../../actions'
-import { RootState } from '../../reducers'
-import { Transaction, Comment } from '../../models'
-import { transactionConsts } from '../../constants'
-import { Icon, Input, Avatar, Spin } from 'antd'
+import { Comment } from '../../models'
 import { ListOptions } from '../../models'
+import { transactionConsts } from '../../constants'
+import { Icon, Input, Avatar } from 'antd'
 import i18n from 'i18next'
 interface CommentProps {
-  dispatch: Dispatch<RootState>
   comment: Comment
-  transactionId?: string
-  rowComments: Comment[]
+  handleReply: (replyTo?: string) => void
+  viewAllReplys: (comment: Comment) => void
+  submitReply: (comment: Comment) => void
 }
 interface CommentState {
-  currentComment: string
   currentReply: string
   currentReplyTo?: string
-  currentReplyRoot?: string
   replyInputShowing: boolean
-  replysInputShowing: boolean
-  viewAllCommentShowing: boolean
   viewAllReplyShowing: boolean
-  commentSubmitted: boolean
-  comments?: Comment[]
-  options: ListOptions
+  currentReplyRoot?: string
 }
 class CommentItem extends React.Component<CommentProps, CommentState> {
   constructor(props: CommentProps) {
@@ -32,32 +23,9 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
     this.state = this.defaultState
   }
   defaultState = {
-    currentComment: '',
     currentReply: '',
     replyInputShowing: false,
-    replysInputShowing: false,
-    options: {
-      page: 1,
-      pageSize: transactionConsts.COMMENT_LIST_SIZE
-    },
-    viewAllCommentShowing: true,
-    viewAllReplyShowing: true,
-    commentSubmitted: false
-  }
-
-  handleReply = (replyTo?: string) => {
-    const { rowComments } = this.props
-    if (replyTo && rowComments) {
-      const lastComment = rowComments.filter(
-        comment => comment.id === replyTo
-      )[0]
-      this.setState({
-        currentReplyTo: replyTo,
-        currentReplyRoot: lastComment.rootId,
-        replyInputShowing: true,
-        replysInputShowing: false
-      })
-    }
+    viewAllReplyShowing: true
   }
 
   formatTime = (time: string) => {
@@ -95,25 +63,32 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
     return <>{result}</>
   }
 
-  submitComment = (event: React.FormEvent<HTMLInputElement>) => {
+  viewAllReplys = (comment: Comment) => {
+    this.props.viewAllReplys(comment)
+    this.setState({ viewAllReplyShowing: false })
+  }
+
+  handleReply = (replyTo?: string) => {
+    this.props.handleReply(replyTo)
+    this.setState({
+      currentReplyTo: replyTo,
+      replyInputShowing: true,
+      currentReplyRoot: this.props.comment.rootId
+    })
+  }
+
+  submitReply = (event: React.FormEvent<HTMLInputElement>) => {
     event.preventDefault()
-    let {
-      currentComment,
-      currentReply,
-      currentReplyTo,
-      currentReplyRoot
-    } = this.state
-    const { dispatch, comment } = this.props
-    const { options } = this.state
+    let { currentReply, currentReplyTo, currentReplyRoot } = this.state
+    let comment: Comment
     comment = {
-      content: currentReplyTo ? currentReply : currentComment,
+      content: currentReply,
       replyTo: currentReplyTo,
-      rootId: currentReplyRoot,
-      transactionId: transaction.id
+      rootId: currentReplyRoot
     }
 
-    this.setState({ viewAllCommentShowing: false, currentReplyTo: undefined })
-    dispatch(transactionActionCreators.createComment(comment, options))
+    this.setState({ replyInputShowing: false, viewAllReplyShowing: false })
+    this.props.submitReply(comment)
   }
 
   handleReplyInputChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -123,36 +98,22 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
     })
   }
 
-  viewAllReplys = (comment: Comment) => {
-    const { options } = this.state
-    this.props.dispatch(
-      transactionActionCreators.listReplys(
-        comment.rootId,
-        comment.transactionId,
-        options
-      )
-    )
-    this.setState({ commentSubmitted: true, viewAllReplyShowing: false })
-  }
-
   renderComment = (comment: Comment) => {
-    const {
-      replyInputShowing,
-      currentReplyTo,
-      currentReply
-    } = this.state
+    const { replyInputShowing, currentReplyTo, currentReply } = this.state
     return (
       <div key={comment.id} className="reply-wrapper">
         <div className="reply">
           <div className="avatar">
             <Avatar icon="user" />
           </div>
-          <div className="main-comment">
-            <span className="user-id click">
-              {comment.user && comment.user.firstName} {i18n.t('reply to')}{' '}
-              {comment.user && comment.user.firstName}
-            </span>
-            <span className="reply-content">{comment.content}</span>
+          <div className="comment-flex">
+            <div className="main-comment">
+              <span className="user-id click">
+                {comment.user && comment.user.firstName} {i18n.t('reply to')}{' '}
+                {comment.user && comment.user.firstName}
+              </span>
+              <span className="reply-content">{comment.content}</span>
+            </div>
           </div>
 
           <div className="features">
@@ -178,7 +139,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
               placeholder="reply..."
               type="text"
               name="replyTo"
-              onPressEnter={this.submitComment}
+              onPressEnter={this.submitReply}
               value={currentReply}
               onChange={this.handleReplyInputChange}
               style={{
@@ -189,7 +150,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
                 <Icon
                   type="enter"
                   style={{ color: 'rgba(0,0,0,.25)' }}
-                  onClick={this.submitComment}
+                  onClick={this.submitReply}
                   className="icon-click"
                 />
               }
@@ -205,11 +166,10 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
       currentReply,
       replyInputShowing,
       currentReplyTo,
-      comments,
       viewAllReplyShowing
     } = this.state
     return (
-      <div key={comment.id} className="comment-wrapper">
+      <div className="comment-wrapper">
         <div className="speak">
           <div className="avatar">
             <Avatar icon="user" />
@@ -248,7 +208,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
                 placeholder="reply..."
                 type="text"
                 name="replyTo"
-                onPressEnter={this.submitComment}
+                onPressEnter={this.submitReply}
                 value={currentReply}
                 onChange={this.handleReplyInputChange}
                 style={{ paddingTop: 5, paddingBottom: 5 }}
@@ -256,15 +216,12 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
                   <Icon
                     type="enter"
                     style={{ color: 'rgba(0,0,0,.25)' }}
-                    onClick={this.submitComment}
+                    onClick={this.submitReply}
                     className="icon-click"
                   />
                 }
                 prefix={
-                  <Icon
-                    type="user"
-                    style={{ color: 'rgba(0,0,0,.25)' }}
-                  />
+                  <Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />
                 }
               />
             </div>
@@ -290,10 +247,4 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
   }
 }
 
-function mapStateToProps(state: RootState) {
-  const { transaction } = state
-  return { rowComments: transaction.rowComments }
-}
-
-const connectedCommentItem = connect(mapStateToProps)(CommentItem)
-export { connectedCommentItem as Comment }
+export { CommentItem }

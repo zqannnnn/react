@@ -257,7 +257,7 @@ router.get('/list/reply', async (req: IRequest, res: express.Response) => {
       order: [orderOption]
     })
     const replys = result.rows.filter(comment => comment.id !== rootId)
-    return res.send({ replys: replys, total: result.count })
+    return res.send({ replys, total: result.count })
   } catch (e) {
     return res.status(500).send({ error: e.message })
   }
@@ -277,9 +277,9 @@ router.post('/comment', async (req: IRequest, res: express.Response) => {
     if (comment.replyTo) {
       const rootComment = await Comment.findById(comment.rootId)
       if (rootComment) {
-        if (rootComment.totalReply)
+        if (rootComment.totalReply) {
           rootComment.totalReply = rootComment.totalReply + 1
-        else {
+        } else {
           rootComment.totalReply = 1
         }
         await rootComment.save()

@@ -7,11 +7,12 @@ import {
   AuthInfo
 } from '../../actions'
 import { RootState } from '../../reducers'
-import { Transaction } from '../../models'
+import { Transaction, Comment } from '../../models'
 import { transactionConsts } from '../../constants'
 import { Exchange } from '../exchange'
 import { Col } from 'antd'
-import { CommentAreaItem } from '../item/'
+import { CommentArea } from '../item/'
+import { ListOptions } from '../../models'
 import i18n from 'i18next'
 interface ItemProps {
   dispatch: Dispatch<RootState>
@@ -19,14 +20,49 @@ interface ItemProps {
   authInfo: AuthInfo
 }
 
-interface ItemState {}
+interface ItemState {
+  commentSubmitted: boolean
+  options: ListOptions
+}
 
 class Item extends React.Component<ItemProps, ItemState> {
   constructor(props: ItemProps) {
     super(props)
     this.state = this.defaultState
   }
-  defaultState = {}
+  defaultState = {
+    options: {
+      page: 1,
+      pageSize: transactionConsts.COMMENT_LIST_SIZE
+    },
+    commentSubmitted: false
+  }
+
+  listComment = (options: ListOptions) => {
+    const { transaction } = this.props
+    this.props.dispatch(
+      transactionActionCreators.listComment(transaction.id, options)
+    )
+  }
+  submitComment = (comment: Comment, options: ListOptions) => {
+    const { transaction } = this.props
+    this.props.dispatch(
+      transactionActionCreators.createComment(
+        { transactionId: transaction.id, ...comment },
+        options
+      )
+    )
+  }
+
+  submitReply = (comment: Comment) => {
+    const { transaction } = this.props
+    this.props.dispatch(
+      transactionActionCreators.createComment({
+        transactionId: transaction.id,
+        ...comment
+      })
+    )
+  }
 
   handleCancel = (id: string) => {
     let r = confirm(i18n.t('Are you sure?'))
@@ -88,7 +124,7 @@ class Item extends React.Component<ItemProps, ItemState> {
   }
   render() {
     const { transaction, authInfo } = this.props
-    const {} = this.state
+    const { options } = this.state
     const goods = transaction.goods
     const taker = transaction.taker
     return (
@@ -225,7 +261,14 @@ class Item extends React.Component<ItemProps, ItemState> {
                 )}
             </div>
 
-            <CommentAreaItem transaction={transaction} />
+            <CommentArea
+              comments={transaction.comments}
+              totalComment={transaction.totalComment}
+              commentLoading={transaction.commentLoading}
+              listComment={this.listComment}
+              submitComment={this.submitComment}
+              submitReply={this.submitReply}
+            />
           </div>
         </Col>
       )

@@ -1,42 +1,41 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { transactionActionCreators, AuthInfo } from '../../actions'
 import { RootState } from '../../reducers'
-import { Transaction, Comment } from '../../models'
+import { Comment } from '../../models'
 import { transactionConsts } from '../../constants'
 import { Icon, Input, Pagination, Spin } from 'antd'
 import { ListOptions } from '../../models'
 import { CommentItem } from '../item/'
+import { transactionActionCreators } from '../../actions'
 import i18n from 'i18next'
 interface CommentAreaProps {
   dispatch: Dispatch<RootState>
-  comment: Comment
-  authInfo: AuthInfo
+  comments?: Comment[]
+  listComment: (options: ListOptions) => void
+  submitComment: (comment: Comment, options: ListOptions) => void
+  submitReply: (comment: Comment) => void
+  totalComment?: number
+  commentLoading?: boolean
   rowComments: Comment[]
 }
 
 interface CommentAreaState {
   currentComment: string
-  currentReply: string
   currentReplyTo?: string
   currentReplyRoot?: string
-  replyInputShowing: boolean
   viewAllCommentShowing: boolean
   commentSubmitted: boolean
   comments?: Comment[]
-  transaction?: Transaction
   options: ListOptions
 }
-class CommentAreaItem extends React.Component<CommentAreaProps, CommentAreaState> {
+class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
   constructor(props: CommentAreaProps) {
     super(props)
     this.state = this.defaultState
   }
   defaultState = {
     currentComment: '',
-    currentReply: '',
-    replyInputShowing: false,
-    comments: this.props.transaction.comments,
+    comments: this.props.comments,
     options: {
       page: 1,
       pageSize: transactionConsts.COMMENT_LIST_SIZE
@@ -54,73 +53,80 @@ class CommentAreaItem extends React.Component<CommentAreaProps, CommentAreaState
 
   viewAllComments = () => {
     const { options } = this.state
-    this.props.dispatch(
-      transactionActionCreators.listComment(this.props.transaction.id, options)
-    )
+    this.props.listComment(options)
     this.setState({ viewAllCommentShowing: false, commentSubmitted: true })
   }
 
+  viewAllReplys = (comment: Comment) => {
+    const { options } = this.state
+    this.props.dispatch(
+      transactionActionCreators.listReplys(
+        comment.rootId,
+        comment.transactionId,
+        options
+      )
+    )
+  }
+
   onPageChange = (current: number, defaultPageSize: number) => {
-    const { transaction } = this.props
     const options = this.state.options
     options.page = current
     options.pageSize = defaultPageSize
     this.setState({ options, commentSubmitted: true })
-    this.props.dispatch(
-      transactionActionCreators.listComment(transaction.id, {
-        ...options
-      })
-    )
+    this.props.listComment(options)
   }
 
   componentWillReceiveProps(nextProps: CommentAreaProps) {
-    const { transaction } = nextProps
+    const { comments } = this.props
     const { commentSubmitted, viewAllCommentShowing } = this.state
     if (!commentSubmitted && viewAllCommentShowing) {
       this.setState({
         ...this.defaultState,
-        comments: transaction.comments
+        comments: comments
       })
     } else {
       this.setState({
-        comments: transaction.comments,
+        comments: comments,
         commentSubmitted: false,
-        currentComment: '',
-        currentReply: '',
-        replyInputShowing: false
+        currentComment: ''
       })
     }
   }
 
   submitComment = (event: React.FormEvent<HTMLInputElement>) => {
     event.preventDefault()
-    let {
-      currentComment,
-      currentReply,
-      currentReplyTo,
-      currentReplyRoot
-    } = this.state
-    const { dispatch, transaction } = this.props
+    let { currentComment, currentReplyTo, currentReplyRoot } = this.state
     const { options } = this.state
     let comment: Comment
     comment = {
-      content: currentReplyTo ? currentReply : currentComment,
+      content: currentComment,
       replyTo: currentReplyTo,
-      rootId: currentReplyRoot,
-      transactionId: transaction.id
+      rootId: currentReplyRoot
     }
 
     this.setState({ viewAllCommentShowing: false, currentReplyTo: undefined })
-    dispatch(transactionActionCreators.createComment(comment, options))
+    this.props.submitComment(comment, options)
+  }
+
+  submitReply = (comment: Comment) => {
+    this.props.submitReply(comment)
+  }
+
+  handleReply = (replyTo?: string) => {
+    const { rowComments } = this.props
+    if (replyTo && rowComments) {
+      const lastComment = rowComments.filter(
+        comment => comment.id === replyTo
+      )[0]
+      this.setState({
+        currentReplyRoot: lastComment.rootId
+      })
+    }
   }
 
   render() {
-    const { comment } = this.props
-    const {
-      currentComment,
-      viewAllCommentShowing,
-      transaction
-    } = this.state
+    const { comments, totalComment, commentLoading } = this.props
+    const { currentComment, viewAllCommentShowing } = this.state
     return (
       <div>
         <div className="comment">
@@ -132,20 +138,26 @@ class CommentAreaItem extends React.Component<CommentAreaProps, CommentAreaState
               >
                 {i18n.t('View all comments')}
               </span>
-              {transaction.commentLoading && <Spin />}
+              {commentLoading && <Spin />}
             </div>
           )}
 
-          {transaction.totalComment === 0 && (
+          {totalComment === 0 && (
             <div className="release">
               <span>{i18n.t("Let's comment on it.")}</span>
             </div>
           )}
 
-          {comment &&
-            comment.map((comment, index) => (
-            <CommentItem comment={comment} />
-          ))}
+          {comments &&
+            comments.map((comment, index) => (
+              <CommentItem
+                comment={comment}
+                handleReply={this.handleReply}
+                viewAllReplys={this.viewAllReplys}
+                submitReply={this.submitReply}
+                key={index}
+              />
+            ))}
 
           <Pagination
             style={{
@@ -156,7 +168,7 @@ class CommentAreaItem extends React.Component<CommentAreaProps, CommentAreaState
             defaultCurrent={1}
             defaultPageSize={3}
             hideOnSinglePage={true}
-            total={transaction.totalComment}
+            total={totalComment}
             onChange={this.onPageChange}
             size="small"
           />
@@ -189,9 +201,9 @@ class CommentAreaItem extends React.Component<CommentAreaProps, CommentAreaState
 }
 
 function mapStateToProps(state: RootState) {
-  const { auth, transaction } = state
-  return { authInfo: auth.authInfo, rowComments: transaction.rowComments }
+  const { transaction } = state
+  return { rowComments: transaction.rowComments }
 }
 
-const connectedCommentAreaItem = connect(mapStateToProps)(CommentAreaItem)
-export { connectedCommentAreaItem as CommentArea }
+const connectedCommentArea = connect(mapStateToProps)(CommentArea)
+export { connectedCommentArea as CommentArea }
