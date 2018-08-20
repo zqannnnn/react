@@ -39,7 +39,7 @@ export const router = (app: Application, passport: PassportStatic) => {
           .send({ error: i18n.t('Incorrect email or password.') })
       }
       const data: AuthInfo = {
-        token: jwt.sign(user, app.get('secretKey'), {
+        token: jwt.sign(user.get(), app.get('secretKey'), {
           expiresIn: consts.EXPIRE_IN
         }),
         id: user.id,

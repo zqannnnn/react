@@ -37,7 +37,7 @@ export const passportConfig = (passport: PassportStatic) => {
 
           const result = await user.validatePassword(password)
           if (result) {
-            return done(null, user.get())
+            return done(null, user)
           } else {
             return done(null, false)
           }
