@@ -11,7 +11,7 @@ import { RootState } from '../reducers'
 export type Action = {
   type: string
   error?: string
-  categorys?: Array<Category>
+  categories?: Array<Category>
 }
 type Thunk = ThunkAction<void, RootState, void>
 
@@ -21,7 +21,7 @@ const getAll: ActionCreator<ThunkAction<void, RootState, void>> = () => {
     categoryService
       .getAll()
       .then(
-        (categorys: Array<Category>) => dispatch(success(categorys)),
+        (categories: Array<Category>) => dispatch(success(categories)),
         (error: string) => dispatch(failure(error))
       )
   }
@@ -29,8 +29,8 @@ const getAll: ActionCreator<ThunkAction<void, RootState, void>> = () => {
   function request(): Action {
     return { type: categoryConsts.GET_REQUEST }
   }
-  function success(categorys: Array<Category>): Action {
-    return { type: categoryConsts.GET_SUCCESS, categorys }
+  function success(categories: Array<Category>): Action {
+    return { type: categoryConsts.GET_SUCCESS, categories }
   }
   function failure(error: string): Action {
     return { type: categoryConsts.GET_FAILURE, error }

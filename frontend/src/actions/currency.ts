@@ -11,7 +11,7 @@ import { RootState } from '../reducers'
 export type Action = {
   type: string
   error?: string
-  currencys?: Array<Currency>
+  currencies?: Array<Currency>
   currencyState?: string
 }
 type Thunk = ThunkAction<void, RootState, void>
@@ -22,7 +22,7 @@ const getAll: ActionCreator<ThunkAction<void, RootState, void>> = () => {
     currencyService
       .getAll()
       .then(
-        (currencys: Array<Currency>) => dispatch(success(currencys)),
+        (currencies: Array<Currency>) => dispatch(success(currencies)),
         (error: string) => dispatch(failure(error))
       )
   }
@@ -30,17 +30,17 @@ const getAll: ActionCreator<ThunkAction<void, RootState, void>> = () => {
   function request(): Action {
     return { type: currencyConsts.GET_REQUEST }
   }
-  function success(currencys: Array<Currency>): Action {
-    return { type: currencyConsts.GET_SUCCESS, currencys }
+  function success(currencies: Array<Currency>): Action {
+    return { type: currencyConsts.GET_SUCCESS, currencies }
   }
   function failure(error: string): Action {
     return { type: currencyConsts.GET_FAILURE, error }
   }
 }
-function upCurrencystatus(currencyState: string) {
+function upCurrencyStatus(currencyState: string) {
   return { type: currencyConsts.UPDATE_CURRENCY_STATE, currencyState }
 }
 export const actionCreators = {
   getAll,
-  upCurrencystatus
+  upCurrencyStatus
 }

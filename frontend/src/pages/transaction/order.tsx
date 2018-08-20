@@ -20,8 +20,8 @@ const { TextArea } = Input
 interface OrderEditProps {
   dispatch: Dispatch<RootState>
   processing: boolean
-  categorys: Category[]
-  currencys: Currency[]
+  categories: Category[]
+  currencies: Currency[]
   authInfo: AuthInfo
 }
 interface OrderEditState {
@@ -60,9 +60,9 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
   }
 
   componentDidMount() {
-    if (!this.props.categorys)
+    if (!this.props.categories)
       this.props.dispatch(categoryActionCreators.getAll())
-    if (!this.props.currencys)
+    if (!this.props.currencies)
       this.props.dispatch(currencyActionCreators.getAll())
   }
 
@@ -169,10 +169,10 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
       category
     } = this.state.goods
     let { submitted } = this.state
-    let { processing, categorys, currencys } = this.props
+    let { processing, categories, currencies } = this.props
     let currentCategory: Category =
-      categorys &&
-      categorys.filter((item: Category) => {
+      categories &&
+      categories.filter((item: Category) => {
         return item.type === category
       })[0]
 
@@ -501,7 +501,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                   offset={2}
                 >
                   <label>{i18n.t('Price')}</label>
-                  {currencys && (
+                  {currencies && (
                     <div className="flex">
                       <InputNumber
                         min={0}
@@ -519,7 +519,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                           this.handlePriceChange(value, 'currencyCode')
                         }
                       >
-                        {currencys.map((item, index) => (
+                        {currencies.map((item, index) => (
                           <Select.Option key={index} value={item.code}>
                             {item.code}
                           </Select.Option>
@@ -602,8 +602,8 @@ function mapStateToProps(state: RootState) {
   const { processing } = goods
   return {
     processing,
-    categorys: category.items,
-    currencys: currency.items,
+    categories: category.items,
+    currencies: currency.items,
     authInfo: auth.authInfo
   }
 }

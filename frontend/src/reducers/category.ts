@@ -11,7 +11,7 @@ export function category(state = {}, action: CategoryAction): State {
     case categoryConsts.GET_REQUEST:
       return { loading: true }
     case categoryConsts.GET_SUCCESS:
-      return { items: action.categorys }
+      return { items: action.categories }
     case categoryConsts.GET_FAILURE:
       return { error: action.error }
     default:

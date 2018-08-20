@@ -7,11 +7,11 @@ router.use(authMiddleware)
 router.use(loginCheckMiddleware)
 
 router.get('/', async (req: express.Request, res: express.Response) => {
-  const categorys = await Category.findAll({
+  const categories = await Category.findAll({
     attributes: ['type', 'details']
   })
 
-  return res.send(categorys)
+  return res.send(categories)
 })
 
 export { router }
