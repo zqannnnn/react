@@ -10,5 +10,3 @@ export {
     UserForm,
     UserValuesProps
   } from './personal-modal'
-
-export { ConsigneeForm, ConsigneeValuesProps } from './consignee-modal'

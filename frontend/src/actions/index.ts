@@ -3,10 +3,6 @@ export {
   Action as AlertAction
 } from './alert'
 export {
-  actionCreators as consigneeActionCreators,
-  Action as consigneeAction
-} from './consignee'
-export {
   actionCreators as categoryActionCreators,
   Action as CategoryAction
 } from './category'

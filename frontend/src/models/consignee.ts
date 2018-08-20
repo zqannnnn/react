@@ -1,7 +1,7 @@
 export interface Consignee {
   id?: string
   userId?: string
-  phoneNum: number
+  phoneNum: string
   name: string
   email: string
   address: string

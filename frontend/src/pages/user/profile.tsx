@@ -9,11 +9,13 @@ import {
   lightboxActionCreators
 } from '../../actions'
 import { RootState, UserState } from '../../reducers'
-import { User, Currency, Image } from '../../models'
+import { User, Currency, Image, Consignee } from '../../models'
 import { Row, Col, Select, Button } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import i18n from 'i18next'
 import { UserForm, UserValuesProps, CompanyForm, CompanyValuesProps } from '../../components/form'
+import { Record, EditableTable } from '../../components/consignee-editor/'
+
 
 interface ProfileProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
@@ -21,6 +23,7 @@ interface ProfileProps extends RouteComponentProps<{ id: string }> {
   authInfo: AuthInfo
   currencies: Currency[]
 }
+
 interface ProfileState {
   userId: string
   user: User
@@ -29,6 +32,7 @@ interface ProfileState {
   companyVisible: boolean
   path?:string
 }
+
 class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   constructor(props: ProfileProps) {
     super(props)
@@ -78,8 +82,8 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   }
 
   componentWillReceiveProps(nextProps: ProfileProps) {
-    const { userState } = nextProps
-    const { userData } = userState
+    const { userProp } = nextProps
+    const { userData } = userProp
     const { authInfo } = this.props
     const { user } = this.state
     if(nextProps.match.path !== this.state.path){
@@ -152,17 +156,24 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     this.setState({ user: newUser })
   }
 
-  handleSubmitConsignee = (values: ConsigneeValuesProps) => {
+  handleSubmitConsignee = (values: Record) => {
     const { dispatch } = this.props
-    // const { userType } = this.state.user
     let consignee: Consignee = {
       name: values.name,
       email: values.email,
       phoneNum: values.phoneNum,
       address: values.address
     }
-    dispatch(consigneeActionCreators.new(consignee))
+    if (values.id)
+      dispatch(userActionCreators.editConsignee(consignee, values.id))
+    else dispatch(userActionCreators.newConsignee(consignee))
   }
+
+  handleDeleteConsignee = (id: string) => {
+    const { dispatch } = this.props
+    dispatch(userActionCreators.deleteConsignee(id))
+  }
+
   //for render select input
   renderCurrencySelect = () => {
     let preferCurrency = this.state.user.preferredCurrencyCode || ''
@@ -190,12 +201,23 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   openLightbox = (image: string) => {
     this.props.dispatch(lightboxActionCreators.open(image))
   }
-  handleAddress = (value: any) => {
-    this.setState({ submitted: true })
-    this.props.dispatch(authActionCreators.login(value.email, value.password))
-  }
+
   render() {
     const { user, userSelf } = this.state
+    
+    let dataSource: Record[]
+    if (user.consignees) {
+      dataSource = user.consignees.map((source, index) => ({
+        key: index.toString(),
+        id: source.id,
+        name: source.name,
+        email: source.email,
+        phoneNum: source.phoneNum,
+        address: source.address
+      }))
+    } else {
+      dataSource = []
+    }
     let imagePaths: string[]
     if (user && user.businessLicenses) {
       imagePaths = user.businessLicenses.map(image => image.path)
@@ -219,6 +241,14 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
               renderCurrencySelect={this.renderCurrencySelect}
             />}
           </div>
+          <div className="addConsignee">
+              <label>{i18n.t('Address')}</label>
+            </div>
+            <EditableTable
+              data={dataSource}
+              handleSubmit={this.handleSubmitConsignee}
+              handleDelete={this.handleDeleteConsignee}
+            />
           <div className="view-content">
             <Row>
               <Col

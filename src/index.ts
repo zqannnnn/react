@@ -15,7 +15,6 @@ import { router } from './routes'
 const app = express()
 webpackMiddleware(app)
 app.use(middleware.handle(i18n))
-
 // initDatabase()
 // Get the exchange rate API
 // import { getApi as currencyApi } from './api/currency'
