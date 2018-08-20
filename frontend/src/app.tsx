@@ -2,9 +2,16 @@ import * as React from 'react'
 import { Router, Route, Switch } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import i18n from 'i18next'
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStroopwafel, faEnvelope, faKey, faTimes } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faStroopwafel,faEnvelope,faKey, faTimes)
+
 import { history } from './helpers/history'
 import { alertActionCreators, authActionCreators } from './actions'
-import { PrivateRoute, AdminRoute, NavBar, Lightbox } from './components'
+import { PrivateRoute, AdminRoute, NavBar, Lightbox, Chat } from './components'
 import {
   LoginPage,
   RegisterPage,
@@ -26,6 +33,10 @@ import { RootState, LightboxState, AuthState, AlertState } from './reducers'
 import { Layout, Alert, BackTop } from 'antd'
 import './app.scss'
 
+declare global {
+    interface Window { Chat: any; }
+}
+
 interface AppProps {
   dispatch: (action: any) => void
   alert: AlertState
@@ -43,8 +54,8 @@ class App extends React.Component<AppProps, any> {
     })
     if (auth.loggedIn) dispatch(authActionCreators.refresh())
   }
-
   render() {
+    const { auth } = this.props
     /*
     const changeLanguage = (lng: string) => {
       i18n.changeLanguage(lng);
@@ -53,11 +64,12 @@ class App extends React.Component<AppProps, any> {
     const { alert, lightbox } = this.props
 
     return (
-      <Router history={history}>
-        <Layout>
+      <Layout>
+        <Router history={history}>
+          <div>
           <NavBar mobileBreakPoint={768} placement="bottomLeft" />
           <Lightbox />
-          <Layout>
+          
             <Layout.Content className="page-wr">
               {alert.message && (
                 <Alert message={alert.message} type={alert.type} />
@@ -102,12 +114,14 @@ class App extends React.Component<AppProps, any> {
                 <div className="ant-back-top-inner">UP</div>
               </BackTop>
             </Layout.Content>
-            <Layout.Footer style={{ textAlign: 'center' }}>
-              {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
-            </Layout.Footer>
-          </Layout>
-        </Layout>
-      </Router>
+            </div>
+        </Router>
+        {/* //1532692062 chat */}
+        <Chat auth={auth} ref={(Chat) => {window.Chat = Chat}} />
+        <Layout.Footer style={{ textAlign: 'center' }}>
+          {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
+        </Layout.Footer>
+      </Layout>
     )
   }
 }

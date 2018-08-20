@@ -25,7 +25,7 @@ export {
 export {
   actionCreators as authActionCreators,
   Action as AuthAction,
-  AuthInfo
+  AuthInfo,
 } from './auth'
 export {
   actionCreators as lightboxActionCreators,

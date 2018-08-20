@@ -7,6 +7,7 @@ import { app } from '../index'
 import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
 import { Image, User } from '../models'
+import { UserFields } from '../passport'
 const router = express.Router()
 router.use(authMiddleware)
 router.post('/new', async (req, res) => {
@@ -41,7 +42,8 @@ router.post('/new', async (req, res) => {
       id: user.id,
       licenseStatus: 0,
       isAdmin: user.userType === consts.USER_TYPE_ADMIN,
-      preferredCurrencyCode: user.preferredCurrencyCode
+      preferredCurrencyCode: user.preferredCurrencyCode,
+      name: user.fullName()
     }
     return res.send(data)
   } catch (e) {
@@ -54,8 +56,8 @@ router.use(loginCheckMiddleware)
 router.get('/refresh/auth', async (req: IRequest, res: express.Response) => {
   User.findOne({
     where: { id: req.userId },
-    attributes: ['userType', 'licenseStatus', 'preferredCurrencyCode']
-  }).then(user => {
+    attributes: UserFields
+}).then(user => {
     if (!user) {
       return res
         .status(401)
@@ -64,7 +66,8 @@ router.get('/refresh/auth', async (req: IRequest, res: express.Response) => {
     const authInfo: AuthInfo = {
       id: req.userId,
       preferredCurrencyCode: user.preferredCurrencyCode,
-      licenseStatus: user.licenseStatus
+      licenseStatus: user.licenseStatus,
+      name: user.fullName()
     }
     if (user.userType === consts.USER_TYPE_ADMIN) {
       authInfo.isAdmin = true
