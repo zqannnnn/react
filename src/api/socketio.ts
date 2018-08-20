@@ -1,6 +1,7 @@
 import * as socket from 'socket.io' //1532692062 chat
 import { AuthInfo } from '../../frontend/src/actions'
 import { StringKeyHash, HashOfStringKeyHash } from '../interfaces'
+import { Message } from '../models/'
 //https://socket.io/get-started/chat/
 //https://codeburst.io/isomorphic-web-app-react-js-express-socket-io-e2f03a469cd3
 const startSocket = async (server: any) => {
@@ -10,6 +11,14 @@ const startSocket = async (server: any) => {
         socket.on("private", function(data) {     
             const privateMsg = { from: socket.id, to: data.to, msg: data.msg }
             io.to(`${data.to}`).emit('private', privateMsg );
+            const from = users[socket.id]['id']
+            const to = users[data.to]['id']
+            const message = new Message({
+                from: from,
+                to: to,
+                message: data.msg
+            })
+            message.save()          
         });
 		socket.on('get-users', (authInfo: AuthInfo) => {
 			let keyForRemove = null
