@@ -36,8 +36,8 @@ interface TransProps
   processing: boolean
   transProp: Transaction
   goodsProp: Goods
-  categorys: Category[]
-  currencys: Currency[]
+  categories: Category[]
+  currencies: Currency[]
   image: string
   authInfo: AuthInfo
 }
@@ -79,9 +79,9 @@ class EditPage extends React.Component<TransProps, TransState> {
         ...this.state,
         goodsId
       })
-    if (!this.props.categorys)
+    if (!this.props.categories)
       this.props.dispatch(categoryActionCreators.getAll())
-    if (!this.props.currencys)
+    if (!this.props.currencies)
       this.props.dispatch(currencyActionCreators.getAll())
     transactionId &&
       this.props.dispatch(transactionActionCreators.getById(transactionId))
@@ -98,7 +98,7 @@ class EditPage extends React.Component<TransProps, TransState> {
     }
   }
   componentWillReceiveProps(nextProps: TransProps) {
-    const { transProp, goodsProp, image, categorys } = nextProps
+    const { transProp, goodsProp, image, categories } = nextProps
     const { submitted, transactionId, goodsId, transaction } = this.state
     const goods = transaction.goods
     if (transactionId && transProp && !submitted) {
@@ -109,7 +109,7 @@ class EditPage extends React.Component<TransProps, TransState> {
         }
       })
     }
-    if (!transactionId && categorys) {
+    if (!transactionId && categories) {
       this.setState({
         transaction: {
           ...transaction
@@ -199,7 +199,7 @@ class EditPage extends React.Component<TransProps, TransState> {
   render() {
     const { price, status, currencyCode, goods } = this.state.transaction
     let { submitted } = this.state
-    let { processing, currencys } = this.props
+    let { processing, currencies } = this.props
     let imagePaths: string[]
     if (goods && goods.images) {
       imagePaths = goods.images.map(image => image.path)
@@ -267,7 +267,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                       offset={2}
                     >
                       <label>{i18n.t('Price')}</label>
-                      {currencys && (
+                      {currencies && (
                         <div className="flex">
                           <div
                             className={submitted && !price ? 'has-error' : ''}
@@ -295,7 +295,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                               this.handleSelectChange(value, 'currencyCode')
                             }
                           >
-                            {currencys.map((item, index) => (
+                            {currencies.map((item, index) => (
                               <Select.Option key={index} value={item.code}>
                                 {item.code}
                               </Select.Option>
@@ -342,8 +342,8 @@ function mapStateToProps(state: RootState) {
   const { goodsData } = goods
   return {
     processing,
-    categorys: category.items,
-    currencys: currency.items,
+    categories: category.items,
+    currencies: currency.items,
     transProp: transData,
     goodsProp: goodsData,
     authInfo: auth.authInfo

@@ -28,7 +28,7 @@ class Filter extends React.Component<ItemProps, ItemState> {
     this.setState({ options: this.props.initOptions })
   }
   handleSelectCurrency = (value: string) => {
-    this.props.dispatch(currencyActionCreators.upCurrencystatus(value))
+    this.props.dispatch(currencyActionCreators.upCurrencyStatus(value))
   }
   handleChangeType = (values: string[]) => {
     let newOptions = this.state.options

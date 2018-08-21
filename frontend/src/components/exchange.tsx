@@ -14,15 +14,15 @@ class Exchange extends React.Component<ItemProps> {
     super(props)
   }
   exchangeCurrency = (price: number, currencyCode: string) => {
-    let currencys = this.props.currencyState.items
+    let currencies = this.props.currencyState.items
     let result = ''
-    if (currencys) {
-      let newArray = currencys.filter(currency => {
+    if (currencies) {
+      let newArray = currencies.filter(currency => {
         return currency.code === currencyCode
       })
       let oldRate = newArray[0].rate
       let currentCurrency = this.props.currencyState.currentCurrency
-      let newRate = currencys.filter(currency => {
+      let newRate = currencies.filter(currency => {
         return currency.code === currentCurrency
       })[0].rate
       let newPrice = (((price / oldRate) * newRate * 100) / 100).toFixed(4)

@@ -24,8 +24,7 @@ interface ProfileProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
   userState: UserState
   authInfo: AuthInfo
-  currencys: Currency[]
-  curencyCode: Currency
+  currencies: Currency[]
 }
 interface ProfileState {
   userId: string
@@ -58,7 +57,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     } else {
       this.props.authInfo.id &&
         this.props.dispatch(userActionCreators.getById(this.props.authInfo.id))
-      if (!this.props.currencys)
+      if (!this.props.currencies)
         this.props.dispatch(currencyActionCreators.getAll())
     }
   }
@@ -137,7 +136,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
         [name]: value
       }
     })
-    this.props.dispatch(currencyActionCreators.upCurrencystatus(value))
+    this.props.dispatch(currencyActionCreators.upCurrencyStatus(value))
   }
   personalSubmit = (values: UserValuesProps) => {
     const { user } = this.state
@@ -169,7 +168,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   //for render select input
   renderCurrencySelect = () => {
     let preferCurrency = this.state.user.preferredCurrencyCode || ''
-    const { currencys } = this.props
+    const { currencies } = this.props
     return (
       <Select
         value={String(preferCurrency)}
@@ -177,8 +176,8 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
           this.handleSelect(value, 'preferredCurrencyCode')
         }
       >
-        {currencys &&
-          currencys.map((item, index) => (
+        {currencies &&
+          currencies.map((item, index) => (
             <Select.Option key={index} value={item.code}>
               {item.code}({item.description})
             </Select.Option>
@@ -326,7 +325,7 @@ function mapStateToProps(state: RootState) {
   return {
     userState: user,
     authInfo: auth.authInfo,
-    currencys: currency.items
+    currencies: currency.items
   }
 }
 const connectedProfilePage = connect(mapStateToProps)(ProfilePage)
