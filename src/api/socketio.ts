@@ -10,8 +10,6 @@ const startSocket = async (server: any) => {
 	io.on('connection', socket => {
         socket.on("private", function(data) {     
             if ( users[socket.id] != undefined && users[data.to] != undefined ) {
-                const privateMsg = { from: socket.id, to: data.to, msg: data.msg }
-                io.to(`${data.to}`).emit('private', privateMsg );
                 const from = users[socket.id]['id']
                 const to = users[data.to]['id']
                 const message = new Message({
@@ -20,6 +18,23 @@ const startSocket = async (server: any) => {
                     message: data.msg
                 })
                 message.save()    
+                const privateMsg = { id: message.id, from: socket.id, to: data.to, msg: data.msg }
+                io.to(`${data.to}`).emit('private', privateMsg );
+            }      
+        });
+        socket.on("read-pm", function(data) {   
+            //update all messages from data.user as read  
+            if ( users[socket.id] != undefined ) {
+                const to = users[socket.id]['id']
+                const from = data.user['id']
+                Message.findAll({
+                    where: { from: from, to: to }
+                }).then(msgs => {
+                    msgs.forEach(function (msg, index) {
+                        //msg.isNew = false
+                        //msg.save()
+                    });
+                })
             }      
         });
 		socket.on('get-users', (authInfo: AuthInfo) => {
@@ -46,6 +61,8 @@ const startSocket = async (server: any) => {
 				delete users[keyForRemove]
 			}
             io.sockets.emit('get-users', users)
+            console.log('get users!!!!!!!!!!!!!')
+            console.log(users)
 		})
 		socket.on('disconnect', () => {
 			delete users[socket.id]

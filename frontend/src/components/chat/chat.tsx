@@ -63,7 +63,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
     }    
     componentWillMount() {
 		let { auth } = this.props
-		const { authInfo } = auth
+        const { authInfo } = auth
         const that = this;
 		const socket = socketIOClient("http://localhost:3000")
 		socket.on('connect', function () {
@@ -135,6 +135,9 @@ class Chat extends React.Component<ItemProps, ItemState> {
             this.setState({activePanel: panel})
             users[panel]['panelStatus'] = 'expended'
             users[panel]['newMsg'] = false
+            //update all messages from user as read
+            const data = { user: users[panel] }
+            if (this.state.socket !== undefined) this.state.socket.emit("read-pm", data);
         } else {
             this.setState({activePanel: ''})
         }
