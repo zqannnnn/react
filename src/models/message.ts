@@ -45,4 +45,9 @@ export class Message extends Model<Message> {
     public to: string
 
     @Column public message: string
+
+    @Default(true)
+    @Column({ field: 'is_new' })
+    public isNew: boolean
+
 }
