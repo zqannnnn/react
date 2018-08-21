@@ -57,7 +57,7 @@ router.get('/refresh/auth', async (req: IRequest, res: express.Response) => {
   User.findOne({
     where: { id: req.userId },
     attributes: UserFields
-}).then(user => {
+  }).then(user => {
     if (!user) {
       return res
         .status(401)

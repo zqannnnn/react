@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { RouteComponentProps } from 'react-router-dom'
+import {Location} from 'history';
 import {consts} from "../../../../src/config/static"
 import {
   userActionCreators,
@@ -32,6 +33,7 @@ interface ProfileState {
   userSelf: boolean
   personalVisible: boolean
   modalVisible: boolean
+  path?:string
 }
 class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   constructor(props: ProfileProps) {
@@ -86,6 +88,27 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     const { userData } = userState
     const { authInfo } = this.props
     const { user } = this.state
+    if(nextProps.match.path !== this.state.path){
+      let userId = nextProps.match.params.id
+      let path = nextProps.match.path
+      if(path){
+        this.setState({
+          path:path
+        })
+      }
+      if (userId) {
+        userId &&
+          this.setState({
+            userId:userId, 
+          })
+        userId && nextProps.dispatch(userActionCreators.getById(userId))
+      } else {
+          nextProps.authInfo.id &&
+          nextProps.dispatch(userActionCreators.getById(nextProps.authInfo.id))
+        if (!nextProps.currencys)
+          nextProps.dispatch(currencyActionCreators.getAll())
+      }
+    }
     if (userData) {
       this.setState({
         user: {

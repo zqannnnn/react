@@ -234,7 +234,18 @@ router
           attributes: ['code']
         },
         {
-          model: Goods
+          model: User,
+          as: 'maker',
+          attributes: ['firstName', 'lastName', 'id']
+        },
+        {
+          model: Goods,
+          include: [
+            {
+              model: Image,
+              attributes: ['path', 'type']
+            }
+          ]
         }
       ]
     })

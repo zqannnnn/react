@@ -64,10 +64,13 @@ class App extends React.Component<AppProps, any> {
     const { alert, lightbox } = this.props
 
     return (
+      <>
+      
       <Router history={history}>
+        
         <Layout>
           <NavBar mobileBreakPoint={768} placement="bottomLeft" />
-          <Lightbox />
+          {lightbox.visible? <Lightbox />  : ''}
           <Layout>
             <Layout.Content className="page-wr">
               {alert.message && (
@@ -121,6 +124,7 @@ class App extends React.Component<AppProps, any> {
           </Layout>
         </Layout>
       </Router>
+      </>
     )
   }
 }
