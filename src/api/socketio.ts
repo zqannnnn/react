@@ -9,26 +9,44 @@ const startSocket = async (server: any) => {
 	let users: HashOfStringKeyHash = {}
 	io.on('connection', socket => {
         socket.on("private", function(data) {     
-            if ( users[socket.id] != undefined && users[data.to] != undefined ) {
-                const from = users[socket.id]['id']
-                const to = users[data.to]['id']
-                const message = new Message({
-                    from: from,
-                    to: to,
-                    message: data.msg
-                })
-                message.save()    
-                const privateMsg = { id: message.id, from: socket.id, to: data.to, msg: data.msg }
-                io.to(`${data.to}`).emit('private', privateMsg );
-            }      
+            //if ( users[socket.id] != undefined ) {
+                // && users[data.to] != undefined
+
+                let from;
+                for (var key in users) {
+                    if ( users[key]['socket'] == socket.id ) {
+                        from = key
+                    }
+                }
+    
+                if (from != undefined) {
+                    const message = new Message({
+                        from: from,
+                        to: data.to,
+                        message: data.msg
+                    })
+                    message.save()        
+                }
+
+                if ( users[data.to] != undefined ) {
+                    //console.log('TO !!!!!!!!')
+                    //console.log(users[data.to])
+                    const privateMsg = { from: from, to: data.to, msg: data.msg }
+                    io.to(`${users[data.to]['socket']}`).emit('private', privateMsg );
+    
+                }
+                //const from = users[socket.id]['id']
+                //const to = users[data.to]['id']
+            //}      
         });
+        /*
         socket.on("read-pm", function(data) {   
             //update all messages from data.user as read  
             if ( users[socket.id] != undefined ) {
                 const to = users[socket.id]['id']
                 const from = data.user['id']
                 Message.findAll({
-                    where: { from: from, to: to }
+                    where: { from: from, to: to, isNew: true }
                 }).then(msgs => {
                     msgs.forEach(function (msg, index) {
                         //msg.isNew = false
@@ -37,32 +55,46 @@ const startSocket = async (server: any) => {
                 })
             }      
         });
+        */
 		socket.on('get-users', (authInfo: AuthInfo) => {
 			let keyForRemove = null
 			for (var key in users) {
-				if ( users[key]['id'] == authInfo.id ) {
+				if ( key == authInfo.id ) {
 					let aInfo: StringKeyHash = {};
 					aInfo['id'] = authInfo.id
 					let name = users[key]['name']
 					if ( name == 'undefined undefined' ) name = authInfo.name					
 					aInfo['name'] = name
+                    aInfo['socket'] = socket.id
 					aInfo['ts'] = Date.now()
 					keyForRemove = key
-					users[socket.id] = aInfo
+					users[authInfo.id] = aInfo
 				}
 			}
 			if ( keyForRemove == null) {
 				let aInfo: StringKeyHash = {};
 				aInfo['id'] = authInfo.id
 				aInfo['name'] = authInfo.name
+				aInfo['socket'] = socket.id
 				aInfo['ts'] = Date.now()
-				users[socket.id] = aInfo	
-			} else {
-				delete users[keyForRemove]
+				users[authInfo.id] = aInfo	
 			}
             io.sockets.emit('get-users', users)
-            console.log('get users!!!!!!!!!!!!!')
-            console.log(users)
+            /*
+            const to = users[socket.id]['id']
+            Message.findAll({
+                order: [
+                    ['createdAt', 'ASC'],
+                ],
+                where: { to: to, isNew: true }
+            }).then(msgs => {
+                msgs.forEach(function (msg, index) {
+                    const user = User.findOne({ where: { id: msg.from } })
+                })
+            })
+            */
+            //console.log('get users!!!!!!!!!!!!!')
+            //console.log(users)
 		})
 		socket.on('disconnect', () => {
 			delete users[socket.id]
