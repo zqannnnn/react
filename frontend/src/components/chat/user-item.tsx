@@ -52,6 +52,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     }
     componentDidMount() {
         this.scrollBottom()
+        this.renderMsgs(this.props)
     }
     componentDidUpdate() {
         this.scrollBottom()
