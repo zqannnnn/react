@@ -9,16 +9,18 @@ const startSocket = async (server: any) => {
 	let users: HashOfStringKeyHash = {}
 	io.on('connection', socket => {
         socket.on("private", function(data) {     
-            const privateMsg = { from: socket.id, to: data.to, msg: data.msg }
-            io.to(`${data.to}`).emit('private', privateMsg );
-            const from = users[socket.id]['id']
-            const to = users[data.to]['id']
-            const message = new Message({
-                from: from,
-                to: to,
-                message: data.msg
-            })
-            message.save()          
+            if ( users[socket.id] != undefined && users[data.to] != undefined ) {
+                const privateMsg = { from: socket.id, to: data.to, msg: data.msg }
+                io.to(`${data.to}`).emit('private', privateMsg );
+                const from = users[socket.id]['id']
+                const to = users[data.to]['id']
+                const message = new Message({
+                    from: from,
+                    to: to,
+                    message: data.msg
+                })
+                message.save()    
+            }      
         });
 		socket.on('get-users', (authInfo: AuthInfo) => {
 			let keyForRemove = null
