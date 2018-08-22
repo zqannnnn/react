@@ -100,7 +100,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
       } else {
           nextProps.authInfo.id &&
           nextProps.dispatch(userActionCreators.getById(nextProps.authInfo.id))
-        if (!nextProps.currencys)
+        if (!nextProps.currencies)
           nextProps.dispatch(currencyActionCreators.getAll())
       }
     }
