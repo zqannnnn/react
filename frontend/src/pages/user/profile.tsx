@@ -11,14 +11,10 @@ import {
 } from '../../actions'
 import { RootState, UserState } from '../../reducers'
 import { User, Currency, Image } from '../../models'
-import { Row, Col, Select } from 'antd'
+import { Row, Col, Select, Button } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import i18n from 'i18next'
-import { UserForm, UserValuesProps } from '../../components/form/personal-modal'
-import {
-  CompanyForm,
-  CompanyValuesProps
-} from '../../components/form/company-modal'
+import { UserForm, UserValuesProps, CompanyForm, CompanyValuesProps } from '../../components/form'
 
 interface ProfileProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
