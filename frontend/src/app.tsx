@@ -117,7 +117,7 @@ class App extends React.Component<AppProps, any> {
               </BackTop>
             </Layout.Content>
             {/* //1532692062 chat */}
-            <Chat auth={auth} ref={(Chat) => {window.Chat = Chat}} />
+            {/* <Chat auth={auth} ref={(Chat) => {window.Chat = Chat}} /> */}
             <Layout.Footer style={{ textAlign: 'center' }}>
               {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
             </Layout.Footer>
