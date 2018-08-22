@@ -31,7 +31,7 @@ interface ProfileState {
   user: User
   userSelf: boolean
   personalVisible: boolean
-  modalVisible: boolean
+  companyVisible: boolean
   path?:string
 }
 class ProfilePage extends React.Component<ProfileProps, ProfileState> {
@@ -40,9 +40,9 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     this.state = {
       user: {},
       userId: '',
-      userSelf: true,
+      userSelf: false,
       personalVisible: false,
-      modalVisible: false
+      companyVisible: false
     }
   }
   componentDidMount() {
@@ -68,12 +68,12 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   }
   showCompanyModal = () => {
     this.setState({
-      modalVisible: true
+      companyVisible: true
     })
   }
   hideCompanyModal = () => {
     this.setState({
-      modalVisible: false
+      companyVisible: false
     })
   }
   hidePersonalModal = () => {
@@ -98,13 +98,13 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
       if (userId) {
         userId &&
           this.setState({
-            userId:userId, 
+            userId:userId
           })
         userId && nextProps.dispatch(userActionCreators.getById(userId))
       } else {
           nextProps.authInfo.id &&
           nextProps.dispatch(userActionCreators.getById(nextProps.authInfo.id))
-        if (!nextProps.currencys)
+        if (!nextProps.currencies)
           nextProps.dispatch(currencyActionCreators.getAll())
       }
     }
@@ -118,16 +118,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
       })
     }
   }
-  handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const { name, value } = event.currentTarget
-    const { user } = this.state
-    this.setState({
-      user: {
-        ...user,
-        [name]: value
-      }
-    })
-  }
+
   handleSelect = (value: string, name: string) => {
     const { user } = this.state
     this.setState({
@@ -210,13 +201,13 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
             <span className={userSelf ? 'edit' : 'none'}>
               <a onClick={this.showPersonalModal}>{i18n.t('Edit')}</a>
             </span>
-            <UserForm
+            {this.state.personalVisible&&<UserForm
               handleSubmit={this.personalSubmit}
               user={user}
               visible={this.state.personalVisible}
               handleCancel={this.hidePersonalModal}
               renderCurrencySelect={this.renderCurrencySelect}
-            />
+            />}
           </div>
           <div className="view-content">
             <Row>
@@ -260,13 +251,13 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
               <a onClick={this.showCompanyModal}>{i18n.t('Edit')}</a>
             </span>
 
-            <CompanyForm
+             {this.state.companyVisible&&<CompanyForm
               handleSubmit={this.companySubmit}
               user={user}
-              modalVisible={this.state.modalVisible}
+              modalVisible={this.state.companyVisible}
               handleCancel={this.hideCompanyModal}
               handlePreview={this.handlePreview}
-            />
+            />}
           </div>
           <div className="view-content">
             <Row>

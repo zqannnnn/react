@@ -56,8 +56,8 @@ class UserForm extends React.Component<CompanyFormProps, ProfileState> {
 
     this.setState({ fileList })
   }
-  componentWillReceiveProps(nextProps: CompanyFormProps) {
-    const { user } = nextProps
+  componentDidMount() {
+    const { user } = this.props
     if (user && user.businessLicenses) {
       let licenseList = user.businessLicenses.map(
         (license, index): UploadFile => ({
@@ -123,6 +123,7 @@ class UserForm extends React.Component<CompanyFormProps, ProfileState> {
             </div>
           </FormItem>
         </Form>
+        
       </Modal>
     )
   }
