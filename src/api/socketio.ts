@@ -9,35 +9,24 @@ const startSocket = async (server: any) => {
 	let users: HashOfStringKeyHash = {}
 	io.on('connection', socket => {
         socket.on("private", function(data) {     
-            //if ( users[socket.id] != undefined ) {
-                // && users[data.to] != undefined
-
-                let from;
-                for (var key in users) {
-                    if ( users[key]['socket'] == socket.id ) {
-                        from = key
-                    }
-                }
-    
-                if (from != undefined) {
-                    const message = new Message({
-                        from: from,
-                        to: data.to,
-                        message: data.msg
-                    })
-                    message.save()        
-                }
-
-                if ( users[data.to] != undefined ) {
-                    //console.log('TO !!!!!!!!')
-                    //console.log(users[data.to])
-                    const privateMsg = { from: from, to: data.to, msg: data.msg }
-                    io.to(`${users[data.to]['socket']}`).emit('private', privateMsg );
-    
-                }
-                //const from = users[socket.id]['id']
-                //const to = users[data.to]['id']
-            //}      
+            let from;
+            for (var key in users) {
+                if ( users[key]['socket'] == socket.id ) from = key
+            }
+            let createdAt:any = ''
+            if (from != undefined) {
+                const message = new Message({
+                    from: from,
+                    to: data.to,
+                    message: data.msg
+                })
+                message.save()        
+                createdAt = message.createdAt
+            }
+            if ( users[data.to] != undefined ) {
+                const privateMsg = { from: from, to: data.to, msg: data.msg, createdAt: createdAt }
+                io.to(`${users[data.to]['socket']}`).emit('private', privateMsg );
+            }
         });
         /*
         socket.on("read-pm", function(data) {   
@@ -89,10 +78,7 @@ const startSocket = async (server: any) => {
             }).then(msgs => {
                 msgs.forEach(function (msg, index) {
                     User.findOne({ where: { id: msg.from } }).then(user => {
-                        //console.log('From user')
-                        //console.log(msg.from)
-                        //console.log(user)
-                        const privateMsg = { from: msg.from, to: to, msg: msg.message }
+                        const privateMsg = { from: msg.from, to: to, msg: msg.message, createdAt: msg.createdAt }
                         io.to(`${users[to]['socket']}`).emit('private', privateMsg );
                     })
                 })

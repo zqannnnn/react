@@ -26,29 +26,33 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         this.chatBottom = React.createRef();
     }    
     renderMsgs(props: any) {
-        let relatedMsgs:StringKeyHash = {}
-        let messages = this.state.messages
-        Object.keys(props.messages).map((key, index) => {
-            if ( messages[key] == undefined ) relatedMsgs[key] = props.messages[key]
-        })       
-        messages = Object.assign(messages, relatedMsgs)
-        let msgsKeys = []
-        for (let k in messages) {
-            if (messages.hasOwnProperty(k)) {
-                msgsKeys.push(k);
+        if (props.messages !== undefined) {
+            let relatedMsgs:StringKeyHash = {}
+            let messages = this.state.messages
+            Object.keys(props.messages).map((key, index) => {
+                if ( messages[key] == undefined ) relatedMsgs[key] = props.messages[key]
+            })       
+            messages = Object.assign(messages, relatedMsgs)
+            let msgsKeys = []
+            for (let k in messages) {
+                if (messages.hasOwnProperty(k)) {
+                    msgsKeys.push(k);
+                }
+            }        
+            msgsKeys.sort()
+            const len = msgsKeys.length
+            let orderededMessages:StringKeyHash = {}
+            for (let i = 0; i < len; i++) {
+                let msgKey = msgsKeys[i]
+                orderededMessages[msgKey] = messages[msgKey]
             }
-        }        
-        msgsKeys.sort()
-        const len = msgsKeys.length
-        let orderededMessages:StringKeyHash = {}
-        for (let i = 0; i < len; i++) {
-            let msgKey = msgsKeys[i]
-            orderededMessages[msgKey] = messages[msgKey]
+            this.setState({ messages: orderededMessages })
         }
-        this.setState({ messages: orderededMessages });  
     }
     scrollBottom() {
-        const that = this            
+        const that = this    
+        //if we do scroll without timeout, then on opening user chat item it jumping
+        //and make not nice user experience
         setTimeout(() => { 
             if ( that.chatBottom.current != null ) that.chatBottom.current.scrollIntoView({ behavior: "smooth" })
         }, 300)
