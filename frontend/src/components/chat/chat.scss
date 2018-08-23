@@ -21,6 +21,10 @@
     .new-msg {
         background-color: #ff5e00;
     }
+    .ant-collapse-content-box {
+        position: relative;
+        bottom: 0;
+    }
     .chat-container {
         display: flex;
         flex-direction: column;

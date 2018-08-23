@@ -48,11 +48,14 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         this.setState({ messages: orderededMessages });  
     }
     scrollBottom() {
-        if ( this.chatBottom.current != null ) this.chatBottom.current.scrollIntoView({ behavior: "smooth" })
+        const that = this            
+        setTimeout(() => { 
+            if ( that.chatBottom.current != null ) that.chatBottom.current.scrollIntoView({ behavior: "smooth" })
+        }, 300)
     }
     componentDidMount() {
-        this.scrollBottom()
         this.renderMsgs(this.props)
+        this.scrollBottom()
     }
     componentDidUpdate() {
         this.scrollBottom()

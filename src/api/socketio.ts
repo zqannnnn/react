@@ -1,7 +1,7 @@
 import * as socket from 'socket.io' //1532692062 chat
 import { AuthInfo } from '../../frontend/src/actions'
 import { StringKeyHash, HashOfStringKeyHash } from '../interfaces'
-import { Message } from '../models/'
+import { Message, User } from '../models/'
 //https://socket.io/get-started/chat/
 //https://codeburst.io/isomorphic-web-app-react-js-express-socket-io-e2f03a469cd3
 const startSocket = async (server: any) => {
@@ -80,8 +80,7 @@ const startSocket = async (server: any) => {
 				users[authInfo.id] = aInfo	
 			}
             io.sockets.emit('get-users', users)
-            /*
-            const to = users[socket.id]['id']
+            const to = authInfo.id
             Message.findAll({
                 order: [
                     ['createdAt', 'ASC'],
@@ -89,13 +88,16 @@ const startSocket = async (server: any) => {
                 where: { to: to, isNew: true }
             }).then(msgs => {
                 msgs.forEach(function (msg, index) {
-                    const user = User.findOne({ where: { id: msg.from } })
+                    User.findOne({ where: { id: msg.from } }).then(user => {
+                        //console.log('From user')
+                        //console.log(msg.from)
+                        //console.log(user)
+                        const privateMsg = { from: msg.from, to: to, msg: msg.message }
+                        io.to(`${users[to]['socket']}`).emit('private', privateMsg );
+                    })
                 })
             })
-            */
-            //console.log('get users!!!!!!!!!!!!!')
-            //console.log(users)
-		})
+        })
 		socket.on('disconnect', () => {
 			delete users[socket.id]
 		})
