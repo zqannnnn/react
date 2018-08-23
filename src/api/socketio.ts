@@ -9,7 +9,7 @@ const startSocket = async (server: any) => {
 	let users: HashOfStringKeyHash = {}
 	io.on('connection', socket => {
         socket.on("private", function(data) {     
-            let from;
+            let from
             for (var key in users) {
                 if ( users[key]['socket'] == socket.id ) from = key
             }
@@ -28,23 +28,23 @@ const startSocket = async (server: any) => {
                 io.to(`${users[data.to]['socket']}`).emit('private', privateMsg );
             }
         });
-        /*
         socket.on("read-pm", function(data) {   
-            //update all messages from data.user as read  
-            if ( users[socket.id] != undefined ) {
-                const to = users[socket.id]['id']
-                const from = data.user['id']
+            let to
+            for (var key in users) {
+                if ( users[key]['socket'] == socket.id ) to = key
+            }
+            if ( to != undefined ) {
+                const from = data.user.id
                 Message.findAll({
                     where: { from: from, to: to, isNew: true }
                 }).then(msgs => {
                     msgs.forEach(function (msg, index) {
-                        //msg.isNew = false
-                        //msg.save()
+                        msg.isNew = false
+                        msg.save()
                     });
                 })
             }      
         });
-        */
 		socket.on('get-users', (authInfo: AuthInfo) => {
 			let keyForRemove = null
 			for (var key in users) {
