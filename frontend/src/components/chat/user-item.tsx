@@ -29,8 +29,12 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         if (props.messages !== undefined) {
             let relatedMsgs:StringKeyHash = {}
             let messages = this.state.messages
+            let isNewMessage = false
             Object.keys(props.messages).map((key, index) => {
-                if ( messages[key] == undefined ) relatedMsgs[key] = props.messages[key]
+                if ( messages[key] == undefined ) {
+                    relatedMsgs[key] = props.messages[key]
+                    isNewMessage = true
+                }
             })       
             messages = Object.assign(messages, relatedMsgs)
             let msgsKeys = []
@@ -47,6 +51,13 @@ class UserItem extends React.Component<ItemProps, ItemState> {
                 orderededMessages[msgKey] = messages[msgKey]
             }
             this.setState({ messages: orderededMessages })
+
+            if ( isNewMessage ) {
+                //update all messages from user as read
+                const data = { userId: this.props.userKey}
+                if (this.props.socket !== undefined) this.props.socket.emit("read-pm", data)
+            }
+
         }
     }
     scrollBottom() {

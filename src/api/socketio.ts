@@ -34,7 +34,7 @@ const startSocket = async (server: any) => {
                 if ( users[key]['socket'] == socket.id ) to = key
             }
             if ( to != undefined ) {
-                const from = data.user.id
+                const from = data.userId
                 Message.findAll({
                     where: { from: from, to: to, isNew: true }
                 }).then(msgs => {
