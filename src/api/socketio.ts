@@ -28,6 +28,18 @@ const startSocket = async (server: any) => {
                 io.to(`${users[data.to]['socket']}`).emit('private', privateMsg );
             }
         });
+        socket.on("open-offline-user", function(data) {   
+            User.findOne({ where: { id: data.userId } }).then(user => {
+                if (user != undefined) {
+                    let aInfo: StringKeyHash = {}
+                    aInfo['id'] = user.id
+                    aInfo['name'] = user.fullName()
+                    aInfo['ts'] = Date.now()
+                    const data = { user: aInfo }
+                    io.to(`${socket.id}`).emit('open-offline-user', data );
+                }
+            })
+        });
         socket.on("read-pm", function(data) {   
             let to
             for (var key in users) {
@@ -49,7 +61,7 @@ const startSocket = async (server: any) => {
 			let keyForRemove = null
 			for (var key in users) {
 				if ( key == authInfo.id ) {
-					let aInfo: StringKeyHash = {};
+					let aInfo: StringKeyHash = {}
 					aInfo['id'] = authInfo.id
 					let name = users[key]['name']
 					if ( name == 'undefined undefined' ) name = authInfo.name					
@@ -85,7 +97,9 @@ const startSocket = async (server: any) => {
             })
         })
 		socket.on('disconnect', () => {
-			delete users[socket.id]
+            for (var key in users) {
+                if ( users[key]['socket'] == socket.id ) delete users[key]
+            }			
 		})
 	})
 }

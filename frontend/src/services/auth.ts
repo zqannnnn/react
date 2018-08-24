@@ -36,6 +36,7 @@ function login(email: string, password: string) {
         // store user details and jwt token in local storage to keep user logged in
         // between page refreshes
         setAuth(result)
+        window.Chat.connect()
         return result
       }
       return {}
@@ -45,6 +46,7 @@ function login(email: string, password: string) {
 function logout() {
   // remove user from local storage to log user out
   removeAuth()
+  window.Chat.disconnect()
 }
 
 function register(user: User) {
@@ -65,6 +67,7 @@ function register(user: User) {
         // store user details and jwt token in local storage to keep user logged in
         // between page refreshes
         setAuth(result)
+        window.Chat.connect()
         return result
       }
       return {}

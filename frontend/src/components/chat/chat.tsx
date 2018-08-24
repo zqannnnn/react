@@ -27,6 +27,7 @@ interface ItemState {
     newMsg: boolean
     opened: boolean
     activePanel: string
+    connected: boolean
 }
 class Chat extends React.Component<ItemProps, ItemState> {
 	constructor(props: ItemProps) {
@@ -41,33 +42,41 @@ class Chat extends React.Component<ItemProps, ItemState> {
             userKey: '',
             newMsg: false,
             opened: false,
-            activePanel: ''
+            activePanel: '',
+            connected: false
         }
         this.onUserItemClose = this.onUserItemClose.bind(this)
         this.onOpenChat = this.onOpenChat.bind(this)
         this.onOpenUserItem = this.onOpenUserItem.bind(this)
         this.onSendMsg = this.onSendMsg.bind(this)
     }
-    openChat(id: string) {
+    disconnect() {
+        if (this.state.connected) {
+            if (this.state.socket !== undefined) this.state.socket.disconnect()
+            this.setState({socket: undefined, connected: false})
+        }
+    }    
+    openChat(userId: string) {
         let users = this.state.users
-        for (let userKey in users) {  
-            if (users[userKey].id == id) {
-                this.setState({opened: true})
-                this.setState({activePanel: userKey})
-                users[userKey]['panelStatus'] = 'expended'
-                users[userKey]['status'] = 'inlist'
-                users[userKey]['newMsg'] = false
-            }
+        if (users[userId] != undefined) {
+            this.setState({opened: true})
+            this.setState({activePanel: userId})
+            users[userId]['panelStatus'] = 'expended'
+            users[userId]['status'] = 'inlist'
+            users[userId]['newMsg'] = false
+        } else {
+            const data = { userId: userId }
+            if (this.state.socket !== undefined) this.state.socket.emit("open-offline-user", data)
         }
         this.setState({users: users})
     }    
-    componentWillMount() {
-		let { auth } = this.props
-        const { authInfo } = auth
+    connect() {
         const that = this;
 		const socket = socketIOClient("http://localhost:3000")
 		socket.on('connect', function () {
-            that.setState({socket: socket})
+            let { auth } = that.props
+            const { authInfo } = auth
+            that.setState({socket: socket, connected: true})
 			if (authInfo !== undefined) socket.emit('get-users', authInfo)
 			socket.on('get-users', (users: any) => {
                 that.setState({users: users})
@@ -88,7 +97,14 @@ class Chat extends React.Component<ItemProps, ItemState> {
             socket.on("private", function(msg: any) {    
                 that.onPrivateMsg(msg)
             })
+            socket.on("open-offline-user", function(data: any) {    
+                console.log('open-offline-user')
+                console.log(data)
+            })
 		});
+    }    
+    componentWillMount() {
+        this.connect()
     }
     updateUserMsgs(userKey: string) {
         const messages = this.state.messages
