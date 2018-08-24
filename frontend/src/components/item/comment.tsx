@@ -1,21 +1,21 @@
 import * as React from 'react'
 import { Comment } from '../../models'
-import { ListOptions } from '../../models'
-import { transactionConsts } from '../../constants'
 import { Icon, Input, Avatar } from 'antd'
 import i18n from 'i18next'
 interface CommentProps {
   comment: Comment
-  handleReply: (replyTo?: string) => void
   viewAllReplys: (comment: Comment) => void
   submitReply: (comment: Comment) => void
+  commentLoading?: boolean
 }
 interface CommentState {
   currentReply: string
   currentReplyTo?: string
   replyInputShowing: boolean
   viewAllReplyShowing: boolean
+  replyLoading: boolean
   currentReplyRoot?: string
+  comment: Comment
 }
 class CommentItem extends React.Component<CommentProps, CommentState> {
   constructor(props: CommentProps) {
@@ -25,7 +25,9 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
   defaultState = {
     currentReply: '',
     replyInputShowing: false,
-    viewAllReplyShowing: true
+    viewAllReplyShowing: false,
+    replyLoading: false,
+    comment: {}
   }
 
   formatTime = (time: string) => {
@@ -64,17 +66,31 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
   }
 
   viewAllReplys = (comment: Comment) => {
+    this.setState({
+      replyLoading: true,
+      viewAllReplyShowing: true
+    })
     this.props.viewAllReplys(comment)
-    this.setState({ viewAllReplyShowing: false })
   }
 
   handleReply = (replyTo?: string) => {
-    this.props.handleReply(replyTo)
     this.setState({
       currentReplyTo: replyTo,
       replyInputShowing: true,
       currentReplyRoot: this.props.comment.rootId
     })
+  }
+
+  componentWillReceiveProps(nextProps: CommentProps) {
+    const { commentLoading } = this.props
+    if (commentLoading) {
+      this.setState({ replyLoading: false, comment: nextProps.comment })
+    } else {
+      this.setState({
+        ...this.defaultState,
+        comment: nextProps.comment
+      })
+    }
   }
 
   submitReply = (event: React.FormEvent<HTMLInputElement>) => {
@@ -86,8 +102,12 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
       replyTo: currentReplyTo,
       rootId: currentReplyRoot
     }
-
-    this.setState({ replyInputShowing: false, viewAllReplyShowing: false })
+    this.setState({
+      replyInputShowing: false,
+      replyLoading: true,
+      viewAllReplyShowing: true,
+      currentReply: ''
+    })
     this.props.submitReply(comment)
   }
 
@@ -130,33 +150,35 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
               {comment.createdAt && this.formatTime(comment.createdAt)}
             </span>
           </div>
+          {replyInputShowing &&
+            currentReplyTo === comment.id && (
+              <Input
+                className="reply-input"
+                autoFocus
+                placeholder="reply..."
+                type="text"
+                name="replyTo"
+                onPressEnter={this.submitReply}
+                value={currentReply}
+                onChange={this.handleReplyInputChange}
+                style={{
+                  paddingTop: 5,
+                  paddingBottom: 5
+                }}
+                suffix={
+                  <Icon
+                    type="enter"
+                    style={{ color: 'rgba(0,0,0,.25)' }}
+                    onClick={this.submitReply}
+                    className="icon-click"
+                  />
+                }
+                prefix={
+                  <Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />
+                }
+              />
+            )}
         </div>
-        {replyInputShowing &&
-          currentReplyTo === comment.id && (
-            <Input
-              className="reply-input"
-              autoFocus
-              placeholder="reply..."
-              type="text"
-              name="replyTo"
-              onPressEnter={this.submitReply}
-              value={currentReply}
-              onChange={this.handleReplyInputChange}
-              style={{
-                paddingTop: 5,
-                paddingBottom: 5
-              }}
-              suffix={
-                <Icon
-                  type="enter"
-                  style={{ color: 'rgba(0,0,0,.25)' }}
-                  onClick={this.submitReply}
-                  className="icon-click"
-                />
-              }
-              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            />
-          )}
       </div>
     )
   }
@@ -227,7 +249,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
             </div>
           )}
 
-        {viewAllReplyShowing &&
+        {!viewAllReplyShowing &&
           comment.totalReply && (
             <div className="features">
               <Icon type="rollback" className="icon-rollback" />

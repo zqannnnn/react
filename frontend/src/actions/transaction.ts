@@ -316,6 +316,43 @@ const createComment: ActionCreator<Thunk> = (
   }
 }
 
+const createReply: ActionCreator<Thunk> = (comment: Comment) => {
+  return (dispatch: Dispatch<RootState>): void => {
+    comment.transactionId && dispatch(request(comment.transactionId))
+
+    transService
+      .createReply(comment)
+      .then(
+        (result: Comment) =>
+          comment.transactionId &&
+          dispatch(success(comment.transactionId, result)),
+        (error: string) =>
+          comment.transactionId &&
+          dispatch(failure(comment.transactionId, error))
+      )
+  }
+  function request(id: string): Action {
+    return {
+      type: transactionConsts.REPLY_CREATE_REQUEST,
+      id
+    }
+  }
+  function success(id: string, result: Comment): Action {
+    return {
+      type: transactionConsts.REPLY_CREATE_SUCCESS,
+      comment: result,
+      id
+    }
+  }
+  function failure(id: string, error: string): Action {
+    return {
+      type: transactionConsts.REPLY_CREATE_FAILURE,
+      error,
+      id
+    }
+  }
+}
+
 const listComment: ActionCreator<Thunk> = (
   id: string,
   option?: ListOptions
@@ -356,16 +393,19 @@ const listReplys: ActionCreator<Thunk> = (
     transService
       .listReplys(id, transactionId, option)
       .then(
-        (result: { replys: Array<Comment>; total: number }) =>
-          dispatch(success(result.replys, result.total)),
+        (result: {
+          replys: Array<Comment>
+          total: number
+          transactionId: string
+        }) => dispatch(success(result.replys, result.total, transactionId)),
         (error: string) => dispatch(failure(error))
       )
   }
 
   function request(): Action {
-    return { type: transactionConsts.REPLY_LIST_REQUEST }
+    return { type: transactionConsts.REPLY_LIST_REQUEST, transactionId }
   }
-  function success(replys: Array<Comment>, total: number): Action {
+  function success(replys: Array<Comment>, total: number, id: string): Action {
     return {
       type: transactionConsts.REPLY_LIST_SUCCESS,
       replys,
@@ -389,6 +429,7 @@ export const actionCreators = {
   reactivate,
   buy,
   createComment,
+  createReply,
   listComment,
   listReplys
 }

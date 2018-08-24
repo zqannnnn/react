@@ -11,6 +11,7 @@ export const transService = {
   finish,
   buy,
   createComment,
+  createReply,
   listComment,
   listReplys
 }
@@ -144,6 +145,18 @@ function createComment(comment: Comment, options?: ListOptions) {
   return fetch('/transaction/comment?' + query, requestOptions).then(
     handleResponse
   )
+}
+
+function createReply(comment: Comment) {
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(comment)
+  }
+  return fetch('/transaction/reply', requestOptions).then(handleResponse)
 }
 
 function listComment(id: string, options?: ListOptions) {

@@ -23,6 +23,7 @@ interface ItemProps {
 interface ItemState {
   commentSubmitted: boolean
   options: ListOptions
+  transaction?: Transaction
 }
 
 class Item extends React.Component<ItemProps, ItemState> {
@@ -37,7 +38,9 @@ class Item extends React.Component<ItemProps, ItemState> {
     },
     commentSubmitted: false
   }
-
+  componentWillReceiveProps(nextProps: ItemProps) {
+    this.setState({ transaction: nextProps.transaction })
+  }
   listComment = (options: ListOptions) => {
     const { transaction } = this.props
     this.props.dispatch(
@@ -57,7 +60,7 @@ class Item extends React.Component<ItemProps, ItemState> {
   submitReply = (comment: Comment) => {
     const { transaction } = this.props
     this.props.dispatch(
-      transactionActionCreators.createComment({
+      transactionActionCreators.createReply({
         transactionId: transaction.id,
         ...comment
       })
@@ -124,7 +127,6 @@ class Item extends React.Component<ItemProps, ItemState> {
   }
   render() {
     const { transaction, authInfo } = this.props
-    const { options } = this.state
     const goods = transaction.goods
     const taker = transaction.taker
     return (

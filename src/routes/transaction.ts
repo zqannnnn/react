@@ -294,13 +294,14 @@ router.post('/comment', async (req: IRequest, res: express.Response) => {
       limit?: number
     } = {}
     if (pageSize && typeof page !== 'undefined') {
-      pageOption.offset = (page - 1) * pageSize
+      pageOption.offset = (page - 1) * pageSize + comment.totalReply
       pageOption.limit = pageSize
     }
     const orderOption: string[] = ['createdAt', 'DESC']
     const result = await Comment.findAndCount({
       where: {
-        transactionId
+        transactionId,
+        replyTo: null
       },
       include: [
         {
@@ -317,6 +318,36 @@ router.post('/comment', async (req: IRequest, res: express.Response) => {
     return res.status(500).send({ error: e.message })
   }
 })
+
+router.post('/reply', async (req: IRequest, res: express.Response) => {
+  try {
+    const comment = new Comment({
+      userId: req.userId,
+      ...req.body
+    })
+    await comment.save()
+    if (!comment.replyTo) {
+      comment.rootId = comment.id
+      await comment.save()
+    }
+    if (comment.replyTo) {
+      const rootComment = await Comment.findById(comment.rootId)
+      if (rootComment) {
+        if (rootComment.totalReply) {
+          rootComment.totalReply = rootComment.totalReply + 1
+        } else {
+          rootComment.totalReply = 1
+        }
+        await rootComment.save()
+      }
+    }
+
+    return res.send(comment)
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
 router
   .route('/:transactionId')
   .get(async (req: express.Request, res: express.Response) => {

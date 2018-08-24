@@ -1,6 +1,7 @@
 import { transactionConsts } from '../constants'
 import { TransactionAction } from '../actions'
 import { Transaction, Comment } from '../models'
+import { cloneDeep } from 'lodash'
 export type State = {
   processing?: boolean
   loading?: boolean
@@ -60,6 +61,8 @@ export function transaction(
           ...state,
           items: items
         }
+      } else {
+        return state
       }
     case transactionConsts.CANCEL_SUCCESS:
       return state
@@ -73,6 +76,8 @@ export function transaction(
           ...state,
           items: items
         }
+      } else {
+        return state
       }
     case transactionConsts.REACTIVATE_REQUEST:
       if (state.items) {
@@ -84,6 +89,8 @@ export function transaction(
           ...state,
           items: items
         }
+      } else {
+        return state
       }
     case transactionConsts.REACTIVATE_SUCCESS:
       return state
@@ -97,13 +104,14 @@ export function transaction(
           ...state,
           items: items
         }
+      } else {
+        return state
       }
     case transactionConsts.BUY_REQUEST:
-      if (state.items)
-        return {
-          ...state,
-          processing: true
-        }
+      return {
+        ...state,
+        processing: true
+      }
     case transactionConsts.BUY_SUCCESS:
       if (state.items)
         return {
@@ -119,6 +127,7 @@ export function transaction(
                 : item
           )
         }
+      else return state
     case transactionConsts.BUY_FAILURE:
       if (state.items)
         return {
@@ -152,31 +161,62 @@ export function transaction(
                 : item
           )
         }
+      } else {
+        return state
       }
 
-    case transactionConsts.COMMENT_CREATE_FAILURE:
+    case transactionConsts.REPLY_CREATE_REQUEST:
       return {
         ...state,
-        error: action.error
+        processing: true
       }
-    case transactionConsts.COMMENT_LIST_REQUEST:
-      if (state.items && action.id) {
-        let items = state.items.filter(item => item.id !== action.id)
-        let item = state.items.filter(item => item.id === action.id)[0]
-        item.commentLoading = true
-        items.push(item)
+    case transactionConsts.REPLY_CREATE_SUCCESS:
+      if (state.items && state.rowComments && action.comment) {
+        let items = state.items.map(item => {
+          if (item.id === action.id) {
+            if (item.comments) {
+              item.comments.map(comment => {
+                if (action.comment && comment.id === action.comment.rootId) {
+                  comment.replys && comment.replys.push(action.comment)
+                }
+                return comment
+              })
+            }
+          }
+          return item
+        })
+        state.rowComments.push(action.comment)
         return {
           ...state,
-          items: state.items.map(
-            item =>
-              item.id === action.id
-                ? {
-                    ...item,
-                    items
-                  }
-                : item
-          )
+          processing: false,
+          items
         }
+      } else {
+        return {
+          ...state,
+          processing: false
+        }
+      }
+    case transactionConsts.REPLY_CREATE_FAILURE:
+      return {
+        ...state,
+        error: action.error,
+        processing: false
+      }
+
+    case transactionConsts.COMMENT_LIST_REQUEST:
+      if (state.items && action.transactionId) {
+        return {
+          ...state,
+          items: state.items.map(item => {
+            if (item.id === action.id) {
+              item.commentLoading = true
+            }
+            return item
+          })
+        }
+      } else {
+        return state
       }
     case transactionConsts.COMMENT_LIST_SUCCESS:
       if (state.items && action.comments) {
@@ -200,6 +240,8 @@ export function transaction(
                 : item
           )
         }
+      } else {
+        return state
       }
     case transactionConsts.COMMENT_LIST_FAILURE:
       if (state.items && action.id) {
@@ -219,16 +261,28 @@ export function transaction(
                 : item
           )
         }
+      } else {
+        return state
       }
 
     case transactionConsts.REPLY_LIST_REQUEST:
-      return {
-        ...state,
-        loading: true
+      if (state.items && action.transactionId) {
+        return {
+          ...state,
+          items: state.items.map(item => {
+            if (item.id === action.id) {
+              item.commentLoading = true
+            }
+            return item
+          })
+        }
+      } else {
+        return state
       }
     case transactionConsts.REPLY_LIST_SUCCESS:
       if (state.items && action.replys && state.rowComments) {
         let merge = state.rowComments.concat(action.replys)
+        let clone = cloneDeep(merge)
         let comments = commentReduce(merge)
         let items = state.items.filter(item => item.id !== action.transactionId)
         let item = state.items.filter(
@@ -238,7 +292,7 @@ export function transaction(
         items.push(item)
         return {
           ...state,
-          rowComments: merge,
+          rowComments: clone,
           loading: false,
           items: state.items.map(
             item =>

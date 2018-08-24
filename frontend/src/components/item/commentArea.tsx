@@ -40,30 +40,32 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
       page: 1,
       pageSize: transactionConsts.COMMENT_LIST_SIZE
     },
-    viewAllCommentShowing: true,
+    viewAllCommentShowing: false,
     commentSubmitted: false
   }
 
   handleCommentInputChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget
     this.setState({
-      currentComment: value
+      currentComment: value,
+      commentSubmitted: true
     })
   }
 
   viewAllComments = () => {
     const { options } = this.state
     this.props.listComment(options)
-    this.setState({ viewAllCommentShowing: false, commentSubmitted: true })
+    this.setState({
+      viewAllCommentShowing: true,
+      commentSubmitted: true
+    })
   }
 
   viewAllReplys = (comment: Comment) => {
-    const { options } = this.state
     this.props.dispatch(
       transactionActionCreators.listReplys(
         comment.rootId,
-        comment.transactionId,
-        options
+        comment.transactionId
       )
     )
   }
@@ -77,18 +79,16 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
   }
 
   componentWillReceiveProps(nextProps: CommentAreaProps) {
-    const { comments } = this.props
-    const { commentSubmitted, viewAllCommentShowing } = this.state
-    if (!commentSubmitted && viewAllCommentShowing) {
+    const { commentSubmitted } = this.state
+    if (commentSubmitted) {
       this.setState({
-        ...this.defaultState,
-        comments: comments
+        commentSubmitted: false,
+        comments: nextProps.comments
       })
     } else {
       this.setState({
-        comments: comments,
-        commentSubmitted: false,
-        currentComment: ''
+        ...this.defaultState,
+        comments: nextProps.comments
       })
     }
   }
@@ -104,24 +104,16 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
       rootId: currentReplyRoot
     }
 
-    this.setState({ viewAllCommentShowing: false, currentReplyTo: undefined })
+    this.setState({
+      viewAllCommentShowing: true,
+      currentReplyTo: undefined,
+      currentComment: ''
+    })
     this.props.submitComment(comment, options)
   }
 
   submitReply = (comment: Comment) => {
     this.props.submitReply(comment)
-  }
-
-  handleReply = (replyTo?: string) => {
-    const { rowComments } = this.props
-    if (replyTo && rowComments) {
-      const lastComment = rowComments.filter(
-        comment => comment.id === replyTo
-      )[0]
-      this.setState({
-        currentReplyRoot: lastComment.rootId
-      })
-    }
   }
 
   render() {
@@ -130,13 +122,13 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
     return (
       <div>
         <div className="comment">
-          {viewAllCommentShowing && (
+          {!viewAllCommentShowing && (
             <div>
               <span
                 className="control-btn click"
                 onClick={() => this.viewAllComments()}
               >
-                {i18n.t('View all comments')}
+                {i18n.t('view All Comments')}
               </span>
               {commentLoading && <Spin />}
             </div>
@@ -152,7 +144,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
             comments.map((comment, index) => (
               <CommentItem
                 comment={comment}
-                handleReply={this.handleReply}
+                commentLoading={this.props.commentLoading}
                 viewAllReplys={this.viewAllReplys}
                 submitReply={this.submitReply}
                 key={index}
