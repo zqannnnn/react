@@ -55,9 +55,8 @@ class UserItem extends React.Component<ItemProps, ItemState> {
             if ( isNewMessage ) {
                 //update all messages from user as read
                 const data = { userId: this.props.userKey}
-                if (this.props.socket !== undefined) this.props.socket.emit("ununread-messages", data)
+                if (this.props.socket !== undefined) this.props.socket.emit("set-messages-as-old", data)
             }
-
         }
     }
     scrollBottom() {

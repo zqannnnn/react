@@ -88,7 +88,23 @@ class Chat extends React.Component<ItemProps, ItemState> {
             socket.on("get-user", function(data: any) {    
                 that.addUserChatItem(data.user, data.open)
             })
-		});
+            socket.on("old-messages", function(data: any) {    
+                let messages = that.state.messages
+                let usersIds = [] as string[]
+                data.messages.forEach(function (messageId: string, index: number) {
+                    for (let msgKey in messages) {  
+                        if ( messages[msgKey].id == messageId ) {
+                            messages[msgKey].isNew = false
+                            usersIds.push(messages[msgKey].from)
+                        }
+                    }
+                })
+                that.setState({ messages: messages })
+                usersIds.forEach(function (userId, index) {
+                    that.updateUserMsgs(userId)
+                })
+            })
+		})
     }    
     componentWillMount() {
         this.connect()
@@ -112,7 +128,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
         for (let msgKey in messages) {  
             if ( (messages[msgKey].from == userKey) || (messages[msgKey].to == userKey) ) {
                 users[userKey]['messages'][msgKey] = messages[msgKey]
-                isNewMessage = true
+                if (!isNewMessage) isNewMessage = messages[msgKey].isNew
             }
         }
         if (users[userKey]['panelStatus'] == 'collapsed') users[userKey]['newMsg'] = isNewMessage
@@ -123,7 +139,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
         let messages = that.state.messages
         const timestamp = new Date().getTime().toString()
         messages[timestamp] = msg
-        that.setState({ messages: messages }); 
+        that.setState({ messages: messages })
         let foundUser = false
         for (let userKey in that.state.users) {  
             if ( (userKey != that.state.userKey) && ((msg.from == userKey) || (msg.to == userKey)) ) {
@@ -159,7 +175,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
             users[panel]['newMsg'] = false
             //update all messages from user as read
             const data = { userId: users[panel].id }
-            if (this.state.socket !== undefined) this.state.socket.emit("ununread-messages", data)
+            if (this.state.socket !== undefined) this.state.socket.emit("set-messages-as-old", data)
         } else {
             this.setState({activePanel: ''})
         }

@@ -14,8 +14,9 @@ const startSocket = async (server: any) => {
                 if ( users[key]['socket'] == socket.id ) from = key
             }
             let createdAt:any = ''
+            let message
             if (from != undefined) {
-                const message = new Message({
+                message = new Message({
                     from: from,
                     to: data.to,
                     message: data.msg
@@ -23,8 +24,8 @@ const startSocket = async (server: any) => {
                 message.save()        
                 createdAt = message.createdAt
             }
-            if ( users[data.to] != undefined ) {
-                const privateMsg = { from: from, to: data.to, msg: data.msg, createdAt: createdAt }
+            if ( users[data.to] != undefined && message != undefined) {
+                const privateMsg = { id: message.id, from: from, to: data.to, msg: data.msg, createdAt: createdAt, isNew: true }
                 io.to(`${users[data.to]['socket']}`).emit('private', privateMsg );
             }
         });
@@ -40,7 +41,7 @@ const startSocket = async (server: any) => {
                 }
             })
         });
-        socket.on("ununread-messages", function(data) {   
+        socket.on("set-messages-as-old", function(data) {   
             let to
             for (var key in users) {
                 if ( users[key]['socket'] == socket.id ) to = key
@@ -50,10 +51,13 @@ const startSocket = async (server: any) => {
                 Message.findAll({
                     where: { from: from, to: to, isNew: true }
                 }).then(msgs => {
+                    let sendData = { messages: [] as string[] }
                     msgs.forEach(function (msg, index) {
                         msg.isNew = false
                         msg.save()
+                        sendData.messages.push(msg.id)
                     });
+                    io.to(`${socket.id}`).emit('old-messages', sendData );
                 })
             }      
         });
@@ -67,7 +71,7 @@ const startSocket = async (server: any) => {
             }).then(msgs => {
                 msgs.forEach(function (msg, index) {
                     User.findOne({ where: { id: msg.from } }).then(user => {
-                        const privateMsg = { from: msg.from, to: to, msg: msg.message, createdAt: msg.createdAt }
+                        const privateMsg = { id: msg.id, from: msg.from, to: to, msg: msg.message, createdAt: msg.createdAt, isNew: msg.isNew }
                         io.to(`${users[to]['socket']}`).emit('private', privateMsg );
                     })
                 })
