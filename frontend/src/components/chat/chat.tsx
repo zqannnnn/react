@@ -56,18 +56,20 @@ class Chat extends React.Component<ItemProps, ItemState> {
             this.setState({socket: undefined, connected: false})
         }
     }    
-    openChat(userId: string) {
+    openChat(userId: string, open = true) {
         let users = this.state.users
         if (users[userId] != undefined) {
-            this.setState({opened: true})
-            this.setState({activePanel: userId})
-            users[userId]['panelStatus'] = 'expended'
+            let panelStatus = 'collapsed'
+            if (open) panelStatus = 'expended'
+            users[userId]['panelStatus'] = panelStatus
             users[userId]['newMsg'] = false
+            this.setState({users: users})
         } else {
-            const data = { userId: userId }
+            const data = { userId: userId, open: open }
             if (this.state.socket !== undefined) this.state.socket.emit("get-user", data)
         }
-        this.setState({users: users})
+        this.setState({opened: true})
+        if (open) this.setState({activePanel: userId})
     }    
     connect() {
         const that = this;
@@ -84,18 +86,19 @@ class Chat extends React.Component<ItemProps, ItemState> {
                 that.onPrivateMsg(msg)
             })
             socket.on("get-user", function(data: any) {    
-                that.addUserChatItem(data.user)
-                that.setState({opened: true, activePanel: data.user.id})
+                that.addUserChatItem(data.user, data.open)
             })
 		});
     }    
     componentWillMount() {
         this.connect()
     }
-    addUserChatItem(user: any) {
+    addUserChatItem(user: any, open = false) {
         let users = this.state.users
         users[user.id] = user
-        users[user.id]['panelStatus'] = 'expended'
+        let panelStatus = 'collapsed'
+        if (open) panelStatus = 'expended'
+        users[user.id]['panelStatus'] = panelStatus
         users[user.id]['newMsg'] = false
         users[user.id]['messages'] = {}    
         this.setState({users: users})
@@ -105,10 +108,14 @@ class Chat extends React.Component<ItemProps, ItemState> {
         const messages = this.state.messages
         let users = this.state.users 
         users[userKey]['messages'] = {}
+        let isNewMessage = false
         for (let msgKey in messages) {  
-            if ( (messages[msgKey].from == userKey) || (messages[msgKey].to == userKey) ) users[userKey]['messages'][msgKey] = messages[msgKey]
+            if ( (messages[msgKey].from == userKey) || (messages[msgKey].to == userKey) ) {
+                users[userKey]['messages'][msgKey] = messages[msgKey]
+                isNewMessage = true
+            }
         }
-        if (users[userKey]['panelStatus'] == 'collapsed') users[userKey]['newMsg'] = true
+        if (users[userKey]['panelStatus'] == 'collapsed') users[userKey]['newMsg'] = isNewMessage
         this.setState({users: users})
     }    
 	onPrivateMsg(msg: any) {
@@ -124,7 +131,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
                 this.updateUserMsgs(userKey)
             }
         }
-        if (!foundUser) this.openChat(msg.from)
+        if (!foundUser) this.openChat(msg.from, false)
     }
 	onUserItemClose(userKey: any) {
         let users = this.state.users
@@ -146,7 +153,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
         for (let userKey in users) {  
             users[userKey]['panelStatus'] = 'collapsed'
         }
-        if (panel != undefined) {
+        if (panel != undefined && users[panel] != undefined) {
             this.setState({activePanel: panel})
             users[panel]['panelStatus'] = 'expended'
             users[panel]['newMsg'] = false

@@ -35,8 +35,8 @@ const startSocket = async (server: any) => {
                     aInfo['id'] = user.id
                     aInfo['name'] = user.fullName()
                     aInfo['ts'] = Date.now()
-                    const data = { user: aInfo }
-                    io.to(`${socket.id}`).emit('get-user', data );
+                    const sendData = { user: aInfo, open: data.open }
+                    io.to(`${socket.id}`).emit('get-user', sendData );
                 }
             })
         });
