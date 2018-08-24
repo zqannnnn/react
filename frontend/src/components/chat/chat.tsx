@@ -84,19 +84,22 @@ class Chat extends React.Component<ItemProps, ItemState> {
                 that.onPrivateMsg(msg)
             })
             socket.on("get-user", function(data: any) {    
-                let users = that.state.users
-                const user = data.user
-                users[user.id] = user
-                users[user.id]['panelStatus'] = 'expended'
-                users[user.id]['newMsg'] = false
-                users[user.id]['messages'] = {}    
-                that.setState({users: users, opened: true, activePanel: user.id})
-                that.updateUserMsgs(user.id)
+                that.addUserChatItem(data.user)
+                that.setState({opened: true, activePanel: data.user.id})
+                that.updateUserMsgs(data.user.id)
             })
 		});
     }    
     componentWillMount() {
         this.connect()
+    }
+    addUserChatItem(user: any) {
+        let users = this.state.users
+        users[user.id] = user
+        users[user.id]['panelStatus'] = 'expended'
+        users[user.id]['newMsg'] = false
+        users[user.id]['messages'] = {}    
+        this.setState({users: users})
     }
     updateUserMsgs(userKey: string) {
         const messages = this.state.messages
