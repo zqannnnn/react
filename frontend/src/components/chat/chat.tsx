@@ -86,7 +86,6 @@ class Chat extends React.Component<ItemProps, ItemState> {
             socket.on("get-user", function(data: any) {    
                 that.addUserChatItem(data.user)
                 that.setState({opened: true, activePanel: data.user.id})
-                that.updateUserMsgs(data.user.id)
             })
 		});
     }    
@@ -100,6 +99,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
         users[user.id]['newMsg'] = false
         users[user.id]['messages'] = {}    
         this.setState({users: users})
+        this.updateUserMsgs(user.id)
     }
     updateUserMsgs(userKey: string) {
         const messages = this.state.messages
