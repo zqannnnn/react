@@ -76,6 +76,10 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
     if (transaction) { 
       maker = transaction.maker
     }
+    let taker
+    if (transaction) { 
+      taker = transaction.taker
+    }
     let goods
     if (transaction) { 
       goods = transaction.goods
@@ -145,13 +149,37 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                   }`}</div>
                 </Col>
               </Row>
+              {taker && <Row>
+                <Col
+                  xs={{ span: 20, offset: 2 }}
+                  sm={{ span: 20, offset: 2 }}
+                  md={{ span: 6, offset: 5 }}
+                  className="view-top"
+                >
+                  <label>{i18n.t('taker')}:</label>
+                  <div className="message">
+                    {taker ? (
+                    <Link
+                    to={'/user/' + transaction.takerId}
+                    className="control-btn"
+                    >
+                      <span>
+                        {taker.firstName} {taker.lastName}
+                      </span>
+                      </Link>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                </Col>
+              </Row>}
               <Row className="top">
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 17, offset: 5 }}
                 >
-                  <label className="Details-nav">{i18n.t('inside information')}:</label>
+                  <label className="details-nav">{i18n.t('goods information')}:</label>
                 </Col>
               </Row>
               <Row>

@@ -3,7 +3,7 @@ import * as i18n from 'i18next'
 import { consts } from '../config/static'
 import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
-import { Goods, Image, Transaction } from '../models/'
+import { Goods, Image, Transaction, User } from '../models/'
 const router = express.Router()
 
 router.use(authMiddleware)
@@ -106,6 +106,11 @@ router
         {
           model: Image,
           attributes: ['path', 'type']
+        },
+        {
+          model: User,
+          as: 'creator',
+          attributes: ['firstName', 'lastName', 'id']
         }
       ]
     })

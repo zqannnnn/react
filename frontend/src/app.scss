@@ -392,6 +392,9 @@ html {
 .page-wr {
   padding-top: 64px;
 }
+.page-wr .title{
+  font-size: 20px;
+}
 @media (min-width: 0px) and (max-width: 768px) {
   .page-wr {
     padding: 0px;
@@ -458,9 +461,6 @@ html {
   }
   .edit {
     margin-left: 20px;
-  }
-  .none {
-    display: none;
   }
   .tips {
     font-size: 14px;
@@ -579,15 +579,4 @@ html {
 .ant-layout-sider-zero-width-trigger {
   top: 0px;
   z-index: 1;
-}
-.Name {
-  font-size: 20px;
-  font-weight: 800;
-  margin-right: 20px;
-}
-.ant-modal-wrap {
-  z-index: 0;
-}
-.ant-modal-mask {
-  z-index: 0;
 }

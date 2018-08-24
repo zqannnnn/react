@@ -56,11 +56,6 @@ class App extends React.Component<AppProps, any> {
   }
   render() {
     const { auth } = this.props
-    /*
-    const changeLanguage = (lng: string) => {
-      i18n.changeLanguage(lng);
-    };
-    */
     const { alert, lightbox } = this.props
 
     return (

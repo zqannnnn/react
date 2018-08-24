@@ -225,6 +225,17 @@ class EditPage extends React.Component<TransProps, TransState> {
                 <div className="edits-input">
                   <Row>
                     <Col span={20} offset={2} className="edits-input">
+                      <label className="title">{i18n.t('Goods Information')}</label>
+                      {goods && (
+                            <Link
+                              to={'/goods/' + goods.id}
+                              className="control-btn"
+                            >
+                              {i18n.t('  Details')}
+                            </Link>
+                        )}
+                    </Col>
+                    <Col span={20} offset={2} className="edits-input">
                       <label className="edits-input">{i18n.t('Title')}</label>
                       <div>{goods.title}</div>
                     </Col>

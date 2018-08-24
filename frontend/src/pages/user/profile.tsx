@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { RouteComponentProps } from 'react-router-dom'
-import {Location} from 'history';
 import {consts} from "../../../../src/config/static"
 import {
   userActionCreators,
@@ -194,9 +193,9 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
           <h2 className="header-center">{i18n.t('User Profile')}</h2>
           <div className="subtitle">
             {i18n.t('Personal Information')}
-            <span className={userSelf ? 'edit' : 'none'}>
+            {userSelf && <span className= 'edit'>
               <a onClick={this.showPersonalModal}>{i18n.t('Edit')}</a>
-            </span>
+            </span>}
             {this.state.personalVisible&&<UserForm
               handleSubmit={this.personalSubmit}
               user={user}
@@ -216,24 +215,8 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                 <div className="message">
                   {user.firstName} {user.lastName}
                 </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 17, offset: 5 }}
-              >
                 <label>{i18n.t('Email')}:</label>
                 <div className="message">{user.email}</div>
-              </Col>
-            </Row>
-            <Row className={userSelf ? '' : 'none'}>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 17, offset: 5 }}
-              >
                 <label>{i18n.t('Preferred Currency')}</label>
                 <div className={userSelf ? 'message' : 'none'}>
                   {user.preferredCurrencyCode}
@@ -243,9 +226,9 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
           </div>
           <div className="subtitle">
             {i18n.t('Company Information')}
-            <span className={userSelf ? ' edit' : 'none'}>
+            {userSelf && <span className= 'edit'>
               <a onClick={this.showCompanyModal}>{i18n.t('Edit')}</a>
-            </span>
+            </span>}
 
              {this.state.companyVisible&&<CompanyForm
               handleSubmit={this.companySubmit}
@@ -264,24 +247,8 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
               >
                 <label>{i18n.t('Company Name')}:</label>
                 <div className="message">{user.companyName}</div>
-              </Col>
-            </Row>
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 17, offset: 5 }}
-              >
                 <label>{i18n.t('Company Address')}:</label>
                 <div className="message">{user.companyAddress}</div>
-              </Col>
-            </Row>
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 17, offset: 5 }}
-              >
                 <label>{i18n.t('Business License')}:</label>
                 <div className="image-wr">
                   {imagePaths && (
