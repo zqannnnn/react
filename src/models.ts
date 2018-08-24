@@ -105,4 +105,4 @@ const insertInitialData = () => {
   })
 }
 
-export { User, Transaction, Goods, Category, Image, initDatabase }
+export { User, Transaction, Goods, Category, Image, initDatabase ,Consignee}

@@ -1,0 +1,29 @@
+@media (min-width: 320px) {
+    .consignee-table{
+        width:100%;
+        background:#fff;
+        td{
+            padding: 2% !important;
+        }
+        span{
+            display: block !important;
+            white-space: nowrap;
+        }
+        a{
+            min-width: 50px !important; 
+        }
+        .ant-table-bordered.ant-table-empty .ant-table-placeholder{
+            border:none;
+        }
+    }
+  }
+  .consignee-table{
+      overflow-y: auto !important;
+      input{
+        min-width:145px !important;
+      }
+      textarea{
+        min-width:188px !important;
+      }
+  }
+  .addAddress{display:block !important;}

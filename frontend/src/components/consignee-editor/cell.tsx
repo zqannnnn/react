@@ -1,9 +1,10 @@
 import * as React from 'react'
-import { Form, Input, InputNumber } from 'antd'
+import { Form, Input} from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import { WrappedFormUtils } from 'antd/lib/form/Form'
 import { EditableContext } from '.'
 const FormItem = Form.Item
+const { TextArea } = Input
 export interface Record {
   key: string
   id?: string
@@ -23,9 +24,10 @@ interface CellProps extends FormComponentProps {
 }
 class EditableCell extends React.Component<CellProps> {
   getInput = () => {
-    if (this.props.inputType === 'number') {
-      return <InputNumber />
+    if (this.props.dataIndex === 'address') {
+      return <TextArea />
     }
+
     return <Input />
   }
 

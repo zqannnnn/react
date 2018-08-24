@@ -145,7 +145,10 @@ router
       return res.status(500).send({ error: i18n.t('Permission denied.') })
     }
     try {
-      const user = await User.find({ where: { id: req.params.userId } })
+      const user = await User.find({
+        where: { id: req.params.userId },
+        attributes: { exclude: ['password'] }
+      })
       if (!user) {
         return res.status(500).send({ error: i18n.t('User does not exist.') })
       }

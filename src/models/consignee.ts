@@ -10,7 +10,6 @@ import {
   Model,
   PrimaryKey,
   Table,
-  Unique,
   UpdatedAt
 } from 'sequelize-typescript'
 import { User } from './'

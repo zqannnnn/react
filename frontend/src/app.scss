@@ -452,35 +452,6 @@ html {
   color: black;
   text-align: center;
 }
-.profile-page {
-  .subtitle {
-    font: 20px bold;
-    margin: 6px 112px;
-    color: black;
-    margin-top: 20px;
-  }
-  .edit {
-    margin-left: 20px;
-  }
-  .tips {
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.65);
-  }
-  label {
-    font-weight: bold;
-    font-size:16px;
-  }
-  .view-content {
-    font-size: 18px;
-    color: rgba(0, 0, 0, 0.8);
-  }
-  
-  .view-content .message {
-    font-size: 16px;
-    color: rgba(0, 0, 0, 0.65);
-    min-height:24px;
-  }
-} 
 .button-margin {
   margin-right: 10px;
 }
@@ -533,9 +504,6 @@ html {
 .ant-form-item-control {
   text-align: right;
   font-size: 90%;
-}
-.modalsBody .ant-form-item {
-  margin-bottom: 0;
 }
 .steps-content {
   padding-left: 0;

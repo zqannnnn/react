@@ -30,13 +30,13 @@ function edit(consignee: Consignee, id: string) {
   return fetch('/consignee/' + id, requestOptions).then(handleResponse)
 }
 
-function _delete(consigneeId: string) {
+function _delete(id: string) {
   const requestOptions = {
     method: 'DELETE',
     headers: authHeader()
   }
 
-  return fetch('/consignee/' + consigneeId, requestOptions).then(handleResponse)
+  return fetch('/consignee/' + id, requestOptions).then(handleResponse)
 }
 
 function handleResponse(response: Response) {

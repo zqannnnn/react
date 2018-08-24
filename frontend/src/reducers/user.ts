@@ -11,31 +11,32 @@ export function user(state: State = {}, action: UserAction): State {
   let user = state.userData
   switch (action.type) {
     case userConsts.UPDATE_REQUEST:
-      return { ...state, processing: true }
+      return { processing: true }
     case userConsts.UPDATE_SUCCESS:
-      return { userData: action.user }
+      return { userData: action.user, processing: false }
     case userConsts.UPDATE_FAILURE:
-      return { error: action.error }
+      return { error: action.error, processing: false }
     case userConsts.GET_REQUEST:
       return { loading: true }
     case userConsts.GET_SUCCESS:
-      return { userData: action.user }
+      return { userData: action.user, loading: false }
     case userConsts.GET_FAILURE:
-      return { error: action.error }
+      return { error: action.error, loading: false }
     case userConsts.CREATE_CONSIGNEE_REQUEST:
       return { ...state, processing: true }
     case userConsts.CREATE_CONSIGNEE_SUCCESS:
       if (user && user.consignees && action.consignee) {
         user.consignees.push(action.consignee)
       }
-      return { userData: user }
+      return { userData: user,processing: false, }
     case userConsts.CREATE_CONSIGNEE_FAILURE:
-      return { error: action.error }
+      return { error: action.error,processing: false, }
     case userConsts.EDIT_CONSIGNEE_REQUEST:
       return { ...state, processing: true }
     case userConsts.EDIT_CONSIGNEE_SUCCESS:
       if (user && user.consignees && action.consignee) {
         return {
+          processing: false,
           userData: {
             ...user,
             consignees: user.consignees.map(item => {
@@ -51,12 +52,13 @@ export function user(state: State = {}, action: UserAction): State {
       }
 
     case userConsts.EDIT_CONSIGNEE_FAILURE:
-      return { error: action.error }
+      return { error: action.error,processing: false }
     case userConsts.DELETE_CONSIGNEE_REQUEST:
       return { ...state, processing: true }
     case userConsts.DELETE_CONSIGNEE_SUCCESS:
       if (user && user.consignees) {
         return {
+          processing: false,
           userData: {
             ...user,
             consignees: user.consignees.filter(
@@ -68,7 +70,7 @@ export function user(state: State = {}, action: UserAction): State {
         return state
       }
     case userConsts.DELETE_CONSIGNEE_FAILURE:
-      return { error: action.error }
+      return { error: action.error, processing: false }
     default:
       return state
   }

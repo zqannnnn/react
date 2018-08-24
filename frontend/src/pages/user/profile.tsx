@@ -15,6 +15,7 @@ import { UploadFile } from 'antd/lib/upload/interface'
 import i18n from 'i18next'
 import { UserForm, UserValuesProps, CompanyForm, CompanyValuesProps } from '../../components/form'
 import { Record, EditableTable } from '../../components/consignee-editor/'
+import './profile.scss'
 
 
 interface ProfileProps extends RouteComponentProps<{ id: string }> {
@@ -83,7 +84,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
 
   componentWillReceiveProps(nextProps: ProfileProps) {
     const { userProp } = nextProps
-    const { userData } = userProp
+    const { userData,processing } = userProp
     const { authInfo } = this.props
     const { user } = this.state
     if(nextProps.match.path !== this.state.path){
@@ -107,11 +108,11 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
           nextProps.dispatch(currencyActionCreators.getAll())
       }
     }
-    if (userData) {
+    if (userData&&!processing) {
       this.setState({
         user: {
-          ...userData,
-          ...user
+          ...user,
+          ...userData
         },
         userSelf: userData.id === authInfo.id
       })
@@ -226,7 +227,10 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     }
     return (
       <Row type="flex" justify="space-around" align="middle" className="profile-page">
-        <Col span={20}>
+        <Col 
+        xs={{ span: 20, offset: 2 }}
+        sm={{ span: 20, offset: 1 }}
+        >
           <h2 className="header-center">{i18n.t('User Profile')}</h2>
           <div className="subtitle">
             {i18n.t('Personal Information')}
@@ -241,35 +245,36 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
               renderCurrencySelect={this.renderCurrencySelect}
             />}
           </div>
-          <div className="addConsignee">
-              <label>{i18n.t('Address')}</label>
-            </div>
-            <EditableTable
-              data={dataSource}
-              handleSubmit={this.handleSubmitConsignee}
-              handleDelete={this.handleDeleteConsignee}
-            />
           <div className="view-content">
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 17, offset: 5 }}
-              >
+            <div className="field">
                 <label>{i18n.t('Name')}:</label>
                 <div className="message">
                   {user.firstName} {user.lastName}
                 </div>
+            </div>
+
+            <div className="field">
                 <label>{i18n.t('Email')}:</label>
                 <div className="message">{user.email}</div>
+            </div>
+            <div className="field">
+            <div className={userSelf ? '' : 'none'}>
                 <label>{i18n.t('Preferred Currency')}</label>
                 <div className={userSelf ? 'message' : 'none'}>
                   {user.preferredCurrencyCode}
                 </div>
-              </Col>
-            </Row>
-          </div>
-          <div className="subtitle">
+                </div>
+              </div>
+            </div>
+            <div className="field" style={{marginBottom:0}}>
+              <label>{i18n.t('Address')}:</label>
+              {dataSource&&<EditableTable
+              data={dataSource}
+              handleSubmit={this.handleSubmitConsignee}
+              handleDelete={this.handleDeleteConsignee}
+              />}
+            </div>
+          <div className="subtitle company-information">
             {i18n.t('Company Information')}
             {userSelf && <span className= 'edit'>
               <a onClick={this.showCompanyModal}>{i18n.t('Edit')}</a>
@@ -284,16 +289,15 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
             />}
           </div>
           <div className="view-content">
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 17, offset: 5 }}
-              >
+            <div className="field">
                 <label>{i18n.t('Company Name')}:</label>
                 <div className="message">{user.companyName}</div>
+            </div>
+            <div className="field">
                 <label>{i18n.t('Company Address')}:</label>
                 <div className="message">{user.companyAddress}</div>
+            </div>
+            <div className="field">
                 <label>{i18n.t('Business License')}:</label>
                 <div className="image-wr">
                   {imagePaths && (
@@ -310,8 +314,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                     </div>
                   )}
                 </div>
-              </Col>
-            </Row>
+            </div>
           </div>
         </Col>
       </Row>

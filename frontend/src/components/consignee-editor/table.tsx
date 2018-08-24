@@ -2,6 +2,8 @@ import * as React from 'react'
 import { Form, Input, Button, InputNumber, Table, Popconfirm } from 'antd'
 import { WrappedFormUtils } from 'antd/lib/form/Form'
 import { EditableCell, EditableFormRow, EditableContext, Record } from '.'
+import './table.scss'
+
 
 interface TableProps {
   data: Array<Record>
@@ -27,31 +29,31 @@ class EditableTable extends React.Component<TableProps, TableState> {
     {
       title: 'name',
       dataIndex: 'name',
-      width: '10%',
+      width: '15%',
       editable: true
     },
     {
       title: 'email',
       dataIndex: 'email',
-      width: '15%',
+      width: '21%',
       editable: true
     },
     {
       title: 'phoneNum',
       dataIndex: 'phoneNum',
-      width: '15%',
+      width: '16%',
       editable: true
     },
     {
       title: 'address',
       dataIndex: 'address',
-      width: '30%',
+      width: '25%',
       editable: true
     },
     {
       title: 'operation',
       dataIndex: 'operation',
-      width: '15%',
+      width: '14%',
       render: (text: string, record: Record) => {
         const editable = this.isEditing(record)
         return (
@@ -86,7 +88,7 @@ class EditableTable extends React.Component<TableProps, TableState> {
     {
       title: 'delete',
       dataIndex: 'delete',
-      width: '15%',
+      width: '9%',
       render: (text: string, record: Record) => {
         return record.id ? (
           <Popconfirm
@@ -112,7 +114,6 @@ class EditableTable extends React.Component<TableProps, TableState> {
   }
 
   handleDelete = (key: string) => {
-    const data = this.state.data
     this.props.handleDelete(key)
   }
 
@@ -135,7 +136,6 @@ class EditableTable extends React.Component<TableProps, TableState> {
         }
         newData.splice(index, 1, newItem)
         this.props.handleSubmit(newItem)
-
         this.setState({ editingKey: '', data: newData })
       } else {
         newData.push(row)
@@ -154,18 +154,20 @@ class EditableTable extends React.Component<TableProps, TableState> {
   }
   handleAdd = () => {
     const { count, data } = this.state
-    const newData: Record = {
-      key: count.toString(),
-      name: '',
-      email: '',
-      phoneNum: '',
-      address: ''
+    if (this.state.editingKey==='') {
+      const newData: Record = {
+        key: count.toString(),
+        name: '',
+        email: '',
+        phoneNum: '',
+        address: ''
+      }
+      this.setState({
+        editingKey: count.toString(),
+        data: [...data, newData],
+        count: count + 1
+      })
     }
-    this.setState({
-      editingKey: count.toString(),
-      data: [...data, newData],
-      count: count + 1
-    })
   }
   render() {
     const components = {
@@ -188,25 +190,40 @@ class EditableTable extends React.Component<TableProps, TableState> {
         })
       }
     })
-
+    const { editingKey } = this.state
+    
     return (
-      <div>
+      <>
+       { editingKey!==''?
+       <Popconfirm
+        title="Please save first"
+        onConfirm={this.handleAdd}
+      >
+        <Button
+            className=" addAddress"
+            type="primary"
+            style={{ marginBottom: 12 }}
+          >
+            add Address
+          </Button>
+      </Popconfirm>:
         <Button
           className=" addAddress"
           onClick={this.handleAdd}
           type="primary"
-          style={{ marginBottom: 12 }}
+          style={{ marginBottom: 12}}
         >
           add Address
-        </Button>
+        </Button>}
         <Table
+          className="consignee-table"
           components={components}
           bordered
           dataSource={this.state.data}
           columns={newColumns}
           pagination={false}
         />
-      </div>
+      </>
     )
   }
 }
