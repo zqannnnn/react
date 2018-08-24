@@ -40,7 +40,7 @@ const startSocket = async (server: any) => {
                 }
             })
         });
-        socket.on("read-pm", function(data) {   
+        socket.on("ununread-messages", function(data) {   
             let to
             for (var key in users) {
                 if ( users[key]['socket'] == socket.id ) to = key
