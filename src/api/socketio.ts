@@ -28,7 +28,7 @@ const startSocket = async (server: any) => {
                 io.to(`${users[data.to]['socket']}`).emit('private', privateMsg );
             }
         });
-        socket.on("open-offline-user", function(data) {   
+        socket.on("get-user", function(data) {   
             User.findOne({ where: { id: data.userId } }).then(user => {
                 if (user != undefined) {
                     let aInfo: StringKeyHash = {}
@@ -36,7 +36,7 @@ const startSocket = async (server: any) => {
                     aInfo['name'] = user.fullName()
                     aInfo['ts'] = Date.now()
                     const data = { user: aInfo }
-                    io.to(`${socket.id}`).emit('open-offline-user', data );
+                    io.to(`${socket.id}`).emit('get-user', data );
                 }
             })
         });

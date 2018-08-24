@@ -65,7 +65,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
             users[userId]['newMsg'] = false
         } else {
             const data = { userId: userId }
-            if (this.state.socket !== undefined) this.state.socket.emit("open-offline-user", data)
+            if (this.state.socket !== undefined) this.state.socket.emit("get-user", data)
         }
         this.setState({users: users})
     }    
@@ -83,7 +83,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
             socket.on("private", function(msg: any) {    
                 that.onPrivateMsg(msg)
             })
-            socket.on("open-offline-user", function(data: any) {    
+            socket.on("get-user", function(data: any) {    
                 let users = that.state.users
                 const user = data.user
                 users[user.id] = user
