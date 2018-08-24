@@ -56,6 +56,8 @@ class Chat extends React.Component<ItemProps, ItemState> {
             this.setState({socket: undefined, connected: false})
         }
     }    
+    //TODO: strings to const
+    //TODO: clarify definitions & comments
     openChat(userId: string, open = true) {
         let users = this.state.users
         if (users[userId] != undefined) {
@@ -109,6 +111,8 @@ class Chat extends React.Component<ItemProps, ItemState> {
     componentWillMount() {
         this.connect()
     }
+    //TODO: strings to const
+    //TODO: clarify definitions & comments
     addUserChatItem(user: any, open = false) {
         let users = this.state.users
         users[user.id] = user
@@ -120,6 +124,8 @@ class Chat extends React.Component<ItemProps, ItemState> {
         this.setState({users: users})
         this.updateUserMsgs(user.id)
     }
+    //TODO: strings to const
+    //TODO: clarify definitions & comments
     updateUserMsgs(userKey: string) {
         const messages = this.state.messages
         let users = this.state.users 
@@ -135,14 +141,12 @@ class Chat extends React.Component<ItemProps, ItemState> {
         this.setState({users: users})
     }    
 	onPrivateMsg(msg: any) {
-        const that = this;
-        let messages = that.state.messages
-        const timestamp = new Date().getTime().toString()
-        messages[timestamp] = msg
-        that.setState({ messages: messages })
+        let messages = this.state.messages
+        messages[msg.id] = msg
+        this.setState({ messages: messages })
         let foundUser = false
-        for (let userKey in that.state.users) {  
-            if ( (userKey != that.state.userKey) && ((msg.from == userKey) || (msg.to == userKey)) ) {
+        for (let userKey in this.state.users) {  
+            if ( (userKey != this.state.userKey) && ((msg.from == userKey) || (msg.to == userKey)) ) {
                 foundUser = true
                 this.updateUserMsgs(userKey)
             }
