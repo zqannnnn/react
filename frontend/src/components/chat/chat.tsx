@@ -76,21 +76,8 @@ class Chat extends React.Component<ItemProps, ItemState> {
             let { auth } = that.props
             const { authInfo } = auth
             that.setState({socket: socket, connected: true})
-			if (authInfo !== undefined) socket.emit('get-users', authInfo)
-			socket.on('get-users', (users: any) => {
-                that.setState({users: users})
-                for (let key in users) {  
-                    if (users[key]['messages'] == undefined) users[key]['messages'] = {}
-                    if (users[key]['panelStatus'] == undefined) users[key]['panelStatus'] = 'collapsed'
-                    if (users[key]['newMsg'] == undefined) users[key]['newMsg'] = false
-                    if (authInfo !== undefined) {
-                        if ( users[key].id == authInfo.id ) {
-                            //console.log('YOU ARE ' + key )                        
-                            that.setState({userKey: key})
-                        }
-                    }                    
-                }
-                that.setState({users: users})
+			if (authInfo !== undefined) socket.emit('start-chat-session', authInfo)
+			socket.on('session-started', (data: any) => {
             })
             socket.on("private", function(msg: any) {    
                 that.onPrivateMsg(msg)

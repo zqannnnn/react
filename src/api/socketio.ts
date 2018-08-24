@@ -57,7 +57,7 @@ const startSocket = async (server: any) => {
                 })
             }      
         });
-		socket.on('get-users', (authInfo: AuthInfo) => {
+		socket.on('start-chat-session', (authInfo: AuthInfo) => {
 			let keyForRemove = null
 			for (var key in users) {
 				if ( key == authInfo.id ) {
@@ -80,7 +80,7 @@ const startSocket = async (server: any) => {
 				aInfo['ts'] = Date.now()
 				users[authInfo.id] = aInfo	
 			}
-            io.sockets.emit('get-users', users)
+            io.to(`${socket.id}`).emit('session-started', {} );
             const to = authInfo.id
             Message.findAll({
                 order: [
