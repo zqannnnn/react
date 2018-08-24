@@ -98,8 +98,15 @@ class Chat extends React.Component<ItemProps, ItemState> {
                 that.onPrivateMsg(msg)
             })
             socket.on("open-offline-user", function(data: any) {    
-                console.log('open-offline-user')
-                console.log(data)
+                let users = that.state.users
+                const user = data.user
+                users[user.id] = user
+                users[user.id]['panelStatus'] = 'expended'
+                users[user.id]['status'] = 'inlist'
+                users[user.id]['newMsg'] = false
+                users[user.id]['messages'] = {}    
+                that.setState({users: users, opened: true, activePanel: user.id})
+                that.updateUserMsgs(user.id)
             })
 		});
     }    
@@ -125,9 +132,14 @@ class Chat extends React.Component<ItemProps, ItemState> {
         const timestamp = new Date().getTime().toString()
         messages[timestamp] = msg
         that.setState({ messages: messages }); 
+        let foundUser = false
         for (let userKey in that.state.users) {  
-            if ( (userKey != that.state.userKey) && ((msg.from == userKey) || (msg.to == userKey)) ) this.updateUserMsgs(userKey)
+            if ( (userKey != that.state.userKey) && ((msg.from == userKey) || (msg.to == userKey)) ) {
+                foundUser = true
+                this.updateUserMsgs(userKey)
+            }
         }
+        if (!foundUser) this.openChat(msg.from)
     }
 	onUserItemClose(userKey: any) {
         let users = this.state.users
