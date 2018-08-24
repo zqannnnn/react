@@ -57,6 +57,22 @@ const startSocket = async (server: any) => {
                 })
             }      
         });
+        socket.on("get-unread-messages", (authInfo: AuthInfo) => {   
+            const to = authInfo.id
+            Message.findAll({
+                order: [
+                    ['createdAt', 'ASC'],
+                ],
+                where: { to: to, isNew: true }
+            }).then(msgs => {
+                msgs.forEach(function (msg, index) {
+                    User.findOne({ where: { id: msg.from } }).then(user => {
+                        const privateMsg = { from: msg.from, to: to, msg: msg.message, createdAt: msg.createdAt }
+                        io.to(`${users[to]['socket']}`).emit('private', privateMsg );
+                    })
+                })
+            })
+        });
 		socket.on('start-chat-session', (authInfo: AuthInfo) => {
 			let keyForRemove = null
 			for (var key in users) {
@@ -81,20 +97,6 @@ const startSocket = async (server: any) => {
 				users[authInfo.id] = aInfo	
 			}
             io.to(`${socket.id}`).emit('session-started', {} );
-            const to = authInfo.id
-            Message.findAll({
-                order: [
-                    ['createdAt', 'ASC'],
-                ],
-                where: { to: to, isNew: true }
-            }).then(msgs => {
-                msgs.forEach(function (msg, index) {
-                    User.findOne({ where: { id: msg.from } }).then(user => {
-                        const privateMsg = { from: msg.from, to: to, msg: msg.message, createdAt: msg.createdAt }
-                        io.to(`${users[to]['socket']}`).emit('private', privateMsg );
-                    })
-                })
-            })
         })
 		socket.on('disconnect', () => {
             for (var key in users) {

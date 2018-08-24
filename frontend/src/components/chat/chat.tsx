@@ -78,6 +78,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
             that.setState({socket: socket, connected: true})
 			if (authInfo !== undefined) socket.emit('start-chat-session', authInfo)
 			socket.on('session-started', (data: any) => {
+                socket.emit('get-unread-messages', authInfo)                
             })
             socket.on("private", function(msg: any) {    
                 that.onPrivateMsg(msg)
