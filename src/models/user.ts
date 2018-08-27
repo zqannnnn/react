@@ -17,6 +17,7 @@ import {
     UpdatedAt
 } from 'sequelize-typescript'
 import { Currency, Image, Transaction } from './'
+import { Consignee } from './consignee'
 @Table({
     tableName: 'user',
     underscored: true

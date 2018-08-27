@@ -56,8 +56,8 @@ class UserForm extends React.Component<CompanyFormProps, ProfileState> {
 
     this.setState({ fileList })
   }
-  componentWillReceiveProps(nextProps: CompanyFormProps) {
-    const { user } = nextProps
+  componentDidMount() {
+    const { user } = this.props
     if (user && user.businessLicenses) {
       let licenseList = user.businessLicenses.map(
         (license, index): UploadFile => ({
@@ -74,12 +74,6 @@ class UserForm extends React.Component<CompanyFormProps, ProfileState> {
   render() {
     const { getFieldDecorator } = this.props.form
     const { fileList } = this.state
-    const uploadButton = (
-      <div>
-        <Icon type="plus" />
-        <div className="ant-upload-text">Upload</div>
-      </div>
-    )
     return (
       <Modal
         title={i18n.t('Company Information')}
@@ -129,6 +123,7 @@ class UserForm extends React.Component<CompanyFormProps, ProfileState> {
             </div>
           </FormItem>
         </Form>
+        
       </Modal>
     )
   }

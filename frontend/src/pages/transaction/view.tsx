@@ -72,6 +72,14 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
   render() {
     const { transaction, authInfo, loading } = this.props
     const { commentInputShowing, comment } = this.state
+    let maker
+    if (transaction) { 
+      maker = transaction.maker
+    }
+    let taker
+    if (transaction) { 
+      taker = transaction.taker
+    }
     let goods
     if (transaction) { 
       goods = transaction.goods
@@ -100,6 +108,78 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                   <div className="message">
                     {goods.title ? goods.title : 'N/A'}
                   </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col
+                  xs={{ span: 20, offset: 2 }}
+                  sm={{ span: 20, offset: 2 }}
+                  md={{ span: 6, offset: 5 }}
+                  className="view-top"
+                >
+                  <label>{i18n.t('maker')}:</label>
+                  <div className="message">
+                    {maker ? (
+                    <Link
+                    to={'/user/' + transaction.makerId}
+                    className="control-btn"
+                    >
+                      <span>
+                        {maker.firstName} {maker.lastName}
+                      </span>
+                      </Link>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                </Col>
+                <Col
+                  xs={{ span: 20, offset: 2 }}
+                  sm={{ span: 20, offset: 2 }}
+                  md={{ span: 7, offset: 1 }}
+                  className="view-top"
+                >
+                  <label>{i18n.t('Price')}:</label>
+                  <div className="message">{`${
+                    transaction.price ? transaction.price : 'N/A'
+                  } ${
+                    transaction.currencyCode
+                      ? transaction.currencyCode + '/KG'
+                      : ''
+                  }`}</div>
+                </Col>
+              </Row>
+              {taker && <Row>
+                <Col
+                  xs={{ span: 20, offset: 2 }}
+                  sm={{ span: 20, offset: 2 }}
+                  md={{ span: 6, offset: 5 }}
+                  className="view-top"
+                >
+                  <label>{i18n.t('taker')}:</label>
+                  <div className="message">
+                    {taker ? (
+                    <Link
+                    to={'/user/' + transaction.takerId}
+                    className="control-btn"
+                    >
+                      <span>
+                        {taker.firstName} {taker.lastName}
+                      </span>
+                      </Link>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                </Col>
+              </Row>}
+              <Row className="top">
+                <Col
+                  xs={{ span: 20, offset: 2 }}
+                  sm={{ span: 20, offset: 2 }}
+                  md={{ span: 17, offset: 5 }}
+                >
+                  <label className="details-nav">{i18n.t('goods information')}:</label>
                 </Col>
               </Row>
               <Row>
@@ -231,20 +311,16 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                     )}
                   </div>
                 </Col>
-                <Col
+                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 7, offset: 1 }}
                   className="view-top"
                 >
-                  <label>{i18n.t('Price')}:</label>
-                  <div className="message">{`${
-                    transaction.price ? transaction.price : 'N/A'
-                  } ${
-                    transaction.currencyCode
-                      ? transaction.currencyCode + '/KG'
-                      : ''
-                  }`}</div>
+                  <label>{i18n.t('Place of Origin')}:</label>
+                  <div className="message">
+                    {goods.placeOfOrigin ? goods.placeOfOrigin : 'N/A'}
+                  </div>
                 </Col>
               </Row>
               <Row>
@@ -296,17 +372,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 </Col>
               </Row>
               <Row>
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 6, offset: 5 }}
-                  className="view-top"
-                >
-                  <label>{i18n.t('Place of Origin')}:</label>
-                  <div className="message">
-                    {goods.placeOfOrigin ? goods.placeOfOrigin : 'N/A'}
-                  </div>
-                </Col>
+               
               </Row>
               <Row>
                 <Col
@@ -330,58 +396,6 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                             />
                           </div>
                         ))}
-                      </div>
-                    )}
-                  </div>
-                </Col>
-              </Row>
-              <Row>
-                <Col
-                  xs={{ span: 10, offset: 2 }}
-                  sm={{ span: 10, offset: 2 }}
-                  md={{ span: 10, offset: 7 }}
-                  className="view-top"
-                >
-                  <div className="message">
-                    {authInfo.isAdmin &&
-                    transaction.status == transactionConsts.STATUS_FINISHED ? (
-                      <div
-                        className="control-btn"
-                        onClick={() => {
-                          this.triggerCommentInput()
-                        }}
-                      >
-                        <span className="view-comment">{'Comment '}</span>
-                        <i
-                          className={
-                            'fa fa-comment-o ' +
-                            (commentInputShowing ? 'icon-active' : '')
-                          }
-                          aria-hidden="true"
-                        />
-                      </div>
-                    ) : (
-                      ''
-                    )}
-                    {commentInputShowing ? (
-                      <div className="input-wr content">
-                        <Input
-                          addonAfter={
-                            <Icon
-                              type="edit"
-                              onClick={() => {
-                                this.sendComment()
-                              }}
-                            />
-                          }
-                          name="comment"
-                          value={comment}
-                          onChange={this.handleInputChange}
-                        />
-                      </div>
-                    ) : (
-                      <div className="comment content">
-                        {this.state.comment}
                       </div>
                     )}
                   </div>

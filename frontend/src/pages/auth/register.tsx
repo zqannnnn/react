@@ -44,7 +44,7 @@ class RegisterPage extends React.Component<RegisterProps, RegisterState> {
     this.setState({ submitted: true })
     const { dispatch } = this.props
     const { userType } = this.state.user
-    let newUser: User = { ...values, userType, isActive: true }
+    let newUser: User = { ...values, userType, isActive: true, consignees: [] }
     dispatch(authActionCreators.register(newUser))
   }
 

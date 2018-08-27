@@ -36,7 +36,10 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
 
   render() {
     const { goods, authInfo, loading } = this.props
-
+    let creator
+    if (goods) { 
+      creator = goods.creator
+    }
     let imagePaths: string[]
     if (goods && goods.images) {
       imagePaths = goods.images.map(image => image.path)
@@ -262,6 +265,28 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                       {goods.placeOfOrigin ? goods.placeOfOrigin : 'N/A'}
                     </div>
                   </Col>
+                  <Col
+                  xs={{ span: 20, offset: 2 }}
+                  sm={{ span: 20, offset: 2 }}
+                  md={{ span: 7, offset: 1 }}
+                  className="view-top"
+                >
+                  <label>{i18n.t('creator')}:</label>
+                  <div className="message">
+                    {creator ? (
+                    <Link
+                    to={'/user/' + goods.creatorId}
+                    className="control-btn"
+                    >
+                      <span>
+                        {creator.firstName} {creator.lastName}
+                      </span>
+                      </Link>
+                    ) : (
+                      'nO taker'
+                    )}
+                  </div>
+                </Col>
                 </Row>
                 <Row>
                   <Col

@@ -34,7 +34,7 @@ interface GoodsProps extends RouteComponentProps<{ id: string }> {
   loading: boolean
   processing: boolean
   goodsProp: Goods
-  categorys: Category[]
+  categories: Category[]
   image: string
   authInfo: AuthInfo
 }
@@ -79,7 +79,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
         ...this.state,
         goodsId
       })
-    if (!this.props.categorys)
+    if (!this.props.categories)
       this.props.dispatch(categoryActionCreators.getAll())
 
     goodsId && this.props.dispatch(goodsActionCreators.getById(goodsId))
@@ -250,10 +250,10 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       category
     } = this.state.goods
     let { submitted, fileList, certificateList } = this.state
-    let { processing, categorys } = this.props
+    let { processing, categories } = this.props
     let currentCategory: Category =
-      categorys &&
-      categorys.filter((item: Category) => {
+      categories &&
+      categories.filter((item: Category) => {
         return item.type === category
       })[0]
     switch (current) {
@@ -705,7 +705,7 @@ function mapStateToProps(state: RootState) {
   const { processing, goodsData } = goods
   return {
     processing,
-    categorys: category.items,
+    categories: category.items,
     goodsProp: goodsData,
     authInfo: auth.authInfo
   }

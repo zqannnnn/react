@@ -3,10 +3,27 @@ import * as fs from 'fs'
 import { Sequelize } from 'sequelize-typescript'
 import { config } from './config/db'
 import { beefOptions, consts, sheepOptions, vealOptions } from './config/static'
-import { Category, Currency, Goods, Image, Transaction, User, Message } from './models/'
+import {
+  Category,
+  Currency,
+  Goods,
+  Image,
+  Transaction,
+  User,
+  Message,
+  Consignee
+} from './models/'
 
 const sequelize = new Sequelize(config)
-sequelize.addModels([User, Transaction, Goods, Category, Image, Currency, Message])
+sequelize.addModels([
+  User,
+  Transaction,
+  Goods,
+  Category,
+  Image,
+  Currency,
+  Consignee
+])
 
 const initDatabase = async () => {
   await sequelize.sync({force:true})
@@ -89,4 +106,4 @@ const insertInitialData = () => {
   })
 }
 
-export { User, Transaction, Goods, Category, Image, initDatabase }
+export { User, Transaction, Goods, Category, Image, initDatabase ,Consignee, Message}

@@ -33,6 +33,10 @@ import { RootState, LightboxState, AuthState, AlertState } from './reducers'
 import { Layout, Alert, BackTop } from 'antd'
 import './app.scss'
 
+declare global {
+    interface Window { Chat: any; }
+}
+
 interface AppProps {
   dispatch: (action: any) => void
   alert: AlertState
@@ -60,11 +64,14 @@ class App extends React.Component<AppProps, any> {
     const { alert, lightbox } = this.props
 
     return (
+      <>
+      
       <Router history={history}>
+        
         <Layout>
           <NavBar mobileBreakPoint={768} placement="bottomLeft" />
-          <Lightbox />
-          <Layout>              
+          {lightbox.visible? <Lightbox />  : ''}
+          <Layout>
             <Layout.Content className="page-wr">
               {alert.message && (
                 <Alert message={alert.message} type={alert.type} />
@@ -117,6 +124,7 @@ class App extends React.Component<AppProps, any> {
           </Layout>
         </Layout>
       </Router>
+      </>
     )
   }
 }

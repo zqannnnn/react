@@ -1,4 +1,5 @@
 import { Currency, Image, ListItem } from '.'
+import { Consignee } from '.'
 
 export class User implements ListItem {
   id?: string
@@ -18,4 +19,5 @@ export class User implements ListItem {
   companyAddress?: string
   businessLicenses?: Image[]
   licenseStatus?: number
+  consignees?: Consignee[]
 }
