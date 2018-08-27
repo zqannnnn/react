@@ -108,7 +108,4 @@ export class User extends Model<User> {
     return false
   }
 
-  public fullName = () => {
-    return this.firstName + ' ' + this.lastName
-  }
 }
