@@ -22,6 +22,7 @@ sequelize.addModels([
   Category,
   Image,
   Currency,
+  Message,
   Consignee
 ])
 
