@@ -11,11 +11,8 @@
             float: right;
             width: 36px;            
         }
-        svg {
-            float: right;
-            right: 14px;
-            position: relative;
-            top: 4px;            
+        i {
+            cursor: pointer;
         }
     }
     .new-msg {

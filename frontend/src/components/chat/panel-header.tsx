@@ -2,6 +2,7 @@
 import * as React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { StringKeyHash } from '../../../../src/interfaces'
+import { Icon } from 'antd'
 
 interface ItemProps {
     user: StringKeyHash
@@ -24,7 +25,8 @@ class PanelHead extends React.Component<ItemProps> {
     }   
     render() {
         let closeBtn;
-        if (this.props.showClose) closeBtn = <div  onClick={this.handleClick}><FontAwesomeIcon icon="times" /></div>
+        
+        if (this.props.showClose) closeBtn = <div  onClick={this.handleClick}><Icon type="close" /></div>
         let title = this.props.text != '' ? this.props.text : this.props.user.name
         return (
             <label className='user-header'>
