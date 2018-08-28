@@ -84,7 +84,7 @@ class UserForm extends React.Component<CompanyFormProps, ProfileState> {
         cancelText={i18n.t('Cancel')}
       >
         <Form>
-          <FormItem label="companyName">
+          <FormItem label="Company Name">
             {getFieldDecorator('companyName', {
               rules: [
                 {
@@ -94,7 +94,7 @@ class UserForm extends React.Component<CompanyFormProps, ProfileState> {
               ]
             })(<Input />)}
           </FormItem>
-          <FormItem label="companyAddress">
+          <FormItem label="Company Address">
             {getFieldDecorator('companyAddress', {
               rules: [
                 {

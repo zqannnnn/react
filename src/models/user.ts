@@ -107,5 +107,4 @@ export class User extends Model<User> {
     }
     return false
   }
-
 }

@@ -1,10 +1,10 @@
-import * as socket from 'socket.io' // 1532692062 chat
+import * as Socket from 'socket.io' // 1532692062 chat
 import { AuthInfo } from '../../frontend/src/actions'
 import { StringKeyHash, HashOfStringKeyHash } from '../interfaces'
 // https://socket.io/get-started/chat/
 // https://codeburst.io/isomorphic-web-app-react-js-express-socket-io-e2f03a469cd3
 const startSocket = async (server: any) => {
-  const io = socket(server)
+  const io = Socket(server)
   const users: HashOfStringKeyHash = {}
   io.on('connection', socket => {
     socket.on('private', function(data) {
@@ -14,11 +14,11 @@ const startSocket = async (server: any) => {
     socket.on('get-users', (authInfo: AuthInfo) => {
       let keyForRemove = null
       for (const key in users) {
-        if (users[key].id == authInfo.id) {
+        if (users[key].id === authInfo.id) {
           const aInfo: StringKeyHash = {}
           aInfo.id = authInfo.id
           let name = users[key].name
-          if (name == 'undefined undefined') name = authInfo.name
+          if (name === 'undefined undefined') name = authInfo.name
           aInfo.name = name
           aInfo.ts = Date.now()
           keyForRemove = key

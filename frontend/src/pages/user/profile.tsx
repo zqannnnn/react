@@ -257,15 +257,16 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                 <label>{i18n.t('Email')}:</label>
                 <div className="message">{user.email}</div>
             </div>
+
             <div className="field">
-            <div className={userSelf ? '' : 'none'}>
+              <div className={userSelf ? '' : 'none'}>
                 <label>{i18n.t('Preferred Currency')}</label>
                 <div className={userSelf ? 'message' : 'none'}>
                   {user.preferredCurrencyCode}
                 </div>
-                </div>
               </div>
             </div>
+
             <div className="field" style={{marginBottom:0}}>
               <label>{i18n.t('Address')}:</label>
               {dataSource&&<EditableTable
@@ -274,6 +275,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
               handleDelete={this.handleDeleteConsignee}
               />}
             </div>
+          </div>
           <div className="subtitle company-information">
             {i18n.t('Company Information')}
             {userSelf && <span className= 'edit'>
@@ -298,22 +300,22 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                 <div className="message">{user.companyAddress}</div>
             </div>
             <div className="field">
-                <label>{i18n.t('Business License')}:</label>
-                <div className="image-wr">
-                  {imagePaths && (
-                    <div className="images-container">
-                      {imagePaths.map((image, index) => (
-                        <div key={index} className="image-wrapper">
-                          <img
-                            className="image cursor-pointer"
-                            onClick={() => this.openLightbox(imagePaths[index])}
-                            src={image}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              <label>{i18n.t('Business License')}:</label>
+              <div className="image-wr">
+                {imagePaths && (
+                  <div className="images-container">
+                    {imagePaths.map((image, index) => (
+                      <div key={index} className="image-wrapper">
+                        <img
+                          className="image cursor-pointer"
+                          onClick={() => this.openLightbox(imagePaths[index])}
+                          src={image}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </Col>
