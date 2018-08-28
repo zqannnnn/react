@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "format": "prettier --write ./**/*.{js,ts,tsx,json,scss}",
-    "lint": "tslint src/**/*.ts --fix --project tsconfig.json" ,
+    "lint": "tslint src/**/*.ts --fix --project tsconfig.json",
     "run": "ts-node src/index",
     "watch": "nodemon -e js,ts,tsx -w src/ -x ts-node src/index",
     "test": "jest"
@@ -34,9 +34,6 @@
     ]
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.0-14",
-    "@fortawesome/free-solid-svg-icons": "^5.1.0-11",
-    "@fortawesome/react-fontawesome": "0.1.0-11",
     "@types/socket.io": "^1.4.36",
     "@types/socket.io-client": "^1.4.32",
     "antd": "^3.5.3",
