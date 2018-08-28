@@ -231,7 +231,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                               to={'/goods/' + goods.id}
                               className="control-btn"
                             >
-                              {i18n.t('  Details')}
+                            {i18n.t('  details')}
                             </Link>
                         )}
                     </Col>
