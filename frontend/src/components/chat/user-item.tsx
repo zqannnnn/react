@@ -94,11 +94,11 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         if (event.keyCode == 13) this.submit()
     }
     submit() {
-        if (this.state.value.length > 0) {
+        if (this.state.value.trim().length > 0) {
             const msg = { msg: this.state.value, to: this.props.userKey }
             if (this.props.socket !== undefined) this.props.socket.emit("private", msg)
-            this.setState({value: '' })
         }
+        this.setState({value: '' })
     }
     render() {
         const { TextArea } = Input
