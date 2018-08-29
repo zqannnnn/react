@@ -7,6 +7,7 @@ interface CommentProps {
   viewAllReplys: (comment: Comment) => void
   submitReply: (comment: Comment) => void
   commentLoading?: boolean
+  reseted: boolean
 }
 interface CommentState {
   currentReply: string
@@ -82,10 +83,14 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
   }
 
   componentWillReceiveProps(nextProps: CommentProps) {
-    const { commentLoading } = this.props
-    if (commentLoading) {
-      this.setState({ replyLoading: false, comment: nextProps.comment })
-    } else {
+    const { commentLoading, reseted } = nextProps
+    if (!commentLoading) {
+      this.setState({
+        replyLoading: false,
+        comment: nextProps.comment
+      })
+    }
+    if (reseted) {
       this.setState({
         ...this.defaultState,
         comment: nextProps.comment

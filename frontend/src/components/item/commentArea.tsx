@@ -24,7 +24,7 @@ interface CommentAreaState {
   currentReplyTo?: string
   currentReplyRoot?: string
   viewAllCommentShowing: boolean
-  commentSubmitted: boolean
+  reseted: boolean
   comments?: Comment[]
   options: ListOptions
 }
@@ -41,14 +41,13 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
       pageSize: transactionConsts.COMMENT_LIST_SIZE
     },
     viewAllCommentShowing: false,
-    commentSubmitted: false
+    reseted: false
   }
 
   handleCommentInputChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget
     this.setState({
-      currentComment: value,
-      commentSubmitted: true
+      currentComment: value
     })
   }
 
@@ -56,8 +55,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
     const { options } = this.state
     this.props.listComment(options)
     this.setState({
-      viewAllCommentShowing: true,
-      commentSubmitted: true
+      viewAllCommentShowing: true
     })
   }
 
@@ -74,20 +72,21 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
     const options = this.state.options
     options.page = current
     options.pageSize = defaultPageSize
-    this.setState({ options, commentSubmitted: true })
+    this.setState({ options, reseted: true })
     this.props.listComment(options)
   }
 
   componentWillReceiveProps(nextProps: CommentAreaProps) {
-    const { commentSubmitted } = this.state
-    if (commentSubmitted) {
+    const { commentLoading } = nextProps
+    if (!commentLoading) {
       this.setState({
-        commentSubmitted: false,
         comments: nextProps.comments
       })
-    } else {
+    }
+    if (this.state.reseted) {
       this.setState({
         ...this.defaultState,
+        reseted: false,
         comments: nextProps.comments
       })
     }
@@ -147,6 +146,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
                 commentLoading={this.props.commentLoading}
                 viewAllReplys={this.viewAllReplys}
                 submitReply={this.submitReply}
+                reseted={this.state.reseted}
                 key={index}
               />
             ))}

@@ -331,24 +331,24 @@ const createReply: ActionCreator<Thunk> = (comment: Comment) => {
           dispatch(failure(comment.transactionId, error))
       )
   }
-  function request(id: string): Action {
+  function request(transactionId: string): Action {
     return {
       type: transactionConsts.REPLY_CREATE_REQUEST,
-      id
+      transactionId
     }
   }
-  function success(id: string, result: Comment): Action {
+  function success(transactionId: string, result: Comment): Action {
     return {
       type: transactionConsts.REPLY_CREATE_SUCCESS,
       comment: result,
-      id
+      transactionId
     }
   }
-  function failure(id: string, error: string): Action {
+  function failure(transactionId: string, error: string): Action {
     return {
       type: transactionConsts.REPLY_CREATE_FAILURE,
       error,
-      id
+      transactionId
     }
   }
 }
@@ -369,7 +369,7 @@ const listComment: ActionCreator<Thunk> = (
   }
 
   function request(): Action {
-    return { type: transactionConsts.COMMENT_LIST_REQUEST }
+    return { type: transactionConsts.COMMENT_LIST_REQUEST, id }
   }
   function success(
     comments: Array<Comment>,

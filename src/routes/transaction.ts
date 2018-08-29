@@ -329,8 +329,7 @@ router.post('/reply', async (req: IRequest, res: express.Response) => {
     if (!comment.replyTo) {
       comment.rootId = comment.id
       await comment.save()
-    }
-    if (comment.replyTo) {
+    } else {
       const rootComment = await Comment.findById(comment.rootId)
       if (rootComment) {
         if (rootComment.totalReply) {
@@ -341,8 +340,18 @@ router.post('/reply', async (req: IRequest, res: express.Response) => {
         await rootComment.save()
       }
     }
-
-    return res.send(comment)
+    const result = await Comment.find({
+      where: {
+        id: comment.id
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['firstName', 'lastName']
+        }
+      ]
+    })
+    return res.send(result)
   } catch (e) {
     return res.status(500).send({ error: e.message })
   }

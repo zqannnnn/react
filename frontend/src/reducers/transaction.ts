@@ -166,21 +166,39 @@ export function transaction(
       }
 
     case transactionConsts.REPLY_CREATE_REQUEST:
-      return {
-        ...state,
-        processing: true
+      if (state.items) {
+        let items = state.items.map(item => {
+          if (item.id === action.transactionId) {
+            if (item.comments) {
+              item.commentLoading = true
+            }
+          }
+          return item
+        })
+        return {
+          ...state,
+          processing: true,
+          items
+        }
+      } else {
+        return state
       }
     case transactionConsts.REPLY_CREATE_SUCCESS:
       if (state.items && state.rowComments && action.comment) {
         let items = state.items.map(item => {
-          if (item.id === action.id) {
+          if (item.id === action.transactionId) {
             if (item.comments) {
               item.comments.map(comment => {
-                if (action.comment && comment.id === action.comment.rootId) {
-                  comment.replys && comment.replys.push(action.comment)
+                if (
+                  action.comment &&
+                  comment.id === action.comment.rootId &&
+                  comment.replys
+                ) {
+                  comment.replys = [action.comment, ...comment.replys]
                 }
                 return comment
               })
+              item.commentLoading = false
             }
           }
           return item
@@ -205,7 +223,7 @@ export function transaction(
       }
 
     case transactionConsts.COMMENT_LIST_REQUEST:
-      if (state.items && action.transactionId) {
+      if (state.items) {
         return {
           ...state,
           items: state.items.map(item => {
@@ -270,7 +288,7 @@ export function transaction(
         return {
           ...state,
           items: state.items.map(item => {
-            if (item.id === action.id) {
+            if (item.id === action.transactionId) {
               item.commentLoading = true
             }
             return item
@@ -289,11 +307,11 @@ export function transaction(
           item => item.id === action.transactionId
         )[0]
         item.comments = comments
+        item.commentLoading = false
         items.push(item)
         return {
           ...state,
           rowComments: clone,
-          loading: false,
           items: state.items.map(
             item =>
               item.id === action.id
@@ -306,10 +324,17 @@ export function transaction(
         }
       }
     case transactionConsts.REPLY_LIST_FAILURE:
-      return {
-        ...state,
-        loading: false
-      }
+      if (state.items && action.transactionId)
+        return {
+          ...state,
+          items: state.items.map(item => {
+            if (item.id === action.id) {
+              item.commentLoading = false
+            }
+            return item
+          })
+        }
+      else return state
 
     case transactionConsts.GET_REQUEST:
       return { ...state, loading: true }
