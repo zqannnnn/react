@@ -48,7 +48,6 @@ class Chat extends React.Component<ItemProps, ItemState> {
         this.onUserItemClose = this.onUserItemClose.bind(this)
         this.onOpenChat = this.onOpenChat.bind(this)
         this.onOpenUserItem = this.onOpenUserItem.bind(this)
-        this.onSendMsg = this.onSendMsg.bind(this)
     }
     disconnect() {
         if (this.state.connected) {
@@ -185,9 +184,6 @@ class Chat extends React.Component<ItemProps, ItemState> {
         }
         this.setState({users: users})
     }
-	onSendMsg(msg: any) {
-        this.onPrivateMsg(msg)
-    }
 	render() {
         let users = this.state.users   
         let chatCssClass = ''
@@ -215,7 +211,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
                                                 if (this.state.users[userKey]['newMsg']) cssClass = 'new-msg'
                                                 return (
                                                     <Panel className={cssClass} header={<PanelHead onUserItemClose={this.onUserItemClose} user={this.state.users[userKey]} userKey={userKey} text='' showClose={true} />} key={userKey}> 
-                                                        <UserItem messages={this.state.users[userKey]['messages']} userKey={userKey} socket={this.state.socket} onSendMsg={this.onSendMsg} /> 
+                                                        <UserItem messages={this.state.users[userKey]['messages']} userKey={userKey} socket={this.state.socket} /> 
                                                     </Panel>
                                                 )    
                                             }

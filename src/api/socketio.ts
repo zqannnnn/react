@@ -26,7 +26,8 @@ const startSocket = async (server: any) => {
             }
             if ( users[data.to] != undefined && message != undefined) {
                 const privateMsg = { id: message.id, from: from, to: data.to, msg: data.msg, createdAt: createdAt, isNew: true }
-                io.to(`${users[data.to]['socket']}`).emit('private', privateMsg );
+                io.to(`${users[data.to]['socket']}`).emit('private', privateMsg )
+                io.to(`${socket.id}`).emit('private', privateMsg )
             }
         });
         socket.on("get-user", function(data) {   

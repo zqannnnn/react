@@ -8,7 +8,6 @@ interface ItemProps {
     messages: StringKeyHash
     userKey: string
     socket: any
-    onSendMsg: any
 }
 interface ItemState {
     value: string
@@ -35,25 +34,30 @@ class UserItem extends React.Component<ItemProps, ItemState> {
             Object.keys(props.messages).map((key, index) => {
                 if ( messages[key] == undefined ) {
                     relatedMsgs[key] = props.messages[key]
-                    if (!isNewMessage) isNewMessage = props.messages[key].isNew                    
+                    if (!isNewMessage && props.messages[key].to == props.userKey ) isNewMessage = props.messages[key].isNew                    
                 }
             })       
             messages = Object.assign(messages, relatedMsgs)
-            let msgsKeys = []
+            let msgsTimes = []
             for (let k in messages) {
                 if (messages.hasOwnProperty(k)) {
-                    msgsKeys.push(k);
+                    msgsTimes.push(messages[k].createdAt)
                 }
             }        
-            msgsKeys.sort()
-            const len = msgsKeys.length
+            msgsTimes.sort()
+            const len = msgsTimes.length
             let orderededMessages:StringKeyHash = {}
             for (let i = 0; i < len; i++) {
-                let msgKey = msgsKeys[i]
-                orderededMessages[msgKey] = messages[msgKey]
+                let createdAt = msgsTimes[i]
+                for (let k in messages) {
+                    if (messages.hasOwnProperty(k)) {
+                        if ( messages[k].createdAt == createdAt ) {
+                            orderededMessages[k] = messages[k]
+                        }
+                    }
+                }        
             }
             this.setState({ messages: orderededMessages })
-
             if ( isNewMessage ) {
                 //update all messages from user as read
                 const data = { userId: this.props.userKey}
@@ -94,7 +98,6 @@ class UserItem extends React.Component<ItemProps, ItemState> {
             const msg = { msg: this.state.value, to: this.props.userKey }
             if (this.props.socket !== undefined) this.props.socket.emit("private", msg)
             this.setState({value: '' })
-            this.props.onSendMsg(msg)    
         }
     }
     render() {
