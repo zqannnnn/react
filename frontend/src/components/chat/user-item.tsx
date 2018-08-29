@@ -1,6 +1,8 @@
 //1532692062 chat
 import * as React from 'react'
 import { StringKeyHash } from '../../../../src/interfaces'
+//https://ant.design/components/input/
+import { Input } from 'antd'
 
 interface ItemProps {
     messages: StringKeyHash
@@ -90,12 +92,15 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     submit() {
         if (this.state.value.length > 0) {
             const msg = { msg: this.state.value, to: this.props.userKey }
-            if (this.props.socket !== undefined) this.props.socket.emit("private", msg);
+            if (this.props.socket !== undefined) this.props.socket.emit("private", msg)
             this.setState({value: '' })
             this.props.onSendMsg(msg)    
         }
     }
     render() {
+        const { TextArea } = Input
+        //<textarea value={this.state.value} onChange={this.handleChange} onKeyUp={this.handleKeyUp} />
+
         return (
             <div className='chat-container'>
                 <div className='chat-log'>
@@ -115,7 +120,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
                 </div>
                 <div className='chat-input'>
                     <form onSubmit={this.handleSubmit}>
-                        <textarea value={this.state.value} onChange={this.handleChange} onKeyUp={this.handleKeyUp} />
+                        <TextArea rows={2} value={this.state.value} onChange={this.handleChange} onKeyUp={this.handleKeyUp}/>
                         <input type="submit" value="Submit" />
                     </form>
                 </div>
