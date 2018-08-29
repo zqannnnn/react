@@ -26,6 +26,7 @@ import {
   Icon
 } from 'antd'
 import i18n from 'i18next'
+import{ GoodsInfo } from '../../components'
 
 const { TextArea } = Input
 
@@ -171,7 +172,7 @@ class EditPage extends React.Component<TransProps, TransState> {
         dispatch(transactionActionCreators.edit(transaction, transactionId))
       else dispatch(transactionActionCreators.new(transaction))
     } else {
-      //dispatch(alertActionCreators.error(""));
+      
     }
     window.scrollTo(0, 0)
   }
@@ -179,7 +180,6 @@ class EditPage extends React.Component<TransProps, TransState> {
     this.props.dispatch(lightboxActionCreators.open(image))
   }
 
-  //for render select input
   renderSelect(optionItems: Array<string>, field: keyof Transaction) {
     let selectValue = this.state.transaction[field] || ''
     return (
@@ -223,40 +223,10 @@ class EditPage extends React.Component<TransProps, TransState> {
             <div className="steps-content">
               {goods && (
                 <div className="edits-input">
-                  <Row>
-                    <Col span={20} offset={2} className="edits-input">
-                      <label className="edits-input">{i18n.t('Title')}</label>
-                      <div>{goods.title}</div>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col span={20} offset={2} className="edits-input">
-                      <label>{i18n.t('Description')}</label>
-                      <div>{goods.desc}</div>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col span={20} offset={2} className="view-top">
-                      <label>{i18n.t('Images')}:</label>
-                      <div className="message">
-                        {imagePaths && (
-                          <div className="images-container">
-                            {imagePaths.map((image, index) => (
-                              <div key={index} className="image-wrapper">
-                                <img
-                                  className="image cursor-pointer"
-                                  onClick={() =>
-                                    this.openLightbox(imagePaths[index])
-                                  }
-                                  src={image}
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </Col>
-                  </Row>
+                  <GoodsInfo
+                  goods={goods}
+                  openLightbox={this.openLightbox}
+                  />
                   <Row>
                     <Col
                       xs={{ span: 20, offset: 2 }}
