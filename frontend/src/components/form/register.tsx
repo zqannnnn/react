@@ -14,7 +14,7 @@ export interface RegisterValuesProps {
   email: string
 }
 interface RegisterFormProps extends FormComponentProps {
-  handleSubmit: (values: any) => void
+  handleSubmit: (values: RegisterValuesProps) => void
   processing?: boolean
 }
 interface RegisterFormState {

@@ -32,14 +32,14 @@ export class Transaction extends Model<Transaction> {
   @Column({ field: 'taker_id' })
   public takerId: string
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => User, 'taker_id')
   public taker: User
 
   @ForeignKey(() => User)
   @Column({ field: 'maker_id' })
   public makerId: string
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => User, 'maker_id')
   public maker: User
 
   @ForeignKey(() => Goods)

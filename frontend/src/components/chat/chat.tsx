@@ -78,7 +78,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
                             //console.log('YOU ARE ' + key )                        
                             that.setState({userKey: key})
                         }
-                    }                    
+                    }
                 }
                 that.setState({users: users})
             })

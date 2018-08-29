@@ -13,7 +13,7 @@ export interface UserValuesProps {
 interface UserFormProps extends FormComponentProps {
   handleSubmit: (values: UserValuesProps) => void
   handleCancel: () => void
-  renderCurrencySelect: () => void
+  renderCurrencySelect: () => JSX.Element
   visible: boolean
   user: User
 }
@@ -42,7 +42,7 @@ class UserForm extends React.Component<UserFormProps> {
         cancelText={i18n.t('Cancel')}
       >
         <Form className="login-form">
-          <FormItem label="firstName">
+          <FormItem label="First Name">
             {getFieldDecorator('firstName', {
               rules: [
                 {
@@ -52,7 +52,7 @@ class UserForm extends React.Component<UserFormProps> {
               ]
             })(<Input />)}
           </FormItem>
-          <FormItem label="lastName">
+          <FormItem label="Last Name">
             {getFieldDecorator('lastName', {
               rules: [
                 {
@@ -76,10 +76,9 @@ class UserForm extends React.Component<UserFormProps> {
               ]
             })(<Input />)}
           </FormItem>
-          <div>
-            <label>{i18n.t('Preferred Currency')}</label>
+          <FormItem label="Preferred Currency">
             {this.props.renderCurrencySelect()}
-          </div>
+          </FormItem>
         </Form>
       </Modal>
     )

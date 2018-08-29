@@ -9,38 +9,40 @@ import {
   lightboxActionCreators
 } from '../../actions'
 import { RootState, UserState } from '../../reducers'
-import { User, Currency, Image } from '../../models'
-import { Row, Col, Select } from 'antd'
+import { User, Currency, Image, Consignee } from '../../models'
+import { Row, Col, Select, Button } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import i18n from 'i18next'
-import { UserForm, UserValuesProps } from '../../components/form/personal-modal'
-import {
-  CompanyForm,
-  CompanyValuesProps
-} from '../../components/form/company-modal'
+import { UserForm, UserValuesProps, CompanyForm, CompanyValuesProps } from '../../components/form'
+import { Record, EditableTable } from '../../components/consignee-editor/'
+import './profile.scss'
+
 
 interface ProfileProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
-  userState: UserState
+  userProp: UserState
   authInfo: AuthInfo
   currencies: Currency[]
 }
+
 interface ProfileState {
   userId: string
   user: User
   userSelf: boolean
   personalVisible: boolean
-  modalVisible: boolean
+  companyVisible: boolean
+  path?:string
 }
+
 class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   constructor(props: ProfileProps) {
     super(props)
     this.state = {
       user: {},
       userId: '',
-      userSelf: true,
+      userSelf: false,
       personalVisible: false,
-      modalVisible: false
+      companyVisible: false
     }
   }
   componentDidMount() {
@@ -66,12 +68,12 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   }
   showCompanyModal = () => {
     this.setState({
-      modalVisible: true
+      companyVisible: true
     })
   }
   hideCompanyModal = () => {
     this.setState({
-      modalVisible: false
+      companyVisible: false
     })
   }
   hidePersonalModal = () => {
@@ -81,30 +83,42 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   }
 
   componentWillReceiveProps(nextProps: ProfileProps) {
-    const { userState } = nextProps
-    const { userData } = userState
+    const { userProp } = nextProps
+    const { userData,processing } = userProp
     const { authInfo } = this.props
     const { user } = this.state
-    if (userData) {
+    if(nextProps.match.path !== this.state.path){
+      let userId = nextProps.match.params.id
+      let path = nextProps.match.path
+      if(path){
+        this.setState({
+          path:path
+        })
+      }
+      if (userId) {
+        userId &&
+          this.setState({
+            userId:userId
+          })
+        userId && nextProps.dispatch(userActionCreators.getById(userId))
+      } else {
+          nextProps.authInfo.id &&
+          nextProps.dispatch(userActionCreators.getById(nextProps.authInfo.id))
+        if (!nextProps.currencies)
+          nextProps.dispatch(currencyActionCreators.getAll())
+      }
+    }
+    if (userData&&!processing) {
       this.setState({
         user: {
-          ...userData,
-          ...user
+          ...user,
+          ...userData
         },
         userSelf: userData.id === authInfo.id
       })
     }
   }
-  handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const { name, value } = event.currentTarget
-    const { user } = this.state
-    this.setState({
-      user: {
-        ...user,
-        [name]: value
-      }
-    })
-  }
+
   handleSelect = (value: string, name: string) => {
     const { user } = this.state
     this.setState({
@@ -142,6 +156,25 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     dispatch(userActionCreators.update(newUser))
     this.setState({ user: newUser })
   }
+
+  handleSubmitConsignee = (values: Record) => {
+    const { dispatch } = this.props
+    let consignee: Consignee = {
+      name: values.name,
+      email: values.email,
+      phoneNum: values.phoneNum,
+      address: values.address
+    }
+    if (values.id)
+      dispatch(userActionCreators.editConsignee(consignee, values.id))
+    else dispatch(userActionCreators.newConsignee(consignee))
+  }
+
+  handleDeleteConsignee = (id: string) => {
+    const { dispatch } = this.props
+    dispatch(userActionCreators.deleteConsignee(id))
+  }
+
   //for render select input
   renderCurrencySelect = () => {
     let preferCurrency = this.state.user.preferredCurrencyCode || ''
@@ -172,6 +205,20 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
 
   render() {
     const { user, userSelf } = this.state
+    
+    let dataSource: Record[]
+    if (user.consignees) {
+      dataSource = user.consignees.map((source, index) => ({
+        key: index.toString(),
+        id: source.id,
+        name: source.name,
+        email: source.email,
+        phoneNum: source.phoneNum,
+        address: source.address
+      }))
+    } else {
+      dataSource = []
+    }
     let imagePaths: string[]
     if (user && user.businessLicenses) {
       imagePaths = user.businessLicenses.map(image => image.path)
@@ -180,116 +227,96 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     }
     return (
       <Row type="flex" justify="space-around" align="middle" className="profile-page">
-        <Col span={20}>
+        <Col 
+        xs={{ span: 20, offset: 2 }}
+        sm={{ span: 20, offset: 1 }}
+        >
           <h2 className="header-center">{i18n.t('User Profile')}</h2>
           <div className="subtitle">
             {i18n.t('Personal Information')}
-            <span className={userSelf ? 'edit' : 'none'}>
+            {userSelf && <span className= 'edit'>
               <a onClick={this.showPersonalModal}>{i18n.t('Edit')}</a>
-            </span>
-            <UserForm
+            </span>}
+            {this.state.personalVisible&&<UserForm
               handleSubmit={this.personalSubmit}
               user={user}
               visible={this.state.personalVisible}
               handleCancel={this.hidePersonalModal}
               renderCurrencySelect={this.renderCurrencySelect}
-            />
+            />}
           </div>
           <div className="view-content">
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 17, offset: 5 }}
-              >
+            <div className="field">
                 <label>{i18n.t('Name')}:</label>
                 <div className="message">
                   {user.firstName} {user.lastName}
                 </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 17, offset: 5 }}
-              >
+            </div>
+
+            <div className="field">
                 <label>{i18n.t('Email')}:</label>
                 <div className="message">{user.email}</div>
-              </Col>
-            </Row>
-            <Row className={userSelf ? '' : 'none'}>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 17, offset: 5 }}
-              >
+            </div>
+
+            <div className="field">
+              <div className={userSelf ? '' : 'none'}>
                 <label>{i18n.t('Preferred Currency')}</label>
                 <div className={userSelf ? 'message' : 'none'}>
                   {user.preferredCurrencyCode}
                 </div>
-              </Col>
-            </Row>
-          </div>
-          <div className="subtitle">
-            {i18n.t('Company Information')}
-            <span className={userSelf ? ' edit' : 'none'}>
-              <a onClick={this.showCompanyModal}>{i18n.t('Edit')}</a>
-            </span>
+              </div>
+            </div>
 
-            <CompanyForm
+            <div className="field" style={{marginBottom:0}}>
+              <label>{i18n.t('Address')}:</label>
+              {dataSource&&<EditableTable
+              data={dataSource}
+              handleSubmit={this.handleSubmitConsignee}
+              handleDelete={this.handleDeleteConsignee}
+              />}
+            </div>
+          </div>
+          <div className="subtitle company-information">
+            {i18n.t('Company Information')}
+            {userSelf && <span className= 'edit'>
+              <a onClick={this.showCompanyModal}>{i18n.t('Edit')}</a>
+            </span>}
+
+             {this.state.companyVisible&&<CompanyForm
               handleSubmit={this.companySubmit}
               user={user}
-              modalVisible={this.state.modalVisible}
+              modalVisible={this.state.companyVisible}
               handleCancel={this.hideCompanyModal}
               handlePreview={this.handlePreview}
-            />
+            />}
           </div>
           <div className="view-content">
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 17, offset: 5 }}
-              >
+            <div className="field">
                 <label>{i18n.t('Company Name')}:</label>
                 <div className="message">{user.companyName}</div>
-              </Col>
-            </Row>
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 17, offset: 5 }}
-              >
+            </div>
+            <div className="field">
                 <label>{i18n.t('Company Address')}:</label>
                 <div className="message">{user.companyAddress}</div>
-              </Col>
-            </Row>
-            <Row>
-              <Col
-                xs={{ span: 20, offset: 2 }}
-                sm={{ span: 20, offset: 2 }}
-                md={{ span: 17, offset: 5 }}
-              >
-                <label>{i18n.t('Business License')}:</label>
-                <div className="image-wr">
-                  {imagePaths && (
-                    <div className="images-container">
-                      {imagePaths.map((image, index) => (
-                        <div key={index} className="image-wrapper">
-                          <img
-                            className="image cursor-pointer"
-                            onClick={() => this.openLightbox(imagePaths[index])}
-                            src={image}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </Col>
-            </Row>
+            </div>
+            <div className="field">
+              <label>{i18n.t('Business License')}:</label>
+              <div className="image-wr">
+                {imagePaths && (
+                  <div className="images-container">
+                    {imagePaths.map((image, index) => (
+                      <div key={index} className="image-wrapper">
+                        <img
+                          className="image cursor-pointer"
+                          onClick={() => this.openLightbox(imagePaths[index])}
+                          src={image}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </Col>
       </Row>
@@ -300,7 +327,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
 function mapStateToProps(state: RootState) {
   const { user, auth, currency } = state
   return {
-    userState: user,
+    userProp: user,
     authInfo: auth.authInfo,
     currencies: currency.items
   }

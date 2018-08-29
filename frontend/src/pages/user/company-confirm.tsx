@@ -61,14 +61,16 @@ class ConfirmPage extends React.Component<ConfirmProps> {
           ) : comfirmingCompany ? (
             <div>
               <div>
-                <div className="confirm-title">{i18n.t('Name:')}</div>
+                <div className="confirm-title">{i18n.t('Name')}:</div>
                 <div>{comfirmingCompany.companyName || 'null'}</div>
               </div>
-              <div className="confirm-title">{i18n.t('Address:')}</div>
-
+              <div>
+              <div className="confirm-title">{i18n.t('Address')}:</div>
+              <div>{comfirmingCompany.companyAddress || 'null'}</div>
+              </div>
               <div>
                 <div className="confirm-title">
-                  {i18n.t('Bussines License:')}
+                  {i18n.t('Bussines License')}:
                 </div>
                 <div className="images-container">
                   {licensePaths.map((image, index) => (

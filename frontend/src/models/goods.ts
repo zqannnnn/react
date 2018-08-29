@@ -1,4 +1,5 @@
 import { ListItem, Image, Transaction } from '.'
+import { User } from './user';
 
 export class Goods implements ListItem {
   id?: string
@@ -15,6 +16,7 @@ export class Goods implements ListItem {
   bone?: string
   title?: string
   desc?: string
+  creator?:User
   fed?: string
   transaction?: Transaction
   selling?: boolean

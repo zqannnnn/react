@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
+import { RouteComponentProps,withRouter } from 'react-router-dom'
 import { authActionCreators, currencyActionCreators } from '../../actions'
 import { RootState, CurrencyState, AuthState } from '../../reducers'
 import { MenuMarkup } from './menu-markup'
@@ -8,7 +9,7 @@ import { throttle } from 'lodash'
 import { Layout, Menu } from 'antd'
 import './nav-bar.scss'
 const { Sider } = Layout
-interface NavProps {
+interface NavProps extends RouteComponentProps<{}> {
   dispatch: Dispatch<RootState>
   auth: AuthState
   mobileBreakPoint: number
@@ -46,13 +47,13 @@ class ReNavBar extends React.Component<NavProps> {
     })
   }, this.props.applyViewportChange)
   renderMenu() {
-    const { auth } = this.props
+    const { auth,location } = this.props
     const { isMobile } = this.state
     if (isMobile) {
       return (
         <MenuMarkup
           auth={auth}
-          activeLinkKey={location.hash.substring(1)}
+          activeLinkKey={location.pathname}
           mobileVersion={false}
           logout={this.logout}
           onLinkClick={this.onclick}
@@ -65,7 +66,7 @@ class ReNavBar extends React.Component<NavProps> {
           logout={this.logout}
           mobileVersion={true}
           onLinkClick={this.onclick}
-          activeLinkKey={location.hash.substring(1)}
+          activeLinkKey={location.pathname}
         />
       )
     }
@@ -102,5 +103,5 @@ function mapStateToProps(state: RootState) {
   const { auth } = state
   return { auth }
 }
-const connectedReNavBar = connect(mapStateToProps)(ReNavBar)
+const connectedReNavBar = withRouter(connect(mapStateToProps)(ReNavBar))
 export { connectedReNavBar as NavBar }

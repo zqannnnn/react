@@ -56,18 +56,16 @@ class App extends React.Component<AppProps, any> {
   }
   render() {
     const { auth } = this.props
-    /*
-    const changeLanguage = (lng: string) => {
-      i18n.changeLanguage(lng);
-    };
-    */
     const { alert, lightbox } = this.props
 
     return (
+      <>
+      
       <Router history={history}>
+        
         <Layout>
           <NavBar mobileBreakPoint={768} placement="bottomLeft" />
-          <Lightbox />
+          {lightbox.visible? <Lightbox />  : ''}
           <Layout>
             <Layout.Content className="page-wr">
               {alert.message && (
@@ -114,13 +112,14 @@ class App extends React.Component<AppProps, any> {
               </BackTop>
             </Layout.Content>
             {/* //1532692062 chat */}
-            <Chat auth={auth} ref={(Chat) => {window.Chat = Chat}} />
+            {/* <Chat auth={auth} ref={(Chat) => {window.Chat = Chat}} /> */}
             <Layout.Footer style={{ textAlign: 'center' }}>
               {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
             </Layout.Footer>
           </Layout>
         </Layout>
       </Router>
+      </>
     )
   }
 }

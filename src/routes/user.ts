@@ -6,7 +6,7 @@ import { consts } from '../config/static'
 import { app } from '../index'
 import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
-import { Image, User } from '../models'
+import { Image, User, Consignee } from '../models'
 import { UserFields } from '../passport'
 const router = express.Router()
 router.use(authMiddleware)
@@ -57,7 +57,7 @@ router.get('/refresh/auth', async (req: IRequest, res: express.Response) => {
   User.findOne({
     where: { id: req.userId },
     attributes: UserFields
-}).then(user => {
+  }).then(user => {
     if (!user) {
       return res
         .status(401)
@@ -133,7 +133,7 @@ router
     const user = await User.find({
       where: { id: req.params.userId },
       attributes: { exclude: ['password'] },
-      include: [{ model: Image, attributes: ['path'] }]
+      include: [{ model: Image, attributes: ['path'] }, { model: Consignee }]
     })
     if (!user) {
       return res.status(500).send({ error: i18n.t('User does not exist.') })
@@ -145,7 +145,10 @@ router
       return res.status(500).send({ error: i18n.t('Permission denied.') })
     }
     try {
-      const user = await User.find({ where: { id: req.params.userId } })
+      const user = await User.find({
+        where: { id: req.params.userId },
+        attributes: { exclude: ['password'] }
+      })
       if (!user) {
         return res.status(500).send({ error: i18n.t('User does not exist.') })
       }
