@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { StringKeyHash } from '../../../../src/interfaces'
 //https://ant.design/components/input/
-import { Input } from 'antd'
+import { Form, Input, Button } from 'antd'
 
 interface ItemProps {
     messages: StringKeyHash
@@ -99,8 +99,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     }
     render() {
         const { TextArea } = Input
-        //<textarea value={this.state.value} onChange={this.handleChange} onKeyUp={this.handleKeyUp} />
-
+        const FormItem = Form.Item
         return (
             <div className='chat-container'>
                 <div className='chat-log'>
@@ -119,10 +118,16 @@ class UserItem extends React.Component<ItemProps, ItemState> {
                     <div ref={this.chatBottom}></div>
                 </div>
                 <div className='chat-input'>
-                    <form onSubmit={this.handleSubmit}>
-                        <TextArea rows={2} value={this.state.value} onChange={this.handleChange} onKeyUp={this.handleKeyUp}/>
-                        <input type="submit" value="Submit" />
-                    </form>
+                    <Form onSubmit={this.handleSubmit} >
+                        <FormItem>
+                            <TextArea rows={2} value={this.state.value} onChange={this.handleChange} onKeyUp={this.handleKeyUp}/>
+                        </FormItem>
+                        <FormItem>
+                            <Button type="primary" htmlType="submit">
+                                Submit
+                            </Button>
+                        </FormItem>
+                    </Form>
                 </div>
             </div>
         )
