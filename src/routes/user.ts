@@ -127,9 +127,6 @@ router.get('/denie/:id', async (req: IRequest, res: express.Response) => {
 router
   .route('/:userId')
   .get(async (req: IRequest, res: express.Response) => {
-    if (req.params.userId !== req.userId && !req.isAdmin) {
-      return res.status(500).send({ error: i18n.t('Permission denied.') })
-    }
     const user = await User.find({
       where: { id: req.params.userId },
       attributes: { exclude: ['password'] },
