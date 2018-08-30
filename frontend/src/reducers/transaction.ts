@@ -184,17 +184,16 @@ export function transaction(
         return state
       }
     case transactionConsts.REPLY_CREATE_SUCCESS:
-      if (state.items && state.rowComments && action.comment) {
+      if (state.items && state.rowComments && action.comments) {
         let items = state.items.map(item => {
           if (item.id === action.transactionId) {
             if (item.comments) {
               item.comments.map(comment => {
                 if (
-                  action.comment &&
-                  comment.id === action.comment.rootId &&
-                  comment.replys
+                  action.comments &&
+                  comment.id === action.comments[0].rootId
                 ) {
-                  comment.replys = [action.comment, ...comment.replys]
+                  comment.replys = action.comments
                 }
                 return comment
               })
@@ -203,7 +202,6 @@ export function transaction(
           }
           return item
         })
-        state.rowComments.push(action.comment)
         return {
           ...state,
           processing: false,

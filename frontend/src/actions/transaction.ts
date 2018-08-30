@@ -323,9 +323,9 @@ const createReply: ActionCreator<Thunk> = (comment: Comment) => {
     transService
       .createReply(comment)
       .then(
-        (result: Comment) =>
+        (result: { comments: Array<Comment> }) =>
           comment.transactionId &&
-          dispatch(success(comment.transactionId, result)),
+          dispatch(success(comment.transactionId, result.comments)),
         (error: string) =>
           comment.transactionId &&
           dispatch(failure(comment.transactionId, error))
@@ -337,10 +337,10 @@ const createReply: ActionCreator<Thunk> = (comment: Comment) => {
       transactionId
     }
   }
-  function success(transactionId: string, result: Comment): Action {
+  function success(transactionId: string, comments: Array<Comment>): Action {
     return {
       type: transactionConsts.REPLY_CREATE_SUCCESS,
-      comment: result,
+      comments,
       transactionId
     }
   }

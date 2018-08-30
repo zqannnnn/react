@@ -87,7 +87,8 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
       this.setState({
         ...this.defaultState,
         reseted: false,
-        comments: nextProps.comments
+        comments: nextProps.comments,
+        viewAllCommentShowing: true
       })
     }
   }

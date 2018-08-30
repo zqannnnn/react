@@ -340,18 +340,22 @@ router.post('/reply', async (req: IRequest, res: express.Response) => {
         await rootComment.save()
       }
     }
-    const result = await Comment.find({
+    const orderOption: string[] = ['createdAt', 'DESC']
+    const result = await Comment.findAndCount({
       where: {
-        id: comment.id
+        rootId: comment.rootId,
+        totalReply: null
       },
       include: [
         {
           model: User,
           attributes: ['firstName', 'lastName']
         }
-      ]
+      ],
+      order: [orderOption]
     })
-    return res.send(result)
+
+    return res.send({ comments: result.rows })
   } catch (e) {
     return res.status(500).send({ error: e.message })
   }
