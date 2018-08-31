@@ -5,18 +5,19 @@ export const consts = {
   TRANSACTION_STATUS_CANCELLED: 0,
   TRANSACTION_STATUS_CREATED: 1,
   TRANSACTION_STATUS_FINISHED: 2,
+  TRANSACTION_STATUS_TAKING: 3,
 
   LICENSE_STATUS_UNCONFIRMED: 0,
   LICENSE_STATUS_CONFIRMED: 1,
   LICENSE_STATUS_DENIED: 2,
 
-  IMAGE_TYPE_MEDIE: 1,
+  IMAGE_TYPE_MEDIA: 1,
   IMAGE_TYPE_CERTIFICATE: 2,
 
   TRANSACTION_TYPE_BUY: 'Buy',
   TRANSACTION_TYPE_SELL: 'Sell',
 
-  EXPIREMENT: 60 * 60 * 24 * 7
+  EXPIRE_IN: 60 * 60 * 24 * 7
 }
 export const beefOptions = {
   Storage: ['Frozen', 'Chilled'],
@@ -59,7 +60,7 @@ export const beefOptions = {
     '1/8 cuts (eight way cuts)',
     'Selected Beef Cuts (Primals)'
   ],
-  'Marble Score': ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+  'Marble Score': [1, 2, 3, 4, 5, 6, 7, 8, 9],
   Bone: ['Bone In', 'Bone Out']
 }
 
@@ -84,7 +85,7 @@ export const vealOptions = {
     '1/8 cuts (eight way cuts)',
     'Selected Beef Cuts (Primals)'
   ],
-  'Marble Score': ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+  'Marble Score': [1, 2, 3, 4, 5, 6, 7, 8, 9],
   Bone: ['Bone In', 'Bone Out']
 }
 export const sheepOptions = {
@@ -96,7 +97,7 @@ export const sheepOptions = {
     'Six way cut',
     'Slected Primals'
   ],
-  'Marble Score': ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+  'Marble Score': [1, 2, 3, 4, 5, 6, 7, 8, 9],
   Bone: ['Bone In', 'Bone Out']
 }
 export const accessKey = 'db7b00b340d9275681a88e2398428a37'

@@ -1,9 +1,11 @@
+import { authHeader } from '../helpers/auth'
 export const currencyService = {
   getAll
 }
 function getAll() {
   const requestOptions = {
-    method: 'GET'
+    method: 'GET',
+    headers: authHeader()
   }
   return fetch('/currency/list', requestOptions).then(handleResponse)
 }

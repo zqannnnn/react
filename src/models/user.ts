@@ -1,8 +1,6 @@
 import * as bcrypt from 'bcrypt'
-import { DataTypeJSONB } from 'sequelize'
 import {
   BeforeCreate,
-  BeforeUpdate,
   BelongsTo,
   Column,
   CreatedAt,
@@ -18,8 +16,8 @@ import {
   Unique,
   UpdatedAt
 } from 'sequelize-typescript'
-import { consts } from '../config/static'
 import { Currency, Image, Transaction } from './'
+import { Consignee } from './consignee'
 @Table({
   tableName: 'user',
   underscored: true
@@ -75,8 +73,6 @@ export class User extends Model<User> {
   @BelongsTo(() => Currency, 'preferred_currency')
   public preferredCurrency: Currency
 
-  @Column public desc: string
-
   // fields for company
   @Column({ field: 'company_name' })
   public companyName: string
@@ -90,12 +86,18 @@ export class User extends Model<User> {
   @Column({ field: 'license_status' })
   public licenseStatus: number
 
+  @HasMany(() => Consignee, 'user_id')
+  public consignees: Consignee[]
+
   // class methods
   @BeforeCreate
   public static hashPassword = async (instance: User) => {
     if (instance.password) {
       instance.password = await bcrypt.hash(instance.password, 10)
     }
+  }
+  public fullName = () => {
+    return this.firstName + ' ' + this.lastName
   }
 
   // instance methods

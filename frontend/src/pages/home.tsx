@@ -5,9 +5,9 @@ import { transactionActionCreators } from '../actions'
 import { RootState, TransactionState } from '../reducers'
 import { AuthInfo } from '../actions'
 import { transactionConsts } from '../constants'
-import { List as ListC } from '../components'
+import { List as ListC, Filter } from '../components'
+import { ListOptions } from '../models'
 import { Row, Col } from 'antd'
-import { Filter } from '../components'
 import i18n from 'i18next'
 
 interface HomeProps {
@@ -15,13 +15,30 @@ interface HomeProps {
   transaction: TransactionState
   authInfo: AuthInfo
 }
-
-class HomePage extends React.Component<HomeProps> {
+interface HomeState {
+  searched?: boolean
+  options: ListOptions
+}
+class HomePage extends React.Component<HomeProps, HomeState> {
   constructor(props: HomeProps) {
     super(props)
+    this.state = {
+      searched: false,
+      options: {
+        type: 'all',
+        page: 1,
+        pageSize: 6
+      }
+    }
+  }
+  onOptionsChange = (newOptions: ListOptions) => {
+    const oldOptions = this.state.options
+    const options = { ...oldOptions, ...newOptions }
+    this.setState({ options })
+    this.props.dispatch(transactionActionCreators.getAll(options))
   }
   componentDidMount() {
-    this.props.dispatch(transactionActionCreators.getAll({ type: 'all' }))
+    this.props.dispatch(transactionActionCreators.getAll(this.state.options))
   }
   render() {
     const { authInfo, transaction } = this.props
@@ -38,12 +55,17 @@ class HomePage extends React.Component<HomeProps> {
             md={{ span: 18, offset: 3 }}
             lg={{ span: 16, offset: 4 }}
           >
-            <Filter />
+            <Filter
+              initOptions={this.state.options}
+              onOptionsChange={this.onOptionsChange}
+            />
             <div className="list-container">
               <div className="header">
                 <div className="title">{i18n.t('Home')}</div>
                 <div className="subtitle">
-                  <div className="des">{i18n.t('People looking for buy or sell')}</div>
+                  <div className="des">
+                    {i18n.t('People looking for buy or sell')}
+                  </div>
                   <Link className="link" to={'/transactions'}>
                     {i18n.t('👁 view all transactions')}
                   </Link>

@@ -1,14 +1,19 @@
 import { authHeader } from '../helpers/auth'
-import { Transaction } from '../models'
-import { ListOptions } from '../models'
+import { Transaction, ListOptions, Comment } from '../models'
 export const transService = {
   new: _new,
+  newOrder: newOrder,
   edit,
   getById,
   getAll,
-  cancell,
+  cancel,
+  reactivate,
   finish,
-  addComment
+  buy,
+  createComment,
+  createReply,
+  listComment,
+  listReplys
 }
 function _new(transaction: Transaction) {
   const requestOptions = {
@@ -20,6 +25,17 @@ function _new(transaction: Transaction) {
     body: JSON.stringify(transaction)
   }
   return fetch('/transaction/new', requestOptions).then(handleResponse)
+}
+function newOrder(transaction: Transaction) {
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(transaction)
+  }
+  return fetch('/transaction/order/new', requestOptions).then(handleResponse)
 }
 function edit(transaction: Transaction, transactionId: string) {
   const requestOptions = {
@@ -42,13 +58,26 @@ function getById(id: string) {
 
   return fetch('/transaction/' + id, requestOptions).then(handleResponse)
 }
-function cancell(id: string) {
+function cancel(id: string) {
   const requestOptions = {
     method: 'DELETE',
     headers: authHeader()
   }
 
   return fetch('/transaction/' + id, requestOptions).then(handleResponse)
+}
+function reactivate(transaction: Transaction) {
+  const requestOptions = {
+    method: 'PUT',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(transaction)
+  }
+  return fetch('/transaction/' + transaction.id, requestOptions).then(
+    handleResponse
+  )
 }
 function finish(id: string) {
   const requestOptions = {
@@ -58,20 +87,16 @@ function finish(id: string) {
 
   return fetch('/transaction/finish/' + id, requestOptions).then(handleResponse)
 }
-function addComment(id: string, comment: string) {
+
+function buy(id: string) {
   const requestOptions = {
-    method: 'POST',
-    headers: {
-      ...authHeader(),
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ comment })
+    method: 'GET',
+    headers: authHeader()
   }
 
-  return fetch('/transaction/comment/' + id, requestOptions).then(
-    handleResponse
-  )
+  return fetch('/transaction/buy/' + id, requestOptions).then(handleResponse)
 }
+
 function renderQuery(options: ListOptions) {
   let query: string = ''
   for (const key in options) {
@@ -91,6 +116,82 @@ function getAll(options: ListOptions) {
   return fetch('/transaction/list?' + query, requestOptions).then(
     handleResponse
   )
+}
+
+function getwaitting(options: ListOptions) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  let query = renderQuery(options)
+  return fetch('/transaction/list?' + query, requestOptions).then(
+    handleResponse
+  )
+}
+
+function createComment(comment: Comment, options?: ListOptions) {
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(comment)
+  }
+  let query = ''
+  if (options) {
+    query = renderQuery(options)
+  }
+  return fetch('/transaction/comment?' + query, requestOptions).then(
+    handleResponse
+  )
+}
+
+function createReply(comment: Comment) {
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(comment)
+  }
+  return fetch('/transaction/reply', requestOptions).then(handleResponse)
+}
+
+function listComment(id: string, options?: ListOptions) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  let query = ''
+  if (options) {
+    query = renderQuery(options)
+  }
+  return fetch(
+    '/transaction/list/comment?transactionId=' + id + '&' + query,
+    requestOptions
+  ).then(handleResponse)
+}
+
+function listReplys(id: string, transactionId: string, options?: ListOptions) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  let query = ''
+  if (options) {
+    query = renderQuery(options)
+  }
+  return fetch(
+    '/transaction/list/reply?commentId=' +
+      id +
+      '&' +
+      transactionId +
+      '&' +
+      query,
+    requestOptions
+  ).then(handleResponse)
 }
 
 function handleResponse(response: Response) {

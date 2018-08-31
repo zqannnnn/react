@@ -1,13 +1,9 @@
 import {
   Column,
   DataType,
-  Default,
-  HasOne,
-  IsUUID,
   Model,
   PrimaryKey,
-  Table,
-  Unique
+  Table
 } from 'sequelize-typescript'
 @Table({
   tableName: 'currency',

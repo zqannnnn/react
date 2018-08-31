@@ -1,0 +1,236 @@
+.block.transaction {
+    @extend %block;
+}
+.block.goods {
+    @extend %block;
+}
+.block.company {
+    @extend %block;
+}
+%block {
+    margin-bottom: 10px;
+    min-height: 100px;
+    padding-right: 10px;
+}
+.boxmain {
+    background-color: white;
+    border-radius: 2px;
+    overflow: hidden;
+    min-height: 100px;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.boxmain .menu {
+    font-weight: bold;
+    padding: 0 10px;
+}
+
+.block .content {
+    padding: 0 10px;
+    min-height: 1rem;
+    height: 25px;
+    line-height: 25px;
+    font-weight: bold;
+}
+
+.block .header {
+    text-align: right;
+    font-size: 12px;
+    height: 45px;
+    transform: rotate(-45deg) scale(0.83);
+    position: absolute;
+    line-height: 43px;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    width: 64px;
+    left: -8px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.block .left-icon:before {
+    content: ' ';
+    border: 40px solid transparent;
+    border-bottom: 45px solid red;
+    display: inline-block;
+    height: 0;
+    left: -42px;
+    opacity: 0.8;
+    position: absolute;
+    top: -44px;
+    width: 0;
+    border-color: #56b372 transparent transparent;
+    transform: rotate(135deg);
+}
+
+.block .title {
+    text-align: center;
+    padding: 6px 45px;
+    font-size: 18px;
+}
+
+.block .menu {
+    border-top: solid 1px #ccc;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+.block .control-btn {
+    font-weight: bold;
+    color: #007bff;
+}
+.block .control-btn:hover {
+    text-decoration: underline;
+}
+.block .desc {
+    word-break: break-word;
+    min-height: 50px;
+    overflow: hidden;
+    font-size: 13px;
+    padding: 0 10px;
+    flex-grow: 2;
+}
+.block .image-wr {
+    overflow: hidden;
+    height: 140px;
+}
+
+.block.transaction {
+    flex: 1 1 100%;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+.block-img {
+    width: 100%;
+    max-height: 150px;
+    height: 100%;
+}
+.block .comment {
+    border-top: solid 1px #ccc;
+}
+.block .input-wr {
+    display: flex;
+    margin-bottom: 5px;
+}
+.block input {
+    display: block;
+    width: 100%;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+}
+.block .input-btn-wr {
+    border-top: 1px solid #ced4da;
+    border-bottom: 1px solid #ced4da;
+    border-right: 1px solid #ced4da;
+}
+.block .input-btn-wr .input-btn {
+    font-size: 14px;
+    line-height: 28px;
+    padding: 0 5px;
+}
+
+.comment {
+    width: 100%;
+    padding-top: 8px;
+    padding-bottom: 4px;
+    display: inline-block;
+    word-break: break-all;
+}
+.comment-wrapper {
+    overflow: hidden;
+    padding: 3px 0;
+}
+.reply-wrapper{
+    padding: 3px 0;
+}
+.comment > div {
+    margin: 0 10px;
+}
+.comment .comment-wrapper .speak .main-comment {
+    display: inline-block;
+}
+.comment .comment-wrapper .reply .main-comment {
+    display: inline-block;
+}
+.reply {
+    padding-left: 15%;
+}
+.reply-wrapper .reply-input,.comment-wrapper .reply-input {
+    width: 85%;
+}
+.speak .main-comment,
+.reply .main-comment {
+    background-color: #eff1f3;
+    border-radius: 20px;
+    line-height: 32px;
+    font-size: 14px;
+    padding: 0 12px;
+}
+.speak .main-comment .user-id,
+.reply .main-comment .user-id {
+    color: #365899;
+    font-weight: 600;
+}
+.speak .main-comment .comment-content,
+.reply .main-comment .reply-content {
+    font-size: 14px;
+    font-weight: 600;
+    padding-left: 10px;
+}
+.features {
+    margin-left: 50px;
+    margin-bottom: 3px;
+    padding-top: 3px;
+}
+.features span {
+    color: #365899;
+    font-size: 14px;
+    line-height: 20px;
+    padding-right: 10px;
+}
+.click:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.avatar,
+ {
+    float: left;
+}
+.avatar {
+    padding-right: 5px;
+}
+.submitReply {
+    padding-left: 20%;
+    padding-bottom: 10px;
+}
+.text-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.icon-click{
+    cursor: pointer;
+}
+.release span{
+    color: #90949c;
+    font-family: inherit;
+    font-size: 10px;
+}
+.comment-flex{
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+}
+.icon-rollback{
+    transform: rotate(180deg);
+    padding-left: 3px;
+}
+.features span.createdAt{
+    color: #616770;
+}

@@ -1,5 +1,4 @@
 import {
-  BeforeCreate,
   BelongsTo,
   Column,
   CreatedAt,
@@ -7,17 +6,15 @@ import {
   Default,
   ForeignKey,
   HasMany,
-  HasOne,
-  IsEmail,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
-  Unique,
   UpdatedAt
 } from 'sequelize-typescript'
 import { consts } from '../config/static'
-import { Currency, Image, User } from './'
+import { Comment, Currency, User } from './'
+import { Goods } from './goods'
 @Table({
   tableName: 'transaction',
   underscored: true
@@ -33,62 +30,31 @@ export class Transaction extends Model<Transaction> {
   public id: string
 
   @ForeignKey(() => User)
-  @Column({ field: 'user_id' })
-  public userId: string
+  @Column({ field: 'taker_id' })
+  public takerId: string
 
-  @BelongsTo(() => User)
-  public user: User
+  @BelongsTo(() => User, 'taker_id')
+  public taker: User
 
-  @Column public type: string
+  @ForeignKey(() => User)
+  @Column({ field: 'maker_id' })
+  public makerId: string
 
-  @Column public category: string
+  @BelongsTo(() => User, 'maker_id')
+  public maker: User
 
-  @Column public title: string
+  @ForeignKey(() => Goods)
+  @Column({ field: 'goods_id' })
+  public goodsId: string
 
-  @Column public desc: string
+  @BelongsTo(() => Goods)
+  public goods: Goods
 
   @Default(consts.TRANSACTION_STATUS_CREATED)
   @Column
   public status: number
 
-  @Column public storage: string
-
-  @Column public breed: string
-
-  @Column public grade: string
-
-  @Column public fed: string
-
-  @Column public brand: string
-
-  @Column({ field: 'grain_fed_days' })
-  public grainFedDays: number
-
-  @Column({ field: 'slaughter_spec' })
-  public slaughterSpec: string
-
-  @Column({ field: 'primal_cuts' })
-  public primalCuts: string
-
-  @Column({ field: 'delivery_term' })
-  public deliveryTerm: string
-
-  @Column({ field: 'place_of_origin' })
-  public placeOfOrigin: string
-
-  @Column({ field: 'factory_num' })
-  public factoryNum: string
-
-  @Column({ field: 'marble_score' })
-  public marbleScore: string
-
-  @Column public quantity: number
-
-  @Column public bone: string
-
   @Column public price: number
-
-  @Column public trimmings: number
 
   @Column({ type: DataType.TEXT })
   public comment: string
@@ -100,8 +66,11 @@ export class Transaction extends Model<Transaction> {
   @BelongsTo(() => Currency)
   public currency: Currency
 
-  @HasMany(() => Image, 'transaction_id')
-  public images: Image[]
+  @HasMany(() => Comment, 'transaction_id')
+  public comments: Comment[]
+
+  @Column({ field: 'is_maker_seller' })
+  public isMakerSeller: boolean
 
   @CreatedAt
   @Column({ field: 'created_at' })

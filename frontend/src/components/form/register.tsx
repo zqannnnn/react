@@ -1,9 +1,4 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
-import { connect, Dispatch } from 'react-redux'
-import { transactionActionCreators, AuthInfo } from '../../actions'
-import { RootState, TransactionState } from '../../reducers'
-import { Transaction, ListItem } from '../../models'
 import { Form, Icon, Input, Button, Checkbox } from 'antd'
 import {
   FormComponentProps,
@@ -19,7 +14,7 @@ export interface RegisterValuesProps {
   email: string
 }
 interface RegisterFormProps extends FormComponentProps {
-  handleSubmit: (values: any) => void
+  handleSubmit: (values: RegisterValuesProps) => void
   processing?: boolean
 }
 interface RegisterFormState {
@@ -36,7 +31,7 @@ class RegisterForm extends React.Component<
     e.preventDefault()
     this.props.form.validateFieldsAndScroll(
       (err: string, values: RegisterValuesProps) => {
-        this.props.handleSubmit(values)
+        if (!err) this.props.handleSubmit(values)
       }
     )
   }
@@ -65,13 +60,9 @@ class RegisterForm extends React.Component<
   ) => {
     const form = this.props.form
     if (value && this.state.confirmDirty) {
-      form.validateFields(
-        ['confirm'],
-        {
-          force: true
-        },
-        callback
-      )
+      form.validateFieldsAndScroll(['confirm'], {
+        force: true
+      })
     }
     callback()
   }
@@ -180,4 +171,4 @@ class RegisterForm extends React.Component<
   }
 }
 const WrappedRegisterForm = Form.create()(RegisterForm)
-export { WrappedRegisterForm as RegisterForm }
+export { WrappedRegisterForm as Register }

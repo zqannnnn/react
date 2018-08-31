@@ -11,6 +11,10 @@ export {
   Action as TransactionAction
 } from './transaction'
 export {
+  actionCreators as goodsActionCreators,
+  Action as goodsAction
+} from './goods'
+export {
   actionCreators as userActionCreators,
   Action as UserAction
 } from './user'
@@ -21,12 +25,8 @@ export {
 export {
   actionCreators as authActionCreators,
   Action as AuthAction,
-  AuthInfo
+  AuthInfo,
 } from './auth'
-export {
-  actionCreators as uploadActionCreators,
-  Action as UploadAction
-} from './upload'
 export {
   actionCreators as lightboxActionCreators,
   Action as LightboxAction

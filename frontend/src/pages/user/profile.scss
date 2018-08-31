@@ -1,0 +1,48 @@
+.profile-page {
+  .subtitle {
+    font: 20px bold;
+    margin: 6 0;
+    color: black;
+    margin-top: 20px;
+  }
+  .edit {
+    margin-left: 20px;
+  }
+  .none {
+    display: none;
+  }
+  .tips {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.65);
+  }
+  label {
+    font-weight: bold;
+    font-size:14px;
+  }
+  .field{
+    margin-top:10px;
+  }
+  .view-content {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .view-content .message {
+    color: rgba(0, 0, 0, 0.65);
+    min-height:24px;
+  }
+  .company-information{
+    margin-top:40px;
+  }
+} 
+@media (max-width: 375px) {
+    .profile-page{
+        .subtitle{
+            margin: 40px 0 6px 0 ;
+            font: 20px bold;
+        }
+    }
+        th{
+        padding: 0;
+    }
+  }

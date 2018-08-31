@@ -1,107 +1,124 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
+import { RouteComponentProps } from 'react-router-dom'
+import {consts} from "../../../../src/config/static"
 import {
   userActionCreators,
   AuthInfo,
   currencyActionCreators,
-  uploadActionCreators,
   lightboxActionCreators
 } from '../../actions'
-import { RootState, UserState, UploadState } from '../../reducers'
-import { User, Currency, Image } from '../../models'
-import { authConsts } from '../../constants'
-import { Row, Col, Input, Select, Button, Icon, Upload } from 'antd'
-import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface'
+import { RootState, UserState } from '../../reducers'
+import { User, Currency, Image, Consignee } from '../../models'
+import { Row, Col, Select, Button } from 'antd'
+import { UploadFile } from 'antd/lib/upload/interface'
 import i18n from 'i18next'
+import { UserForm, UserValuesProps, CompanyForm, CompanyValuesProps } from '../../components/form'
+import { Record, EditableTable } from '../../components/consignee-editor/'
+import './profile.scss'
 
-interface ProfileProps {
+
+interface ProfileProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
-  userState: UserState
+  userProp: UserState
   authInfo: AuthInfo
-  currencys: Currency[]
-  upload: UploadState
+  currencies: Currency[]
 }
+
 interface ProfileState {
+  userId: string
   user: User
-  submitted: boolean
+  userSelf: boolean
+  personalVisible: boolean
+  companyVisible: boolean
+  path?:string
 }
+
 class ProfilePage extends React.Component<ProfileProps, ProfileState> {
   constructor(props: ProfileProps) {
     super(props)
     this.state = {
       user: {},
-      submitted: false
+      userId: '',
+      userSelf: false,
+      personalVisible: false,
+      companyVisible: false
     }
   }
   componentDidMount() {
-    this.props.authInfo.id &&
-      this.props.dispatch(userActionCreators.getById(this.props.authInfo.id))
-    if (!this.props.currencys)
-      this.props.dispatch(currencyActionCreators.getAll())
-  }
-  componentWillReceiveProps(nextProps: ProfileProps) {
-    const { userState, upload } = nextProps
-    const { userData } = userState
-    const { image } = upload
-    const { submitted, user } = this.state
-    if (userData && !submitted) {
-      this.setState({
-        user: {
-          ...userData,
-          ...user
-        }
-      })
-    }
-    if (image) {
-      if (user.businessLicenses) {
+    let userId = this.props.match.params.id
+    if (userId) {
+      userId &&
         this.setState({
-          user: {
-            ...user,
-            businessLicenses: [...user.businessLicenses, { path: image }]
-          }
+          ...this.state,
+          userId
         })
-      } else {
-        this.setState({
-          user: {
-            ...user,
-            businessLicenses: [{ path: image }]
-          }
-        })
-      }
-      this.props.dispatch(uploadActionCreators.clear())
+      userId && this.props.dispatch(userActionCreators.getById(userId))
+    } else {
+      this.props.authInfo.id &&
+        this.props.dispatch(userActionCreators.getById(this.props.authInfo.id))
+      if (!this.props.currencies)
+        this.props.dispatch(currencyActionCreators.getAll())
     }
   }
-  handleUpload = (uploadFile: UploadFile) => {
-    let license = uploadFile.originFileObj
-    this.props.dispatch(uploadActionCreators.uploadImage(license))
-  }
-  handleDeleteImage = (uploadFile: UploadFile) => {
-    const { user } = this.state
-    const { businessLicenses } = user
-    const uid = uploadFile.uid
-    if (businessLicenses) {
-      let newBusinessLicenses = businessLicenses.filter(
-        (image: Image, index: number) => {
-          return uid != index
-        }
-      )
-      this.setState({
-        user: { ...user, businessLicenses: newBusinessLicenses }
-      })
-      return true
-    }
-  }
-  handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const { name, value } = event.currentTarget
-    const { user } = this.state
+  showPersonalModal = () => {
     this.setState({
-      user: {
-        ...user,
-        [name]: value
-      }
+      personalVisible: true
     })
   }
+  showCompanyModal = () => {
+    this.setState({
+      companyVisible: true
+    })
+  }
+  hideCompanyModal = () => {
+    this.setState({
+      companyVisible: false
+    })
+  }
+  hidePersonalModal = () => {
+    this.setState({
+      personalVisible: false
+    })
+  }
+
+  componentWillReceiveProps(nextProps: ProfileProps) {
+    const { userProp } = nextProps
+    const { userData,processing } = userProp
+    const { authInfo } = this.props
+    const { user } = this.state
+    if(nextProps.match.path !== this.state.path){
+      let userId = nextProps.match.params.id
+      let path = nextProps.match.path
+      if(path){
+        this.setState({
+          path:path
+        })
+      }
+      if (userId) {
+        userId &&
+          this.setState({
+            userId:userId
+          })
+        userId && nextProps.dispatch(userActionCreators.getById(userId))
+      } else {
+          nextProps.authInfo.id &&
+          nextProps.dispatch(userActionCreators.getById(nextProps.authInfo.id))
+        if (!nextProps.currencies)
+          nextProps.dispatch(currencyActionCreators.getAll())
+      }
+    }
+    if (userData&&!processing) {
+      this.setState({
+        user: {
+          ...user,
+          ...userData
+        },
+        userSelf: userData.id === authInfo.id
+      })
+    }
+  }
+
   handleSelect = (value: string, name: string) => {
     const { user } = this.state
     this.setState({
@@ -110,24 +127,58 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
         [name]: value
       }
     })
-    this.props.dispatch(currencyActionCreators.upCurrencystatus(value))
+    this.props.dispatch(currencyActionCreators.upCurrencyStatus(value))
   }
-  handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    this.setState({ submitted: true })
-    let user = this.state.user
-    if (user.firstName && user.lastName && user.email) {
-      if (user.companyName) {
-        user.licenseStatus = authConsts.LICENSE_STATUS_UNCONFIRMED
-      }
-      this.props.dispatch(userActionCreators.update(user))
+  personalSubmit = (values: UserValuesProps) => {
+    const { user } = this.state
+    const { dispatch } = this.props
+    let newUser = {
+      ...user,
+      firstName: values.firstName,
+      email: values.email,
+      lastName: values.lastName
     }
-    window.scrollTo(0, 0)
+    dispatch(userActionCreators.update(newUser))
+    this.setState({ user: newUser })
   }
+  companySubmit = (values: CompanyValuesProps, fileList: UploadFile[]) => {
+    const { user } = this.state
+    const { dispatch } = this.props
+    let businessLicenses: Image[] = []
+    fileList.forEach((file: any) => businessLicenses.push({ path: file.url }))
+    let newUser:User = {
+      ...user,
+      companyName: values.companyName,
+      companyAddress: values.companyAddress,
+      businessLicenses,
+      licenseStatus:consts.LICENSE_STATUS_UNCONFIRMED
+    }
+    dispatch(userActionCreators.update(newUser))
+    this.setState({ user: newUser })
+  }
+
+  handleSubmitConsignee = (values: Record) => {
+    const { dispatch } = this.props
+    let consignee: Consignee = {
+      name: values.name,
+      email: values.email,
+      phoneNum: values.phoneNum,
+      address: values.address
+    }
+    if (values.id)
+      dispatch(userActionCreators.editConsignee(consignee, values.id))
+    else dispatch(userActionCreators.newConsignee(consignee))
+  }
+
+  handleDeleteConsignee = (id: string) => {
+    const { dispatch } = this.props
+    dispatch(userActionCreators.deleteConsignee(id))
+  }
+
   //for render select input
-  renderCurrencySelect = (optionItems: Currency[]) => {
+  renderCurrencySelect = () => {
     let preferCurrency = this.state.user.preferredCurrencyCode || ''
+    const { currencies } = this.props
     return (
       <Select
         value={String(preferCurrency)}
@@ -135,165 +186,138 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
           this.handleSelect(value, 'preferredCurrencyCode')
         }
       >
-        {optionItems.map((item, index) => (
-          <Select.Option key={index} value={item.code}>
-            {item.code}({item.description})
-          </Select.Option>
-        ))}
+        {currencies &&
+          currencies.map((item, index) => (
+            <Select.Option key={index} value={item.code}>
+              {item.code}({item.description})
+            </Select.Option>
+          ))}
       </Select>
     )
   }
   handlePreview = (file: UploadFile) => {
-    file.url && this.openLightbox([file.url], 0)
+    file.url && this.openLightbox(file.url)
   }
 
-  openLightbox = (images: string[], index: number) => {
-    this.props.dispatch(lightboxActionCreators.open(images, index))
-  }
-
-  customRequest = () => {
-    return false
+  openLightbox = (image: string) => {
+    this.props.dispatch(lightboxActionCreators.open(image))
   }
 
   render() {
-    const { userState, currencys } = this.props
-    const { processing } = userState
-    const { user, submitted } = this.state
-    let licenseList: UploadFile[]
-    if (user.businessLicenses) {
-      licenseList = user.businessLicenses.map(
-        (license, index): UploadFile => ({
-          url: license.path,
-          name: '',
-          uid: index,
-          size: 200,
-          type: 'done'
-        })
-      )
+    const { user, userSelf } = this.state
+    
+    let dataSource: Record[]
+    if (user.consignees) {
+      dataSource = user.consignees.map((source, index) => ({
+        key: index.toString(),
+        id: source.id,
+        name: source.name,
+        email: source.email,
+        phoneNum: source.phoneNum,
+        address: source.address
+      }))
     } else {
-      licenseList = []
+      dataSource = []
+    }
+    let imagePaths: string[]
+    if (user && user.businessLicenses) {
+      imagePaths = user.businessLicenses.map(image => image.path)
+    } else {
+      imagePaths = []
     }
     return (
-      <Row className="profile-page">
-        <Col
-          xs={{ span: 22, offset: 1 }}
-          sm={{ span: 16, offset: 4 }}
-          md={{ span: 12, offset: 6 }}
-          lg={{ span: 10, offset: 7 }}
+      <Row type="flex" justify="space-around" align="middle" className="profile-page">
+        <Col 
+        xs={{ span: 20, offset: 2 }}
+        sm={{ span: 20, offset: 1 }}
         >
-          <div className="header-center">{i18n.t('User Profile')}</div>
+          <h2 className="header-center">{i18n.t('User Profile')}</h2>
           <div className="subtitle">
             {i18n.t('Personal Information')}
+            {userSelf && <span className= 'edit'>
+              <a onClick={this.showPersonalModal}>{i18n.t('Edit')}</a>
+            </span>}
+            {this.state.personalVisible&&<UserForm
+              handleSubmit={this.personalSubmit}
+              user={user}
+              visible={this.state.personalVisible}
+              handleCancel={this.hidePersonalModal}
+              renderCurrencySelect={this.renderCurrencySelect}
+            />}
           </div>
-          <form name="form" onSubmit={this.handleSubmit}>
-            <div className={submitted && !user.firstName ? ' has-error' : ''}>
-              <label>{i18n.t('First Name')}</label>
-              <Input
-                type="text"
-                name="firstName"
-                value={user.firstName || ''}
-                onChange={this.handleChange}
-              />{' '}
-              {submitted &&
-                !user.firstName && (
-                  <div className="invalid-feedback">
-                    {i18n.t('First Name is required')}
-                  </div>
-                )}
-            </div>
-            <div className={submitted && !user.lastName ? ' has-error' : ''}>
-              <label>{i18n.t('Last Name')}</label>
-              <Input
-                type="text"
-                name="lastName"
-                value={user.lastName || ''}
-                onChange={this.handleChange}
-              />{' '}
-              {submitted &&
-                !user.lastName && (
-                  <div className="invalid-feedback">
-                    {i18n.t('Last Name is required')}
-                  </div>
-                )}
-            </div>
-            <div>
-              <label>{i18n.t('Email')}</label>
-              <Input
-                type="text"
-                name="email"
-                value={user.email || ''}
-                disabled={true}
-              />
-            </div>
-            <div>
-              <label>{i18n.t('Preferred Currency')}</label>
-              {currencys && this.renderCurrencySelect(currencys)}
-            </div>
-            <div className="subtitle">
-              {i18n.t('Company Information')}
-            </div>
-            {user.licenseStatus !== authConsts.LICENSE_STATUS_CONFIRMED && (
-                <div className="tips">
-                  {i18n.t(
-                    'Please fulfill company information for adding offer'
-                  )}
+          <div className="view-content">
+            <div className="field">
+                <label>{i18n.t('Name')}:</label>
+                <div className="message">
+                  {user.firstName} {user.lastName}
                 </div>
-              )}
-            <div>
-              <label>{i18n.t('Company Name')}</label>
-              <Input
-                type="text"
-                name="companyName"
-                value={user.companyName || ''}
-                onChange={this.handleChange}
-              />
             </div>
-            <div>
-              <label>{i18n.t('Company Address')}</label>
-              <Input
-                type="text"
-                name="companyAddress"
-                value={user.companyAddress || ''}
-                onChange={this.handleChange}
-              />
+
+            <div className="field">
+                <label>{i18n.t('Email')}:</label>
+                <div className="message">{user.email}</div>
             </div>
-            <div>
-              <div>
-                <label>{i18n.t('Business License')}</label>
-                <div className="upload-profile clearfix">
-                  <Upload
-                    listType="picture-card"
-                    fileList={licenseList}
-                    accept="image/*"
-                    customRequest={this.customRequest}
-                    onChange={(file: UploadChangeParam) =>
-                      this.handleUpload(file.file)
-                    }
-                    onPreview={this.handlePreview}
-                    onRemove={this.handleDeleteImage}
-                  >
-                    <div>
-                      <Icon type="plus" />
-                      <div className="ant-upload-text">{i18n.t('Upload')}</div>
-                    </div>
-                  </Upload>
+
+            <div className="field">
+              <div className={userSelf ? '' : 'none'}>
+                <label>{i18n.t('Preferred Currency')}</label>
+                <div className={userSelf ? 'message' : 'none'}>
+                  {user.preferredCurrencyCode}
                 </div>
               </div>
             </div>
-            <div>
-              <Button
-                htmlType="submit"
-                type="primary"
-                className="button-margin"
-              >
-                {i18n.t('Submit')}
-              </Button>
-              {processing && <Icon type="loading" />}
-              <Button>
-                <Link to="/">{i18n.t('Cancel')}</Link>
-              </Button>
+
+            <div className="field" style={{marginBottom:0}}>
+              <label>{i18n.t('Address')}:</label>
+              {dataSource&&<EditableTable
+              data={dataSource}
+              handleSubmit={this.handleSubmitConsignee}
+              handleDelete={this.handleDeleteConsignee}
+              />}
             </div>
-          </form>
+          </div>
+          <div className="subtitle company-information">
+            {i18n.t('Company Information')}
+            {userSelf && <span className= 'edit'>
+              <a onClick={this.showCompanyModal}>{i18n.t('Edit')}</a>
+            </span>}
+
+             {this.state.companyVisible&&<CompanyForm
+              handleSubmit={this.companySubmit}
+              user={user}
+              modalVisible={this.state.companyVisible}
+              handleCancel={this.hideCompanyModal}
+              handlePreview={this.handlePreview}
+            />}
+          </div>
+          <div className="view-content">
+            <div className="field">
+                <label>{i18n.t('Company Name')}:</label>
+                <div className="message">{user.companyName}</div>
+            </div>
+            <div className="field">
+                <label>{i18n.t('Company Address')}:</label>
+                <div className="message">{user.companyAddress}</div>
+            </div>
+            <div className="field">
+              <label>{i18n.t('Business License')}:</label>
+              <div className="image-wr">
+                {imagePaths && (
+                  <div className="images-container">
+                    {imagePaths.map((image, index) => (
+                      <div key={index} className="image-wrapper">
+                        <img
+                          className="image cursor-pointer"
+                          onClick={() => this.openLightbox(imagePaths[index])}
+                          src={image}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </Col>
       </Row>
     )
@@ -301,14 +325,12 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
 }
 
 function mapStateToProps(state: RootState) {
-  const { user, auth, currency, upload } = state
+  const { user, auth, currency } = state
   return {
-    userState: user,
+    userProp: user,
     authInfo: auth.authInfo,
-    currencys: currency.items,
-    upload
+    currencies: currency.items
   }
 }
-
 const connectedProfilePage = connect(mapStateToProps)(ProfilePage)
 export { connectedProfilePage as ProfilePage }

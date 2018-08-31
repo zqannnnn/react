@@ -1,14 +1,14 @@
 import * as express from 'express'
 import * as i18n from 'i18next'
 import * as nodemailer from 'nodemailer'
-import * as qs from 'querystring'
 import { smtpConfig } from '../config/email'
-import { authMiddleware } from '../middleware/auth'
+import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
 import { User } from '../models/user'
 import { makeRandomString } from '../util'
 const router = express.Router()
 
+router.use(authMiddleware)
 const transporter = nodemailer.createTransport(smtpConfig)
 function genMessage(resetUrl: string, email: string) {
   const ourName = 'SITE_NAME'
@@ -55,8 +55,7 @@ router.post('/lost', async (req: express.Request, res: express.Response) => {
   }
 })
 
-router.use(authMiddleware)
-
+router.use(loginCheckMiddleware)
 router.post('/reset', async (req: IRequest, res: express.Response) => {
   try {
     const user = await User.findOne({ where: { id: req.userId } })
@@ -71,4 +70,4 @@ router.post('/reset', async (req: IRequest, res: express.Response) => {
     return res.status(500).send({ error: e.message })
   }
 })
-export = router
+export { router }

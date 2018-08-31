@@ -1,9 +1,5 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { connect, Dispatch } from 'react-redux'
-import { transactionActionCreators, AuthInfo } from '../../actions'
-import { RootState, TransactionState } from '../../reducers'
-import { Transaction, ListItem } from '../../models'
 import { Form, Icon, Input, Button, Checkbox } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import i18n from 'i18next'
@@ -16,7 +12,7 @@ class LostPassForm extends React.Component<LostPassFormProps> {
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      this.props.handleSubmit(values.email)
+      if (!err) this.props.handleSubmit(values.email)
     })
   }
   render() {
@@ -59,4 +55,4 @@ class LostPassForm extends React.Component<LostPassFormProps> {
 }
 
 const WrappedLostPassForm = Form.create()(LostPassForm)
-export { WrappedLostPassForm as LostPassForm }
+export { WrappedLostPassForm as LostPass }

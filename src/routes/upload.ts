@@ -1,11 +1,11 @@
 import * as express from 'express'
 import * as fs from 'fs'
 import * as multer from 'multer'
-import { authMiddleware } from '../middleware/auth'
+import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { makeRandomString } from '../util'
 const router = express.Router()
 router.use(authMiddleware)
-
+router.use(loginCheckMiddleware)
 const upload = multer({ dest: 'uploads/' })
 
 function makeRandomName(originalname: string) {
@@ -17,7 +17,7 @@ function makeRandomName(originalname: string) {
 
 router.post(
   '/image',
-  upload.single('image'),
+  upload.single('file'),
   async (req: express.Request, res: express.Response) => {
     const fileName = makeRandomName(req.file.originalname)
     fs.rename(req.file.path, 'uploads/' + fileName, err => {
@@ -30,4 +30,4 @@ router.post(
   }
 )
 
-export = router
+export { router }

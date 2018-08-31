@@ -1,15 +1,14 @@
 import * as express from 'express'
 import * as i18n from 'i18next'
 import { consts } from '../config/static'
-import { authMiddleware } from '../middleware/auth'
+import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
-import { Currency, Image, Transaction } from '../models/'
+import { Comment, Currency, Goods, Image, Transaction, User } from '../models/'
 const router = express.Router()
 
 router.use(authMiddleware)
 
 router.get('/list', async (req: IRequest, res: express.Response) => {
-  let transactions
   const type = req.query.type
   const buy = req.query.buy === 'true'
   const sell = req.query.sell === 'true'
@@ -18,35 +17,38 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   const keyword = req.query.keyword
   const sorting = req.query.sorting
   const whereOption: {
-    userId?: string
+    makerId?: string
     status?: number
-    type?: string
-    title?: { $like: string }
+    isMakerSeller?: boolean
   } = {}
-
+  const goodsOption: {
+    title?: { $like: string }
+    category?: number
+  } = {}
   const pageOption: {
     offset?: number
     limit?: number
   } = {}
-
   let orderOption: string[] = ['createdAt', 'DESC']
 
   if (buy && !sell) {
-    whereOption.type = consts.TRANSACTION_TYPE_BUY
+    whereOption.isMakerSeller = true
   } else if (sell && !buy) {
-    whereOption.type = consts.TRANSACTION_TYPE_SELL
+    whereOption.isMakerSeller = false
   }
   if (pageSize && typeof page !== 'undefined') {
     pageOption.offset = (page - 1) * pageSize
-    pageOption.limit = (page - 1) * pageSize + pageSize
+    pageOption.limit = pageSize
   }
   if (typeof keyword !== 'undefined') {
-    whereOption.title = { $like: `%${keyword}%` }
+    goodsOption.title = { $like: `%${keyword}%` }
   }
   if (type === 'mine') {
-    whereOption.userId = req.userId
+    whereOption.makerId = req.userId
   } else if (type === 'finished') {
     whereOption.status = consts.TRANSACTION_STATUS_FINISHED
+  } else if (type === 'waitting') {
+    whereOption.status = consts.TRANSACTION_STATUS_TAKING
   } else {
     whereOption.status = consts.TRANSACTION_STATUS_CREATED
   }
@@ -56,52 +58,75 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
     orderOption = ['createdAt', 'ASC']
   }
   try {
-    transactions = await Transaction.findAll({
+    const result = await Transaction.findAndCount({
       where: {
         ...whereOption
       },
       include: [
         {
-          model: Image,
-          attributes: ['path', 'type']
+          model: Goods,
+          where: { ...goodsOption },
+          include: [
+            {
+              model: Image,
+              attributes: ['path', 'type']
+            }
+          ]
+        },
+        {
+          model: User,
+          as: 'taker',
+          attributes: ['firstName', 'lastName', 'id']
         }
       ],
       ...pageOption,
       order: [orderOption]
     })
-    return res.send(transactions)
+    return res.send({ transactions: result.rows, total: result.count })
   } catch (e) {
     return res.status(500).send({ error: e.message })
   }
 })
 
+router.use(loginCheckMiddleware)
 router.post('/new', async (req: IRequest, res: express.Response) => {
   try {
     const transaction = new Transaction({
-      userId: req.userId,
+      makerId: req.userId,
       ...req.body
     })
     await transaction.save()
-    if (req.body.images) {
-      req.body.images.forEach((image: { path: string }) => {
-        const imageDb = new Image({
-          path: image.path,
-          transactionId: transaction.id,
-          type: consts.IMAGE_TYPE_MEDIE
-        })
-        imageDb.save()
-      })
-    }
-    if (req.body.certificates) {
-      req.body.certificates.forEach((certificate: { path: string }) => {
-        const imageDb = new Image({
-          path: certificate.path,
-          transactionId: transaction.id,
-          type: consts.IMAGE_TYPE_CERTIFICATE
-        })
-        imageDb.save()
-      })
-    }
+    Goods.find({
+      where: { id: req.body.goodsId }
+    }).then(goods => {
+      if (!goods) {
+        return res.status(500).send({ error: i18n.t('Goods does not exist.') })
+      }
+      goods.selling = true
+      goods.save()
+    })
+
+    return res.send({ success: true })
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
+router.post('/order/new', async (req: IRequest, res: express.Response) => {
+  try {
+    const goods = new Goods({
+      creatorId: req.userId,
+      ownerId: req.userId,
+      ...req.body.goods
+    })
+    await goods.save()
+    const transaction = new Transaction({
+      makerId: req.userId,
+      goodsId: goods.id,
+      price: req.body.price,
+      currencyCode: req.body.currencyCode
+    })
+    await transaction.save()
     return res.send({ success: true })
   } catch (e) {
     return res.status(500).send({ error: e.message })
@@ -115,6 +140,7 @@ router.get(
       if (!req.isAdmin) {
         return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
+
       const transaction = await Transaction.find({
         where: {
           id: req.params.transactionId
@@ -127,19 +153,27 @@ router.get(
       }
       transaction.status = consts.TRANSACTION_STATUS_FINISHED
       transaction.save()
+
+      const goods = await Goods.find({
+        where: { id: transaction.goodsId }
+      })
+      if (!goods) {
+        return res.status(500).send({ error: i18n.t('Goods does not exist.') })
+      }
+      goods.selling = false
+      goods.ownerId = transaction.takerId
+      goods.save()
+
       return res.send({ success: true })
     } catch (e) {
       return res.status(500).send({ error: e.message })
     }
   }
 )
-router.post(
-  '/comment/:transactionId',
+router.get(
+  '/buy/:transactionId',
   async (req: IRequest, res: express.Response) => {
     try {
-      if (!req.isAdmin) {
-        return res.status(500).send({ error: i18n.t('Permission denied.') })
-      }
       const transaction = await Transaction.find({
         where: {
           id: req.params.transactionId
@@ -150,14 +184,183 @@ router.post(
           .status(500)
           .send({ error: i18n.t('Transaction does not exist.') })
       }
-      transaction.comment = req.body.comment
+      transaction.status = consts.TRANSACTION_STATUS_TAKING
+      transaction.takerId = req.userId
       transaction.save()
+
       return res.send({ success: true })
     } catch (e) {
       return res.status(500).send({ error: e.message })
     }
   }
 )
+
+router.get('/list/comment', async (req: IRequest, res: express.Response) => {
+  const page = Number(req.query.page)
+  const pageSize = Number(req.query.pageSize)
+  const transactionId = String(req.query.transactionId)
+  const pageOption: {
+    offset?: number
+    limit?: number
+  } = {}
+  const orderOption: string[] = ['createdAt', 'DESC']
+  if (pageSize && typeof page !== 'undefined') {
+    pageOption.offset = (page - 1) * pageSize
+    pageOption.limit = pageSize
+  }
+  try {
+    const result = await Comment.findAndCount({
+      where: {
+        transactionId,
+        replyTo: null
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['firstName', 'lastName']
+        }
+      ],
+      ...pageOption,
+      order: [orderOption]
+    })
+    return res.send({ comments: result.rows, total: result.count })
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
+router.get('/list/reply', async (req: IRequest, res: express.Response) => {
+  const page = Number(req.query.page)
+  const pageSize = Number(req.query.pageSize)
+  const rootId = String(req.query.commentId)
+  const pageOption: {
+    offset?: number
+    limit?: number
+  } = {}
+  const orderOption: string[] = ['createdAt', 'DESC']
+  if (pageSize && typeof page !== 'undefined') {
+    pageOption.offset = (page - 1) * pageSize
+    pageOption.limit = pageSize
+  }
+  try {
+    const result = await Comment.findAndCount({
+      where: {
+        rootId
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['firstName', 'lastName']
+        }
+      ],
+      ...pageOption,
+      order: [orderOption]
+    })
+    const replys = result.rows.filter(comment => comment.id !== rootId)
+    return res.send({ replys, total: result.count })
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
+router.post('/comment', async (req: IRequest, res: express.Response) => {
+  try {
+    const comment = new Comment({
+      userId: req.userId,
+      ...req.body
+    })
+    await comment.save()
+    if (!comment.replyTo) {
+      comment.rootId = comment.id
+      await comment.save()
+    }
+    if (comment.replyTo) {
+      const rootComment = await Comment.findById(comment.rootId)
+      if (rootComment) {
+        if (rootComment.totalReply) {
+          rootComment.totalReply = rootComment.totalReply + 1
+        } else {
+          rootComment.totalReply = 1
+        }
+        await rootComment.save()
+      }
+    }
+
+    const page = Number(req.query.page)
+    const pageSize = Number(req.query.pageSize)
+    const transactionId = comment.transactionId
+    const pageOption: {
+      offset?: number
+      limit?: number
+    } = {}
+    if (pageSize && typeof page !== 'undefined') {
+      pageOption.offset = (page - 1) * pageSize + comment.totalReply
+      pageOption.limit = pageSize
+    }
+    const orderOption: string[] = ['createdAt', 'DESC']
+    const result = await Comment.findAndCount({
+      where: {
+        transactionId,
+        replyTo: null
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['firstName', 'lastName']
+        }
+      ],
+      ...pageOption,
+      order: [orderOption]
+    })
+
+    return res.send({ comments: result.rows, total: result.count })
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
+router.post('/reply', async (req: IRequest, res: express.Response) => {
+  try {
+    const comment = new Comment({
+      userId: req.userId,
+      ...req.body
+    })
+    await comment.save()
+    if (!comment.replyTo) {
+      comment.rootId = comment.id
+      await comment.save()
+    } else {
+      const rootComment = await Comment.findById(comment.rootId)
+      if (rootComment) {
+        if (rootComment.totalReply) {
+          rootComment.totalReply = rootComment.totalReply + 1
+        } else {
+          rootComment.totalReply = 1
+        }
+        await rootComment.save()
+      }
+    }
+    const orderOption: string[] = ['createdAt', 'DESC']
+    const result = await Comment.findAndCount({
+      where: {
+        rootId: comment.rootId,
+        totalReply: null
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['firstName', 'lastName']
+        }
+      ],
+      order: [orderOption]
+    })
+
+    return res.send({ comments: result.rows })
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
 router
   .route('/:transactionId')
   .get(async (req: express.Request, res: express.Response) => {
@@ -167,12 +370,27 @@ router
       },
       include: [
         {
-          model: Image,
-          attributes: ['path', 'type']
-        },
-        {
           model: Currency,
           attributes: ['code']
+        },
+        {
+          model: User,
+          as: 'maker',
+          attributes: ['firstName', 'lastName', 'id']
+        },
+        {
+          model: User,
+          as: 'taker',
+          attributes: ['firstName', 'lastName', 'id']
+        },
+        {
+          model: Goods,
+          include: [
+            {
+              model: Image,
+              attributes: ['path', 'type']
+            }
+          ]
         }
       ]
     })
@@ -190,7 +408,7 @@ router
           id: req.params.transactionId
         }
       })
-      if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
+      if (transaction && transaction.makerId !== req.userId && !req.isAdmin) {
         return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
       if (!transaction) {
@@ -202,31 +420,6 @@ router
         (key: string) => (transaction[key] = req.body[key])
       )
       transaction.save()
-      await Image.destroy({
-        where: {
-          transactionId: req.params.transactionId
-        }
-      })
-      if (req.body.images) {
-        req.body.images.forEach((image: { path: string }) => {
-          const imageDb = new Image({
-            path: image.path,
-            transactionId: transaction.id,
-            type: consts.IMAGE_TYPE_MEDIE
-          })
-          imageDb.save()
-        })
-      }
-      if (req.body.certificates) {
-        req.body.certificates.forEach((certificate: { path: string }) => {
-          const imageDb = new Image({
-            path: certificate.path,
-            transactionId: transaction.id,
-            type: consts.IMAGE_TYPE_CERTIFICATE
-          })
-          imageDb.save()
-        })
-      }
       return res.send({ success: true })
     } catch (e) {
       return res.status(500).send({ error: e.message })
@@ -239,7 +432,7 @@ router
           id: req.params.transactionId
         }
       })
-      if (transaction && transaction.userId !== req.userId && !req.isAdmin) {
+      if (transaction && transaction.makerId !== req.userId && !req.isAdmin) {
         return res.status(500).send({ error: i18n.t('Permission denied.') })
       }
       if (!transaction) {
@@ -255,4 +448,4 @@ router
     }
   })
 
-export = router
+export { router }

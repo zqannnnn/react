@@ -18,9 +18,9 @@ export function currency(
         loading: true
       }
     case currencyConsts.GET_SUCCESS:
-      return { ...state, items: action.currencys }
+      return { ...state, items: action.currencies }
     case currencyConsts.GET_FAILURE:
-      return { error: action.error }
+      return { ...state, error: action.error }
     case currencyConsts.UPDATE_CURRENCY_STATE:
       return { ...state, currentCurrency: action.currencyState }
     default:

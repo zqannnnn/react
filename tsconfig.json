@@ -5,6 +5,8 @@
     "moduleResolution": "node",
     "noImplicitAny": true,
     "strictNullChecks": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowJs": true,
@@ -12,5 +14,5 @@
     "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*", "frontend/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "tests/**", "**/*.test.ts"]
 }

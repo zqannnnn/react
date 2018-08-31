@@ -1,6 +1,7 @@
 export { categoryService } from './category'
 export { transService } from './transaction'
+export { goodsService } from './goods'
 export { userService } from './user'
 export { currencyService } from './currency'
-export { uploadService } from './upload'
 export { authService } from './auth'
+export { consigneeService } from './consignee'

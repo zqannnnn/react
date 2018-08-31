@@ -32,8 +32,8 @@ class ConfirmPage extends React.Component<ConfirmProps> {
   handleDisconfirm = (id: string) => {
     this.props.dispatch(adminActionCreators.disconfirm(id))
   }
-  openLightbox = (images: string[], index: number) => {
-    this.props.dispatch(lightboxActionCreators.open(images, index))
+  openLightbox = (image: string) => {
+    this.props.dispatch(lightboxActionCreators.open(image))
   }
   render() {
     const { comfirmingCompany, loading, processing } = this.props
@@ -61,21 +61,23 @@ class ConfirmPage extends React.Component<ConfirmProps> {
           ) : comfirmingCompany ? (
             <div>
               <div>
-                <div className="confirm-title">{i18n.t('Name:')}</div>
+                <div className="confirm-title">{i18n.t('Name')}:</div>
                 <div>{comfirmingCompany.companyName || 'null'}</div>
               </div>
-              <div className="confirm-title">{i18n.t('Address:')}</div>
-
+              <div>
+              <div className="confirm-title">{i18n.t('Address')}:</div>
+              <div>{comfirmingCompany.companyAddress || 'null'}</div>
+              </div>
               <div>
                 <div className="confirm-title">
-                  {i18n.t('Bussines License:')}
+                  {i18n.t('Bussines License')}:
                 </div>
                 <div className="images-container">
                   {licensePaths.map((image, index) => (
                     <div key={index} className="image-wrapper">
                       <img
                         className="image cursor-pointer"
-                        onClick={() => this.openLightbox(licensePaths, index)}
+                        onClick={() => this.openLightbox(licensePaths[index])}
                         src={image}
                       />
                     </div>

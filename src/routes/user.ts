@@ -4,13 +4,20 @@ import * as jwt from 'jsonwebtoken'
 import { AuthInfo } from '../../frontend/src/actions'
 import { consts } from '../config/static'
 import { app } from '../index'
-import { authMiddleware } from '../middleware/auth'
+import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
-import { Image, User } from '../models'
+import { Image, User, Consignee } from '../models'
+import { UserFields } from '../passport'
 const router = express.Router()
-
+router.use(authMiddleware)
 router.post('/new', async (req, res) => {
   try {
+    const userData = await User.findOne({
+      where: { email: req.body.email }
+    })
+    if (userData) {
+      return res.status(401).send({ error: i18n.t('Email has been used.') })
+    }
     const user = new User({
       email: req.body.email,
       password: req.body.password,
@@ -28,14 +35,15 @@ router.post('/new', async (req, res) => {
         preferredCurrencyCode: user.preferredCurrencyCode
       },
       app.get('secretKey'),
-      { expiresIn: consts.EXPIREMENT }
+      { expiresIn: consts.EXPIRE_IN }
     )
     const data: AuthInfo = {
       token,
       id: user.id,
       licenseStatus: 0,
       isAdmin: user.userType === consts.USER_TYPE_ADMIN,
-      preferredCurrencyCode: user.preferredCurrencyCode
+      preferredCurrencyCode: user.preferredCurrencyCode,
+      name: user.fullName()
     }
     return res.send(data)
   } catch (e) {
@@ -43,20 +51,23 @@ router.post('/new', async (req, res) => {
   }
 })
 
-router.use(authMiddleware)
+router.use(loginCheckMiddleware)
 
 router.get('/refresh/auth', async (req: IRequest, res: express.Response) => {
   User.findOne({
     where: { id: req.userId },
-    attributes: ['userType', 'licenseStatus', 'preferredCurrencyCode']
+    attributes: UserFields
   }).then(user => {
     if (!user) {
-      return res.status(401).send({ error: i18n.t('Server error.') })
+      return res
+        .status(401)
+        .send({ error: i18n.t('Login has expired, please login again.') })
     }
     const authInfo: AuthInfo = {
       id: req.userId,
       preferredCurrencyCode: user.preferredCurrencyCode,
-      licenseStatus: user.licenseStatus
+      licenseStatus: user.licenseStatus,
+      name: user.fullName()
     }
     if (user.userType === consts.USER_TYPE_ADMIN) {
       authInfo.isAdmin = true
@@ -78,6 +89,7 @@ router.get(
     if (req.isAdmin) {
       const users = await User.findAll({
         attributes: { exclude: ['password'] },
+        include: [{ model: Image, attributes: ['path'] }],
         where: { licenseStatus: consts.LICENSE_STATUS_UNCONFIRMED }
       })
       return res.send(users)
@@ -115,13 +127,10 @@ router.get('/denie/:id', async (req: IRequest, res: express.Response) => {
 router
   .route('/:userId')
   .get(async (req: IRequest, res: express.Response) => {
-    if (req.params.userId !== req.userId && !req.isAdmin) {
-      return res.status(500).send({ error: i18n.t('Permission denied.') })
-    }
     const user = await User.find({
       where: { id: req.params.userId },
       attributes: { exclude: ['password'] },
-      include: [{ model: Image, attributes: ['path'] }]
+      include: [{ model: Image, attributes: ['path'] }, { model: Consignee }]
     })
     if (!user) {
       return res.status(500).send({ error: i18n.t('User does not exist.') })
@@ -133,7 +142,10 @@ router
       return res.status(500).send({ error: i18n.t('Permission denied.') })
     }
     try {
-      const user = await User.find({ where: { id: req.params.userId } })
+      const user = await User.find({
+        where: { id: req.params.userId },
+        attributes: { exclude: ['password'] }
+      })
       if (!user) {
         return res.status(500).send({ error: i18n.t('User does not exist.') })
       }
@@ -151,7 +163,7 @@ router
           imageDb.save()
         })
       }
-      return res.send({ success: true })
+      return res.send(user)
     } catch (e) {
       return res.status(500).send({ error: e.message })
     }
@@ -173,4 +185,4 @@ router
     }
   })
 
-export = router
+export { router }

@@ -1,9 +1,5 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { connect, Dispatch } from 'react-redux'
-import { transactionActionCreators, AuthInfo } from '../../actions'
-import { RootState, TransactionState } from '../../reducers'
-import { Transaction, ListItem } from '../../models'
 import { Form, Icon, Input, Button, Checkbox } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import i18n from 'i18next'
@@ -17,7 +13,7 @@ class LoginForm extends React.Component<LoginFormProps> {
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      this.props.handleSubmit(values)
+      if (!err) this.props.handleSubmit(values)
     })
   }
   render() {
@@ -81,4 +77,4 @@ class LoginForm extends React.Component<LoginFormProps> {
 }
 
 const WrappedLoginForm = Form.create()(LoginForm)
-export { WrappedLoginForm as LoginForm }
+export { WrappedLoginForm as Login }
