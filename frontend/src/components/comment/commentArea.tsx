@@ -5,7 +5,7 @@ import { Comment } from '../../models'
 import { transactionConsts } from '../../constants'
 import { Icon, Input, Pagination, Spin } from 'antd'
 import { ListOptions } from '../../models'
-import { CommentItem } from '../item/'
+import { CommentItem } from '../comment/'
 import { transactionActionCreators } from '../../actions'
 import i18n from 'i18next'
 interface CommentAreaProps {

@@ -11,7 +11,7 @@ import { Transaction, Comment } from '../../models'
 import { transactionConsts } from '../../constants'
 import { Exchange } from '../exchange'
 import { Col } from 'antd'
-import { CommentArea } from '../item/'
+import { CommentArea } from '../comment/'
 import { ListOptions } from '../../models'
 import i18n from 'i18next'
 interface ItemProps {
@@ -20,13 +20,7 @@ interface ItemProps {
   authInfo: AuthInfo
 }
 
-interface ItemState {
-  commentSubmitted: boolean
-  options: ListOptions
-  transaction?: Transaction
-}
-
-class Item extends React.Component<ItemProps, ItemState> {
+class Item extends React.Component<ItemProps> {
   constructor(props: ItemProps) {
     super(props)
     this.state = this.defaultState
