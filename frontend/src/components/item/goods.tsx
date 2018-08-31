@@ -21,7 +21,14 @@ class GoodsItem extends React.Component<GoodsItemProps> {
 
     return (
       goods && (
-        <Col key={goods.id} xs={12} sm={11} md={10} lg={9} className="block">
+        <Col
+          key={goods.id}
+          xs={24}
+          sm={11}
+          md={10}
+          lg={9}
+          className="block goods"
+        >
           <div className="boxmain">
             <div className="title text-overflow">{goods.title}</div>
             <div className="desc content text-overflow">
@@ -35,9 +42,9 @@ class GoodsItem extends React.Component<GoodsItemProps> {
             <Link to={'/goods/' + goods.id}>
               <div className="image-wr">
                 {goods.images && goods.images[0] ? (
-                  <img src={goods.images[0].path} />
+                  <img src={goods.images[0].path} className="block-img" />
                 ) : (
-                  <img src="/asset/no-image.jpg" />
+                  <img src="/asset/no-image.jpg" className="block-img" />
                 )}
               </div>
             </Link>

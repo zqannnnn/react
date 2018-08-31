@@ -19,7 +19,7 @@ class Company extends React.Component<CompanyProps> {
   render() {
     const { company, authInfo } = this.props
     return (
-      <Col className="block" xs={12} sm={11} md={10} lg={9}>
+      <Col className="block company" xs={24} sm={11} md={10} lg={9}>
         <div className="boxmain">
           <div className="title text-overflow">{company.companyName}</div>
           <div className="desc text-overflow">
@@ -30,9 +30,12 @@ class Company extends React.Component<CompanyProps> {
           <Link to={'/company/confirm/' + company.id}>
             <div className="image-wr">
               {company.businessLicenses && company.businessLicenses[0] ? (
-                <img src={company.businessLicenses[0].path} />
+                <img
+                  src={company.businessLicenses[0].path}
+                  className="block-img"
+                />
               ) : (
-                <img src="/asset/no-image.jpg" />
+                <img src="/asset/no-image.jpg" className="block-img" />
               )}
             </div>
           </Link>

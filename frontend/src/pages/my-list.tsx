@@ -16,30 +16,34 @@ interface ListProps {
 }
 interface ListState {
   options: ListOptions
+  reseted: boolean
 }
 class List extends React.Component<ListProps, ListState> {
   constructor(props: ListProps) {
     super(props)
-    this.state = {
-      options: {
-        type: 'mine',
-        page: 1,
-        pageSize: transactionConsts.LIST_PAGE_SIZE
-      }
-    }
+    this.state = this.defaultState
+  }
+  defaultState = {
+    options: {
+      type: 'mine',
+      page: 1,
+      pageSize: transactionConsts.LIST_PAGE_SIZE
+    },
+    reseted: false
   }
 
   onPageChange = (current: number, defaultPageSize: number) => {
     const options = this.state.options
     options.page = current
     options.pageSize = defaultPageSize
-    this.setState({ options })
+    this.setState({ options, reseted: true })
     this.props.dispatch(
       transactionActionCreators.getAll({
         type: this.props.type,
         ...options
       })
     )
+    window.scrollTo(0, 0)
   }
   onOptionsChange = (newOptions: ListOptions) => {
     const oldOptions = this.state.options
@@ -47,6 +51,16 @@ class List extends React.Component<ListProps, ListState> {
     this.setState({ options })
     this.props.dispatch(transactionActionCreators.getAll(options))
   }
+
+  componentWillReceiveProps(nextProps: ListProps) {
+    if (this.state.reseted) {
+      this.setState({
+        ...this.defaultState,
+        reseted: false
+      })
+    }
+  }
+
   componentDidMount() {
     this.props.dispatch(transactionActionCreators.getAll(this.state.options))
   }

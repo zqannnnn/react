@@ -8,17 +8,20 @@ import { Dispatch } from 'react-redux'
 import { ActionCreator } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 import { RootState } from '../reducers'
-import { ListOptions } from '../models'
+import { ListOptions, Comment } from '../models'
 
 export type Action = {
   type: string
   error?: string
   id?: string
+  transactionId?: string
   transactions?: Array<Transaction>
   data?: Transaction
   imagePath?: string
-  comment?: string
+  comment?: Comment
   total?: number
+  comments?: Array<Comment>
+  replys?: Array<Comment>
 }
 
 type Thunk = ThunkAction<void, RootState, void>
@@ -266,34 +269,156 @@ const getAll: ActionCreator<Thunk> = (option: ListOptions) => {
   }
 }
 
-function addComment(id: string, comment: string) {
-  return (dispatch: (action: Action) => void) => {
-    dispatch(request(id))
+const createComment: ActionCreator<Thunk> = (
+  comment: Comment,
+  options?: ListOptions
+) => {
+  return (dispatch: Dispatch<RootState>): void => {
+    comment.transactionId && dispatch(request(comment.transactionId))
 
-    transService.addComment(id, comment).then(
-      () => {
-        dispatch(success(id, comment))
-        dispatch(
-          alertActionCreators.success('AddComment transactions successful')
-        )
-      },
-      (error: string) => {
-        dispatch(failure(id, error))
-        dispatch(alertActionCreators.error(error))
-      }
-    )
+    transService
+      .createComment(comment, options)
+      .then(
+        (result: { comments: Array<Comment>; total: number }) =>
+          comment.transactionId &&
+          dispatch(
+            success(comment.transactionId, result.comments, result.total)
+          ),
+        (error: string) =>
+          comment.transactionId &&
+          dispatch(failure(comment.transactionId, error))
+      )
   }
-
-  function request(id: string) {
-    return { type: transactionConsts.COMMENT_REQUEST, id }
+  function request(id: string): Action {
+    return {
+      type: transactionConsts.COMMENT_CREATE_REQUEST,
+      id
+    }
   }
-  function success(id: string, comment: string) {
-    return { type: transactionConsts.COMMENT_SUCCESS, id, comment }
+  function success(
+    id: string,
+    comments: Array<Comment>,
+    total: number
+  ): Action {
+    return {
+      type: transactionConsts.COMMENT_CREATE_SUCCESS,
+      comments,
+      total,
+      id
+    }
   }
-  function failure(id: string, error: string) {
-    return { type: transactionConsts.COMMENT_FAILURE, error, id }
+  function failure(id: string, error: string): Action {
+    return {
+      type: transactionConsts.COMMENT_CREATE_FAILURE,
+      error,
+      id
+    }
   }
 }
+
+const createReply: ActionCreator<Thunk> = (comment: Comment) => {
+  return (dispatch: Dispatch<RootState>): void => {
+    comment.transactionId && dispatch(request(comment.transactionId))
+
+    transService
+      .createReply(comment)
+      .then(
+        (result: { comments: Array<Comment> }) =>
+          comment.transactionId &&
+          dispatch(success(comment.transactionId, result.comments)),
+        (error: string) =>
+          comment.transactionId &&
+          dispatch(failure(comment.transactionId, error))
+      )
+  }
+  function request(transactionId: string): Action {
+    return {
+      type: transactionConsts.REPLY_CREATE_REQUEST,
+      transactionId
+    }
+  }
+  function success(transactionId: string, comments: Array<Comment>): Action {
+    return {
+      type: transactionConsts.REPLY_CREATE_SUCCESS,
+      comments,
+      transactionId
+    }
+  }
+  function failure(transactionId: string, error: string): Action {
+    return {
+      type: transactionConsts.REPLY_CREATE_FAILURE,
+      error,
+      transactionId
+    }
+  }
+}
+
+const listComment: ActionCreator<Thunk> = (
+  id: string,
+  option?: ListOptions
+) => {
+  return (dispatch: Dispatch<RootState>): void => {
+    dispatch(request())
+    transService
+      .listComment(id, option)
+      .then(
+        (result: { comments: Array<Comment>; total: number }) =>
+          dispatch(success(result.comments, result.total, id)),
+        (error: string) => dispatch(failure(error))
+      )
+  }
+
+  function request(): Action {
+    return { type: transactionConsts.COMMENT_LIST_REQUEST, id }
+  }
+  function success(
+    comments: Array<Comment>,
+    total: number,
+    id: string
+  ): Action {
+    return { type: transactionConsts.COMMENT_LIST_SUCCESS, comments, total, id }
+  }
+  function failure(error: string): Action {
+    return { type: transactionConsts.COMMENT_LIST_FAILURE, error }
+  }
+}
+
+const listReplys: ActionCreator<Thunk> = (
+  id: string,
+  transactionId: string,
+  option?: ListOptions
+) => {
+  return (dispatch: Dispatch<RootState>): void => {
+    dispatch(request())
+    transService
+      .listReplys(id, transactionId, option)
+      .then(
+        (result: {
+          replys: Array<Comment>
+          total: number
+          transactionId: string
+        }) => dispatch(success(result.replys, result.total, transactionId)),
+        (error: string) => dispatch(failure(error))
+      )
+  }
+
+  function request(): Action {
+    return { type: transactionConsts.REPLY_LIST_REQUEST, transactionId }
+  }
+  function success(replys: Array<Comment>, total: number, id: string): Action {
+    return {
+      type: transactionConsts.REPLY_LIST_SUCCESS,
+      replys,
+      total,
+      id,
+      transactionId
+    }
+  }
+  function failure(error: string): Action {
+    return { type: transactionConsts.REPLY_LIST_FAILURE, error }
+  }
+}
+
 export const actionCreators = {
   new: _new,
   newOrder,
@@ -302,6 +427,9 @@ export const actionCreators = {
   getById,
   cancel,
   reactivate,
-  addComment,
-  buy
+  buy,
+  createComment,
+  createReply,
+  listComment,
+  listReplys
 }
