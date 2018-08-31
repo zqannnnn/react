@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 import { Comment } from '../../models'
 import { Icon, Input, Avatar } from 'antd'
 import i18n from 'i18next'
@@ -7,7 +8,7 @@ interface CommentProps {
   viewAllReplys: (comment: Comment) => void
   submitReply: (comment: Comment) => void
   commentLoading?: boolean
-  reseted: boolean
+  reset: boolean
 }
 interface CommentState {
   currentReply: string
@@ -40,7 +41,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
     let minute = 1000 * 60
     let hour = minute * 60
     let day = hour * 24
-    let halfamonth = day * 15
+    let halfMonth = day * 15
     let month = day * 30
     let now = new Date().getTime()
     let diffValue = now - timeDifference
@@ -48,12 +49,15 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
       return
     }
     let monthC = timeDifference / month
+    let halfMonthC = timeDifference / halfMonth
     let weekC = timeDifference / (7 * day)
     let dayC = timeDifference / day
     let hourC = timeDifference / hour
     let minC = timeDifference / minute
     if (monthC >= 1) {
       result = '' + parseInt(monthC.toPrecision()) + i18n.t(' month ago')
+    } else if (halfMonthC >= 1) {
+      result = i18n.t('after half a month')
     } else if (weekC >= 1) {
       result = '' + parseInt(weekC.toPrecision()) + i18n.t(' week ago')
     } else if (dayC >= 1) {
@@ -83,14 +87,14 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
   }
 
   componentWillReceiveProps(nextProps: CommentProps) {
-    const { commentLoading, reseted } = nextProps
+    const { commentLoading, reset } = nextProps
     if (!commentLoading) {
       this.setState({
         replyLoading: false,
         comment: nextProps.comment
       })
     }
-    if (reseted) {
+    if (reset) {
       this.setState({
         ...this.defaultState,
         comment: nextProps.comment
@@ -129,12 +133,21 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
       <div key={comment.id} className="reply-wrapper">
         <div className="reply">
           <div className="avatar">
-            <Avatar icon="user" />
+            <Link to={'/user/' + comment.userId}>
+              <Avatar icon="user" />
+            </Link>
           </div>
           <div className="comment-flex">
             <div className="main-comment">
+              <Link to={'/user/' + comment.userId}>
+                <span className="user-id click">
+                  {comment.user && comment.user.firstName}
+                </span>
+              </Link>
+              <span className="comment-replyTo">
+                {i18n.t(' reply to ')}
+              </span>
               <span className="user-id click">
-                {comment.user && comment.user.firstName} {i18n.t('reply to')}{' '}
                 {comment.user && comment.user.firstName}
               </span>
               <span className="reply-content">{comment.content}</span>
@@ -142,7 +155,6 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
           </div>
 
           <div className="features">
-            <span className="click">{i18n.t('praise')}</span>
             <span
               className="click"
               onClick={() => {
@@ -199,7 +211,9 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
       <div className="comment-wrapper">
         <div className="speak">
           <div className="avatar">
-            <Avatar icon="user" />
+            <Link to={'/user/' + comment.userId}>
+              <Avatar icon="user" />
+            </Link>
           </div>
           <div className="comment-flex">
             <div className="main-comment">
@@ -211,7 +225,6 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
           </div>
 
           <div className="features">
-            <span className="click">{i18n.t('praise')}</span>
             <span
               className="click"
               onClick={() => {

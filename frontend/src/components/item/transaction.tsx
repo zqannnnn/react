@@ -32,9 +32,6 @@ class Item extends React.Component<ItemProps> {
     },
     commentSubmitted: false
   }
-  componentWillReceiveProps(nextProps: ItemProps) {
-    this.setState({ transaction: nextProps.transaction })
-  }
   listComment = (options: ListOptions) => {
     const { transaction } = this.props
     this.props.dispatch(

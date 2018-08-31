@@ -21,7 +21,7 @@ interface CommentAreaProps {
 interface CommentAreaState {
   currentComment: string
   viewAllCommentShowing: boolean
-  reseted: boolean
+  reset: boolean
   comments?: Comment[]
   options: ListOptions
 }
@@ -38,7 +38,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
       pageSize: transactionConsts.COMMENT_LIST_SIZE
     },
     viewAllCommentShowing: false,
-    reseted: false
+    reset: false
   }
 
   handleCommentInputChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -69,7 +69,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
     const options = this.state.options
     options.page = current
     options.pageSize = defaultPageSize
-    this.setState({ options, reseted: true })
+    this.setState({ options, reset: true })
     this.props.listComment(options)
   }
 
@@ -80,10 +80,10 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
         comments: nextProps.comments
       })
     }
-    if (this.state.reseted) {
+    if (this.state.reset) {
       this.setState({
         ...this.defaultState,
-        reseted: false,
+        reset: false,
         comments: nextProps.comments,
         viewAllCommentShowing: true
       })
@@ -112,7 +112,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
 
   render() {
     const { comments, totalComment, commentLoading } = this.props
-    const { currentComment, viewAllCommentShowing, reseted } = this.state
+    const { currentComment, viewAllCommentShowing, reset } = this.state
     return (
       <div>
         <div className="comment">
@@ -141,7 +141,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
                 commentLoading={commentLoading}
                 viewAllReplys={this.viewAllReplys}
                 submitReply={this.submitReply}
-                reseted={reseted}
+                reset={reset}
                 key={index}
               />
             ))}
