@@ -5,7 +5,7 @@ import { Comment } from '../../models'
 import { transactionConsts } from '../../constants'
 import { Icon, Input, Pagination, Spin } from 'antd'
 import { ListOptions } from '../../models'
-import { CommentItem } from '../comment/'
+import { CommentItem } from './comment'
 import { transactionActionCreators } from '../../actions'
 import i18n from 'i18next'
 interface CommentAreaProps {
@@ -16,13 +16,10 @@ interface CommentAreaProps {
   submitReply: (comment: Comment) => void
   totalComment?: number
   commentLoading?: boolean
-  rowComments: Comment[]
 }
 
 interface CommentAreaState {
   currentComment: string
-  currentReplyTo?: string
-  currentReplyRoot?: string
   viewAllCommentShowing: boolean
   reseted: boolean
   comments?: Comment[]
@@ -95,18 +92,15 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
 
   submitComment = (event: React.FormEvent<HTMLInputElement>) => {
     event.preventDefault()
-    let { currentComment, currentReplyTo, currentReplyRoot } = this.state
+    let { currentComment } = this.state
     const { options } = this.state
     let comment: Comment
     comment = {
       content: currentComment,
-      replyTo: currentReplyTo,
-      rootId: currentReplyRoot
     }
 
     this.setState({
       viewAllCommentShowing: true,
-      currentReplyTo: undefined,
       currentComment: ''
     })
     this.props.submitComment(comment, options)
@@ -118,7 +112,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
 
   render() {
     const { comments, totalComment, commentLoading } = this.props
-    const { currentComment, viewAllCommentShowing } = this.state
+    const { currentComment, viewAllCommentShowing, reseted } = this.state
     return (
       <div>
         <div className="comment">
@@ -144,10 +138,10 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
             comments.map((comment, index) => (
               <CommentItem
                 comment={comment}
-                commentLoading={this.props.commentLoading}
+                commentLoading={commentLoading}
                 viewAllReplys={this.viewAllReplys}
                 submitReply={this.submitReply}
-                reseted={this.state.reseted}
+                reseted={reseted}
                 key={index}
               />
             ))}
@@ -193,10 +187,5 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
   }
 }
 
-function mapStateToProps(state: RootState) {
-  const { transaction } = state
-  return { rowComments: transaction.rowComments }
-}
-
-const connectedCommentArea = connect(mapStateToProps)(CommentArea)
+const connectedCommentArea = connect()(CommentArea)
 export { connectedCommentArea as CommentArea }
