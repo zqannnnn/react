@@ -28,7 +28,7 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
     return (
       <Item key={ReducedItem.to} onClick={onLinkClick}>
         <Link to={ReducedItem.to} onClick={ReducedItem.onClick}>
-          {i18n.t(ReducedItem.defaultMessage)}
+          {ReducedItem.defaultMessage}
         </Link>
       </Item>
     )
@@ -37,22 +37,22 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
     this.renderItem({
       to: '/transactions/my',
       id: 'navbar.myTransactions',
-      defaultMessage: 'My Transactions'
+      defaultMessage: i18n.t('My Transactions')
     }),
     this.renderItem({
       to: '/profile',
       id: 'navbar.myProfile',
-      defaultMessage: 'My Profile'
+      defaultMessage: i18n.t('My Profile')
     }),
     this.renderItem({
       to: '/inventory',
       id: 'navbar.myInventory',
-      defaultMessage: 'My inventory'
+      defaultMessage: i18n.t('My Inventory')
     }),
     this.renderItem({
       to: '/login',
       id: 'navbar.logout',
-      defaultMessage: 'Logout',
+      defaultMessage: i18n.t('Logout'),
       onClick: this.props.logout
     })
   ]
@@ -87,7 +87,7 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
               {this.renderItem({
                 to: '/order/new',
                 id: 'navbar.allOrder',
-                defaultMessage: 'Add Order'
+                defaultMessage: i18n.t('Add Order')
               })}
 
               {authInfo &&
@@ -95,7 +95,7 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
                 this.renderItem({
                   to: '/admin',
                   id: 'navbar.adminList',
-                  defaultMessage: 'Admin'
+                  defaultMessage: i18n.t('Admin')
                 })}
 
               <Dropdown
@@ -103,7 +103,8 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
                 trigger={['click']}
               >
                 <a className="ant-menu-item" href="#">
-                  Personal center<Icon type="down" />
+                  {i18n.t("My Account")}
+                  <Icon type="down" />
                 </a>
               </Dropdown>
             </Menu>
@@ -120,13 +121,13 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
               {this.renderItem({
                 to: '/',
                 id: 'navbar.Home',
-                defaultMessage: 'Home'
+                defaultMessage: i18n.t('Home')
               })}
 
               {this.renderItem({
                 to: '/order/new',
                 id: 'navbar.allOrder',
-                defaultMessage: 'Add Order'
+                defaultMessage: i18n.t('Add Order')
               })}
 
               {authInfo &&
@@ -134,9 +135,9 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
                 this.renderItem({
                   to: '/admin',
                   id: 'navbar.adminList',
-                  defaultMessage: 'Admin'
+                  defaultMessage: i18n.t('Admin')
                 })}
-              <SubMenu title={<span>Personal center</span>}>
+              <SubMenu title={<span>{i18n.t("My Account")}</span>}>
                 {this.subMenu}
               </SubMenu>
             </Menu>
@@ -170,12 +171,12 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
               {this.renderItem({
                 to: '/login',
                 id: 'navbar.login',
-                defaultMessage: 'Login'
+                defaultMessage: i18n.t('Login')
               })}
               {this.renderItem({
                 to: '/register',
                 id: 'navbar.signup',
-                defaultMessage: 'Sign Up'
+                defaultMessage: i18n.t('Sign Up')
               })}
             </Menu>
           </>
@@ -187,18 +188,18 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
               {this.renderItem({
                 to: '/',
                 id: 'navbar.Home',
-                defaultMessage: 'Home'
+                defaultMessage: i18n.t('Home')
               })}
 
               {this.renderItem({
                 to: '/login',
                 id: 'navbar.login',
-                defaultMessage: 'Login'
+                defaultMessage: i18n.t('Login')
               })}
               {this.renderItem({
                 to: '/register',
                 id: 'navbar.signup',
-                defaultMessage: 'Sign Up'
+                defaultMessage: i18n.t('Sign Up')
               })}
             </Menu>
           </>

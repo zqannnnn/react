@@ -165,7 +165,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 17, offset: 5 }}
                 >
-                  <label className="details-nav">{i18n.t('goods information')}:</label>
+                  <label className="subtitle">{i18n.t('Goods Information')}:</label>
                 </Col>
               </Row>
               <Row>
