@@ -13,6 +13,7 @@ interface ItemProps {
 interface ItemState {
     value: string
     messages: StringKeyHash
+    msgs: StringKeyHash[]
 }
 class UserItem extends React.Component<ItemProps, ItemState> {
     private chatBottom: React.RefObject<HTMLDivElement>;
@@ -21,6 +22,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         this.state = {
             value: '',
             messages: {},
+            msgs: []
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -28,6 +30,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         this.chatBottom = React.createRef();
     }    
     renderMsgs(props: any) {
+        //console.log('renderMsgs !!!!!!')
         if (props.messages !== undefined) {
             let relatedMsgs:StringKeyHash = {}
             let messages = this.state.messages
@@ -47,6 +50,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
             }        
             msgsTimes.sort()
             const len = msgsTimes.length
+            let msgs: StringKeyHash[] = []
             let orderededMessages:StringKeyHash = {}
             for (let i = 0; i < len; i++) {
                 let createdAt = msgsTimes[i]
@@ -54,11 +58,14 @@ class UserItem extends React.Component<ItemProps, ItemState> {
                     if (messages.hasOwnProperty(k)) {
                         if ( messages[k].createdAt == createdAt ) {
                             orderededMessages[k] = messages[k]
+                            msgs.push(messages[k])
                         }
                     }
                 }        
             }
             this.setState({ messages: orderededMessages })
+            this.setState({ msgs: msgs })
+            //console.log(msgs)
             if ( isNewMessage ) {
                 //update all messages from user as read
                 const data = { userId: this.props.userKey}
@@ -109,20 +116,21 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     render() {
         const { TextArea } = Input
         const FormItem = Form.Item
+        const that = this
         return (
             <div className='chat-container'>
                 <div className='chat-log'>
                     {
-                        Object.keys(this.state.messages).map((key, index) => {
-                            if ( (this.state.messages[key].from == this.props.userKey) || (this.state.messages[key].to == this.props.userKey) ) {
-                                let cssClass = (this.state.messages[key].from == this.props.userKey) ? 'incoming' : 'outcoming'
+                        this.state.msgs.map(function(msg, index){
+                            if ( (msg.from == that.props.userKey) || (msg.to == that.props.userKey) ) {
+                                let cssClass = (msg.from == that.props.userKey) ? 'incoming' : 'outcoming'
                                 return (
-                                    <p key={key} className={cssClass} >
-                                        {this.state.messages[key].msg}
+                                    <p key={msg.id} className={cssClass} >
+                                        {msg.msg}
                                     </p>
                                 )
                             }
-                        })
+                        })            
                     }
                     <div ref={this.chatBottom}></div>
                 </div>

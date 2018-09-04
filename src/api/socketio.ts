@@ -99,6 +99,9 @@ const startSocket = async (server: any) => {
                             lt: createdAt
                         }                        
                     },
+                    order: [
+                        ['created_at', 'DESC'],
+                    ],                    
                     limit: 20
                 }).then(msgs => {
                     msgs.forEach(function (msg, index) {
