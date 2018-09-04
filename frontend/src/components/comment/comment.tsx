@@ -187,7 +187,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
                     type="enter"
                     style={{ color: 'rgba(0,0,0,.25)' }}
                     onClick={this.submitReply}
-                    className="icon-click"
+                    className="cursor-pointer"
                   />
                 }
                 prefix={
@@ -257,7 +257,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
                     type="enter"
                     style={{ color: 'rgba(0,0,0,.25)' }}
                     onClick={this.submitReply}
-                    className="icon-click"
+                    className="cursor-pointer"
                   />
                 }
                 prefix={

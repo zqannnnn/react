@@ -122,7 +122,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
                 className="control-btn click"
                 onClick={() => this.viewAllComments()}
               >
-                {i18n.t('view All Comments')}
+                {i18n.t('view all comments')}
               </span>
               {commentLoading && <Spin />}
             </div>
@@ -173,7 +173,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
                 type="enter"
                 style={{ color: 'rgba(0,0,0,.25)' }}
                 onClick={this.submitComment}
-                className="icon-click"
+                className="cursor-pointer"
               />
             }
             prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}

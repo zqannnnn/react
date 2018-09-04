@@ -59,17 +59,17 @@ class Filter extends React.Component<ItemProps, ItemState> {
   render() {
     const { currency } = this.props
     return (
-      <div className="filter margin-bottom">
+      <div className="filter">
         <Row>
           <Select
             defaultValue={i18n.t('New to old')}
             onChange={this.handleSelectSort}
-            className="sorting-left margin-bottom filter--select"
+            className="sorting-left margin-bottom select"
           >
             <Option value="new">{i18n.t('New to old')}</Option>
             <Option value="old">{i18n.t('Old to new')}</Option>
           </Select>
-          <div className="filter--checkbox">
+          <div className="checkbox-wr">
             <Checkbox.Group
               onChange={this.handleChangeType}
               className="margin-bottom"
@@ -88,7 +88,7 @@ class Filter extends React.Component<ItemProps, ItemState> {
             <Select
               value={currency.currentCurrency}
               onChange={this.handleSelectCurrency}
-              className="filter--select"
+              className="select"
             >
               {currency.items
                 ? currency.items.map((item, index) => (

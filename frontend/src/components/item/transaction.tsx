@@ -129,7 +129,6 @@ class Item extends React.Component<ItemProps> {
           md={10}
           lg={9}
           className="block transation"
-          style={{ marginBottom: 10, paddingRight: 10, minHeight: 100 }}
         >
           <div className="boxmain">
             <div className="left-icon">
@@ -165,7 +164,7 @@ class Item extends React.Component<ItemProps> {
                     price={transaction.price}
                     currencyCode={transaction.currencyCode}
                   />
-                )}
+                )}/kg
               {authInfo &&
               authInfo.isAdmin &&
               transaction.status === transactionConsts.STATUS_TAKING ? (
