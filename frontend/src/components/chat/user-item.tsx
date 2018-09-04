@@ -11,23 +11,29 @@ interface ItemProps {
     ownerUserKey: string
 }
 interface ItemState {
+    firstTimeScroll: boolean
     value: string
     messages: StringKeyHash
     msgs: StringKeyHash[]
+    scrollElementId: string
 }
 class UserItem extends React.Component<ItemProps, ItemState> {
     private chatBottom: React.RefObject<HTMLDivElement>;
+    private msgsList: React.RefObject<HTMLDivElement>;
     constructor(props: ItemProps) {
         super(props)
         this.state = {
+            firstTimeScroll: true,
             value: '',
             messages: {},
-            msgs: []
+            msgs: [],
+            scrollElementId: ''
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleKeyUp = this.handleKeyUp.bind(this)
         this.chatBottom = React.createRef();
+        this.msgsList = React.createRef();
     }    
     renderMsgs(props: any) {
         //console.log('renderMsgs !!!!!!')
@@ -38,7 +44,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
             Object.keys(props.messages).map((key, index) => {
                 if ( messages[key] == undefined ) {
                     relatedMsgs[key] = props.messages[key]
-                    if (!isNewMessage && props.messages[key].to == props.userKey ) isNewMessage = props.messages[key].isNew                    
+                    if (!isNewMessage && props.messages[key].to == props.userKey ) isNewMessage = props.messages[key].isNew                
                 }
             })       
             messages = Object.assign(messages, relatedMsgs)
@@ -75,11 +81,30 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     }
     scrollBottom() {
         const that = this    
-        //if we do scroll without timeout, then on opening user chat item it jumping
-        //and make not nice user experience
-        setTimeout(() => { 
-            if ( that.chatBottom.current != null ) that.chatBottom.current.scrollIntoView({ behavior: "smooth" })
-        }, 300)
+        let isNewMessage = false //this.state.firstTimeScroll
+        this.state.msgs.map(function(msg, index){
+            if ( (msg.from == that.props.userKey) || (msg.to == that.props.userKey) ) {
+                if (msg.isNew) isNewMessage = true
+            }
+        })            
+        if (isNewMessage) {
+            //if we do scroll without timeout, then on opening user chat item it jumping
+            //and make not nice user experience            
+            //this.setState({ firstTimeScroll: false });
+            //console.log(typeof that.chatBottom.current)
+            //console.log(that.chatBottom.current)
+            setTimeout(() => { 
+                if ( that.chatBottom.current != null ) that.chatBottom.current.scrollIntoView({ behavior: "smooth" })
+            }, 300)
+        } else {
+            if (this.msgsList.current != null) this.msgsList.current.scrollTop = 20  
+            if (this.refs[this.state.scrollElementId] != undefined) {
+                //this.refs[this.state.scrollElementId].scrollIntoView({block: 'end', behavior: 'smooth'});          
+                //console.log(typeof this.refs[this.state.scrollElementId])
+                //console.log(this.refs[this.state.scrollElementId])
+
+            }
+        }
     }
     componentDidMount() {
         this.renderMsgs(this.props)
@@ -113,19 +138,26 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         }
         this.setState({value: '' })
     }
+    listenScrollEvent(e:any) {
+        if (e.target.scrollTop == 0) {
+            this.setState({scrollElementId: this.state.msgs[0].id })            
+            const data = { from: this.props.ownerUserKey, to: this.props.userKey, createdAt: this.state.msgs[0].createdAt }
+            this.props.socket.emit('get-previous-messages', data)                    
+        }
+    }    
     render() {
         const { TextArea } = Input
         const FormItem = Form.Item
         const that = this
         return (
             <div className='chat-container'>
-                <div className='chat-log'>
+                <div className='chat-log' onScroll={this.listenScrollEvent.bind(this)} ref={this.msgsList} >
                     {
                         this.state.msgs.map(function(msg, index){
                             if ( (msg.from == that.props.userKey) || (msg.to == that.props.userKey) ) {
                                 let cssClass = (msg.from == that.props.userKey) ? 'incoming' : 'outcoming'
                                 return (
-                                    <p key={msg.id} className={cssClass} >
+                                    <p ref={msg.id} key={msg.id} className={cssClass} >
                                         {msg.msg}
                                     </p>
                                 )

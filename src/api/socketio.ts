@@ -88,7 +88,11 @@ const startSocket = async (server: any) => {
             }
             if (from != '') {
                 let createdAt = data.createdAt
-                if (createdAt === undefined) createdAt = Date.now()
+                let limit = 5
+                if (createdAt === undefined) {
+                    createdAt = Date.now()
+                    limit = 20
+                }
                 const to = data.to
                 Message.findAll({
                     where: { 
@@ -102,7 +106,7 @@ const startSocket = async (server: any) => {
                     order: [
                         ['created_at', 'DESC'],
                     ],                    
-                    limit: 20
+                    limit: limit
                 }).then(msgs => {
                     msgs.forEach(function (msg, index) {
                         const privateMsg = { id: msg.id, from: msg.from, to: msg.to, msg: msg.message, createdAt: msg.createdAt, isNew: msg.isNew }
