@@ -2,7 +2,7 @@
 import * as React from 'react'
 import i18n from 'i18next'
 //import { connect, Dispatch } from 'react-redux'
-import * as socketIOClient from 'socket.io-client' //1532692062 chat
+import * as socketIOClient from 'socket.io-client'
 import { AuthState } from '../../reducers'
 import { UserItem } from './user-item'
 import { PanelHead } from './panel-header'
@@ -28,6 +28,7 @@ interface ItemState {
     opened: boolean
     activePanel: string
     connected: boolean
+    authInfo: any
 }
 class Chat extends React.Component<ItemProps, ItemState> {
 	constructor(props: ItemProps) {
@@ -43,7 +44,8 @@ class Chat extends React.Component<ItemProps, ItemState> {
             newMsg: false,
             opened: false,
             activePanel: '',
-            connected: false
+            connected: false,
+            authInfo: undefined
         }
         this.onUserItemClose = this.onUserItemClose.bind(this)
         this.onOpenChat = this.onOpenChat.bind(this)
@@ -74,6 +76,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
     }    
     connect() {
         const that = this;
+        //TODO change this!!!!!
 		const socket = socketIOClient("http://localhost:3000")
 		socket.on('connect', function () {
             let { auth } = that.props
@@ -81,7 +84,8 @@ class Chat extends React.Component<ItemProps, ItemState> {
             that.setState({socket: socket, connected: true})
 			if (authInfo !== undefined) socket.emit('start-chat-session', authInfo)
 			socket.on('session-started', (data: any) => {
-                socket.emit('get-unread-messages', authInfo)                
+                that.setState({authInfo: authInfo})
+                socket.emit('get-unread-messages', authInfo)   
             })
             socket.on("private", function(msg: any) {    
                 that.onPrivateMsg(msg)
@@ -211,7 +215,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
                                                 if (this.state.users[userKey]['newMsg']) cssClass = 'new-msg'
                                                 return (
                                                     <Panel className={cssClass} header={<PanelHead onUserItemClose={this.onUserItemClose} user={this.state.users[userKey]} userKey={userKey} text='' showClose={true} />} key={userKey}> 
-                                                        <UserItem messages={this.state.users[userKey]['messages']} userKey={userKey} socket={this.state.socket} /> 
+                                                        <UserItem messages={this.state.users[userKey]['messages']} userKey={userKey} socket={this.state.socket} ownerUserKey={this.state.authInfo.id} /> 
                                                     </Panel>
                                                 )    
                                             }

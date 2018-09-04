@@ -8,6 +8,7 @@ interface ItemProps {
     messages: StringKeyHash
     userKey: string
     socket: any
+    ownerUserKey: string
 }
 interface ItemState {
     value: string
@@ -76,8 +77,13 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     componentDidMount() {
         this.renderMsgs(this.props)
         this.scrollBottom()
+        const data = { from: this.props.ownerUserKey, to: this.props.userKey }
+        this.props.socket.emit('get-previous-messages', data)                
     }
     componentDidUpdate() {
+        //console.log('componentDidUpdate')
+        //console.log(this.state.messages)
+        ///this.state.messages
         this.scrollBottom()
     }
     componentWillReceiveProps(nextProps: any) {

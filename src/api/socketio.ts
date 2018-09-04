@@ -1,4 +1,5 @@
-import * as socket from 'socket.io' //1532692062 chat
+//1532692062 chat
+import * as socket from 'socket.io' 
 import { AuthInfo } from '../../frontend/src/actions'
 import { StringKeyHash, HashOfStringKeyHash } from '../interfaces'
 import { Message, User } from '../models/'
@@ -78,6 +79,34 @@ const startSocket = async (server: any) => {
                         })
                     })
                 })    
+            }
+        });
+        socket.on("get-previous-messages", (data) => {   
+            let from:string = ''
+            for (var key in users) {
+                if ( users[key]['socket'] == socket.id ) from = key
+            }
+            if (from != '') {
+                let createdAt = data.createdAt
+                if (createdAt === undefined) createdAt = Date.now()
+                const to = data.to
+                Message.findAll({
+                    where: { 
+                        from: [from, to], 
+                        to: [from, to], 
+                        isNew: false,
+                        created_at: {
+                            lt: createdAt
+                        }                        
+                    },
+                    limit: 20
+                }).then(msgs => {
+                    msgs.forEach(function (msg, index) {
+                        const privateMsg = { id: msg.id, from: msg.from, to: msg.to, msg: msg.message, createdAt: msg.createdAt, isNew: msg.isNew }
+                        io.to(`${users[from]['socket']}`).emit('private', privateMsg );
+    
+                    });
+                })
             }
         });
 		socket.on('start-chat-session', (authInfo: AuthInfo) => {
