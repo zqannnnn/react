@@ -229,7 +229,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
                                                 if (this.state.users[userKey]['newMsg']) cssClass = 'new-msg'
                                                 return (
                                                     <Panel className={cssClass} header={<PanelHead onUserItemClose={this.onUserItemClose} user={this.state.users[userKey]} userKey={userKey} text='' showClose={true} />} key={userKey}> 
-                                                        <UserItem messages={this.state.users[userKey]['messages']} userKey={userKey} socket={this.state.socket} ownerUserKey={this.state.authInfo.id} /> 
+                                                        <UserItem messages={this.state.users[userKey]['messages']} userKey={userKey} socket={this.state.socket} ownerUserKey={this.state.userKey} /> 
                                                     </Panel>
                                                 )    
                                             }
