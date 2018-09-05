@@ -39,7 +39,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
             Object.keys(props.messages).map((key, index) => {
                 if ( messages[key] == undefined ) {
                     relatedMsgs[key] = props.messages[key]
-                    if (!isNewMessage && props.messages[key].to == props.userKey ) isNewMessage = props.messages[key].isNew                
+                    if (!isNewMessage && props.messages[key].from == props.userKey ) isNewMessage = props.messages[key].isNew                
                 }
             })       
             messages = Object.assign(messages, relatedMsgs)

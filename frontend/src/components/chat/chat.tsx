@@ -197,9 +197,6 @@ class Chat extends React.Component<ItemProps, ItemState> {
             this.setState({activePanel: panel})
             users[panel]['panelStatus'] = 'expended'
             users[panel]['newMsg'] = false
-            //update all messages from user as read
-            const data = { userId: users[panel].id }
-            if (this.state.socket !== undefined) this.state.socket.emit("set-messages-as-old", data)
         } else {
             this.setState({activePanel: ''})
         }
