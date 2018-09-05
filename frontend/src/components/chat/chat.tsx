@@ -32,15 +32,19 @@ interface ItemState {
 }
 class Chat extends React.Component<ItemProps, ItemState> {
 	constructor(props: ItemProps) {
-		super(props)
+        super(props)
+        //TODO
 		//this.state = {
 		//  endpoint: "http://localhost:3000" // this is where we are connecting to with sockets
         //}
+        let userId = ''
+        if (this.props.auth != undefined && this.props.auth.authInfo != undefined && this.props.auth.authInfo.id != undefined) userId = this.props.auth.authInfo.id
+        //console.log(this.props.auth.authInfo.id)
         this.state = {
             users: {},
             socket: undefined,
             messages: {},
-            userKey: '',
+            userKey: userId,
             newMsg: false,
             opened: false,
             activePanel: '',
@@ -147,12 +151,15 @@ class Chat extends React.Component<ItemProps, ItemState> {
         this.setState({users: users})
     }    
 	onPrivateMsg(msg: any) {
+        console.log('onPrivateMsg')
+        console.log(this.state.userKey)
         let messages = this.state.messages
         messages[msg.id] = msg
         this.setState({ messages: messages })
         let foundUser = false
         for (let userKey in this.state.users) {  
             if ( (userKey != this.state.userKey) && ((msg.from == userKey) || (msg.to == userKey)) ) {
+                console.log(msg.to)
                 foundUser = true
                 this.updateUserMsgs(userKey)
             }

@@ -233,10 +233,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                     sm={{ span: 20, offset: 1 }}
                 >
                     <h2 className="header-center">{i18n.t('User Profile')}</h2>
-                    {!userSelf && <ChatButton user={user} />}
-                    {
-                        //TODO: check chating user with himself
-                    }
+                    { !userSelf && <ChatButton user={user} /> }
                     <div className="subtitle">
                         {i18n.t('Personal Information')}
                         {userSelf && <span className='edit'>
