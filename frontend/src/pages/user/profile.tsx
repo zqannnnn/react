@@ -14,6 +14,7 @@ import { Row, Col, Select, Button } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import i18n from 'i18next'
 import { UserForm, UserValuesProps, CompanyForm, CompanyValuesProps } from '../../components/form'
+import { ChatButton } from '../../components/chat'
 import { Record, EditableTable } from '../../components/consignee-editor/'
 import './profile.scss'
 
@@ -231,7 +232,8 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
         xs={{ span: 20, offset: 2 }}
         sm={{ span: 20, offset: 1 }}
         >
-          <h2 className="header-center">{i18n.t('User Profile')}</h2>
+          <h2 className="header-center">{i18n.t('User Profile')}</h2>          
+          {!userSelf && <ChatButton user={user} />}          
           <div className="subtitle">
             {i18n.t('Personal Information')}
             {userSelf && <span className= 'edit'>
