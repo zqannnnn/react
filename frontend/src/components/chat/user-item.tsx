@@ -86,18 +86,21 @@ class UserItem extends React.Component<ItemProps, ItemState> {
             if ( (msg.from == that.props.userKey) || (msg.to == that.props.userKey) ) {
                 if (msg.isNew) isNewMessage = true
             }
-        })            
+        })     
+        //console.log(this.state.scrollElementId)       
+        setTimeout(() => { 
+            console.log('setTimeout')       
+            if ( that.chatBottom.current != null ) that.chatBottom.current.scrollIntoView({ behavior: "smooth" })
+            
+        }, 300)
         if (isNewMessage) {
             //if we do scroll without timeout, then on opening user chat item it jumping
             //and make not nice user experience            
             //this.setState({ firstTimeScroll: false });
             //console.log(typeof that.chatBottom.current)
             //console.log(that.chatBottom.current)
-            setTimeout(() => { 
-                if ( that.chatBottom.current != null ) that.chatBottom.current.scrollIntoView({ behavior: "smooth" })
-            }, 300)
         } else {
-            if (this.msgsList.current != null) this.msgsList.current.scrollTop = 20  
+            //if (this.msgsList.current != null) this.msgsList.current.scrollTop = 20  
             if (this.refs[this.state.scrollElementId] != undefined) {
                 //this.refs[this.state.scrollElementId].scrollIntoView({block: 'end', behavior: 'smooth'});          
                 //console.log(typeof this.refs[this.state.scrollElementId])
