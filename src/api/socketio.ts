@@ -72,12 +72,14 @@ const startSocket = async (server: any) => {
                     ],
                     where: { to: to, isNew: true }
                 }).then(msgs => {
+                    let privateMsgs: any[] = []
                     msgs.forEach(function (msg, index) {
                         User.findOne({ where: { id: msg.from } }).then(user => {
                             const privateMsg = { id: msg.id, from: msg.from, to: to, msg: msg.message, createdAt: msg.createdAt, isNew: msg.isNew }
-                            io.to(`${users[to]['socket']}`).emit('private', privateMsg );
+                            privateMsgs.push(privateMsg)
                         })
                     })
+                    io.to(`${users[to]['socket']}`).emit('private-batch', privateMsgs ) 
                 })    
             }
         });
@@ -108,11 +110,12 @@ const startSocket = async (server: any) => {
                     ],                    
                     limit: limit
                 }).then(msgs => {
+                    let privateMsgs: any[] = []
                     msgs.forEach(function (msg, index) {
                         const privateMsg = { id: msg.id, from: msg.from, to: msg.to, msg: msg.message, createdAt: msg.createdAt, isNew: msg.isNew }
-                        io.to(`${users[from]['socket']}`).emit('private', privateMsg );
-    
+                        privateMsgs.push(privateMsg)
                     });
+                    io.to(`${users[from]['socket']}`).emit('private-batch', privateMsgs )
                 })
             }
         });

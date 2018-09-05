@@ -90,6 +90,9 @@ class Chat extends React.Component<ItemProps, ItemState> {
             socket.on("private", function(msg: any) {    
                 that.onPrivateMsg(msg)
             })
+            socket.on("private-batch", function(msgs: any[]) {    
+                that.onPrivateMsgsBatch(msgs)
+            })
             socket.on("get-user", function(data: any) {    
                 that.addUserChatItem(data.user, data.open)
             })
@@ -99,7 +102,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
                 data.messages.forEach(function (messageId: string, index: number) {
                     for (let msgKey in messages) {  
                         if ( messages[msgKey].id == messageId ) {
-                            messages[msgKey].isNew = false
+                            //messages[msgKey].isNew = false
                             usersIds.push(messages[msgKey].from)
                         }
                     }
@@ -155,6 +158,22 @@ class Chat extends React.Component<ItemProps, ItemState> {
             }
         }
         if (!foundUser) this.openChat(msg.from, false)
+    }
+	onPrivateMsgsBatch(msgs: any[]) {
+        if (msgs.length == 0) return
+        let messages = this.state.messages
+        msgs.map(function(msg, index){
+            messages[msg.id] = msg
+        })     
+        this.setState({ messages: messages })
+        let foundUser = false
+        for (let userKey in this.state.users) {  
+            if ( (userKey != this.state.userKey) && ((msgs[0].from == userKey) || (msgs[0].to == userKey)) ) {
+                foundUser = true
+                this.updateUserMsgs(userKey)
+            }
+        }
+        if (!foundUser && msgs.length > 0) this.openChat(msgs[0].from, false)
     }
 	onUserItemClose(userKey: any) {
         let users = this.state.users

@@ -11,11 +11,9 @@ interface ItemProps {
     ownerUserKey: string
 }
 interface ItemState {
-    firstTimeScroll: boolean
     value: string
     messages: StringKeyHash
     msgs: StringKeyHash[]
-    scrollElementId: string
 }
 class UserItem extends React.Component<ItemProps, ItemState> {
     private chatBottom: React.RefObject<HTMLDivElement>;
@@ -23,11 +21,9 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     constructor(props: ItemProps) {
         super(props)
         this.state = {
-            firstTimeScroll: true,
             value: '',
             messages: {},
             msgs: [],
-            scrollElementId: ''
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -36,7 +32,6 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         this.msgsList = React.createRef();
     }    
     renderMsgs(props: any) {
-        //console.log('renderMsgs !!!!!!')
         if (props.messages !== undefined) {
             let relatedMsgs:StringKeyHash = {}
             let messages = this.state.messages
@@ -71,7 +66,6 @@ class UserItem extends React.Component<ItemProps, ItemState> {
             }
             this.setState({ messages: orderededMessages })
             this.setState({ msgs: msgs })
-            //console.log(msgs)
             if ( isNewMessage ) {
                 //update all messages from user as read
                 const data = { userId: this.props.userKey}
@@ -81,45 +75,40 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     }
     scrollBottom() {
         const that = this    
-        let isNewMessage = false //this.state.firstTimeScroll
-        this.state.msgs.map(function(msg, index){
-            if ( (msg.from == that.props.userKey) || (msg.to == that.props.userKey) ) {
-                if (msg.isNew) isNewMessage = true
-            }
-        })     
-        //console.log(this.state.scrollElementId)       
         setTimeout(() => { 
-            console.log('setTimeout')       
-            if ( that.chatBottom.current != null ) that.chatBottom.current.scrollIntoView({ behavior: "smooth" })
-            
+            if ( that.chatBottom.current != null ) that.chatBottom.current.scrollIntoView({ behavior: "smooth" })            
         }, 300)
-        if (isNewMessage) {
-            //if we do scroll without timeout, then on opening user chat item it jumping
-            //and make not nice user experience            
-            //this.setState({ firstTimeScroll: false });
-            //console.log(typeof that.chatBottom.current)
-            //console.log(that.chatBottom.current)
-        } else {
-            //if (this.msgsList.current != null) this.msgsList.current.scrollTop = 20  
-            if (this.refs[this.state.scrollElementId] != undefined) {
-                //this.refs[this.state.scrollElementId].scrollIntoView({block: 'end', behavior: 'smooth'});          
-                //console.log(typeof this.refs[this.state.scrollElementId])
-                //console.log(this.refs[this.state.scrollElementId])
-
-            }
-        }
     }
     componentDidMount() {
         this.renderMsgs(this.props)
-        this.scrollBottom()
         const data = { from: this.props.ownerUserKey, to: this.props.userKey }
         this.props.socket.emit('get-previous-messages', data)                
     }
-    componentDidUpdate() {
-        //console.log('componentDidUpdate')
-        //console.log(this.state.messages)
-        ///this.state.messages
-        this.scrollBottom()
+    componentDidUpdate(prevProps: any, prevState: any) {
+        if (Object.keys(prevProps.messages).length == 0 && Object.keys(this.props.messages).length > 0)  {
+            this.scrollBottom()
+        } else if (Object.keys(prevProps.messages).length != Object.keys(this.props.messages).length) {
+            let scrollBottom = false
+            for (let msgId in this.props.messages) {  
+                let found = false
+                for (let prevMsgId in prevProps.messages) {  
+                    if (msgId == prevMsgId) found = true
+                }     
+                if (!found && this.props.messages[msgId].isNew) scrollBottom = true
+            }
+            if (scrollBottom) {
+                this.scrollBottom()
+            } else {
+                if (this.msgsList.current != null && this.msgsList.current.scrollTop == 0) this.msgsList.current.scrollTop = 20  
+            }
+        } else {
+            if (this.state.msgs.length > 0 && this.state.msgs[this.state.msgs.length-1].isNew) {
+                this.scrollBottom()
+                let msgs = this.state.msgs
+                msgs[msgs.length-1].isNew = false
+                this.setState({ msgs: msgs })
+            }
+        }
     }
     componentWillReceiveProps(nextProps: any) {
         this.renderMsgs(nextProps)
@@ -143,7 +132,6 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     }
     listenScrollEvent(e:any) {
         if (e.target.scrollTop == 0) {
-            this.setState({scrollElementId: this.state.msgs[0].id })            
             const data = { from: this.props.ownerUserKey, to: this.props.userKey, createdAt: this.state.msgs[0].createdAt }
             this.props.socket.emit('get-previous-messages', data)                    
         }
