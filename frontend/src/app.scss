@@ -130,30 +130,32 @@ body {
   min-height: 30px;
 }
 
+
 .flex {
   display: flex;
 }
 .float-right{
   float: right;
 }
-
 .space-between {
   display: flex;
   justify-content: space-between;
 }
-
 .cursor-pointer{
   cursor: pointer;
 }
 .font-bold {
   font-weight: bold;
 }
-
 .relative {
   position: relative;
 }
 .main-blue {
   color: #007bff;
+}
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 
@@ -339,6 +341,4 @@ body {
   top: 0px;
   z-index: 1;
 }
-.clear-float {
-  overflow: hidden;
-}
+
