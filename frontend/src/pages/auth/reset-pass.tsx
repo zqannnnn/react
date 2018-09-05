@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Link, Redirect } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import { ResetPassForm } from '../../components/form'
 import { authActionCreators } from '../../actions'
