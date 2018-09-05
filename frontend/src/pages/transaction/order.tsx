@@ -185,7 +185,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
               sm={{ span: 20, offset: 2 }}
               md={{ span: 9, offset: 2 }}
               lg={{ span: 9, offset: 2 }}
-              className="edits-input"
+              className="field"
             >
               <label>{i18n.t('Category')}</label>
               <Select
@@ -207,11 +207,10 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
       case 1:
         return (
           <>
-            <div className="edits-input">
               <Row>
-                <Col span={20} offset={2} className="edits-input">
+                <Col span={20} offset={2} className="field">
                   <div className={submitted && !title ? ' has-error' : ''}>
-                    <label className="edits-input">{i18n.t('Title')}</label>
+                    <label>{i18n.t('Title')}</label>
                     <Input
                       placeholder=""
                       type="text"
@@ -230,7 +229,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                 </Col>
               </Row>
               <Row>
-                <Col span={20} offset={2} className="edits-input">
+                <Col span={20} offset={2} className="field">
                   <label>{i18n.t('Description')}</label>
                   <TextArea
                     placeholder=""
@@ -247,7 +246,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Bone')}</label>
                   {currentCategory &&
@@ -258,7 +257,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Storage')}</label>
                   {currentCategory &&
@@ -274,7 +273,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Grade')}</label>
                   {currentCategory &&
@@ -288,7 +287,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Slaughter Specification')}</label>
                   {currentCategory &&
@@ -304,7 +303,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Marble Score')}</label>
                   {currentCategory &&
@@ -321,7 +320,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                       sm={{ span: 20, offset: 2 }}
                       md={{ span: 9, offset: 2 }}
                       lg={{ span: 9, offset: 2 }}
-                      className="edits-input"
+                      className="field"
                     >
                       <label>{i18n.t('Breed')}</label>
                       {this.renderSelect(
@@ -339,7 +338,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                       sm={{ span: 20, offset: 2 }}
                       md={{ span: 9, offset: 2 }}
                       lg={{ span: 9, offset: 2 }}
-                      className="edits-input"
+                      className="field"
                     >
                       <label>{i18n.t('Fed')}</label>
                       {this.renderSelect(currentCategory.details['Fed'], 'fed')}
@@ -352,7 +351,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
+                    className="field"
                   >
                     <label>{i18n.t('Grain fed days')}</label>
                     <div className="flex">
@@ -375,7 +374,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Primal Cuts')}</label>
                   <Input
@@ -390,7 +389,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Trimmings')}</label>
                   <div className="flex">
@@ -412,7 +411,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Brand')}</label>
                   <Input
@@ -427,7 +426,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Factory Number')}</label>
                   <Input
@@ -444,7 +443,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Place Of Origin')}</label>
                   <Input
@@ -459,7 +458,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Delivery Term')}</label>
                   <Input
@@ -476,7 +475,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Quantity')}</label>
                   <div className="flex">
@@ -497,7 +496,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                   offset={2}
                 >
                   <label>{i18n.t('Price')}</label>
@@ -531,21 +530,19 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
                 </Col>
               </Row>
               <Row>
-                <Col sm={20} md={8} lg={8} offset={2} className="edits-input">
+                <Col sm={20} md={8} lg={8} offset={2} className="footer">
                   <Button
                     type="primary"
                     htmlType="submit"
-                    className="button-margin"
                   >
                     {i18n.t('Submit')}
                   </Button>
                   {processing && <Icon type="loading" />}
-                  <Button>
+                  <Button className="button-left">
                     <Link to="/">{i18n.t('Cancel')}</Link>
                   </Button>
                 </Col>
               </Row>
-            </div>
           </>
         )
       default:

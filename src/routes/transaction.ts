@@ -3,7 +3,7 @@ import * as i18n from 'i18next'
 import { consts } from '../config/static'
 import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
-import { Currency, Goods, Image, Transaction, User } from '../models/'
+import { Comment, Currency, Goods, Image, Transaction, User } from '../models/'
 const router = express.Router()
 
 router.use(authMiddleware)
@@ -38,7 +38,7 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   }
   if (pageSize && typeof page !== 'undefined') {
     pageOption.offset = (page - 1) * pageSize
-    pageOption.limit = (page - 1) * pageSize + pageSize
+    pageOption.limit = pageSize
   }
   if (typeof keyword !== 'undefined') {
     goodsOption.title = { $like: `%${keyword}%` }
@@ -170,7 +170,6 @@ router.get(
     }
   }
 )
-
 router.get(
   '/buy/:transactionId',
   async (req: IRequest, res: express.Response) => {
@@ -196,31 +195,172 @@ router.get(
   }
 )
 
-router.post(
-  '/comment/:transactionId',
-  async (req: IRequest, res: express.Response) => {
-    try {
-      if (!req.isAdmin) {
-        return res.status(500).send({ error: i18n.t('Permission denied.') })
-      }
-      const transaction = await Transaction.find({
-        where: {
-          id: req.params.transactionId
-        }
-      })
-      if (!transaction) {
-        return res
-          .status(500)
-          .send({ error: i18n.t('Transaction does not exist.') })
-      }
-      transaction.comment = req.body.comment
-      transaction.save()
-      return res.send({ success: true })
-    } catch (e) {
-      return res.status(500).send({ error: e.message })
-    }
+router.get('/list/comment', async (req: IRequest, res: express.Response) => {
+  const page = Number(req.query.page)
+  const pageSize = Number(req.query.pageSize)
+  const transactionId = String(req.query.transactionId)
+  const pageOption: {
+    offset?: number
+    limit?: number
+  } = {}
+  const orderOption: string[] = ['createdAt', 'DESC']
+  if (pageSize && typeof page !== 'undefined') {
+    pageOption.offset = (page - 1) * pageSize
+    pageOption.limit = pageSize
   }
-)
+  try {
+    const result = await Comment.findAndCount({
+      where: {
+        transactionId,
+        replyTo: null
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['firstName', 'lastName']
+        }
+      ],
+      ...pageOption,
+      order: [orderOption]
+    })
+    return res.send({ comments: result.rows, total: result.count })
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
+router.get('/list/reply', async (req: IRequest, res: express.Response) => {
+  const page = Number(req.query.page)
+  const pageSize = Number(req.query.pageSize)
+  const rootId = String(req.query.commentId)
+  const pageOption: {
+    offset?: number
+    limit?: number
+  } = {}
+  const orderOption: string[] = ['createdAt', 'DESC']
+  if (pageSize && typeof page !== 'undefined') {
+    pageOption.offset = (page - 1) * pageSize
+    pageOption.limit = pageSize
+  }
+  try {
+    const result = await Comment.findAndCount({
+      where: {
+        rootId
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['firstName', 'lastName']
+        }
+      ],
+      ...pageOption,
+      order: [orderOption]
+    })
+    const replys = result.rows.filter(comment => comment.id !== rootId)
+    return res.send({ replys, total: result.count })
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
+router.post('/comment', async (req: IRequest, res: express.Response) => {
+  try {
+    const comment = new Comment({
+      userId: req.userId,
+      ...req.body
+    })
+    await comment.save()
+    if (!comment.replyTo) {
+      comment.rootId = comment.id
+      await comment.save()
+    }
+    if (comment.replyTo) {
+      const rootComment = await Comment.findById(comment.rootId)
+      if (rootComment) {
+        if (rootComment.totalReply) {
+          rootComment.totalReply = rootComment.totalReply + 1
+        } else {
+          rootComment.totalReply = 1
+        }
+        await rootComment.save()
+      }
+    }
+
+    const page = Number(req.query.page)
+    const pageSize = Number(req.query.pageSize)
+    const transactionId = comment.transactionId
+    const pageOption: {
+      offset?: number
+      limit?: number
+    } = {}
+    if (pageSize && typeof page !== 'undefined') {
+      pageOption.offset = (page - 1) * pageSize + comment.totalReply
+      pageOption.limit = pageSize
+    }
+    const orderOption: string[] = ['createdAt', 'DESC']
+    const result = await Comment.findAndCount({
+      where: {
+        transactionId,
+        replyTo: null
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['firstName', 'lastName']
+        }
+      ],
+      ...pageOption,
+      order: [orderOption]
+    })
+
+    return res.send({ comments: result.rows, total: result.count })
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
+router.post('/reply', async (req: IRequest, res: express.Response) => {
+  try {
+    const comment = new Comment({
+      userId: req.userId,
+      ...req.body
+    })
+    await comment.save()
+    if (!comment.replyTo) {
+      comment.rootId = comment.id
+      await comment.save()
+    } else {
+      const rootComment = await Comment.findById(comment.rootId)
+      if (rootComment) {
+        if (rootComment.totalReply) {
+          rootComment.totalReply = rootComment.totalReply + 1
+        } else {
+          rootComment.totalReply = 1
+        }
+        await rootComment.save()
+      }
+    }
+    const orderOption: string[] = ['createdAt', 'DESC']
+    const result = await Comment.findAndCount({
+      where: {
+        rootId: comment.rootId,
+        totalReply: null
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['firstName', 'lastName']
+        }
+      ],
+      order: [orderOption]
+    })
+
+    return res.send({ comments: result.rows })
+  } catch (e) {
+    return res.status(500).send({ error: e.message })
+  }
+})
+
 router
   .route('/:transactionId')
   .get(async (req: express.Request, res: express.Response) => {

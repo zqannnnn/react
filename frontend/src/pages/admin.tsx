@@ -29,10 +29,7 @@ class AdminPage extends React.Component<AdminProps> {
     const { admin } = this.props
     return (
       <div className="page">
-        <div className="banner">
-          <div className="banner-bg" />
-          <div className="title">{i18n.t('Admin Page')}</div>
-        </div>
+        <h2 className="header-center">{i18n.t('Admin Page')}</h2>
         <Row>
           <Col
             xs={{ span: 22, offset: 1 }}

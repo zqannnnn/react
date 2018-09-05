@@ -97,7 +97,7 @@ class ConfirmPage extends React.Component<ConfirmProps> {
                   />
                 </div>
                 {processing && <Icon type="loading" />}
-                <div className="confirm-btn-right">
+                <div className="float-right">
                   <Icon
                     type="check"
                     style={{

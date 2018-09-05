@@ -1,20 +1,9 @@
 import * as React from 'react'
-import { connect, Dispatch } from 'react-redux'
-import { RootState, TransactionState } from '../../reducers'
-import { transactionActionCreators } from '../../actions'
 import { Input } from 'antd'
 import { history } from '../../helpers/history'
 const Searchfor = Input.Search
 
-interface ItemProps {
-  dispatch: Dispatch<RootState>
-}
-
-class Search extends React.Component<ItemProps> {
-  constructor(props: ItemProps) {
-    super(props)
-  }
-
+class Search extends React.Component {
   handleSearch = (keyword: string) => {
     history.replace(`/transactions?keyword=${keyword}`)
   }
@@ -32,5 +21,4 @@ class Search extends React.Component<ItemProps> {
   }
 }
 
-const connectedList = connect()(Search)
-export { connectedList as Search }
+export { Search }

@@ -26,20 +26,18 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
       values: {
         email: '',
         password: ''
-      },
-      submitted: false
+      }
     }
   }
 
   handleSubmit = (value: any) => {
-    this.setState({ submitted: true })
     this.props.dispatch(authActionCreators.login(value.email, value.password))
   }
 
   render() {
     const { processing, loggedIn } = this.props
     const { email, password } = this.state.values
-    const Reasubmitted = this.state.submitted
+
     return loggedIn ? (
       <Redirect
         to={{
@@ -50,7 +48,7 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
         }}
       />
     ) : (
-      <Row className="page margin-login">
+      <Row className="page -page">
         <div className="header">{i18n.t('Login')}</div>
         <Col
           xs={{ span: 22, offset: 1 }}

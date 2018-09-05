@@ -11,7 +11,8 @@ import {
   Transaction,
   User,
   Message,
-  Consignee
+  Consignee,
+  Comment
 } from './models/'
 
 const sequelize = new Sequelize(config)
@@ -23,7 +24,8 @@ sequelize.addModels([
   Image,
   Currency,
   Message,
-  Consignee
+  Consignee,
+  Comment
 ])
 
 const initDatabase = async () => {

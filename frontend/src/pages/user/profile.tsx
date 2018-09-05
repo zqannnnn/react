@@ -226,7 +226,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
       imagePaths = []
     }
     return (
-      <Row type="flex" justify="space-around" align="middle" className="profile-page">
+      <Row type="flex" justify="space-around" align="middle" className="profile-page page">
         <Col 
         xs={{ span: 20, offset: 2 }}
         sm={{ span: 20, offset: 1 }}

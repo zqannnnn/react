@@ -40,12 +40,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
     transactionId &&
       this.props.dispatch(transactionActionCreators.getById(transactionId))
   }
-  componentWillReceiveProps(nextProps: ViewProps) {
-    const { transaction } = nextProps
-    if (transaction && transaction.comment) {
-      this.setState({ comment: transaction.comment })
-    }
-  }
+
   openLightbox = (image: string) => {
     this.props.dispatch(lightboxActionCreators.open(image))
   }
@@ -59,15 +54,6 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
       ...this.state,
       [name]: value
     })
-  }
-  sendComment = () => {
-    const transId = this.state.transactionId
-    if (transId) {
-      this.props.dispatch(
-        transactionActionCreators.addComment(transId, this.state.comment)
-      )
-      this.setState({ commentInputShowing: false })
-    }
   }
   render() {
     const { transaction, authInfo, loading } = this.props
@@ -91,8 +77,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
       imagePaths = []
     }
     return (
-      <Row type="flex" justify="space-around" align="middle" className="page">
-        <Col span={20}>
+      <div className="view-page page">
           <h2 className="header-center">{i18n.t('Transaction View Page')}</h2>
           {!goods ? (
             <Icon type="loading" />
@@ -102,7 +87,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 17, offset: 5 }}
+                  md={{ span: 17, offset: 7 }}
                 >
                   <label>{i18n.t('Title')}:</label>
                   <div className="message">
@@ -114,10 +99,10 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 6, offset: 5 }}
-                  className="view-top"
+                  md={{ span: 6, offset: 7 }}
+                  className="field"
                 >
-                  <label>{i18n.t('maker')}:</label>
+                  <label>{i18n.t('Maker')}:</label>
                   <div className="message">
                     {maker ? (
                     <Link
@@ -136,8 +121,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 7, offset: 1 }}
-                  className="view-top"
+                  md={{ span: 7, offset: 2 }}
+                  className="field"
                 >
                   <label>{i18n.t('Price')}:</label>
                   <div className="message">{`${
@@ -153,10 +138,10 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 6, offset: 5 }}
-                  className="view-top"
+                  md={{ span: 6, offset: 7 }}
+                  className="field"
                 >
-                  <label>{i18n.t('taker')}:</label>
+                  <label>{i18n.t('Taker')}:</label>
                   <div className="message">
                     {taker ? (
                     <Link
@@ -177,17 +162,17 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 17, offset: 5 }}
+                  md={{ span: 17, offset: 7 }}
                 >
-                  <label className="details-nav">{i18n.t('goods information')}:</label>
+                  <label className="subtitle">{i18n.t('Goods Information')}:</label>
                 </Col>
               </Row>
               <Row>
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 14, offset: 5 }}
-                  className="view-top"
+                  md={{ span: 14, offset: 7 }}
+                  className="field"
                 >
                   <label>{i18n.t('Description')}:</label>
                   <div className="message">
@@ -199,8 +184,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 6, offset: 5 }}
-                  className="view-top"
+                  md={{ span: 6, offset: 7 }}
+                  className="field"
                 >
                   <label>{i18n.t('Storage')}:</label>
                   <div className="message">
@@ -210,8 +195,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 7, offset: 1 }}
-                  className="view-top"
+                  md={{ span: 7, offset: 2 }}
+                  className="field"
                 >
                   <label>{i18n.t('Breed')}:</label>
                   <div className="message">
@@ -223,8 +208,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 6, offset: 5 }}
-                  className="view-top"
+                  md={{ span: 6, offset: 7 }}
+                  className="field"
                 >
                   <label>{i18n.t('Grade')}:</label>
                   <div className="message">
@@ -234,8 +219,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 7, offset: 1 }}
-                  className="view-top"
+                  md={{ span: 7, offset: 2 }}
+                  className="field"
                 >
                   <label>{i18n.t('MarbleScore')}:</label>
                   <div className="message">
@@ -247,8 +232,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 6, offset: 5 }}
-                  className="view-top"
+                  md={{ span: 6, offset: 7 }}
+                  className="field"
                 >
                   <label>{i18n.t('Slaughter Specification')}:</label>
                   <div className="message">
@@ -258,8 +243,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 7, offset: 1 }}
-                  className="view-top"
+                  md={{ span: 7, offset: 2 }}
+                  className="field"
                 >
                   <label>{i18n.t('Bone')}:</label>
                   <div className="message">
@@ -271,8 +256,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 6, offset: 5 }}
-                  className="view-top"
+                  md={{ span: 6, offset: 7 }}
+                  className="field"
                 >
                   <label>{i18n.t('Primal Cuts')}:</label>
                   <div className="message">
@@ -282,8 +267,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 7, offset: 1 }}
-                  className="view-top"
+                  md={{ span: 7, offset: 2 }}
+                  className="field"
                 >
                   <label>{i18n.t('Trimmings')}:</label>
                   <div className="message">
@@ -295,8 +280,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 6, offset: 5 }}
-                  className="view-top"
+                  md={{ span: 6, offset: 7 }}
+                  className="field"
                 >
                   <label>{i18n.t('Fed')}:</label>
                   <div className="message">
@@ -314,8 +299,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                  <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 7, offset: 1 }}
-                  className="view-top"
+                  md={{ span: 7, offset: 2 }}
+                  className="field"
                 >
                   <label>{i18n.t('Place of Origin')}:</label>
                   <div className="message">
@@ -327,8 +312,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 6, offset: 5 }}
-                  className="view-top"
+                  md={{ span: 6, offset: 7 }}
+                  className="field"
                 >
                   <label>{i18n.t('Quantity')}:</label>
                   <div className="message">
@@ -338,8 +323,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 7, offset: 1 }}
-                  className="view-top"
+                  md={{ span: 7, offset: 2 }}
+                  className="field"
                 >
                   <label>{i18n.t('Brand')}:</label>
                   <div className="message">
@@ -351,8 +336,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 6, offset: 5 }}
-                  className="view-top"
+                  md={{ span: 6, offset: 7 }}
+                  className="field"
                 >
                   <label>{i18n.t('Factory Number')}:</label>
                   <div className="message">
@@ -362,8 +347,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 7, offset: 1 }}
-                  className="view-top"
+                  md={{ span: 7, offset: 2 }}
+                  className="field"
                 >
                   <label>{i18n.t('Delivery Term')}:</label>
                   <div className="message">
@@ -378,8 +363,8 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
-                  md={{ span: 12, offset: 5 }}
-                  className="view-top"
+                  md={{ span: 12, offset: 7 }}
+                  className="field"
                 >
                   <label>{i18n.t('Images')}:</label>
                   <div className="message">
@@ -403,8 +388,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
               </Row>
             </div>
           )}
-        </Col>
-      </Row>
+        </div>
     )
   }
 }

@@ -7,24 +7,57 @@ import {
   AuthInfo
 } from '../../actions'
 import { RootState } from '../../reducers'
-import { Transaction } from '../../models'
+import { Transaction, Comment } from '../../models'
 import { transactionConsts } from '../../constants'
-import { Exchange } from '../'
+import { Exchange } from '../exchange'
 import { Col } from 'antd'
+import { CommentArea } from '../comment/'
+import { ListOptions } from '../../models'
 import i18n from 'i18next'
-interface TransactionItemProps {
+interface ItemProps {
   dispatch: Dispatch<RootState>
   transaction: Transaction
   authInfo: AuthInfo
 }
-interface TransactionItemState {}
-class TransactionItem extends React.Component<
-  TransactionItemProps,
-  TransactionItemState
-> {
-  constructor(props: TransactionItemProps) {
+
+class Item extends React.Component<ItemProps> {
+  constructor(props: ItemProps) {
     super(props)
+    this.state = this.defaultState
   }
+  defaultState = {
+    options: {
+      page: 1,
+      pageSize: transactionConsts.COMMENT_LIST_SIZE
+    },
+    commentSubmitted: false
+  }
+  listComment = (options: ListOptions) => {
+    const { transaction } = this.props
+    this.props.dispatch(
+      transactionActionCreators.listComment(transaction.id, options)
+    )
+  }
+  submitComment = (comment: Comment, options: ListOptions) => {
+    const { transaction } = this.props
+    this.props.dispatch(
+      transactionActionCreators.createComment(
+        { transactionId: transaction.id, ...comment },
+        options
+      )
+    )
+  }
+
+  submitReply = (comment: Comment) => {
+    const { transaction } = this.props
+    this.props.dispatch(
+      transactionActionCreators.createReply({
+        transactionId: transaction.id,
+        ...comment
+      })
+    )
+  }
+
   handleCancel = (id: string) => {
     let r = confirm(i18n.t('Are you sure?'))
     if (r)
@@ -32,6 +65,7 @@ class TransactionItem extends React.Component<
         .dispatch(transactionActionCreators.cancel(id))
         .then(() => this.forceUpdate())
   }
+
   handleReactivate = (id: string) => {
     let r = confirm(i18n.t('Are you sure?'))
     if (r)
@@ -39,14 +73,17 @@ class TransactionItem extends React.Component<
         .dispatch(transactionActionCreators.reactivate(this.props.transaction))
         .then(() => this.forceUpdate())
   }
+
   handleFinish = (id: string) => {
     let r = confirm(i18n.t('Are you sure?'))
     if (r) this.props.dispatch(adminActionCreators.finish(id))
   }
+
   handleBuy = (id: string) => {
     let r = confirm(i18n.t('Are you sure?'))
     if (r) this.props.dispatch(transactionActionCreators.buy(id))
   }
+
   renderStatus = (
     isMakerSeller: boolean = false,
     status: number = transactionConsts.STATUS_CREATED
@@ -83,16 +120,15 @@ class TransactionItem extends React.Component<
     const { transaction, authInfo } = this.props
     const goods = transaction.goods
     const taker = transaction.taker
-    // const { commentInputShowing, comment } = this.state
     return (
       goods && (
         <Col
           key={transaction.id}
-          xs={12}
+          xs={24}
           sm={11}
           md={10}
           lg={9}
-          className="block"
+          className="block transation"
         >
           <div className="boxmain">
             <div className="left-icon">
@@ -115,9 +151,9 @@ class TransactionItem extends React.Component<
             <Link to={'/transaction/' + transaction.id}>
               <div className="image-wr">
                 {goods.images && goods.images[0] ? (
-                  <img src={goods.images[0].path} />
+                  <img src={goods.images[0].path} className="block-img" />
                 ) : (
-                  <img src="/asset/no-image.jpg" />
+                  <img src="/asset/no-image.jpg" className="block-img" />
                 )}
               </div>
             </Link>
@@ -128,7 +164,7 @@ class TransactionItem extends React.Component<
                     price={transaction.price}
                     currencyCode={transaction.currencyCode}
                   />
-                )}
+                )}/kg
               {authInfo &&
               authInfo.isAdmin &&
               transaction.status === transactionConsts.STATUS_TAKING ? (
@@ -216,6 +252,15 @@ class TransactionItem extends React.Component<
                   </>
                 )}
             </div>
+
+            <CommentArea
+              comments={transaction.comments}
+              totalComment={transaction.totalComment}
+              commentLoading={transaction.commentLoading}
+              listComment={this.listComment}
+              submitComment={this.submitComment}
+              submitReply={this.submitReply}
+            />
           </div>
         </Col>
       )
@@ -228,5 +273,5 @@ function mapStateToProps(state: RootState) {
   return { authInfo: auth.authInfo }
 }
 
-const connectedTransactionItem = connect(mapStateToProps)(TransactionItem)
+const connectedTransactionItem = connect(mapStateToProps)(Item)
 export { connectedTransactionItem as Transaction }

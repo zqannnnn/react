@@ -19,19 +19,22 @@ interface ListProps {
 interface ListStates {
   searched?: boolean
   options: ListOptions
+  reseted: boolean
 }
 
 class List extends React.Component<ListProps, ListStates> {
   constructor(props: ListProps) {
     super(props)
-    this.state = {
-      searched: false,
-      options: {
-        type: 'all',
-        page: 1,
-        pageSize: transactionConsts.LIST_PAGE_SIZE
-      }
-    }
+    this.state = this.defaultState
+  }
+  defaultState = {
+    searched: false,
+    options: {
+      type: 'all',
+      page: 1,
+      pageSize: transactionConsts.LIST_PAGE_SIZE
+    },
+    reseted: false
   }
   getTransaction = () => {
     let keywordParams = QS.parse(history.location.search)
@@ -47,7 +50,7 @@ class List extends React.Component<ListProps, ListStates> {
     const options = this.state.options
     options.page = current
     options.pageSize = defaultPageSize
-    this.setState({ options })
+    this.setState({ options, reseted: true })
     this.props.dispatch(
       transactionActionCreators.getAll({
         type: this.props.type,
@@ -55,6 +58,16 @@ class List extends React.Component<ListProps, ListStates> {
       })
     )
   }
+
+  componentWillReceiveProps(nextProps: ListProps) {
+    if (this.state.reseted) {
+      this.setState({
+        ...this.defaultState,
+        reseted: false
+      })
+    }
+  }
+
   onOptionsChange = (newOptions: ListOptions) => {
     const oldOptions = this.state.options
     const options = { ...oldOptions, ...newOptions }
