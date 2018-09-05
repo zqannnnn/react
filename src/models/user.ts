@@ -85,7 +85,10 @@ export class User extends Model<User> {
 
     @Column({ field: 'license_status' })
     public licenseStatus: number
-
+    
+    @HasMany(() => Consignee, 'user_id')
+    public consignees: Consignee[]
+  
     // class methods
     @BeforeCreate
     public static hashPassword = async (instance: User) => {

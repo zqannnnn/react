@@ -130,8 +130,7 @@ router
     const user = await User.find({
       where: { id: req.params.userId },
       attributes: { exclude: ['password'] },
-      include: [{ model: Image, attributes: ['path'] }]
-      //include: [{ model: Image, attributes: ['path'] }, { model: Consignee }]
+      include: [{ model: Image, attributes: ['path'] }, { model: Consignee }]
     })
     if (!user) {
       return res.status(500).send({ error: i18n.t('User does not exist.') })
