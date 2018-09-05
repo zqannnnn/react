@@ -185,6 +185,16 @@ export function transaction(
       }
     case transactionConsts.REPLY_CREATE_SUCCESS:
       if (state.items && state.rowComments && action.comments) {
+        let rowComments = state.rowComments.filter(comment => !comment.replyTo)
+        let replies = action.comments.filter(comment => comment.replyTo)
+        replies.forEach(comment => {
+          rowComments.forEach(firstComment => {
+            if (comment.replyTo) {
+              comment.userReplyTo = firstComment.user
+            }
+          })
+        })
+
         let items = state.items.map(item => {
           if (item.id === action.transactionId) {
             if (item.comments) {
@@ -297,6 +307,15 @@ export function transaction(
       }
     case transactionConsts.REPLY_LIST_SUCCESS:
       if (state.items && action.replys && state.rowComments) {
+        let rowComments = state.rowComments.filter(comment => !comment.replyTo)
+        let replies = action.replys.filter(comment => comment.replyTo)
+        replies.forEach(comment => {
+          rowComments.forEach(firstComment => {
+            if (comment.replyTo) {
+              comment.userReplyTo = firstComment.user
+            }
+          })
+        })
         let merge = state.rowComments.concat(action.replys)
         let clone = cloneDeep(merge)
         let comments = commentReduce(merge)

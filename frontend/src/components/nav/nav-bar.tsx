@@ -89,6 +89,7 @@ class ReNavBar extends React.Component<NavProps> {
           collapsedWidth="0"
           collapsed={collapsed}
           onCollapse={() => this.onclick()}
+          className="sidebar"
         >
           <Search />
           <Menu theme="dark" mode="inline">
