@@ -161,7 +161,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
           />
 
           <Input
-            placeholder="Write a Comment..."
+            placeholder="Write a comment..."
             type="text"
             name="comment"
             onPressEnter={this.submitComment}
