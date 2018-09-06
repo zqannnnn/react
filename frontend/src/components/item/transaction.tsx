@@ -160,11 +160,14 @@ class Item extends React.Component<ItemProps> {
             <div className="space-between content text-overflow">
               {transaction.price &&
                 transaction.currencyCode && (
-                  <Exchange
-                    price={transaction.price}
-                    currencyCode={transaction.currencyCode}
-                  />
-                )}/kg
+                  <>
+                    <Exchange
+                      price={transaction.price}
+                      currencyCode={transaction.currencyCode}
+                    />
+                    <span>/kg</span>
+                  </>
+                )}
               {authInfo &&
               authInfo.isAdmin &&
               transaction.status === transactionConsts.STATUS_TAKING ? (
@@ -185,7 +188,7 @@ class Item extends React.Component<ItemProps> {
               transaction.goods.ownerId != authInfo.id &&
               transaction.status == transactionConsts.STATUS_CREATED ? (
                 <div
-                  className="control-btn"
+                  className="control-btn click"
                   onClick={() => {
                     if (transaction.id) this.handleBuy(transaction.id)
                   }}

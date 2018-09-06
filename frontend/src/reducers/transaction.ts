@@ -8,7 +8,6 @@ export type State = {
   error?: string
   transData?: Transaction
   items?: Array<Transaction>
-  rowComments?: Array<Comment>
   total?: number
 }
 const commentReduce = (comments: Comment[]): Comment[] => {
@@ -147,10 +146,10 @@ export function transaction(
         let item = state.items.filter(item => item.id === action.id)[0]
         item.comments = comments
         item.totalComment = action.total
+        item.rowComments = action.comments
         items.push(item)
         return {
           ...state,
-          rowComments: action.comments,
           items: state.items.map(
             item =>
               item.id === action.id
@@ -184,38 +183,42 @@ export function transaction(
         return state
       }
     case transactionConsts.REPLY_CREATE_SUCCESS:
-      if (state.items && state.rowComments && action.comments) {
-        let rowComments = state.rowComments.filter(comment => !comment.replyTo)
-        let replies = action.comments.filter(comment => comment.replyTo)
-        replies.forEach(comment => {
-          rowComments.forEach(firstComment => {
-            if (comment.replyTo) {
+      if (state.items && action.comments) {
+        let item = state.items.filter(
+          item => item.id === action.transactionId
+        )[0]
+        if (item.rowComments) {
+          let rowComments = item.rowComments.filter(comment => !comment.replyTo)
+          let replies = action.comments.filter(comment => comment.replyTo)
+          replies.forEach(comment => {
+            rowComments.forEach(firstComment => {
               comment.userReplyTo = firstComment.user
-            }
+            })
           })
-        })
-
-        let items = state.items.map(item => {
-          if (item.id === action.transactionId) {
-            if (item.comments) {
-              item.comments.map(comment => {
-                if (
-                  action.comments &&
-                  comment.id === action.comments[0].rootId
-                ) {
-                  comment.replys = action.comments
-                }
-                return comment
-              })
-              item.commentLoading = false
+          
+          let items = state.items.map(item => {
+            if (item.id === action.transactionId) {
+              if (item.comments) {
+                item.comments.map(comment => {
+                  if (
+                    action.comments &&
+                    comment.id === action.comments[0].rootId
+                  ) {
+                    comment.replys = action.comments
+                    item.rowComments = action.comments
+                  }
+                  return comment
+                })
+                item.commentLoading = false
+              }
             }
+            return item
+          })
+          return {
+            ...state,
+            processing: false,
+            items
           }
-          return item
-        })
-        return {
-          ...state,
-          processing: false,
-          items
         }
       } else {
         return {
@@ -252,10 +255,10 @@ export function transaction(
         item.comments = comments
         item.totalComment = action.total
         item.commentLoading = false
+        item.rowComments = action.comments
         items.push(item)
         return {
           ...state,
-          rowComments: action.comments,
           items: state.items.map(
             item =>
               item.id === action.id
@@ -306,38 +309,38 @@ export function transaction(
         return state
       }
     case transactionConsts.REPLY_LIST_SUCCESS:
-      if (state.items && action.replys && state.rowComments) {
-        let rowComments = state.rowComments.filter(comment => !comment.replyTo)
-        let replies = action.replys.filter(comment => comment.replyTo)
-        replies.forEach(comment => {
-          rowComments.forEach(firstComment => {
-            if (comment.replyTo) {
-              comment.userReplyTo = firstComment.user
-            }
-          })
-        })
-        let merge = state.rowComments.concat(action.replys)
-        let clone = cloneDeep(merge)
-        let comments = commentReduce(merge)
+      if (state.items && action.replys) {
         let items = state.items.filter(item => item.id !== action.transactionId)
         let item = state.items.filter(
           item => item.id === action.transactionId
         )[0]
-        item.comments = comments
-        item.commentLoading = false
-        items.push(item)
-        return {
-          ...state,
-          rowComments: clone,
-          items: state.items.map(
-            item =>
-              item.id === action.id
-                ? {
-                    ...item,
-                    items
-                  }
-                : item
-          )
+        if (item.rowComments) {
+          let rowComments = item.rowComments.filter(comment => !comment.replyTo)
+          let replies = action.replys.filter(comment => comment.replyTo)
+          replies.forEach(comment => {
+            rowComments.forEach(firstComment => {
+              comment.userReplyTo = firstComment.user
+            })
+          })
+          let merge = item.rowComments.concat(action.replys)
+          let clone = cloneDeep(merge)
+          let comments = commentReduce(merge)
+          item.comments = comments
+          item.commentLoading = false
+          items.push(item)
+          return {
+            ...state,
+            items: state.items.map(
+              item =>
+                item.id === action.id
+                  ? {
+                      ...item,
+                      rowComments: clone,
+                      items
+                    }
+                  : item
+            )
+          }
         }
       }
     case transactionConsts.REPLY_LIST_FAILURE:

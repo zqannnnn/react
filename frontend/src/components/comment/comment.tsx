@@ -140,16 +140,16 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
                 </span>
               </Link>
               {comment.rootId !== comment.replyTo && (
-                <span className="comment-replyTo">
-                  {i18n.t(' reply ')}
-                </span>
-              )}
-              {comment.rootId !== comment.replyTo && (
-                <Link to={'/user/' + comment.userId}>
-                  <span className="user-id click">
-                    {comment.userReplyTo && comment.userReplyTo.firstName}
+                <>
+                  <span className="comment-replyTo">
+                    {i18n.t(' reply ')}
                   </span>
-                </Link>
+                  <Link to={'/user/' + comment.userId}>
+                    <span className="user-id click">
+                      {comment.userReplyTo && comment.userReplyTo.firstName}
+                    </span>
+                  </Link>
+                </>
               )}
               <span className="reply-content">{comment.content}</span>
             </div>
@@ -164,7 +164,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
             >
               {i18n.t('reply')}
             </span>
-            <span className="click createdAt">
+            <span className="createdAt">
               {comment.createdAt && this.formatTime(comment.createdAt)}
             </span>
           </div>
@@ -213,9 +213,11 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
         <div className="speak">
           <div className="comment-flex">
             <div className="main-comment">
-              <span className="user-id click">
-                {comment.user && comment.user.firstName}
-              </span>
+              <Link to={'/user/' + comment.userId}>
+                <span className="user-id click">
+                  {comment.user && comment.user.firstName}
+                </span>
+              </Link>
               <span className="comment-content">{comment.content}</span>
             </div>
           </div>
@@ -229,7 +231,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
             >
               {i18n.t('reply')}
             </span>
-            <span className="click createdAt">
+            <span className="createdAt">
               {comment.createdAt && this.formatTime(comment.createdAt)}
             </span>
           </div>
