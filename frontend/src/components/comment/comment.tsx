@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { Comment } from '../../models'
-import { Icon, Input, Avatar } from 'antd'
+import { Icon, Input, Avatar, Spin } from 'antd'
 import i18n from 'i18next'
 interface CommentProps {
   comment: Comment
@@ -132,11 +132,6 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
     return (
       <div key={comment.id} className="reply-wrapper">
         <div className="reply">
-          <div className="avatar">
-            <Link to={'/user/' + comment.userId}>
-              <Avatar icon="user" />
-            </Link>
-          </div>
           <div className="comment-flex">
             <div className="main-comment">
               <Link to={'/user/' + comment.userId}>
@@ -144,12 +139,18 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
                   {comment.user && comment.user.firstName}
                 </span>
               </Link>
-              <span className="comment-replyTo">
-                {i18n.t(' reply to ')}
-              </span>
-              <span className="user-id click">
-                {comment.user && comment.user.firstName}
-              </span>
+              {comment.rootId !== comment.replyTo && (
+                <>
+                  <span className="comment-replyTo">
+                    {i18n.t(' reply ')}
+                  </span>
+                  <Link to={'/user/' + comment.userId}>
+                    <span className="user-id click">
+                      {comment.userReplyTo && comment.userReplyTo.firstName}
+                    </span>
+                  </Link>
+                </>
+              )}
               <span className="reply-content">{comment.content}</span>
             </div>
           </div>
@@ -163,7 +164,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
             >
               {i18n.t('reply')}
             </span>
-            <span className="click createdAt">
+            <span className="createdAt">
               {comment.createdAt && this.formatTime(comment.createdAt)}
             </span>
           </div>
@@ -200,7 +201,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
     )
   }
   render() {
-    const { comment } = this.props
+    const { comment, commentLoading } = this.props
     const {
       currentReply,
       replyInputShowing,
@@ -210,16 +211,13 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
     return (
       <div className="comment-wrapper">
         <div className="speak">
-          <div className="avatar">
-            <Link to={'/user/' + comment.userId}>
-              <Avatar icon="user" />
-            </Link>
-          </div>
           <div className="comment-flex">
             <div className="main-comment">
-              <span className="user-id click">
-                {comment.user && comment.user.firstName}
-              </span>
+              <Link to={'/user/' + comment.userId}>
+                <span className="user-id click">
+                  {comment.user && comment.user.firstName}
+                </span>
+              </Link>
               <span className="comment-content">{comment.content}</span>
             </div>
           </div>
@@ -233,7 +231,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
             >
               {i18n.t('reply')}
             </span>
-            <span className="click createdAt">
+            <span className="createdAt">
               {comment.createdAt && this.formatTime(comment.createdAt)}
             </span>
           </div>
@@ -277,6 +275,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
               >
                 {comment.totalReply} {i18n.t('replies')}
               </span>
+              {commentLoading && <Spin />}
             </div>
           )}
 
