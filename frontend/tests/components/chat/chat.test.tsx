@@ -26,7 +26,7 @@ beforeEach(() => {
     socketIOClient.connect.mockClear()
 })
 
-describe('Chat', () => {
+describe('Render chat for', () => {
     it('logged-out user', () => {
         let state = {}
         let action = { type: consts.LOGIN_REQUEST }
