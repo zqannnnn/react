@@ -51,4 +51,4 @@ describe('Chat', () => {
         expect(socketIOClient.connect.mock.calls.length).toBe(1)
         expect(socketIOClient.connect.mock.results[0].value.on.mock.calls.length).toBe(1)
     })
-});
+})
