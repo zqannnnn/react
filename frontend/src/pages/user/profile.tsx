@@ -176,6 +176,11 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
         dispatch(userActionCreators.deleteConsignee(id))
     }
 
+    handleDefaultConsignee = (id: string) => {
+        const { dispatch } = this.props
+        dispatch(userActionCreators.setDefaultConsignee(id))
+    }
+
     //for render select input
     renderCurrencySelect = () => {
         let preferCurrency = this.state.user.preferredCurrencyCode || ''
@@ -273,8 +278,10 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                             <label>{i18n.t('Address')}:</label>
                             {dataSource && <EditableTable
                                 data={dataSource}
+                                defaultConsigneeId={user.defaultConsigneeId}
                                 handleSubmit={this.handleSubmitConsignee}
                                 handleDelete={this.handleDeleteConsignee}
+                                handleDefault={this.handleDefaultConsignee}
                             />}
                         </div>
                     </div>

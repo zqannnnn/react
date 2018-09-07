@@ -89,6 +89,10 @@ export class User extends Model<User> {
   @HasMany(() => Consignee, 'user_id')
   public consignees: Consignee[]
 
+  @ForeignKey(() => Consignee)
+  @Column({ field: 'default_consignee_id' })
+  public defaultConsigneeId: string
+
   // class methods
   @BeforeCreate
   public static hashPassword = async (instance: User) => {

@@ -20,4 +20,5 @@ export class User implements ListItem {
   businessLicenses?: Image[]
   licenseStatus?: number
   consignees?: Consignee[]
+  defaultConsigneeId?:string
 }
