@@ -13,7 +13,8 @@
     },
     "jest": {
         "transform": {
-            "^.+\\.tsx?$": "ts-jest"
+            "^.+\\.tsx?$": "ts-jest",
+            "^.+\\.(ts|tsx)$": "<rootDir>/tests/__setups__/test-preprocessor.js"
         },
         "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
         "moduleFileExtensions": [
@@ -25,11 +26,12 @@
             "node"
         ],
         "moduleNameMapper": {
-            "\\.(css|less)$": "<rootDir>/frontend/tests/__mocks__/styleMock.js"
+            "\\.(scss|css|less)$": "<rootDir>/frontend/tests/__mocks__/styleMock.js"
         },
         "automock": false,
         "setupFiles": [
-            "<rootDir>/tests/__setups__/enzyme.ts",
+            "<rootDir>/tests/__setups__/test-shim.js",
+            "<rootDir>/tests/__setups__/enzyme.js",
             "jest-localstorage-mock"
         ]
     },

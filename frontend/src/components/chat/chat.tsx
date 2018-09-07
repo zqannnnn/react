@@ -2,6 +2,7 @@
 import * as React from 'react'
 import i18n from 'i18next'
 //import { connect, Dispatch } from 'react-redux'
+//import * as socketIOClient from 'socket.io-client'
 import * as socketIOClient from 'socket.io-client'
 import { AuthState } from '../../reducers'
 import { UserItem } from './user-item'
@@ -75,7 +76,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
     }    
     connect() {
         const that = this;
-		const socket = socketIOClient(window.location.origin)
+		const socket = socketIOClient.connect(window.location.origin)
 		socket.on('connect', function () {
             let { auth } = that.props
             const { authInfo } = auth
