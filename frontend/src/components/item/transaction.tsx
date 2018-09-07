@@ -160,13 +160,13 @@ class Item extends React.Component<ItemProps> {
             <div className="space-between content text-overflow">
               {transaction.price &&
                 transaction.currencyCode && (
-                  <>
+                  <span>
                     <Exchange
                       price={transaction.price}
                       currencyCode={transaction.currencyCode}
                     />
                     <span>/kg</span>
-                  </>
+                  </span>
                 )}
               {authInfo &&
               authInfo.isAdmin &&

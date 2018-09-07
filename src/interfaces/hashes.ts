@@ -1,7 +1,7 @@
-//https://stackoverflow.com/questions/42211175/typescript-hashmap-dictionary-interface
+// https://stackoverflow.com/questions/42211175/typescript-hashmap-dictionary-interface
 export interface StringKeyHash {
-	[details: string]: any;
+  [details: string]: any
 }
 export interface HashOfStringKeyHash {
-	[details: string]: StringKeyHash;
+  [details: string]: StringKeyHash
 }
