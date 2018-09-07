@@ -188,11 +188,11 @@ export function transaction(
           item => item.id === action.transactionId
         )[0]
         if (item.rowComments) {
-          let rowComments = item.rowComments.filter(comment => !comment.replyTo)
-          let replies = action.comments.filter(comment => comment.replyTo)
-          replies.forEach(comment => {
-            rowComments.forEach(firstComment => {
-              comment.userReplyTo = firstComment.user
+          let firstLevelReply = item.rowComments.filter(comment => comment.replyTo)
+          let Multistage = action.comments.filter(comment => comment.replyTo && comment.rootId !== comment.replyTo)
+          Multistage.forEach(replys => {
+            firstLevelReply.forEach(firstLevel => {
+              replys.userReplyTo = firstLevel.user
             })
           })
           

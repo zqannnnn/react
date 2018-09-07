@@ -90,7 +90,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                   md={{ span: 17, offset: 7 }}
                 >
                   <label>{i18n.t('Title')}:</label>
-                  <div className="message">
+                  <div className="message breakWord">
                     {goods.title ? goods.title : 'N/A'}
                   </div>
                 </Col>
@@ -175,7 +175,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                   className="field"
                 >
                   <label>{i18n.t('Description')}:</label>
-                  <div className="message">
+                  <div className="message breakWord">
                     {goods.desc ? goods.desc : 'N/A'}
                   </div>
                 </Col>
@@ -260,7 +260,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                   className="field"
                 >
                   <label>{i18n.t('Primal Cuts')}:</label>
-                  <div className="message">
+                  <div className="message breakWord">
                     {goods.primalCuts ? goods.primalCuts : 'N/A'}
                   </div>
                 </Col>
@@ -303,7 +303,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                   className="field"
                 >
                   <label>{i18n.t('Place of Origin')}:</label>
-                  <div className="message">
+                  <div className="message breakWord">
                     {goods.placeOfOrigin ? goods.placeOfOrigin : 'N/A'}
                   </div>
                 </Col>
@@ -327,7 +327,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                   className="field"
                 >
                   <label>{i18n.t('Brand')}:</label>
-                  <div className="message">
+                  <div className="message breakWord">
                     {goods.brand ? goods.brand : 'N/A'}
                   </div>
                 </Col>
@@ -340,7 +340,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                   className="field"
                 >
                   <label>{i18n.t('Factory Number')}:</label>
-                  <div className="message">
+                  <div className="message breakWord">
                     {goods.factoryNum ? goods.factoryNum : 'N/A'}
                   </div>
                 </Col>
@@ -351,7 +351,7 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                   className="field"
                 >
                   <label>{i18n.t('Delivery Term')}:</label>
-                  <div className="message">
+                  <div className="message breakWord">
                     {goods.deliveryTerm ? goods.deliveryTerm : 'N/A'}
                   </div>
                 </Col>
