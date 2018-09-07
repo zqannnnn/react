@@ -96,9 +96,6 @@ export class User extends Model<User> {
       instance.password = await bcrypt.hash(instance.password, 10)
     }
   }
-  public fullName = () => {
-    return this.firstName + ' ' + this.lastName
-  }
 
   // instance methods
   public validatePassword = (pwd: string) => {
@@ -106,5 +103,9 @@ export class User extends Model<User> {
       return bcrypt.compare(pwd, this.password)
     }
     return false
+  }
+
+  public fullName = () => {
+    return this.firstName + ' ' + this.lastName
   }
 }

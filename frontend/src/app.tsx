@@ -3,12 +3,6 @@ import { Router, Route, Switch } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import i18n from 'i18next'
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStroopwafel, faEnvelope, faKey, faTimes } from '@fortawesome/free-solid-svg-icons'
-
-library.add(faStroopwafel,faEnvelope,faKey, faTimes)
-
 import { history } from './helpers/history'
 import { alertActionCreators, authActionCreators } from './actions'
 import { PrivateRoute, AdminRoute, NavBar, Lightbox, Chat } from './components'
@@ -56,6 +50,11 @@ class App extends React.Component<AppProps, any> {
   }
   render() {
     const { auth } = this.props
+    /*
+    const changeLanguage = (lng: string) => {
+      i18n.changeLanguage(lng);
+    };
+    */
     const { alert, lightbox } = this.props
 
     return (
@@ -112,7 +111,7 @@ class App extends React.Component<AppProps, any> {
               </BackTop>
             </Layout.Content>
             {/* //1532692062 chat */}
-            {/* <Chat auth={auth} ref={(Chat) => {window.Chat = Chat}} /> */}
+            <Chat auth={auth} ref={(Chat) => {window.Chat = Chat}} />   
             <Layout.Footer style={{ textAlign: 'center' }}>
               {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
             </Layout.Footer>

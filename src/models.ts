@@ -2,7 +2,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import { Sequelize } from 'sequelize-typescript'
 import { config } from './config/db'
-import { beefOptions, consts, sheepOptions, vealOptions } from './config/static'
+import { consts } from './config/static'
 import {
   Category,
   Currency,
@@ -10,6 +10,7 @@ import {
   Image,
   Transaction,
   User,
+  Message,
   Consignee,
   Comment
 } from './models/'
@@ -22,6 +23,7 @@ sequelize.addModels([
   Category,
   Image,
   Currency,
+  Message,
   Consignee,
   Comment
 ])
@@ -56,6 +58,14 @@ const addCurrencyIfNoExists = (currencyObj: any) => {
     }
   })
 }
+const addCategoryIfNoExists = (categoryObj: any) => {
+  Category.findOne({ where: { type: categoryObj.type } }).then(category => {
+    if (!category) {
+      const newCategory = new Category(categoryObj)
+      newCategory.save()
+    }
+  })
+}
 
 const insertInitialData = () => {
    //1532692062 chat test users
@@ -76,35 +86,15 @@ const insertInitialData = () => {
       addCurrencyIfNoExists(currencies[i])
     }  
   }
-  
 
-  Category.findOne({ where: { type: 'Beef' } }).then(categoryBeef => {
-    if (!categoryBeef) {
-      categoryBeef = new Category({
-        type: 'Beef',
-        details: beefOptions
-      })
-      categoryBeef.save()
-    }
-  })
-  Category.findOne({ where: { type: 'Veal' } }).then(categoryVeal => {
-    if (!categoryVeal) {
-      categoryVeal = new Category({
-        type: 'Veal',
-        details: vealOptions
-      })
-      categoryVeal.save()
-    }
-  })
-  Category.findOne({ where: { type: 'Sheep' } }).then(categorySheep => {
-    if (!categorySheep) {
-      categorySheep = new Category({
-        type: 'Sheep',
-        details: sheepOptions
-      })
-      categorySheep.save()
-    }
-  })
+  let categoriesDataFile = path.join(__dirname, './db_data/categories.json')
+  if (fs.existsSync(categoriesDataFile)) {
+    let rawdata = fs.readFileSync(categoriesDataFile)
+    let categories = JSON.parse(rawdata.toString())
+    for (var i = 0; i < categories.length; i++) {
+      addCategoryIfNoExists(categories[i])
+    }  
+  }
 }
 
-export { User, Transaction, Goods, Category, Image, initDatabase ,Consignee}
+export { User, Transaction, Goods, Category, Image, initDatabase ,Consignee, Message}
