@@ -22,7 +22,7 @@ import {
   ViewPage as GoodsViewPage
 } from './pages/goods'
 import { ProfilePage, CompanyConfirmPage, MyInventoryPage } from './pages/user'
-import { AdminPage, HomePage, AllListPage, MyListPage } from './pages'
+import { AdminPage, HomePage, AllListPage, MyListPage, MyChatsPage } from './pages'
 import { RootState, LightboxState, AuthState, AlertState } from './reducers'
 import { Layout, Alert, BackTop } from 'antd'
 import './app.scss'
@@ -72,6 +72,7 @@ class App extends React.Component<AppProps, any> {
               )}
               <Switch>
                 <Route exact path="/" component={HomePage} />
+                <PrivateRoute path="/chats" component={MyChatsPage} />
                 <PrivateRoute path="/reset/pass" component={ResetPassPage} />
                 <PrivateRoute path="/transactions/my" component={MyListPage} />
                 <Route path="/transactions" component={AllListPage} />
@@ -97,6 +98,7 @@ class App extends React.Component<AppProps, any> {
                 <PrivateRoute path="/profile" component={ProfilePage} />
                 <PrivateRoute path="/user/:id" component={ProfilePage} />
                 <PrivateRoute path="/inventory" component={MyInventoryPage} />
+                <PrivateRoute path="/transactions/my" component={MyListPage} />
                 <AdminRoute path="/admin" component={AdminPage} />
                 <AdminRoute
                   path="/company/confirm/:id"

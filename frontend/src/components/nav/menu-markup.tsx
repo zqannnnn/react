@@ -50,6 +50,11 @@ class MenuMarkup extends React.Component<MenuMarkupProps> {
       defaultMessage: i18n.t('My Inventory')
     }),
     this.renderItem({
+        to: '/chats',
+        id: 'navbar.myChats',
+        defaultMessage: i18n.t('My Chats')
+      }),
+      this.renderItem({
       to: '/login',
       id: 'navbar.logout',
       defaultMessage: i18n.t('Logout'),
