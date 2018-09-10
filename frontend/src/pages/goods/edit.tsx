@@ -120,7 +120,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       this.setState({ certificateList: licenseList })
     }
   }
-  handleSelectChange = (value: string, name: string) => {
+  handleCustomChange = (value: string|number, name: string) => {
     const { goods } = this.state
     this.setState({
       goods: {
@@ -159,15 +159,6 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       this.setState({ fileList })
     else
       this.setState({ certificateList: fileList })
-  }
-  handleInputNumber = (value: string | number, name: string | number) => {
-    const { goods } = this.state
-    this.setState({
-      goods: {
-        ...goods,
-        [name]: value
-      }
-    })
   }
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -208,7 +199,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
     return (
       <Select
         value={String(selectValue)}
-        onSelect={(value: string) => this.handleSelectChange(value, field)}
+        onSelect={(value: string) => this.handleCustomChange(value, field)}
       >
         {optionItems.map((item, index) => (
           <Select.Option key={index} value={item}>
@@ -258,7 +249,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                 size="large"
                 value={category}
                 onSelect={(value: string) =>
-                  this.handleSelectChange(value, 'category')
+                  this.handleCustomChange(value, 'category')
                 }
               >
                 {goodsConsts.CATEGORY.map((item, index) => (
@@ -472,7 +463,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                         max={100000}
                         defaultValue={grainFedDays}
                         onChange={(value: number) =>
-                          this.handleInputNumber(value, 'grainFedDays')
+                          this.handleCustomChange(value, 'grainFedDays')
                         }
                       />
                       <div className="label-right">{i18n.t('Days')}</div>
@@ -510,7 +501,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                       max={100000}
                       defaultValue={trimmings}
                       onChange={(value: number) =>
-                        this.handleInputNumber(value, 'trimmings')
+                        this.handleCustomChange(value, 'trimmings')
                       }
                     />
                     <div className="label-right">CL</div>
@@ -598,7 +589,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                         min={1}
                         value={quantity}
                         onChange={(value: number) =>
-                          this.handleInputNumber(value, 'quantity')
+                          this.handleCustomChange(value, 'quantity')
                         }
                       />
                       <div className="label-right">KG</div>

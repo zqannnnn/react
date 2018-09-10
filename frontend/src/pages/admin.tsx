@@ -22,7 +22,7 @@ class AdminPage extends React.Component<AdminProps> {
     )
     this.props.dispatch(adminActionCreators.listUnconfirmedCompanies())
     this.props.dispatch(
-      adminActionCreators.getWaittingTransactions({ type: 'waitting' })
+      adminActionCreators.getWaitingTransactions({ type: 'waiting' })
     )
   }
   render() {
@@ -41,7 +41,7 @@ class AdminPage extends React.Component<AdminProps> {
               {admin.toFinishTransactions && (
                 <List
                   items={admin.toFinishTransactions}
-                  title="Waitting Finish"
+                  title="Waiting Finish"
                 />
               )}
             </div>

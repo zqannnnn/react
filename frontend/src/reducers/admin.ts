@@ -12,7 +12,7 @@ export type State = {
 }
 export function admin(state: State = {}, action: AdminAction): State {
   switch (action.type) {
-    case adminConsts.GET_UNCONFIRMED_COMPANIES_REQUSET:
+    case adminConsts.GET_UNCONFIRMED_COMPANIES_REQUEST:
       return { loading: true }
     case adminConsts.GET_UNCONFIRMED_COMPANIES_SUCCESS:
       return {
@@ -59,7 +59,7 @@ export function admin(state: State = {}, action: AdminAction): State {
         loading: false
       }
 
-    case adminConsts.GET_CONFIRMING_COMPANY_REQUSET:
+    case adminConsts.GET_CONFIRMING_COMPANY_REQUEST:
       return {
         ...state,
         loading: true
@@ -73,7 +73,7 @@ export function admin(state: State = {}, action: AdminAction): State {
     case adminConsts.GET_CONFIRMING_COMPANY_FAILURE:
       return { error: action.error, loading: false }
 
-    case adminConsts.CONFIRM_COMPANY_REQUSET:
+    case adminConsts.CONFIRM_COMPANY_REQUEST:
       return {
         ...state,
         processing: true
@@ -83,9 +83,9 @@ export function admin(state: State = {}, action: AdminAction): State {
         ...state,
         processing: false
       }
-    case adminConsts.DISCONFIRM_COMPANY_REQUSET:
+    case adminConsts.DISCONFIRM_COMPANY_REQUEST:
       return { error: action.error, processing: false }
-    case adminConsts.CONFIRM_COMPANY_REQUSET:
+    case adminConsts.CONFIRM_COMPANY_REQUEST:
       return {
         ...state,
         processing: true
