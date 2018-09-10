@@ -6,7 +6,7 @@ import { consts } from '../config/static'
 import { app } from '../index'
 import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
-import { Image, User, Consignee, Country } from '../models'
+import { Image, User, Consignee, Country } from '../models/'
 import { UserFields } from '../passport'
 const router = express.Router()
 router.use(authMiddleware)
@@ -124,6 +124,22 @@ router.get('/denie/:id', async (req: IRequest, res: express.Response) => {
     return res.status(500).send({ error: i18n.t('Permission denied.') })
   }
 })
+router.put(
+  '/set/default/consignee',
+  async (req: IRequest, res: express.Response) => {
+    try {
+      const user = await User.find({ where: { id: req.userId } })
+      if (!user) {
+        return res.status(500).send({ error: i18n.t('Permission denied.') })
+      }
+      user.defaultConsigneeId = req.query.id
+      await user.save()
+      return res.send({ success: true })
+    } catch (e) {
+      return res.status(500).send({ error: e.message })
+    }
+  }
+)
 router
   .route('/:userId')
   .get(async (req: IRequest, res: express.Response) => {

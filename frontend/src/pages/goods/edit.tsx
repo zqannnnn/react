@@ -141,7 +141,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       }
     })
   }
-  handleChange = (fileParam: UploadChangeParam) => {
+  handleUploadChange = (fileParam: UploadChangeParam,type:'image'|'certificate') => {
     let fileList = fileParam.fileList
     fileList = fileList.map(file => {
       if (file.response) {
@@ -155,25 +155,10 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       }
       return true
     })
-
-    this.setState({ fileList })
-  }
-  certificateChange = (fileParam: UploadChangeParam) => {
-    let fileList = fileParam.fileList
-    fileList = fileList.map(file => {
-      if (file.response) {
-        file.url = file.response.path
-      }
-      return file
-    })
-    fileList = fileList.filter(file => {
-      if (file.response) {
-        return file.status === 'done'
-      }
-      return true
-    })
-
-    this.setState({ certificateList: fileList })
+    if(type==='image')
+      this.setState({ fileList })
+    else
+      this.setState({ certificateList: fileList })
   }
   handleInputNumber = (value: string | number, name: string | number) => {
     const { goods } = this.state
@@ -191,7 +176,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
     const { goods, goodsId, fileList, certificateList } = this.state
 
     const { dispatch } = this.props
-    if (goods.category && goods.title && goods.quantity) {
+    if (goods.category && goods.title && goods.quantity && goods.address) {
       let images: Image[] = []
       let certificates: Image[] = []
       fileList.forEach((file: any) => images.push({ path: file.url }))
@@ -247,7 +232,8 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       fed,
       grainFedDays,
       trimmings,
-      category
+      category,
+      address
     } = this.state.goods
     let { submitted, fileList, certificateList } = this.state
     let { processing, categories } = this.props
@@ -265,7 +251,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
               sm={{ span: 20, offset: 2 }}
               md={{ span: 9, offset: 2 }}
               lg={{ span: 9, offset: 2 }}
-              className="edits-input"
+              className="field"
             >
               <label>{i18n.t('Category')}</label>
               <Select
@@ -297,7 +283,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                     accept="image/*"
                     listType="picture-card"
                     fileList={fileList}
-                    onChange={this.handleChange}
+                    onChange={(fileParam: UploadChangeParam)=>this.handleUploadChange(fileParam,'image')}
                     onPreview={this.handlePreview}
                   >
                     <div>
@@ -316,7 +302,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                     accept="image/*"
                     listType="picture-card"
                     fileList={certificateList}
-                    onChange={this.certificateChange}
+                    onChange={(fileParam: UploadChangeParam)=>this.handleUploadChange(fileParam,'certificate')}
                     onPreview={this.handlePreview}
                   >
                     <div>
@@ -332,11 +318,11 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       case 2:
         return (
           <>
-            <div className="edits-input">
+            <div className="field">
               <Row>
-                <Col span={20} offset={2} className="edits-input">
+                <Col span={20} offset={2} className="field">
                   <div className={submitted && !title ? ' has-error' : ''}>
-                    <label className="edits-input">{i18n.t('Title')}</label>
+                    <label className="field">{i18n.t('Title')}</label>
                     <Input
                       placeholder=""
                       type="text"
@@ -355,7 +341,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                 </Col>
               </Row>
               <Row>
-                <Col span={20} offset={2} className="edits-input">
+                <Col span={20} offset={2} className="field">
                   <label>{i18n.t('Description')}</label>
                   <TextArea
                     placeholder=""
@@ -372,7 +358,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Bone')}</label>
                   {currentCategory &&
@@ -383,7 +369,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Storage')}</label>
                   {currentCategory &&
@@ -399,7 +385,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Grade')}</label>
                   {currentCategory &&
@@ -413,7 +399,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Slaughter Specification')}</label>
                   {currentCategory &&
@@ -429,7 +415,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Marble Score')}</label>
                   {currentCategory &&
@@ -446,7 +432,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                       sm={{ span: 20, offset: 2 }}
                       md={{ span: 9, offset: 2 }}
                       lg={{ span: 9, offset: 2 }}
-                      className="edits-input"
+                      className="field"
                     >
                       <label>{i18n.t('Breed')}</label>
                       {this.renderSelect(
@@ -464,7 +450,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                       sm={{ span: 20, offset: 2 }}
                       md={{ span: 9, offset: 2 }}
                       lg={{ span: 9, offset: 2 }}
-                      className="edits-input"
+                      className="field"
                     >
                       <label>{i18n.t('Fed')}</label>
                       {this.renderSelect(currentCategory.details['Fed'], 'fed')}
@@ -477,7 +463,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
+                    className="field"
                   >
                     <label>{i18n.t('Grain fed days')}</label>
                     <div className="flex">
@@ -500,7 +486,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Primal Cuts')}</label>
                   <Input
@@ -515,7 +501,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Trimmings')}</label>
                   <div className="flex">
@@ -537,7 +523,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Brand')}</label>
                   <Input
@@ -552,7 +538,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Factory Number')}</label>
                   <Input
@@ -569,7 +555,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Place Of Origin')}</label>
                   <Input
@@ -584,7 +570,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Delivery Term')}</label>
                   <Input
@@ -601,7 +587,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <div className={submitted && !quantity ? 'has-error' : ''}>
                     <label>{i18n.t('Quantity')}</label>
@@ -627,16 +613,37 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                 </Col>
               </Row>
               <Row>
-                <Col sm={20} md={8} lg={8} offset={2} className="edits-input">
+                <Col
+                  xs={{ span: 20, offset: 2 }}
+                  sm={{ span: 20, offset: 2 }}
+                  md={{ span: 9, offset: 2 }}
+                  lg={{ span: 9, offset: 2 }}
+                  className="field"
+                >
+                  <label>{i18n.t('Address')}</label>
+                  <TextArea
+                    name="address"
+                    value={address}
+                    onChange={this.handleInputChange}
+                  />
+                  {submitted &&
+                      !address && (
+                        <div className="invalid-feedback">
+                          {i18n.t('Address is required')}
+                        </div>
+                      )}
+                </Col>
+              </Row>
+              <Row>
+                <Col sm={20} md={8} lg={8} offset={2} className="footer">
                   <Button
                     type="primary"
                     htmlType="submit"
-                    className="button-margin"
                   >
                     {i18n.t('Submit')}
                   </Button>
                   {processing && <Icon type="loading" />}
-                  <Button>
+                  <Button className="button-left">
                     <Link to="/">{i18n.t('Cancel')}</Link>
                   </Button>
                 </Col>

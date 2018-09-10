@@ -3,12 +3,15 @@ import { Form, Input, Button, InputNumber, Table, Popconfirm } from 'antd'
 import { WrappedFormUtils } from 'antd/lib/form/Form'
 import { EditableCell, EditableFormRow, EditableContext, Record } from '.'
 import './table.scss'
+import i18n from 'i18next'
 
 
 interface TableProps {
   data: Array<Record>
   handleSubmit: (values: Record) => void
-  handleDelete: (key: string) => void
+  handleDelete: (id: string) => void
+  handleDefault: (id: string) => void
+  defaultConsigneeId?: string
 }
 interface TableState {
   editingKey: string
@@ -29,31 +32,31 @@ class EditableTable extends React.Component<TableProps, TableState> {
     {
       title: 'name',
       dataIndex: 'name',
-      width: '15%',
+      className:'name-col',
       editable: true
     },
     {
       title: 'email',
       dataIndex: 'email',
-      width: '21%',
+      className:'email-col',
       editable: true
     },
     {
       title: 'phoneNum',
       dataIndex: 'phoneNum',
-      width: '16%',
+      className:'phone-num-col',
       editable: true
     },
     {
       title: 'address',
       dataIndex: 'address',
-      width: '25%',
+      className:'address-col',
       editable: true
     },
     {
       title: 'operation',
       dataIndex: 'operation',
-      width: '14%',
+      className:'operation-col',
       render: (text: string, record: Record) => {
         const editable = this.isEditing(record)
         return (
@@ -88,7 +91,7 @@ class EditableTable extends React.Component<TableProps, TableState> {
     {
       title: 'delete',
       dataIndex: 'delete',
-      width: '9%',
+      className:'delete-col',
       render: (text: string, record: Record) => {
         return record.id ? (
           <Popconfirm
@@ -98,6 +101,26 @@ class EditableTable extends React.Component<TableProps, TableState> {
             <a href="javascript:;">Delete</a>
           </Popconfirm>
         ) : null
+      }
+    },
+    {
+      title: 'set default',
+      className:'default-col',
+      render: (text: string, record: Record) => {
+        if(record.id){
+          if(record.id===this.props.defaultConsigneeId){
+            return <div>Is default</div>
+          }else{
+            return <Popconfirm
+            title="Sure to set default?"
+            onConfirm={() => record.id && this.handleDefault(record.id)}
+          >
+            <a href="javascript:;">{i18n.t("Set default")}</a>
+          </Popconfirm>
+          }
+        }else{
+          return null
+        }
       }
     }
   ]
@@ -113,8 +136,11 @@ class EditableTable extends React.Component<TableProps, TableState> {
     return record.key === this.state.editingKey
   }
 
-  handleDelete = (key: string) => {
-    this.props.handleDelete(key)
+  handleDelete = (id: string) => {
+    this.props.handleDelete(id)
+  }
+  handleDefault = (id: string) => {
+    this.props.handleDefault(id)
   }
 
   edit = (key: string) => {

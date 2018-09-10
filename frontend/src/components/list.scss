@@ -1,16 +1,30 @@
-.block.transaction {
-    @extend %block;
-}
-.block.goods {
-    @extend %block;
-}
-.block.company {
-    @extend %block;
-}
-%block {
+.list-container{
+    min-height: 120px;
+  .header .title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+ .header .subtitle {
+    font-size: 18px;
+    font-weight: bold;
     margin-bottom: 10px;
-    min-height: 100px;
-    padding-right: 10px;
+  }
+  
+ .header .subtitle {
+    display: flex;
+    justify-content: space-between;
+    color: #818182;
+  }
+  
+  .header a {
+    color: #818182;
+  }
+}
+.block {
+    margin-bottom: 10px !important;
+    padding-right: 10px !important;
+    min-height: 100px ;
 }
 .boxmain {
     background-color: white;
@@ -31,8 +45,8 @@
     min-height: 1rem;
     height: 25px;
     line-height: 25px;
-    font-weight: bold;
 }
+
 
 .block .header {
     text-align: right;
@@ -43,7 +57,7 @@
     line-height: 43px;
     text-align: center;
     font-weight: bold;
-    color: #fff;
+    color: #fff;    
     width: 64px;
     left: -8px;
     -webkit-user-select: none;
@@ -80,7 +94,7 @@
 }
 .block .control-btn {
     font-weight: bold;
-    color: #007bff;
+    color: #1890ff;
 }
 .block .control-btn:hover {
     text-decoration: underline;
@@ -154,9 +168,11 @@
 }
 .comment .comment-wrapper .speak .main-comment {
     display: inline-block;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12); 
 }
 .comment .comment-wrapper .reply .main-comment {
     display: inline-block;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12); 
 }
 .reply {
     padding-left: 15%;
@@ -174,7 +190,7 @@
 }
 .speak .main-comment .user-id,
 .reply .main-comment .user-id {
-    color: #365899;
+    color: black;
     font-weight: 600;
 }
 .speak .main-comment .comment-content,
@@ -184,7 +200,7 @@
     padding-left: 10px;
 }
 .features {
-    margin-left: 50px;
+    margin-left: 13px;
     margin-bottom: 3px;
     padding-top: 3px;
 }
@@ -198,24 +214,9 @@
     text-decoration: underline;
     cursor: pointer;
 }
-.avatar,
- {
-    float: left;
-}
-.avatar {
-    padding-right: 5px;
-}
 .submitReply {
     padding-left: 20%;
     padding-bottom: 10px;
-}
-.text-overflow {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-.icon-click{
-    cursor: pointer;
 }
 .release span{
     color: #90949c;
@@ -236,4 +237,7 @@
 }
 .comment-replyTo{
     font-weight: 600;
+}
+.highlighted{
+    color: #1890ff !important;
 }

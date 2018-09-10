@@ -2,7 +2,8 @@ import * as React from 'react'
 import { Row ,Col} from 'antd'
 import i18n from 'i18next'
 import {Image, Goods } from '../models'
-  
+import './goods-info.scss'
+
 interface GoodsinfoProps{
   goods: Goods
   openLightbox: (image:string) => void
@@ -21,23 +22,21 @@ class GoodsInfo extends React.Component<GoodsinfoProps>{
           imagePaths = []
         }
       return (
-          
-          <div>
-            <div className="edits-input">
+            <div className="goods-info">
               <Row>
-                <Col span={20} offset={2} className="edits-input">
-                  <label className="edits-input">{i18n.t('Title')}</label>
+                <Col span={20} offset={2} className="field">
+                  <label>{i18n.t('Title')}</label>
                   <div>{goods.title}</div>
                 </Col>
               </Row>
               <Row>
-                <Col span={20} offset={2} className="edits-input">
+                <Col span={20} offset={2} className="field">
                   <label>{i18n.t('Description')}</label>
                   <div>{goods.desc}</div>
                 </Col>
               </Row>
               <Row>
-                <Col span={20} offset={2} className="view-top">
+                <Col span={20} offset={2} className="field">
                   <label>{i18n.t('Images')}:</label>
                   <div className="message">
                     {imagePaths && (
@@ -59,7 +58,6 @@ class GoodsInfo extends React.Component<GoodsinfoProps>{
                 </Col>
               </Row>
             </div>
-          </div>
       )
     }
   }

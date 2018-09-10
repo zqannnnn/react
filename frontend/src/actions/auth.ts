@@ -6,7 +6,7 @@ import * as auth from '../helpers/auth'
 import { User } from '../models'
 
 export type AuthInfo = {
-    id?: string
+    id: string
     token?: string
     isAdmin?: boolean
     preferredCurrencyCode?: string

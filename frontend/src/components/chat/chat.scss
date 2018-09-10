@@ -3,6 +3,8 @@
     bottom: 0;
     right: 0;
     width: 300px;
+    max-height: 100vh;
+    z-index: 1;
     .ant-collapse-header {
         display: flex;
         flex-direction: column;
@@ -10,21 +12,25 @@
             float: right;
             width: 36px;            
         }
-        svg {
-            float: right;
-            right: 14px;
-            position: relative;
-            top: 4px;            
+        i {
+            cursor: pointer;
         }
     }
     .new-msg {
         background-color: #ff5e00;
+    }
+    .ant-collapse-content-box {
+        position: relative;
+        bottom: 0;
     }
     .chat-container {
         display: flex;
         flex-direction: column;
         .chat-log {
             height: auto;
+            max-height: 50vh;
+            overflow: scroll;
+            margin-bottom: 10px;            
             p {
                 border-radius: 4px;
                 padding: 4px;

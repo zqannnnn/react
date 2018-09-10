@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../../reducers'
-import { Comment } from '../../models'
+import { Comment, Transaction } from '../../models'
 import { transactionConsts } from '../../constants'
 import { Icon, Input, Pagination, Spin } from 'antd'
 import { ListOptions } from '../../models'
@@ -16,6 +16,7 @@ interface CommentAreaProps {
   submitReply: (comment: Comment) => void
   totalComment?: number
   commentLoading?: boolean
+  transaction: Transaction
 }
 
 interface CommentAreaState {
@@ -98,12 +99,13 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
     comment = {
       content: currentComment,
     }
-
-    this.setState({
-      viewAllCommentShowing: true,
-      currentComment: ''
-    })
-    this.props.submitComment(comment, options)
+    if (currentComment !== '') {
+      this.setState({
+        viewAllCommentShowing: true,
+        currentComment: ''
+      })
+      this.props.submitComment(comment, options)
+    }
   }
 
   submitReply = (comment: Comment) => {
@@ -111,7 +113,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
   }
 
   render() {
-    const { comments, totalComment, commentLoading } = this.props
+    const { comments, totalComment, commentLoading, transaction } = this.props
     const { currentComment, viewAllCommentShowing, reset } = this.state
     return (
       <div>
@@ -122,7 +124,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
                 className="control-btn click"
                 onClick={() => this.viewAllComments()}
               >
-                {i18n.t('view All Comments')}
+                {i18n.t('view all comments')}
               </span>
               {commentLoading && <Spin />}
             </div>
@@ -142,6 +144,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
                 viewAllReplys={this.viewAllReplys}
                 submitReply={this.submitReply}
                 reset={reset}
+                transaction={transaction}
                 key={index}
               />
             ))}
@@ -161,7 +164,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
           />
 
           <Input
-            placeholder="Write a Comment..."
+            placeholder="Write a comment..."
             type="text"
             name="comment"
             onPressEnter={this.submitComment}
@@ -173,11 +176,12 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
                 type="enter"
                 style={{ color: 'rgba(0,0,0,.25)' }}
                 onClick={this.submitComment}
-                className="icon-click"
+                className="cursor-pointer"
               />
             }
             prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
           />
+          
           <div className="release">
             <span>{i18n.t(' Press the Enter key to publish。')}</span>
           </div>

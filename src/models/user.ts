@@ -96,15 +96,16 @@ export class User extends Model<User> {
   @HasMany(() => Consignee, 'user_id')
   public consignees: Consignee[]
 
+  @ForeignKey(() => Consignee)
+  @Column({ field: 'default_consignee_id' })
+  public defaultConsigneeId: string
+
   // class methods
   @BeforeCreate
   public static hashPassword = async (instance: User) => {
     if (instance.password) {
       instance.password = await bcrypt.hash(instance.password, 10)
     }
-  }
-  public fullName = () => {
-    return this.firstName + ' ' + this.lastName
   }
 
   // instance methods
@@ -113,5 +114,9 @@ export class User extends Model<User> {
       return bcrypt.compare(pwd, this.password)
     }
     return false
+  }
+
+  public fullName = () => {
+    return this.firstName + ' ' + this.lastName
   }
 }

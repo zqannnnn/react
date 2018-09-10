@@ -129,7 +129,6 @@ class Item extends React.Component<ItemProps> {
           md={10}
           lg={9}
           className="block transation"
-          style={{ marginBottom: 10, paddingRight: 10, minHeight: 100 }}
         >
           <div className="boxmain">
             <div className="left-icon">
@@ -161,10 +160,13 @@ class Item extends React.Component<ItemProps> {
             <div className="space-between content text-overflow">
               {transaction.price &&
                 transaction.currencyCode && (
-                  <Exchange
-                    price={transaction.price}
-                    currencyCode={transaction.currencyCode}
-                  />
+                  <span>
+                    <Exchange
+                      price={transaction.price}
+                      currencyCode={transaction.currencyCode}
+                    />
+                    <span>/kg</span>
+                  </span>
                 )}
               {authInfo &&
               authInfo.isAdmin &&
@@ -186,7 +188,7 @@ class Item extends React.Component<ItemProps> {
               transaction.goods.ownerId != authInfo.id &&
               transaction.status == transactionConsts.STATUS_CREATED ? (
                 <div
-                  className="control-btn"
+                  className="control-btn click"
                   onClick={() => {
                     if (transaction.id) this.handleBuy(transaction.id)
                   }}
@@ -228,7 +230,7 @@ class Item extends React.Component<ItemProps> {
                       {i18n.t('Edit')}
                     </Link>
                     <div
-                      className="control-btn"
+                      className="click control-btn"
                       onClick={() => {
                         if (transaction.id) this.handleCancel(transaction.id)
                       }}
@@ -261,6 +263,7 @@ class Item extends React.Component<ItemProps> {
               listComment={this.listComment}
               submitComment={this.submitComment}
               submitReply={this.submitReply}
+              transaction={transaction}
             />
           </div>
         </Col>

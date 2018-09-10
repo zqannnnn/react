@@ -71,6 +71,23 @@ export function user(state: State = {}, action: UserAction): State {
       }
     case userConsts.DELETE_CONSIGNEE_FAILURE:
       return { error: action.error, processing: false }
+
+    case userConsts.SET_DEFAULT_CONSIGNEE_REQUEST:
+      return { ...state, processing: true }
+    case userConsts.SET_DEFAULT_CONSIGNEE_SUCCESS:
+      if (user && user.consignees) {
+        return {
+          processing: false,
+          userData: {
+            ...user,
+            defaultConsigneeId:action.consigneeId
+          }
+        }
+      } else {
+        return state
+      }
+    case userConsts.SET_DEFAULT_CONSIGNEE_FAILURE:
+      return { error: action.error, processing: false }
     default:
       return state
   }

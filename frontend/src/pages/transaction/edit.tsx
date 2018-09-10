@@ -157,7 +157,7 @@ class EditPage extends React.Component<TransProps, TransState> {
       ) {
         this.props.dispatch(
           alertActionCreators.error(
-            'You are not allowed to add new Offer, please fullfill company info first.'
+            'You are not allowed to add new Offer, please finish company info first.'
           )
         )
         window.scrollTo(0, 0)
@@ -222,7 +222,7 @@ class EditPage extends React.Component<TransProps, TransState> {
           <form name="form" onSubmit={this.handleSubmit}>
             <div className="steps-content">
               {goods && (
-                <div className="edits-input">
+                <div className="field">
                   <GoodsInfo
                   goods={goods}
                   openLightbox={this.openLightbox}
@@ -233,7 +233,7 @@ class EditPage extends React.Component<TransProps, TransState> {
                       sm={{ span: 20, offset: 2 }}
                       md={{ span: 9, offset: 2 }}
                       lg={{ span: 9, offset: 2 }}
-                      className="edits-input"
+                      className="field"
                       offset={2}
                     >
                       <label>{i18n.t('Price')}</label>
@@ -282,17 +282,16 @@ class EditPage extends React.Component<TransProps, TransState> {
                       md={8}
                       lg={8}
                       offset={2}
-                      className="edits-input"
+                      className="footer"
                     >
                       <Button
                         type="primary"
                         htmlType="submit"
-                        className="button-margin"
                       >
                         {i18n.t('Submit')}
                       </Button>
                       {processing && <Icon type="loading" />}
-                      <Button>
+                      <Button className="button-left">
                         <Link to="/">{i18n.t('Cancel')}</Link>
                       </Button>
                     </Col>

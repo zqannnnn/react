@@ -45,7 +45,7 @@ class GoodsPage extends React.Component<GoodsProps, GoodsStates> {
       <div className="page">
         <div className="banner">
           <div className="banner-bg" />
-          <div className="title">{i18n.t('My inventory')}</div>
+          <div className="title">{i18n.t('My Inventory')}</div>
         </div>
         <Row>
           <Col

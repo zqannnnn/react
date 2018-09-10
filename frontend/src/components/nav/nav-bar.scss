@@ -33,6 +33,11 @@
   }
 }
 
+.sidebar{
+  z-index: 10;
+  height: 100%;
+  position: absolute !important;
+}
 .nav-bar {
   position: relative;
   display: inline;

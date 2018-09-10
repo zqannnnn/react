@@ -45,9 +45,11 @@ class LostPassForm extends React.Component<LostPassFormProps> {
             {i18n.t('Reset Password')}
           </Button>
           {processing && <Icon type="loading" />}
-          <Button size="large">
-            <Link to="/login">{i18n.t('Back to login')}</Link>
-          </Button>
+          <Link to="/login">
+            <Button size="large">
+              {i18n.t('Back to login')}
+            </Button>
+          </Link>
         </FormItem>
       </Form>
     )

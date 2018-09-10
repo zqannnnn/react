@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { Comment } from '../../models'
-import { Icon, Input, Avatar } from 'antd'
+import { Comment, Transaction } from '../../models'
+import { Icon, Input, Avatar, Spin } from 'antd'
 import i18n from 'i18next'
 interface CommentProps {
   comment: Comment
@@ -9,6 +9,7 @@ interface CommentProps {
   submitReply: (comment: Comment) => void
   commentLoading?: boolean
   reset: boolean
+  transaction: Transaction
 }
 interface CommentState {
   currentReply: string
@@ -111,13 +112,15 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
       replyTo: currentReplyTo,
       rootId: currentReplyRoot
     }
-    this.setState({
-      replyInputShowing: false,
-      replyLoading: true,
-      viewAllReplyShowing: true,
-      currentReply: ''
-    })
-    this.props.submitReply(comment)
+    if (currentReply !== '') {
+      this.setState({
+        replyInputShowing: false,
+        replyLoading: true,
+        viewAllReplyShowing: true,
+        currentReply: ''
+      })
+      this.props.submitReply(comment)
+    }
   }
 
   handleReplyInputChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -128,30 +131,56 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
   }
 
   renderComment = (comment: Comment) => {
+    const { transaction } = this.props
     const { replyInputShowing, currentReplyTo, currentReply } = this.state
     return (
       <div key={comment.id} className="reply-wrapper">
         <div className="reply">
-          <div className="avatar">
-            <Link to={'/user/' + comment.userId}>
-              <Avatar icon="user" />
-            </Link>
-          </div>
           <div className="comment-flex">
-            <div className="main-comment">
-              <Link to={'/user/' + comment.userId}>
-                <span className="user-id click">
-                  {comment.user && comment.user.firstName}
-                </span>
-              </Link>
-              <span className="comment-replyTo">
-                {i18n.t(' reply to ')}
-              </span>
-              <span className="user-id click">
-                {comment.user && comment.user.firstName}
-              </span>
-              <span className="reply-content">{comment.content}</span>
-            </div>
+            {transaction.makerId === comment.userId && (
+              <div className="main-comment">
+                <Link to={'/user/' + comment.userId}>
+                  <span className="user-id click highlighted">
+                    {comment.user && comment.user.firstName}
+                  </span>
+                </Link>
+                {comment.rootId !== comment.replyTo && (
+                  <>
+                    <span className="comment-replyTo">
+                      {i18n.t(' reply ')}
+                    </span>
+                    <Link to={'/user/' + comment.userId}>
+                      <span className="user-id click">
+                        {comment.userReplyTo && comment.userReplyTo.firstName}
+                      </span>
+                    </Link>
+                  </>
+                )}
+                <span className="reply-content">{comment.content}</span>
+              </div>
+            )}
+            {transaction.makerId !== comment.userId && (
+              <div className="main-comment">
+                <Link to={'/user/' + comment.userId}>
+                  <span className="user-id click">
+                    {comment.user && comment.user.firstName}
+                  </span>
+                </Link>
+                {comment.rootId !== comment.replyTo && (
+                  <>
+                    <span className="comment-replyTo">
+                      {i18n.t(' reply ')}
+                    </span>
+                    <Link to={'/user/' + comment.userId}>
+                      <span className="user-id click">
+                        {comment.userReplyTo && comment.userReplyTo.firstName}
+                      </span>
+                    </Link>
+                  </>
+                )}
+                <span className="reply-content">{comment.content}</span>
+              </div>
+            )}
           </div>
 
           <div className="features">
@@ -163,7 +192,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
             >
               {i18n.t('reply')}
             </span>
-            <span className="click createdAt">
+            <span className="createdAt">
               {comment.createdAt && this.formatTime(comment.createdAt)}
             </span>
           </div>
@@ -187,7 +216,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
                     type="enter"
                     style={{ color: 'rgba(0,0,0,.25)' }}
                     onClick={this.submitReply}
-                    className="icon-click"
+                    className="cursor-pointer"
                   />
                 }
                 prefix={
@@ -200,7 +229,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
     )
   }
   render() {
-    const { comment } = this.props
+    const { comment, commentLoading, transaction } = this.props
     const {
       currentReply,
       replyInputShowing,
@@ -210,18 +239,27 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
     return (
       <div className="comment-wrapper">
         <div className="speak">
-          <div className="avatar">
-            <Link to={'/user/' + comment.userId}>
-              <Avatar icon="user" />
-            </Link>
-          </div>
           <div className="comment-flex">
-            <div className="main-comment">
-              <span className="user-id click">
-                {comment.user && comment.user.firstName}
-              </span>
-              <span className="comment-content">{comment.content}</span>
-            </div>
+            {transaction.makerId === comment.userId && (
+              <div className="main-comment">
+                <Link to={'/user/' + comment.userId}>
+                  <span className="user-id click highlighted">
+                    {comment.user && comment.user.firstName}
+                  </span>
+                </Link>
+                <span className="comment-content">{comment.content}</span>
+              </div>
+            )}
+            {transaction.makerId !== comment.userId && (
+              <div className="main-comment">
+                <Link to={'/user/' + comment.userId}>
+                  <span className="user-id click">
+                    {comment.user && comment.user.firstName}
+                  </span>
+                </Link>
+                <span className="comment-content">{comment.content}</span>
+              </div>
+            )}
           </div>
 
           <div className="features">
@@ -233,7 +271,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
             >
               {i18n.t('reply')}
             </span>
-            <span className="click createdAt">
+            <span className="createdAt">
               {comment.createdAt && this.formatTime(comment.createdAt)}
             </span>
           </div>
@@ -257,7 +295,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
                     type="enter"
                     style={{ color: 'rgba(0,0,0,.25)' }}
                     onClick={this.submitReply}
-                    className="icon-click"
+                    className="cursor-pointer"
                   />
                 }
                 prefix={
@@ -277,6 +315,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
               >
                 {comment.totalReply} {i18n.t('replies')}
               </span>
+              {commentLoading && <Spin />}
             </div>
           )}
 
