@@ -54,6 +54,7 @@ const addCountryIfNoExists = (countryObj: any) => {
       newCountry.save()
     }
   })
+}
   const addCategoryIfNoExists = (categoryObj: any) => {
     Category.findOne({ where: { type: categoryObj.type } }).then((category:any) => {
       if (!category) {

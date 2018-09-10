@@ -51,11 +51,10 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     componentDidMount() {
         let userId = this.props.match.params.id
         if (userId) {
-            userId &&
-                this.setState({
-                    ...this.state,
-                    userId
-                })
+            this.setState({
+                ...this.state,
+                userId
+            })
             userId && this.props.dispatch(userActionCreators.getById(userId))
         } else {
             this.props.authInfo.id &&
@@ -65,6 +64,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
             if (!this.props.countries)
                 this.props.dispatch(countryActionCreators.getAll())
         }
+
     }
 
     showPersonalModal = () => {
@@ -194,6 +194,12 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
 
     render() {
         const { user, userSelf } = this.state
+        let imagePaths: string[]
+        if (user && user.businessLicenses) {
+            imagePaths = user.businessLicenses.map(image => image.path)
+        } else {
+            imagePaths = []
+        }
         let dataSource: Record[]
         if (user.consignees) {
             dataSource = user.consignees.map((source, index) => ({
@@ -207,12 +213,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
         } else {
             dataSource = []
         }
-        let imagePaths: string[]
-        if (user && user.businessLicenses) {
-            imagePaths = user.businessLicenses.map(image => image.path)
-        } else {
-            imagePaths = []
-        }
+        
         return (
             <Row type="flex" justify="space-around" align="middle" className="profile-page">
                 <Col
@@ -243,8 +244,12 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                             </div>
                         </div>
                         <div className="field">
+                            <label>{i18n.t('Email')}:</label>
+                            <div className="message">{user.email}</div>
+                        </div>
+                        <div className="field">
                             <div className={userSelf ? '' : 'none'}>
-                                <label>{i18n.t('Preferred Currency')}</label>
+                                <label>{i18n.t('Preferred Currency')}:</label>
                                 <div className={userSelf ? 'message' : 'none'}>
                                     {user.preferredCurrencyCode}
                                 </div>
@@ -273,38 +278,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                         {userSelf && <span className='edit'>
                             <a onClick={this.showCompanyModal}>{i18n.t('Edit')}</a>
                         </span>}
-
-                        <div className="field">
-                            <label>{i18n.t('Email')}:</label>
-                            <div className="message">{user.email}</div>
                         </div>
-
-                        <div className="field">
-                            <div className={userSelf ? '' : 'none'}>
-                                <label>{i18n.t('Preferred Currency')}</label>
-                                <div className={userSelf ? 'message' : 'none'}>
-                                    {user.preferredCurrencyCode}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="field" style={{ marginBottom: 0 }}>
-                            <label>{i18n.t('Address')}:</label>
-                            {dataSource && <EditableTable
-                                data={dataSource}
-                                defaultConsigneeId={user.defaultConsigneeId}
-                                handleSubmit={this.handleSubmitConsignee}
-                                handleDelete={this.handleDeleteConsignee}
-                                handleDefault={this.handleDefaultConsignee}
-                            />}
-                        </div>
-                    </div>
-                    <div className="subtitle company-information">
-                        {i18n.t('Company Information')}
-                        {userSelf && <span className='edit'>
-                            <a onClick={this.showCompanyModal}>{i18n.t('Edit')}</a>
-                        </span>}
-
                         {this.state.companyVisible && <CompanyForm
                             handleSubmit={this.companySubmit}
                             user={user}
@@ -312,7 +286,6 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                             handleCancel={this.hideCompanyModal}
                             handlePreview={this.handlePreview}
                         />}
-                    </div>
                     <div className="view-content">
                         <div className="field">
                             <label>{i18n.t('Company Name')}:</label>

@@ -50,8 +50,8 @@ function update(user: User) {
     dispatch(request(user))
 
     userService.update(user).then(
-      (newUser: User) => {
-        dispatch(success(newUser))
+      () => {
+        dispatch(success(user))
         dispatch(alertActionCreators.success('Submit user succeed'))
       },
       (error: any) => {

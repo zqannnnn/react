@@ -183,16 +183,7 @@ router
           imageDb.save()
         })
       }
-      const newUser = await User.find({
-        where: { id: req.params.userId },
-        attributes: { exclude: ['password'] },
-        include: [
-          { model: Image, attributes: ['path'] },
-          { model: Consignee },
-          { model: Country }
-        ]
-      })
-      return res.send(newUser)
+      return res.send({ success: true })
     } catch (e) {
       return res.status(500).send({ error: e.message })
     }
