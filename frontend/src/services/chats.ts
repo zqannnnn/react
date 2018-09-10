@@ -9,7 +9,7 @@ function getAll() {
         headers: authHeader()
     }
     //let query = renderQuery(options)
-    return fetch('/transaction/list', requestOptions).then(
+    return fetch('/chat/users', requestOptions).then(
         handleResponse
     )
 }
