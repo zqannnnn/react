@@ -11,7 +11,8 @@ import {
   Transaction,
   User,
   Consignee,
-  Comment
+  Comment,
+  Country,
 } from './models/'
 
 const sequelize = new Sequelize(config)
@@ -23,7 +24,8 @@ sequelize.addModels([
   Image,
   Currency,
   Consignee,
-  Comment
+  Comment,
+  Country
 ])
 
 const initDatabase = async () => {
@@ -56,6 +58,14 @@ const addCurrencyIfNoExists = (currencyObj: any) => {
     }
   })
 }
+const addCountryIfNoExists = (countryObj: any) => {
+  Country.findOne({ where: { code: countryObj.code } }).then(country => {
+    if (!country) {
+      const newCountry= new Country(countryObj)
+      newCountry.save()
+    }
+  })
+}
 
 const insertInitialData = () => {
    //1532692062 chat test users
@@ -76,7 +86,14 @@ const insertInitialData = () => {
       addCurrencyIfNoExists(currencies[i])
     }  
   }
-  
+  let countriesDataFile = path.join(__dirname, './db_data/countries.json')
+  if (fs.existsSync(countriesDataFile)) {
+    let rawdata = fs.readFileSync(countriesDataFile)
+    let countries = JSON.parse(rawdata.toString())
+    for (var i = 0; i < countries.length; i++) {
+      addCountryIfNoExists(countries[i])
+    }  
+  }
 
   Category.findOne({ where: { type: 'Beef' } }).then(categoryBeef => {
     if (!categoryBeef) {
@@ -107,4 +124,4 @@ const insertInitialData = () => {
   })
 }
 
-export { User, Transaction, Goods, Category, Image, initDatabase ,Consignee}
+export { User, Transaction, Goods, Category, Image, initDatabase ,Consignee,Country}

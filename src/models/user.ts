@@ -16,7 +16,7 @@ import {
   Unique,
   UpdatedAt
 } from 'sequelize-typescript'
-import { Currency, Image, Transaction } from './'
+import { Currency, Image, Transaction, Country } from './'
 import { Consignee } from './consignee'
 @Table({
   tableName: 'user',
@@ -72,6 +72,13 @@ export class User extends Model<User> {
 
   @BelongsTo(() => Currency, 'preferred_currency')
   public preferredCurrency: Currency
+
+  @ForeignKey(() => Country)
+  @Column({ field: 'country_code' })
+  public countryCode: string
+
+  @BelongsTo(() => Country)
+  public country: Country
 
   // fields for company
   @Column({ field: 'company_name' })

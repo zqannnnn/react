@@ -6,7 +6,7 @@ import { consts } from '../config/static'
 import { app } from '../index'
 import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
-import { Image, User, Consignee } from '../models'
+import { Image, User, Consignee, Country } from '../models'
 import { UserFields } from '../passport'
 const router = express.Router()
 router.use(authMiddleware)
@@ -130,7 +130,11 @@ router
     const user = await User.find({
       where: { id: req.params.userId },
       attributes: { exclude: ['password'] },
-      include: [{ model: Image, attributes: ['path'] }, { model: Consignee }]
+      include: [
+        { model: Image, attributes: ['path'] },
+        { model: Consignee },
+        { model: Country }
+      ]
     })
     if (!user) {
       return res.status(500).send({ error: i18n.t('User does not exist.') })
@@ -152,7 +156,7 @@ router
       Object.keys(req.body).forEach(
         (key: string) => (user[key] = req.body[key])
       )
-      user.save()
+      await user.save()
       await Image.destroy({ where: { userId: req.params.userId } })
       if (req.body.businessLicenses) {
         req.body.businessLicenses.forEach((image: { path: string }) => {
@@ -163,7 +167,16 @@ router
           imageDb.save()
         })
       }
-      return res.send(user)
+      const newUser = await User.find({
+        where: { id: req.params.userId },
+        attributes: { exclude: ['password'] },
+        include: [
+          { model: Image, attributes: ['path'] },
+          { model: Consignee },
+          { model: Country }
+        ]
+      })
+      return res.send(newUser)
     } catch (e) {
       return res.status(500).send({ error: e.message })
     }
