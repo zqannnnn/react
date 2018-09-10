@@ -37,6 +37,8 @@ const getAll: ActionCreator<Thunk> = () => {
         return { type: chatConsts.GETALL_REQUEST }
     }
     function success(users: Array<User>): Action {
+        console.log('getAll success')
+        console.log(users)
         return { type: chatConsts.GETALL_SUCCESS, users }
     }
     function failure(error: string): Action {
