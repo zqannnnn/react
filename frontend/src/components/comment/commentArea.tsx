@@ -57,9 +57,9 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
     })
   }
 
-  viewAllReplys = (comment: Comment) => {
+  viewAllReplies = (comment: Comment) => {
     this.props.dispatch(
-      transactionActionCreators.listReplys(
+      transactionActionCreators.listReplies(
         comment.rootId,
         comment.transactionId
       )
@@ -141,7 +141,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
               <CommentItem
                 comment={comment}
                 commentLoading={commentLoading}
-                viewAllReplys={this.viewAllReplys}
+                viewAllReplies={this.viewAllReplies}
                 submitReply={this.submitReply}
                 reset={reset}
                 transaction={transaction}

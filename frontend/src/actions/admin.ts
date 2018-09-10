@@ -40,7 +40,7 @@ function confirm(id: string) {
   }
 
   function request() {
-    return { type: adminConsts.CONFIRM_COMPANY_REQUSET }
+    return { type: adminConsts.CONFIRM_COMPANY_REQUEST }
   }
   function success() {
     return { type: adminConsts.CONFIRM_COMPANY_SUCCESS }
@@ -95,7 +95,7 @@ function disconfirm(id: string) {
   }
 
   function request() {
-    return { type: adminConsts.DISCONFIRM_COMPANY_REQUSET }
+    return { type: adminConsts.DISCONFIRM_COMPANY_REQUEST }
   }
   function success() {
     return { type: adminConsts.DISCONFIRM_COMPANY_SUCCESS }
@@ -118,7 +118,7 @@ const listUnconfirmedCompanies: ActionCreator<
   }
 
   function request(): Action {
-    return { type: adminConsts.GET_UNCONFIRMED_COMPANIES_REQUSET }
+    return { type: adminConsts.GET_UNCONFIRMED_COMPANIES_REQUEST }
   }
   function success(unconfirmedCompanies: User[]): Action {
     unconfirmedCompanies.forEach(company => (company.itemType = 'Company'))
@@ -145,7 +145,7 @@ const getConfirmingConpany: ActionCreator<
   }
 
   function request(): Action {
-    return { type: adminConsts.GET_CONFIRMING_COMPANY_REQUSET }
+    return { type: adminConsts.GET_CONFIRMING_COMPANY_REQUEST }
   }
   function success(confirmingCompany: User): Action {
     return {
@@ -157,7 +157,7 @@ const getConfirmingConpany: ActionCreator<
     return { type: adminConsts.GET_CONFIRMING_COMPANY_FAILURE, error }
   }
 }
-const getWaittingTransactions: ActionCreator<Thunk> = (option: ListOptions) => {
+const getWaitingTransactions: ActionCreator<Thunk> = (option: ListOptions) => {
   return (dispatch: Dispatch<RootState>): void => {
     dispatch(request())
     transService.getAll(option).then(
@@ -244,7 +244,7 @@ const getFinishedTransactions: ActionCreator<Thunk> = (option: ListOptions) => {
 export const actionCreators = {
   listUnconfirmedCompanies,
   getConfirmingConpany,
-  getWaittingTransactions,
+  getWaitingTransactions,
   getFinishedTransactions,
   confirm,
   disconfirm,

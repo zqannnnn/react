@@ -5,7 +5,7 @@ import { Icon, Input, Avatar, Spin } from 'antd'
 import i18n from 'i18next'
 interface CommentProps {
   comment: Comment
-  viewAllReplys: (comment: Comment) => void
+  viewAllReplies: (comment: Comment) => void
   submitReply: (comment: Comment) => void
   commentLoading?: boolean
   reset: boolean
@@ -71,12 +71,12 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
     return <>{result}</>
   }
 
-  viewAllReplys = (comment: Comment) => {
+  viewAllReplies = (comment: Comment) => {
     this.setState({
       replyLoading: true,
       viewAllReplyShowing: true
     })
-    this.props.viewAllReplys(comment)
+    this.props.viewAllReplies(comment)
   }
 
   handleReply = (replyTo?: string) => {
@@ -311,7 +311,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
               <Icon type="rollback" className="icon-rollback" />
               <span
                 className="click"
-                onClick={() => this.viewAllReplys(comment)}
+                onClick={() => this.viewAllReplies(comment)}
               >
                 {comment.totalReply} {i18n.t('replies')}
               </span>
@@ -319,8 +319,8 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
             </div>
           )}
 
-        {comment.replys &&
-          comment.replys.map(reply => this.renderComment(reply))}
+        {comment.replies &&
+          comment.replies.map(reply => this.renderComment(reply))}
       </div>
     )
   }

@@ -194,14 +194,6 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                       )}
                     </div>
                   </Col>
-                  <Col
-                    xs={{ span: 20, offset: 2 }}
-                    sm={{ span: 20, offset: 2 }}
-                    md={{ span: 7, offset: 1 }}
-                    className="field"
-                  >
-                    <label>{i18n.t('Price')}:</label>
-                  </Col>
                 </Row>
                 <Row>
                   <Col
@@ -264,27 +256,40 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                     </div>
                   </Col>
                   <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 7, offset: 1 }}
-                  className="field"
-                >
-                  <label>{i18n.t('creator')}:</label>
-                  <div className="message">
-                    {creator ? (
-                    <Link
-                    to={'/user/' + goods.creatorId}
-                    className="control-btn"
-                    >
-                      <span>
-                        {creator.firstName} {creator.lastName}
-                      </span>
-                      </Link>
-                    ) : (
-                      'nO taker'
-                    )}
-                  </div>
-                </Col>
+                   xs={{ span: 20, offset: 2 }}
+                   sm={{ span: 20, offset: 2 }}
+                   md={{ span: 7, offset: 1 }}
+                    className="field"
+                  >
+                    <label>{i18n.t('Address')}:</label>
+                    <div className="message">
+                      {goods.address ? goods.address : 'N/A'}
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 6, offset: 6 }}
+                    className="field"
+                  >
+                    <label>{i18n.t('Creator')}:</label>
+                    <div className="message">
+                      {creator ? (
+                      <Link
+                      to={'/user/' + goods.creatorId}
+                      className="control-btn"
+                      >
+                        <span>
+                          {creator.firstName} {creator.lastName}
+                        </span>
+                        </Link>
+                      ) : (
+                        'no taker'
+                      )}
+                    </div>
+                  </Col>
                 </Row>
                 <Row>
                   <Col

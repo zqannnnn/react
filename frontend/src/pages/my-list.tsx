@@ -16,7 +16,7 @@ interface ListProps {
 }
 interface ListState {
   options: ListOptions
-  reseted: boolean
+  reset: boolean
 }
 class List extends React.Component<ListProps, ListState> {
   constructor(props: ListProps) {
@@ -29,14 +29,14 @@ class List extends React.Component<ListProps, ListState> {
       page: 1,
       pageSize: transactionConsts.LIST_PAGE_SIZE
     },
-    reseted: false
+    reset: false
   }
 
   onPageChange = (current: number, defaultPageSize: number) => {
     const options = this.state.options
     options.page = current
     options.pageSize = defaultPageSize
-    this.setState({ options, reseted: true })
+    this.setState({ options, reset: true })
     this.props.dispatch(
       transactionActionCreators.getAll({
         type: this.props.type,
@@ -53,10 +53,10 @@ class List extends React.Component<ListProps, ListState> {
   }
 
   componentWillReceiveProps(nextProps: ListProps) {
-    if (this.state.reseted) {
+    if (this.state.reset) {
       this.setState({
         ...this.defaultState,
-        reseted: false
+        reset: false
       })
     }
   }

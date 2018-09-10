@@ -19,8 +19,8 @@ const commentReduce = (comments: Comment[]): Comment[] => {
     restComments.forEach(comment => {
       firstLevel.forEach(firstComment => {
         if (comment.rootId === firstComment.id) {
-          if (firstComment.replys) firstComment.replys.push(comment)
-          else firstComment.replys = [comment]
+          if (firstComment.replies) firstComment.replies.push(comment)
+          else firstComment.replies = [comment]
         }
       })
     })
@@ -190,9 +190,9 @@ export function transaction(
         if (item.rowComments) {
           let firstLevelReply = item.rowComments.filter(comment => comment.replyTo)
           let Multistage = action.comments.filter(comment => comment.replyTo && comment.rootId !== comment.replyTo)
-          Multistage.forEach(replys => {
+          Multistage.forEach(replies => {
             firstLevelReply.forEach(firstLevel => {
-              replys.userReplyTo = firstLevel.user
+              replies.userReplyTo = firstLevel.user
             })
           })
           
@@ -204,7 +204,7 @@ export function transaction(
                     action.comments &&
                     comment.id === action.comments[0].rootId
                   ) {
-                    comment.replys = action.comments
+                    comment.replies = action.comments
                     item.rowComments = action.comments
                   }
                   return comment
@@ -309,20 +309,20 @@ export function transaction(
         return state
       }
     case transactionConsts.REPLY_LIST_SUCCESS:
-      if (state.items && action.replys) {
+      if (state.items && action.replies) {
         let items = state.items.filter(item => item.id !== action.transactionId)
         let item = state.items.filter(
           item => item.id === action.transactionId
         )[0]
         if (item.rowComments) {
           let rowComments = item.rowComments.filter(comment => !comment.replyTo)
-          let replies = action.replys.filter(comment => comment.replyTo)
+          let replies = action.replies.filter(comment => comment.replyTo)
           replies.forEach(comment => {
             rowComments.forEach(firstComment => {
               comment.userReplyTo = firstComment.user
             })
           })
-          let merge = item.rowComments.concat(action.replys)
+          let merge = item.rowComments.concat(action.replies)
           let clone = cloneDeep(merge)
           let comments = commentReduce(merge)
           item.comments = comments
