@@ -98,7 +98,6 @@ class App extends React.Component<AppProps, any> {
                 <PrivateRoute path="/profile" component={ProfilePage} />
                 <PrivateRoute path="/user/:id" component={ProfilePage} />
                 <PrivateRoute path="/inventory" component={MyInventoryPage} />
-                <PrivateRoute path="/transactions/my" component={MyListPage} />
                 <AdminRoute path="/admin" component={AdminPage} />
                 <AdminRoute
                   path="/company/confirm/:id"

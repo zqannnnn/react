@@ -13,7 +13,7 @@ import { ListOptions, Comment } from '../models'
 
 export type Action = {
     type: string
-    ids?: string
+    ids?: Array<string> 
     error?: string
     users?: Array<User>
 }
@@ -37,10 +37,7 @@ const getAll: ActionCreator<Thunk> = () => {
         return { type: chatConsts.GETALL_REQUEST }
     }
     function success(users: Array<User>, ids: Array<string> ): Action {
-        console.log('getAll success')
-        console.log(users)
-        console.log(ids)
-        return { type: chatConsts.GETALL_SUCCESS, users }
+        return { type: chatConsts.GETALL_SUCCESS, users, ids }
     }
     function failure(error: string): Action {
         return { type: chatConsts.GETALL_FAILURE, error }
