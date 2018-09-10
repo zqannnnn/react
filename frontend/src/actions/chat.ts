@@ -13,6 +13,7 @@ import { ListOptions, Comment } from '../models'
 
 export type Action = {
     type: string
+    ids?: string
     error?: string
     users?: Array<User>
 }
@@ -20,12 +21,11 @@ export type Action = {
 type Thunk = ThunkAction<void, RootState, void>
 
 const getAll: ActionCreator<Thunk> = () => {
-    console.log('getAll')
     return (dispatch: Dispatch<RootState>): void => {
         dispatch(request())
         chatService.getAll().then(
-            (result: { users: Array<User> }) =>
-                dispatch(success(result.users)),
+            (result: { users: Array<User>, ids: Array<string> }) =>
+                dispatch(success(result.users, result.ids)),
             (error: string) => {
                 dispatch(failure(error))
                 dispatch(alertActionCreators.error(error))
@@ -36,9 +36,10 @@ const getAll: ActionCreator<Thunk> = () => {
     function request(): Action {
         return { type: chatConsts.GETALL_REQUEST }
     }
-    function success(users: Array<User>): Action {
+    function success(users: Array<User>, ids: Array<string> ): Action {
         console.log('getAll success')
         console.log(users)
+        console.log(ids)
         return { type: chatConsts.GETALL_SUCCESS, users }
     }
     function failure(error: string): Action {

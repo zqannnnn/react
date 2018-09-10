@@ -8,7 +8,6 @@ function getAll() {
         method: 'GET',
         headers: authHeader()
     }
-    //let query = renderQuery(options)
     return fetch('/chat/users', requestOptions).then(
         handleResponse
     )
