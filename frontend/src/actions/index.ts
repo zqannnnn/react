@@ -35,3 +35,7 @@ export {
   actionCreators as adminActionCreators,
   Action as AdminAction
 } from './admin'
+export {
+    actionCreators as chatActionCreators
+  } from './chat'
+  

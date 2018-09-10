@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 //import { transactionActionCreators } from '../actions'
+import { chatActionCreators } from '../actions'
+
 import { RootState } from '../reducers'
 //import { List as ListC } from '../components'
 import { Row, Col, Pagination } from 'antd'
@@ -10,6 +12,7 @@ import i18n from 'i18next'
 //import { ListOptions } from '../models'
 
 interface ChatsProps {
+    dispatch: Dispatch<RootState>
 }
 interface ChatsState {
 }
@@ -19,6 +22,14 @@ class Chats extends React.Component<ChatsProps, ChatsState> {
     this.state = this.defaultState
   }
   defaultState = {
+  }
+
+  componentWillMount() {
+      console.log('will mount')
+      this.props.dispatch(
+        chatActionCreators.getAll()
+      )
+  
   }
 
   componentWillReceiveProps(nextProps: ChatsProps) {
@@ -49,7 +60,7 @@ class Chats extends React.Component<ChatsProps, ChatsState> {
 
 function mapStateToProps(state: RootState) {
   //const { transaction } = state
-  //return { transaction }
+  return { }
 }
 
 const connectedList = connect(mapStateToProps)(Chats)
