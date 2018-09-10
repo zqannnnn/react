@@ -141,7 +141,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       }
     })
   }
-  handleChange = (fileParam: UploadChangeParam) => {
+  handleUploadChange = (fileParam: UploadChangeParam,type:'image'|'certificate') => {
     let fileList = fileParam.fileList
     fileList = fileList.map(file => {
       if (file.response) {
@@ -155,25 +155,10 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       }
       return true
     })
-
-    this.setState({ fileList })
-  }
-  certificateChange = (fileParam: UploadChangeParam) => {
-    let fileList = fileParam.fileList
-    fileList = fileList.map(file => {
-      if (file.response) {
-        file.url = file.response.path
-      }
-      return file
-    })
-    fileList = fileList.filter(file => {
-      if (file.response) {
-        return file.status === 'done'
-      }
-      return true
-    })
-
-    this.setState({ certificateList: fileList })
+    if(type==='image')
+      this.setState({ fileList })
+    else
+      this.setState({ certificateList: fileList })
   }
   handleInputNumber = (value: string | number, name: string | number) => {
     const { goods } = this.state
@@ -191,7 +176,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
     const { goods, goodsId, fileList, certificateList } = this.state
 
     const { dispatch } = this.props
-    if (goods.category && goods.title && goods.quantity) {
+    if (goods.category && goods.title && goods.quantity && goods.address) {
       let images: Image[] = []
       let certificates: Image[] = []
       fileList.forEach((file: any) => images.push({ path: file.url }))
@@ -247,7 +232,8 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       fed,
       grainFedDays,
       trimmings,
-      category
+      category,
+      address
     } = this.state.goods
     let { submitted, fileList, certificateList } = this.state
     let { processing, categories } = this.props
@@ -297,7 +283,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                     accept="image/*"
                     listType="picture-card"
                     fileList={fileList}
-                    onChange={this.handleChange}
+                    onChange={(fileParam: UploadChangeParam)=>this.handleUploadChange(fileParam,'image')}
                     onPreview={this.handlePreview}
                   >
                     <div>
@@ -316,7 +302,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                     accept="image/*"
                     listType="picture-card"
                     fileList={certificateList}
-                    onChange={this.certificateChange}
+                    onChange={(fileParam: UploadChangeParam)=>this.handleUploadChange(fileParam,'certificate')}
                     onPreview={this.handlePreview}
                   >
                     <div>
@@ -624,6 +610,28 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                         </div>
                       )}
                   </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col
+                  xs={{ span: 20, offset: 2 }}
+                  sm={{ span: 20, offset: 2 }}
+                  md={{ span: 9, offset: 2 }}
+                  lg={{ span: 9, offset: 2 }}
+                  className="field"
+                >
+                  <label>{i18n.t('Address')}</label>
+                  <TextArea
+                    name="address"
+                    value={address}
+                    onChange={this.handleInputChange}
+                  />
+                  {submitted &&
+                      !address && (
+                        <div className="invalid-feedback">
+                          {i18n.t('Address is required')}
+                        </div>
+                      )}
                 </Col>
               </Row>
               <Row>
