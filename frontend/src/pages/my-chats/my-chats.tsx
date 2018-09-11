@@ -60,6 +60,7 @@ class Chats extends React.Component<ChatsProps, ChatsState> {
                 <h2 className="header-center">{i18n.t('Chats History')}</h2>
                 <Spin spinning={this.state.loading}>
                     <Table
+                        rowKey='id'
                         pagination={false}
                         showHeader={false}
                         onRow={(user) => {

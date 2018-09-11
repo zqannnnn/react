@@ -34,9 +34,10 @@
             max-height: 50vh;
             overflow: scroll;
             margin-bottom: 10px;            
-            p {
+            > div {
                 border-radius: 4px;
                 padding: 4px;
+                margin-top: 5px;
                 &.incoming {
                     background-color: #f3cd87;
                 }

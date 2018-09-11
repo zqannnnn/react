@@ -151,12 +151,12 @@ class UserItem extends React.Component<ItemProps, ItemState> {
                                 let cssClass = (msg.from == that.props.userKey) ? 'incoming' : 'outcoming'
                                 const d = new Date(msg.createdAt.replace(' ', 'T'))
                                 return (
-                                    <p ref={msg.id} key={msg.id} className={cssClass} >
+                                    <div ref={msg.id} key={msg.id} className={cssClass} >
                                         {moment(d).format('YYYY/MM/DD HH:mm')}
                                         <div>
                                             {msg.msg}
                                         </div>
-                                    </p>
+                                    </div>
                                 )
                             }
                         })            
