@@ -1,15 +1,11 @@
-import { transactionConsts, adminConsts, chatConsts } from '../constants'
-import { transService } from '../services'
+import { chatConsts } from '../constants'
 import { chatService } from '../services'
 import { alertActionCreators } from '.'
-import { history } from '../helpers/history'
-import * as auth from '../helpers/auth'
-import { Transaction, User } from '../models'
+import { User } from '../models'
 import { Dispatch } from 'react-redux'
 import { ActionCreator } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 import { RootState } from '../reducers'
-import { ListOptions, Comment } from '../models'
 
 export type Action = {
     type: string
