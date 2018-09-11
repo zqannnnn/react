@@ -1,7 +1,6 @@
-import { transactionConsts, chatConsts } from '../constants'
-import { TransactionAction, ChatAction } from '../actions'
-import { Transaction, Comment, User } from '../models'
-import { cloneDeep } from 'lodash'
+import { chatConsts } from '../constants'
+import { ChatAction } from '../actions'
+import { User } from '../models'
 export type State = {
     processing?: boolean
     users?: Array<User>
