@@ -34,13 +34,13 @@ class Chats extends React.Component<ChatsProps, ChatsState> {
     }
     render() {
         const { chat } = this.props
-        console.log(chat)
         const columns = [{
             title: 'First name',
             dataIndex: 'firstName',
             key: 'firstName',
             render: (text: any, record: User) => (
                 <span>
+                    <Avatar size="small" icon="user" />
                     {record.firstName} {record.lastName}
                 </span>
             ),
@@ -48,18 +48,21 @@ class Chats extends React.Component<ChatsProps, ChatsState> {
 
 
         return (
-            <Table
-                pagination={false}
-                showHeader={false}
-                onRow={(user) => {
-                    return {
-                        onClick: () => {
-                            window.Chat.openChat(user.id, true)
-                        },
-                    }
-                }}
-                columns={columns}
-                dataSource={chat.users} />
+            <div className="page">
+                <h2 className="header-center">{i18n.t('Chats History')}</h2>
+                <Table
+                    pagination={false}
+                    showHeader={false}
+                    onRow={(user) => {
+                        return {
+                            onClick: () => {
+                                window.Chat.openChat(user.id, true)
+                            },
+                        }
+                    }}
+                    columns={columns}
+                    dataSource={chat.users} />
+            </div>
         )
     }
 }
