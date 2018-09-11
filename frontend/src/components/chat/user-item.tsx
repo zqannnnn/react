@@ -1,9 +1,7 @@
 //1532692062 chat
 import * as React from 'react'
 import { StringKeyHash } from '../../../../src/interfaces'
-//https://ant.design/components/input/
 import { Form, Input, Button, Spin } from 'antd'
-//import moment from 'moment'
 import * as moment from 'moment'
 
 interface ItemProps {
