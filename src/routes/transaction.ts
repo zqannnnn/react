@@ -47,7 +47,7 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
     whereOption.makerId = req.userId
   } else if (type === 'finished') {
     whereOption.status = consts.TRANSACTION_STATUS_FINISHED
-  } else if (type === 'waitting') {
+  } else if (type === 'waiting') {
     whereOption.status = consts.TRANSACTION_STATUS_TAKING
   } else {
     whereOption.status = consts.TRANSACTION_STATUS_CREATED
@@ -256,8 +256,8 @@ router.get('/list/reply', async (req: IRequest, res: express.Response) => {
       ...pageOption,
       order: [orderOption]
     })
-    const replys = result.rows.filter(comment => comment.id !== rootId)
-    return res.send({ replys, total: result.count })
+    const replies = result.rows.filter(comment => comment.id !== rootId)
+    return res.send({ replies, total: result.count })
   } catch (e) {
     return res.status(500).send({ error: e.message })
   }

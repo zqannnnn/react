@@ -6,7 +6,8 @@ export const userService = {
   delete: _delete,
   listUnconfirmedCompanies,
   confirm,
-  disconfirm
+  disconfirm,
+  setDefaultConsignee
 }
 function confirm(id: string) {
   const requestOptions = {
@@ -65,6 +66,16 @@ function _delete(id: string) {
   }
 
   return fetch('/user/' + id, requestOptions).then(handleResponse)
+}
+function setDefaultConsignee(consigneeId: string) {
+  const requestOptions = {
+    method: 'PUT',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json'
+    }
+  }
+  return fetch('/user/set/default/consignee?id=' + consigneeId, requestOptions).then(handleResponse)
 }
 function handleResponse(response: Response) {
   if (!response.ok) {

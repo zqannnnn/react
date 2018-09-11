@@ -23,9 +23,13 @@ export {
     Action as CurrencyAction
 } from './currency'
 export {
-    actionCreators as authActionCreators,
-    Action as AuthAction,
-    AuthInfo,
+  actionCreators as countryActionCreators,
+  Action as CountryAction
+} from './country'
+export {
+  actionCreators as authActionCreators,
+  Action as AuthAction,
+  AuthInfo,
 } from './auth'
 export {
     actionCreators as lightboxActionCreators,

@@ -2,9 +2,6 @@
     .consignee-table{
         width:100%;
         background:#fff;
-        td{
-            padding: 2% !important;
-        }
         span{
             display: block !important;
             white-space: nowrap;
@@ -18,12 +15,33 @@
     }
   }
   .consignee-table{
-      overflow-y: auto !important;
-      input{
+    overflow-y: auto !important;
+    input{
         min-width:145px !important;
-      }
-      textarea{
+    }
+    textarea{
         min-width:188px !important;
-      }
+    }
+    .name-col{
+        min-width: 150px
+    }
+    .email-col{
+        min-width: 150px
+    }
+    .phone-num-col{
+        min-width: 100px
+    }
+    .address-col{
+        min-width: 150px
+    }
+    .operation-col{
+        min-width: 100px
+    }
+    .delete-col{
+        min-width: 80px
+    }
+    .default-col{
+        min-width: 100px
+    }
   }
   .addAddress{display:block !important;}

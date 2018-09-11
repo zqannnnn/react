@@ -13,7 +13,7 @@ export const transService = {
   createComment,
   createReply,
   listComment,
-  listReplys
+  listReplies
 }
 function _new(transaction: Transaction) {
   const requestOptions = {
@@ -118,17 +118,6 @@ function getAll(options: ListOptions) {
   )
 }
 
-function getwaitting(options: ListOptions) {
-  const requestOptions = {
-    method: 'GET',
-    headers: authHeader()
-  }
-  let query = renderQuery(options)
-  return fetch('/transaction/list?' + query, requestOptions).then(
-    handleResponse
-  )
-}
-
 function createComment(comment: Comment, options?: ListOptions) {
   const requestOptions = {
     method: 'POST',
@@ -174,7 +163,7 @@ function listComment(id: string, options?: ListOptions) {
   ).then(handleResponse)
 }
 
-function listReplys(id: string, transactionId: string, options?: ListOptions) {
+function listReplies(id: string, transactionId: string, options?: ListOptions) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()

@@ -6,10 +6,11 @@ import {
     userActionCreators,
     AuthInfo,
     currencyActionCreators,
+    countryActionCreators,
     lightboxActionCreators
 } from '../../actions'
 import { RootState, UserState } from '../../reducers'
-import { User, Currency, Image, Consignee } from '../../models'
+import { User, Currency, Image, Consignee, Country } from '../../models'
 import { Row, Col, Select, Button } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import i18n from 'i18next'
@@ -24,6 +25,7 @@ interface ProfileProps extends RouteComponentProps<{ id: string }> {
     userProp: UserState
     authInfo: AuthInfo
     currencies: Currency[]
+    countries: Country[]
 }
 
 interface ProfileState {
@@ -49,19 +51,22 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     componentDidMount() {
         let userId = this.props.match.params.id
         if (userId) {
-            userId &&
-                this.setState({
-                    ...this.state,
-                    userId
-                })
+            this.setState({
+                ...this.state,
+                userId
+            })
             userId && this.props.dispatch(userActionCreators.getById(userId))
         } else {
             this.props.authInfo.id &&
                 this.props.dispatch(userActionCreators.getById(this.props.authInfo.id))
             if (!this.props.currencies)
                 this.props.dispatch(currencyActionCreators.getAll())
+            if (!this.props.countries)
+                this.props.dispatch(countryActionCreators.getAll())
         }
+
     }
+
     showPersonalModal = () => {
         this.setState({
             personalVisible: true
@@ -72,14 +77,28 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
             companyVisible: true
         })
     }
-    hideCompanyModal = () => {
-        this.setState({
-            companyVisible: false
-        })
+    personalSubmit = (values: UserValuesProps, ) => {
+        const { user } = this.state
+        const { dispatch, countries } = this.props
+        let newUser = {
+            ...user,
+            firstName: values.firstName,
+            email: values.email,
+            lastName: values.lastName,
+            preferredCurrencyCode: values.preferredCurrencyCode,
+            countryCode: values.countryCode
+        }
+        dispatch(userActionCreators.update(newUser))
+        this.setState({ user: newUser })
     }
     hidePersonalModal = () => {
         this.setState({
             personalVisible: false
+        })
+    }
+    hideCompanyModal = () => {
+        this.setState({
+            companyVisible: false
         })
     }
 
@@ -105,8 +124,6 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
             } else {
                 nextProps.authInfo.id &&
                     nextProps.dispatch(userActionCreators.getById(nextProps.authInfo.id))
-                if (!nextProps.currencies)
-                    nextProps.dispatch(currencyActionCreators.getAll())
             }
         }
         if (userData && !processing) {
@@ -130,18 +147,6 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
         })
         this.props.dispatch(currencyActionCreators.upCurrencyStatus(value))
     }
-    personalSubmit = (values: UserValuesProps) => {
-        const { user } = this.state
-        const { dispatch } = this.props
-        let newUser = {
-            ...user,
-            firstName: values.firstName,
-            email: values.email,
-            lastName: values.lastName
-        }
-        dispatch(userActionCreators.update(newUser))
-        this.setState({ user: newUser })
-    }
     companySubmit = (values: CompanyValuesProps, fileList: UploadFile[]) => {
         const { user } = this.state
         const { dispatch } = this.props
@@ -158,6 +163,13 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
         this.setState({ user: newUser })
     }
 
+
+    handlePreview = (file: UploadFile) => {
+        file.url && this.openLightbox(file.url)
+    }
+    openLightbox = (image: string) => {
+        this.props.dispatch(lightboxActionCreators.open(image))
+    }
     handleSubmitConsignee = (values: Record) => {
         const { dispatch } = this.props
         let consignee: Consignee = {
@@ -175,38 +187,19 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
         const { dispatch } = this.props
         dispatch(userActionCreators.deleteConsignee(id))
     }
-
-    //for render select input
-    renderCurrencySelect = () => {
-        let preferCurrency = this.state.user.preferredCurrencyCode || ''
-        const { currencies } = this.props
-        return (
-            <Select
-                value={String(preferCurrency)}
-                onSelect={(value: string) =>
-                    this.handleSelect(value, 'preferredCurrencyCode')
-                }
-            >
-                {currencies &&
-                    currencies.map((item, index) => (
-                        <Select.Option key={index} value={item.code}>
-                            {item.code}({item.description})
-            </Select.Option>
-                    ))}
-            </Select>
-        )
-    }
-    handlePreview = (file: UploadFile) => {
-        file.url && this.openLightbox(file.url)
-    }
-
-    openLightbox = (image: string) => {
-        this.props.dispatch(lightboxActionCreators.open(image))
+    handleDefaultConsignee = (id: string) => {
+        const { dispatch } = this.props
+        dispatch(userActionCreators.setDefaultConsignee(id))
     }
 
     render() {
         const { user, userSelf } = this.state
-
+        let imagePaths: string[]
+        if (user && user.businessLicenses) {
+            imagePaths = user.businessLicenses.map(image => image.path)
+        } else {
+            imagePaths = []
+        }
         let dataSource: Record[]
         if (user.consignees) {
             dataSource = user.consignees.map((source, index) => ({
@@ -220,20 +213,15 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
         } else {
             dataSource = []
         }
-        let imagePaths: string[]
-        if (user && user.businessLicenses) {
-            imagePaths = user.businessLicenses.map(image => image.path)
-        } else {
-            imagePaths = []
-        }
+        
         return (
-            <Row type="flex" justify="space-around" align="middle" className="profile-page page">
+            <Row type="flex" justify="space-around" align="middle" className="profile-page">
                 <Col
                     xs={{ span: 20, offset: 2 }}
                     sm={{ span: 20, offset: 1 }}
                 >
                     <h2 className="header-center">{i18n.t('User Profile')}</h2>
-                    { !userSelf && <ChatButton user={user} /> }
+                    {!userSelf && <ChatButton user={user} />}
                     <div className="subtitle">
                         {i18n.t('Personal Information')}
                         {userSelf && <span className='edit'>
@@ -242,9 +230,10 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                         {this.state.personalVisible && <UserForm
                             handleSubmit={this.personalSubmit}
                             user={user}
+                            currencies={this.props.currencies}
+                            countries={this.props.countries}
                             visible={this.state.personalVisible}
                             handleCancel={this.hidePersonalModal}
-                            renderCurrencySelect={this.renderCurrencySelect}
                         />}
                     </div>
                     <div className="view-content">
@@ -254,27 +243,33 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                                 {user.firstName} {user.lastName}
                             </div>
                         </div>
-
                         <div className="field">
                             <label>{i18n.t('Email')}:</label>
                             <div className="message">{user.email}</div>
                         </div>
-
                         <div className="field">
                             <div className={userSelf ? '' : 'none'}>
-                                <label>{i18n.t('Preferred Currency')}</label>
+                                <label>{i18n.t('Preferred Currency')}:</label>
                                 <div className={userSelf ? 'message' : 'none'}>
                                     {user.preferredCurrencyCode}
                                 </div>
                             </div>
                         </div>
-
+                        <div className="field">
+                            <div className={userSelf ? '' : 'none'}>
+                                <label>{i18n.t('Country')}</label>
+                                <div className={userSelf ? 'message' : 'none'}>
+                                    {user.country && user.country.name}
+                                </div>
+                            </div>
+                        </div>
                         <div className="field" style={{ marginBottom: 0 }}>
                             <label>{i18n.t('Address')}:</label>
                             {dataSource && <EditableTable
                                 data={dataSource}
                                 handleSubmit={this.handleSubmitConsignee}
                                 handleDelete={this.handleDeleteConsignee}
+                                handleDefault={this.handleDefaultConsignee}
                             />}
                         </div>
                     </div>
@@ -283,7 +278,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                         {userSelf && <span className='edit'>
                             <a onClick={this.showCompanyModal}>{i18n.t('Edit')}</a>
                         </span>}
-
+                        </div>
                         {this.state.companyVisible && <CompanyForm
                             handleSubmit={this.companySubmit}
                             user={user}
@@ -291,7 +286,6 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                             handleCancel={this.hideCompanyModal}
                             handlePreview={this.handlePreview}
                         />}
-                    </div>
                     <div className="view-content">
                         <div className="field">
                             <label>{i18n.t('Company Name')}:</label>
@@ -327,11 +321,12 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
 }
 
 function mapStateToProps(state: RootState) {
-    const { user, auth, currency } = state
+    const { user, auth, currency, country } = state
     return {
         userProp: user,
         authInfo: auth.authInfo,
-        currencies: currency.items
+        currencies: currency.items,
+        countries: country.items
     }
 }
 const connectedProfilePage = connect(mapStateToProps)(ProfilePage)

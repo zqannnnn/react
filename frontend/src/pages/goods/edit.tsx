@@ -120,7 +120,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       this.setState({ certificateList: licenseList })
     }
   }
-  handleSelectChange = (value: string, name: string) => {
+  handleCustomChange = (value: string|number, name: string) => {
     const { goods } = this.state
     this.setState({
       goods: {
@@ -141,7 +141,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       }
     })
   }
-  handleChange = (fileParam: UploadChangeParam) => {
+  handleUploadChange = (fileParam: UploadChangeParam,type:'image'|'certificate') => {
     let fileList = fileParam.fileList
     fileList = fileList.map(file => {
       if (file.response) {
@@ -155,34 +155,10 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       }
       return true
     })
-
-    this.setState({ fileList })
-  }
-  certificateChange = (fileParam: UploadChangeParam) => {
-    let fileList = fileParam.fileList
-    fileList = fileList.map(file => {
-      if (file.response) {
-        file.url = file.response.path
-      }
-      return file
-    })
-    fileList = fileList.filter(file => {
-      if (file.response) {
-        return file.status === 'done'
-      }
-      return true
-    })
-
-    this.setState({ certificateList: fileList })
-  }
-  handleInputNumber = (value: string | number, name: string | number) => {
-    const { goods } = this.state
-    this.setState({
-      goods: {
-        ...goods,
-        [name]: value
-      }
-    })
+    if(type==='image')
+      this.setState({ fileList })
+    else
+      this.setState({ certificateList: fileList })
   }
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -191,7 +167,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
     const { goods, goodsId, fileList, certificateList } = this.state
 
     const { dispatch } = this.props
-    if (goods.category && goods.title && goods.quantity) {
+    if (goods.category && goods.title && goods.quantity && goods.address) {
       let images: Image[] = []
       let certificates: Image[] = []
       fileList.forEach((file: any) => images.push({ path: file.url }))
@@ -223,7 +199,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
     return (
       <Select
         value={String(selectValue)}
-        onSelect={(value: string) => this.handleSelectChange(value, field)}
+        onSelect={(value: string) => this.handleCustomChange(value, field)}
       >
         {optionItems.map((item, index) => (
           <Select.Option key={index} value={item}>
@@ -247,7 +223,8 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       fed,
       grainFedDays,
       trimmings,
-      category
+      category,
+      address
     } = this.state.goods
     let { submitted, fileList, certificateList } = this.state
     let { processing, categories } = this.props
@@ -272,7 +249,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                 size="large"
                 value={category}
                 onSelect={(value: string) =>
-                  this.handleSelectChange(value, 'category')
+                  this.handleCustomChange(value, 'category')
                 }
               >
                 {goodsConsts.CATEGORY.map((item, index) => (
@@ -297,7 +274,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                     accept="image/*"
                     listType="picture-card"
                     fileList={fileList}
-                    onChange={this.handleChange}
+                    onChange={(fileParam: UploadChangeParam)=>this.handleUploadChange(fileParam,'image')}
                     onPreview={this.handlePreview}
                   >
                     <div>
@@ -316,7 +293,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                     accept="image/*"
                     listType="picture-card"
                     fileList={certificateList}
-                    onChange={this.certificateChange}
+                    onChange={(fileParam: UploadChangeParam)=>this.handleUploadChange(fileParam,'certificate')}
                     onPreview={this.handlePreview}
                   >
                     <div>
@@ -486,7 +463,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                         max={100000}
                         defaultValue={grainFedDays}
                         onChange={(value: number) =>
-                          this.handleInputNumber(value, 'grainFedDays')
+                          this.handleCustomChange(value, 'grainFedDays')
                         }
                       />
                       <div className="label-right">{i18n.t('Days')}</div>
@@ -524,7 +501,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                       max={100000}
                       defaultValue={trimmings}
                       onChange={(value: number) =>
-                        this.handleInputNumber(value, 'trimmings')
+                        this.handleCustomChange(value, 'trimmings')
                       }
                     />
                     <div className="label-right">CL</div>
@@ -612,7 +589,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                         min={1}
                         value={quantity}
                         onChange={(value: number) =>
-                          this.handleInputNumber(value, 'quantity')
+                          this.handleCustomChange(value, 'quantity')
                         }
                       />
                       <div className="label-right">KG</div>
@@ -624,6 +601,28 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                         </div>
                       )}
                   </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col
+                  xs={{ span: 20, offset: 2 }}
+                  sm={{ span: 20, offset: 2 }}
+                  md={{ span: 9, offset: 2 }}
+                  lg={{ span: 9, offset: 2 }}
+                  className="field"
+                >
+                  <label>{i18n.t('Address')}</label>
+                  <TextArea
+                    name="address"
+                    value={address}
+                    onChange={this.handleInputChange}
+                  />
+                  {submitted &&
+                      !address && (
+                        <div className="invalid-feedback">
+                          {i18n.t('Address is required')}
+                        </div>
+                      )}
                 </Col>
               </Row>
               <Row>
