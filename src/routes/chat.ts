@@ -1,6 +1,5 @@
 import * as express from 'express'
 import * as i18n from 'i18next'
-//import { consts } from '../config/static'
 import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
 import { User, Message } from '../models/'
