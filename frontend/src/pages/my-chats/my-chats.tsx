@@ -1,5 +1,4 @@
 import * as React from 'react'
-//import { RootState, ChatState } from '../../reducers'
 import { User } from '../../../../src/models'
 import { Table, Avatar, Spin, message } from 'antd'
 import i18n from 'i18next'
@@ -8,8 +7,6 @@ import { chatService } from '../../services'
 
 
 interface ChatsProps {
-    //dispatch: Dispatch<RootState>
-    //chat: ChatState
 }
 interface ChatsState {
     users: Array<User>
@@ -67,5 +64,4 @@ class Chats extends React.Component<ChatsProps, ChatsState> {
         )
     }
 }
-
 export { Chats as MyChatsPage }

@@ -35,8 +35,3 @@ export {
     actionCreators as adminActionCreators,
     Action as AdminAction
 } from './admin'
-export {
-    actionCreators as chatActionCreators,
-    Action as ChatAction
-} from './chat'
-

@@ -1,7 +1,6 @@
 export { consts as alertConsts } from './alert'
 export { consts as categoryConsts } from './category'
 export { consts as transactionConsts } from './transaction'
-export { consts as chatConsts } from './chat'
 export { consts as goodsConsts } from './goods'
 export { consts as userConsts } from './user'
 export { consts as currencyConsts } from './currency'

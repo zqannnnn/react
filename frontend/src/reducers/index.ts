@@ -4,7 +4,6 @@ import { auth, State as AuthState } from './auth'
 import { user, State as UserState } from './user'
 import { alert, State as AlertState } from './alert'
 import { transaction, State as TransactionState } from './transaction'
-import { chat, State as ChatState } from './chat'
 import { goods, State as GoodsState } from './goods'
 import { category, State as CategoryState } from './category'
 import { currency, State as CurrencyState } from './currency'
@@ -15,7 +14,6 @@ export const rootReducer = combineReducers({
   user,
   alert,
   transaction,
-  chat,
   goods,
   category,
   currency,
@@ -28,7 +26,6 @@ export type RootState = {
   user: UserState
   alert: AlertState
   transaction: TransactionState
-  chat: ChatState
   goods: GoodsState
   category: CategoryState
   currency: CurrencyState
@@ -41,7 +38,6 @@ export {
   UserState,
   AlertState,
   TransactionState,
-  ChatState,
   GoodsState,
   CategoryState,
   CurrencyState,

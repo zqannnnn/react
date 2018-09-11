@@ -130,8 +130,6 @@ const initialState: RootState = {
       }
     ]
   },
-  chat: {
-  },
   user: {
     userData: {
       businessLicenses: [{ path: 'http://localhost:3000/static/jFRAMAkM.jpg' }],
