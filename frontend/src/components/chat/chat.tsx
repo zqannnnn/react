@@ -30,6 +30,7 @@ interface ItemState {
     activePanel: string
     connected: boolean
     authInfo: any
+    active: boolean
 }
 class Chat extends React.Component<ItemProps, ItemState> {
 	constructor(props: ItemProps) {
@@ -45,8 +46,10 @@ class Chat extends React.Component<ItemProps, ItemState> {
             opened: false,
             activePanel: '',
             connected: false,
-            authInfo: undefined
+            authInfo: undefined,
+            active: false
         }
+        this.onChatClose = this.onChatClose.bind(this)
         this.onUserItemClose = this.onUserItemClose.bind(this)
         this.onOpenChat = this.onOpenChat.bind(this)
         this.onOpenUserItem = this.onOpenUserItem.bind(this)
@@ -71,7 +74,7 @@ class Chat extends React.Component<ItemProps, ItemState> {
             const data = { userId: userId, open: open }
             if (this.state.socket !== undefined) this.state.socket.emit("get-user", data)
         }
-        this.setState({opened: true})
+        this.setState({opened: true, active: true})
         if (open) this.setState({activePanel: userId})
     }    
     connect() {
@@ -181,6 +184,9 @@ class Chat extends React.Component<ItemProps, ItemState> {
         }
         this.setState({users: users})
     }
+	onChatClose(key: any) {
+        this.setState({active: false})
+    }
 	onOpenChat(panel: any) {
         if (panel != undefined) {
             this.setState({opened: true})
@@ -216,12 +222,12 @@ class Chat extends React.Component<ItemProps, ItemState> {
         let chatActiveKey = ''
         if (this.state.opened) chatActiveKey = 'chat'
         const that = this
-        if (loggedIn) {
+        if (loggedIn && this.state.active) {
 			chat = (
 				<>
 					<div id="chat">
 						<Collapse activeKey={chatActiveKey} accordion onChange={this.onOpenChat}>
-                            <Panel className={chatCssClass} header={<PanelHead onUserItemClose='' user={{}} userKey='none' text={i18n.t('Chat')} showClose={false} />} key='chat'> 
+                            <Panel className={chatCssClass} header={<PanelHead onUserItemClose={this.onChatClose} user={{}} userKey='none' text={i18n.t('Chat')} showClose={true} />} key='chat'> 
                                 <Collapse activeKey={this.state.activePanel} accordion onChange={that.onOpenUserItem}>
                                     {
                                         Object.keys(this.state.users).map((userKey, index) => {

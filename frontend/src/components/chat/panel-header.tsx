@@ -18,8 +18,8 @@ class PanelHead extends React.Component<ItemProps> {
         this.handleClick = this.handleClick.bind(this)
     }
     handleClick(event: React.FormEvent<HTMLDivElement>) {
-        //event.preventDefault()
-        //event.stopPropagation()
+        event.preventDefault()
+        event.stopPropagation()
         this.props.onUserItemClose(this.props.userKey)
     }   
     render() {
