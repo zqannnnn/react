@@ -213,7 +213,11 @@ yarn test
 
 ### Chat
 
-To open chat with an user, execute window.Chat.openChat("user-id")
+To open chat with an user, execute window.Chat.openChat("user-id"), or use ChatButton component to add button opening chat for specific user.
+
+All history of chats is available in page in main menu 'My account' -> 'My Chats'
+
+
 
 ### React components library
 
