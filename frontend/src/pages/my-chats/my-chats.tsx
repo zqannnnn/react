@@ -33,17 +33,28 @@ class Chats extends React.Component<ChatsProps, ChatsState> {
         )
     }
     render() {
-        const columns = [{
-            title: 'First name',
-            dataIndex: 'firstName',
-            key: 'firstName',
-            render: (text: any, record: User) => (
-                <span>
-                    <Avatar size="small" icon="user" />
-                    {record.firstName} {record.lastName}
-                </span>
-            ),
-        }];
+        const columns = [
+            {
+                title: 'avatar',
+                dataIndex: 'avatar',
+                width: 60,
+                render: (text: any, record: User) => (
+                    <span>
+                        <Avatar size="small" icon="user" />
+                    </span>
+                ),
+            },
+            {
+                title: 'First name',
+                dataIndex: 'firstName',
+                key: 'firstName',
+                render: (text: any, record: User) => (
+                    <span>
+                        {record.firstName} {record.lastName}
+                    </span>
+                ),
+            }
+        ];
         return (
             <div className="page">
                 <h2 className="header-center">{i18n.t('Chats History')}</h2>
