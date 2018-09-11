@@ -14,6 +14,7 @@ import {
 } from './pages/auth'
 import {
   EditPage as TransactionEditPage,
+  ShippingPage as connectedShippingPage,
   ViewPage as TransactionViewPage,
   OrderEditPage
 } from './pages/transaction'
@@ -78,6 +79,10 @@ class App extends React.Component<AppProps, any> {
                 <PrivateRoute
                   path="/transaction/new/:goodsId"
                   component={TransactionEditPage}
+                />
+                <PrivateRoute
+                  path="/transaction/shipping/:goodsId"
+                  component={connectedShippingPage}
                 />
                 <PrivateRoute path="/order/new/" component={OrderEditPage} />
                 <PrivateRoute

@@ -35,6 +35,7 @@ interface ProfileState {
     personalVisible: boolean
     companyVisible: boolean
     path?: string
+    selectable: boolean
 }
 
 class ProfilePage extends React.Component<ProfileProps, ProfileState> {
@@ -45,7 +46,8 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
             userId: '',
             userSelf: false,
             personalVisible: false,
-            companyVisible: false
+            companyVisible: false,
+            selectable: false
         }
     }
     componentDidMount() {
@@ -64,7 +66,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
             if (!this.props.countries)
                 this.props.dispatch(countryActionCreators.getAll())
         }
-
+        this.setState({ selectable: false })
     }
 
     showPersonalModal = () => {
@@ -267,9 +269,11 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                             <label>{i18n.t('Address')}:</label>
                             {dataSource && <EditableTable
                                 data={dataSource}
+                                selectable={this.state.selectable}
                                 handleSubmit={this.handleSubmitConsignee}
                                 handleDelete={this.handleDeleteConsignee}
                                 handleDefault={this.handleDefaultConsignee}
+                                defaultConsigneeId={this.state.user.defaultConsigneeId}
                             />}
                         </div>
                     </div>

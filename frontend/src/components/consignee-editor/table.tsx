@@ -1,10 +1,11 @@
 import * as React from 'react'
-import { Form, Input, Button, InputNumber, Table, Popconfirm } from 'antd'
+import { Form, Input, Button, InputNumber, Table, Popconfirm, Radio } from 'antd'
 import { WrappedFormUtils } from 'antd/lib/form/Form'
 import { EditableCell, EditableFormRow, EditableContext, Record } from '.'
 import './table.scss'
 import i18n from 'i18next'
 
+const RadioGroup = Radio.Group
 
 interface TableProps {
   data: Array<Record>
@@ -12,20 +13,22 @@ interface TableProps {
   handleDelete: (id: string) => void
   handleDefault: (id: string) => void
   defaultConsigneeId?: string
+  selectable?: boolean
 }
 interface TableState {
   editingKey: string
   data: Array<Record>
   count: number
+  value: string
 }
-
 class EditableTable extends React.Component<TableProps, TableState> {
   constructor(props: TableProps) {
     super(props)
     this.state = {
       editingKey: '',
       count: props.data ? props.data.length : 0,
-      data: props.data
+      data: props.data,
+      value: ''
     }
   }
   columns = [
@@ -125,10 +128,28 @@ class EditableTable extends React.Component<TableProps, TableState> {
     }
   ]
 
+newCol =[ {
+    title: 'select',
+    dataIndex: 'select',
+    className:'select-col',
+    render: (text: string, record: Record) => {
+      return record.id ? (
+        <Radio value={record.id}></Radio>
+      ) : null
+    }
+  },...this.columns]
+
   componentWillReceiveProps(nextProps: TableProps) {
     this.setState({
       data: nextProps.data,
       count: nextProps.data ? nextProps.data.length : 0
+    })
+  }
+
+  onChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget
+    this.setState({
+      value: value
     })
   }
 
@@ -226,7 +247,7 @@ class EditableTable extends React.Component<TableProps, TableState> {
         onConfirm={this.handleAdd}
       >
         <Button
-            className=" addAddress"
+            className="addAddress"
             type="primary"
             style={{ marginBottom: 12 }}
           >
@@ -234,21 +255,23 @@ class EditableTable extends React.Component<TableProps, TableState> {
           </Button>
       </Popconfirm>:
         <Button
-          className=" addAddress"
+          className="addAddress"
           onClick={this.handleAdd}
           type="primary"
           style={{ marginBottom: 12}}
         >
           add Address
         </Button>}
-        <Table
-          className="consignee-table"
-          components={components}
-          bordered
-          dataSource={this.state.data}
-          columns={newColumns}
-          pagination={false}
-        />
+        <RadioGroup name="radiogroup" className="radio">
+          <Table
+            className="consignee-table"
+            components={components}
+            bordered
+            dataSource={this.state.data}
+            columns={newColumns}
+            pagination={false}
+          />
+        </RadioGroup>
       </>
     )
   }

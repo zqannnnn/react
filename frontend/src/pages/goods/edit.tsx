@@ -611,18 +611,20 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   lg={{ span: 9, offset: 2 }}
                   className="field"
                 >
-                  <label>{i18n.t('Address')}</label>
-                  <TextArea
-                    name="address"
-                    value={address}
-                    onChange={this.handleInputChange}
-                  />
-                  {submitted &&
-                      !address && (
-                        <div className="invalid-feedback">
-                          {i18n.t('Address is required')}
-                        </div>
-                      )}
+                  <div className={submitted && !address ? 'has-error' : ''}>
+                    <label>{i18n.t('Address')}</label>
+                    <TextArea
+                      name="address"
+                      value={address}
+                      onChange={this.handleInputChange}
+                    />
+                    {submitted &&
+                        !address && (
+                          <div className="invalid-feedback">
+                            {i18n.t('Address is required')}
+                          </div>
+                        )}
+                  </div>
                 </Col>
               </Row>
               <Row>

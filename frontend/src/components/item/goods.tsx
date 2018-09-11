@@ -60,6 +60,16 @@ class GoodsItem extends React.Component<GoodsItemProps> {
                   </Link>
                 </>
               )}
+              {!goods.selling && (
+                <>
+                  <Link
+                    to={'/transaction/shipping/' + goods.id}
+                    className="control-btn"
+                  >
+                    {i18n.t('Redeem')}
+                  </Link>
+                </>
+              )}
               {goods.transaction &&
                 goods.selling && (
                   <>

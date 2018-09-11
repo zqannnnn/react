@@ -25,14 +25,14 @@ class GoodsInfo extends React.Component<GoodsinfoProps>{
             <div className="goods-info">
               <Row>
                 <Col span={20} offset={2} className="field">
-                  <label>{i18n.t('Title')}</label>
+                  <label>{i18n.t('Title')}:</label>
                   <div>{goods.title}</div>
                 </Col>
               </Row>
               <Row>
                 <Col span={20} offset={2} className="field">
-                  <label>{i18n.t('Description')}</label>
-                  <div>{goods.desc}</div>
+                  <label>{i18n.t('Description')}:</label>
+                  <div>{goods.desc ? goods.desc : 'N/A'}</div>
                 </Col>
               </Row>
               <Row>

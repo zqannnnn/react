@@ -39,8 +39,12 @@ module.exports = {
     await queryInterface
       .sequelize
       .transaction(async function handleTransaction(t) {
-        await queryInterface.removeConstraint('user', 'user_consignee_fk', { transaction: t })
-        await queryInterface.removeColumn('user', 'default_consignee_id', { transaction: t })
+        try {
+          await queryInterface.removeConstraint('user', 'user_consignee_fk', { transaction: t })
+          await queryInterface.removeColumn('user', 'default_consignee_id', { transaction: t })
+        } catch (error) {
+          console.log(error)
+        }
       })
   }
 };

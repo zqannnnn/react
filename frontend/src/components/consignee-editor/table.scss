@@ -22,26 +22,30 @@
     textarea{
         min-width:188px !important;
     }
+    .select-col{
+        min-width: 50px;
+    }
     .name-col{
-        min-width: 150px
+        min-width: 150px;
     }
     .email-col{
-        min-width: 150px
+        min-width: 150px;
     }
     .phone-num-col{
-        min-width: 100px
+        min-width: 100px;
     }
     .address-col{
-        min-width: 150px
+        min-width: 150px;
     }
     .operation-col{
-        min-width: 100px
+        min-width: 100px;
     }
     .delete-col{
-        min-width: 80px
+        min-width: 80px;
     }
     .default-col{
-        min-width: 100px
+        min-width: 100px;
     }
   }
   .addAddress{display:block !important;}
+  .radio{width: 100%;}
