@@ -3,6 +3,8 @@ import * as React from 'react'
 import { StringKeyHash } from '../../../../src/interfaces'
 //https://ant.design/components/input/
 import { Form, Input, Button } from 'antd'
+//import moment from 'moment'
+import * as moment from 'moment'
 
 interface ItemProps {
     messages: StringKeyHash
@@ -147,9 +149,13 @@ class UserItem extends React.Component<ItemProps, ItemState> {
                         this.state.msgs.map(function(msg, index){
                             if ( (msg.from == that.props.userKey) || (msg.to == that.props.userKey) ) {
                                 let cssClass = (msg.from == that.props.userKey) ? 'incoming' : 'outcoming'
+                                const d = new Date(msg.createdAt.replace(' ', 'T'))
                                 return (
                                     <p ref={msg.id} key={msg.id} className={cssClass} >
-                                        {msg.msg}
+                                        {moment(d).format('YYYY/MM/DD HH:mm')}
+                                        <div>
+                                            {msg.msg}
+                                        </div>
                                     </p>
                                 )
                             }
