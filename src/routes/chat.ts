@@ -1,3 +1,4 @@
+//1532692062 chat
 import * as express from 'express'
 import * as i18n from 'i18next'
 import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
