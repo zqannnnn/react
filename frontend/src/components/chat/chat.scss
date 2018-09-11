@@ -2,9 +2,12 @@
     position: fixed;
     bottom: 0;
     right: 0;
-    width: 300px;
+    width: 400px;
     max-height: 100vh;
     z-index: 1;
+    @media only screen and (max-width: 400px) {
+        width: 100%;
+    }
     .ant-collapse-header {
         display: flex;
         flex-direction: column;
