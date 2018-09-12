@@ -11,6 +11,7 @@ interface ChatsProps {
 }
 interface ChatsState {
     users: Array<User>
+    ids: Array<string>
     loading: boolean
 }
 class Chats extends React.Component<ChatsProps, ChatsState> {
@@ -18,13 +19,14 @@ class Chats extends React.Component<ChatsProps, ChatsState> {
         super(props)
         this.state = {
             users: [],
+            ids: [],
             loading: true
         }
     }
     componentWillMount() {
         chatService.getAll().then(
             (result: { users: Array<User>, ids: Array<string> }) => {
-                this.setState({ users: result.users, loading: false })
+                this.setState({ users: result.users, ids: result.ids, loading: false })
             },
             (error: string) => {
                 this.setState({ loading: false })
@@ -55,6 +57,12 @@ class Chats extends React.Component<ChatsProps, ChatsState> {
                 ),
             }
         ];
+        let users: Array<User> = []
+        this.state.ids.forEach(id => {
+            this.state.users.forEach(user => {
+                if (user.id == id ) users.push(user)
+            })
+        })
         return (
             <div className="page">
                 <h2 className="header-center">{i18n.t('Chats History')}</h2>
@@ -71,7 +79,7 @@ class Chats extends React.Component<ChatsProps, ChatsState> {
                             }
                         }}
                         columns={columns}
-                        dataSource={this.state.users} />
+                        dataSource={users} />
                 </Spin>
             </div>
         )
