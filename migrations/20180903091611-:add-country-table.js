@@ -12,7 +12,7 @@ module.exports = {
     */
    
   await queryInterface.sequelize.transaction(async function handleTransaction(t) {
-    let countryDataFile = path.join(__dirname, '../../src/db_data/countries.json')
+    let countryDataFile = path.join(__dirname, '../src/db_data/countries.json')
       let rawdata = fs.readFileSync(countryDataFile)
       let jsonData =  JSON.parse(rawdata.toString())
       await queryInterface.addColumn('user', 'country_code',{type: Sequelize.STRING})
