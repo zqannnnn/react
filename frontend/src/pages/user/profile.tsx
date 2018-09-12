@@ -247,14 +247,12 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                             <label>{i18n.t('Email')}:</label>
                             <div className="message">{user.email}</div>
                         </div>
-                        <div className="field">
-                            <div className={userSelf ? '' : 'none'}>
-                                <label>{i18n.t('Preferred Currency')}:</label>
-                                <div className={userSelf ? 'message' : 'none'}>
-                                    {user.preferredCurrencyCode}
-                                </div>
+                        {userSelf&&<div className="field">
+                            <label>{i18n.t('Preferred Currency')}:</label>
+                            <div className={userSelf ? 'message' : 'none'}>
+                                {user.preferredCurrencyCode}
                             </div>
-                        </div>
+                        </div>}
                         <div className="field">
                             <div className={userSelf ? '' : 'none'}>
                                 <label>{i18n.t('Country')}</label>
@@ -263,7 +261,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                                 </div>
                             </div>
                         </div>
-                        <div className="field" style={{ marginBottom: 0 }}>
+                        {userSelf&&<div className="field" style={{ marginBottom: 0 }}>
                             <label>{i18n.t('Address')}:</label>
                             {dataSource && <EditableTable
                                 data={dataSource}
@@ -271,7 +269,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                                 handleDelete={this.handleDeleteConsignee}
                                 handleDefault={this.handleDefaultConsignee}
                             />}
-                        </div>
+                        </div>}
                     </div>
                     <div className="subtitle company-information">
                         {i18n.t('Company Information')}
