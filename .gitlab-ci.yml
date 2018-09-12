@@ -34,3 +34,6 @@ deploy:
     - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; mkdir node_modules; chmod -R 777 node_modules; mkdir uploads; chmod -R 777 uploads;"
     - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; ./bin/yarn install;"
     - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker-compose build; docker-compose up -d;"
+    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; mkdir config; chmod -R 777 config;"
+    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker exec bmp-app yarn sequelize init;"
+    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker exec bmp-app yarn sequelize db:migrate;"
