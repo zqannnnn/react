@@ -5,7 +5,6 @@ const common = require('./webpack.common.js')
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 module.exports = merge(common, {
-  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -20,7 +19,6 @@ module.exports = merge(common, {
   plugins: [
     new ExtractTextPlugin('styles.css'),
     new UglifyJSPlugin({
-      sourceMap: true
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
