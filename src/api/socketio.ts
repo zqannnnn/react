@@ -110,15 +110,15 @@ const startSocket = async (server: any) => {
         }
         const to = data.to
         Message.findAll({
-            limit,
-            where: {
+          limit,
+          where: {
             from: [from, to],
             to: [from, to],
             created_at: {
               lt: createdAt
             }
           },
-          order: [['created_at', 'DESC']],
+          order: [['created_at', 'DESC']]
         }).then(msgs => {
           const privateMsgs: any[] = []
           msgs.forEach((msg, index) => {
