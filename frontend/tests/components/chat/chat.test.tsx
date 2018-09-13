@@ -47,7 +47,7 @@ describe('Render chat for', () => {
         const wrap = shallow(
             <Chat auth={newState} />
         )
-        expect(wrap.text()).toEqual('<Collapse />')
+        expect(wrap.text()).toEqual('')
         expect(socketIOClient.connect.mock.calls.length).toBe(1)
         expect(socketIOClient.connect.mock.results[0].value.on.mock.calls.length).toBe(1)
     })

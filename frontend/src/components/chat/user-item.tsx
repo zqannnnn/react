@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { StringKeyHash } from '../../../../src/interfaces'
 import { Form, Input, Button, Spin } from 'antd'
-import * as moment from 'moment'
+const moment = require('moment')
 
 interface ItemProps {
     messages: StringKeyHash

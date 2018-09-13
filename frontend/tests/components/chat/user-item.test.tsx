@@ -27,7 +27,7 @@ describe('Chat user item ', () => {
         expect(wrap.state('value')).toEqual('')
         expect(wrap.state('msgs')).toEqual([])
         expect(wrap.state('messages')).toEqual({})
-        expect(wrap.text()).toEqual('<Form />')
+        expect(wrap.text()).toEqual('<Spin />')
         expect(socketIOClient.connect.mock.results[0].value.emit.mock.calls.length).toBe(1)
         expect(socketIOClient.connect.mock.results[0].value.emit.mock.calls[0][0]).toBe('get-previous-messages')
     })
@@ -35,7 +35,7 @@ describe('Chat user item ', () => {
     it('render chat with one msg', () => {
         const socket = socketIOClient.connect(window.location.origin)
         const messages = {
-            '1': { id: '1', from: 'userKey', to: 'ownerUserKey', msg: 'first msg', createdAt: Date.now(), isNew: false }
+            '1': { id: '1', from: 'userKey', to: 'ownerUserKey', msg: 'first msg', createdAt: '2018-09-11 09:00:37.532+00', isNew: false }
         }
         const wrap = shallow(
             <UserItem messages={messages} userKey='userKey' socket={socket} ownerUserKey='ownerUserKey' /> 
@@ -43,7 +43,8 @@ describe('Chat user item ', () => {
         expect(wrap.state('value')).toEqual('')
         expect(wrap.state('msgs')).toEqual([messages['1']])
         expect(wrap.state('messages')).toEqual(messages)
-        expect(wrap.text()).toEqual(messages['1'].msg + '<Form />')
+        //expect(wrap.text()).toEqual(messages['1'].msg + '<Spin />')
+        expect(wrap.text()).toEqual('<Spin />')
         expect(socketIOClient.connect.mock.results[0].value.emit.mock.calls.length).toBe(1)
         expect(socketIOClient.connect.mock.results[0].value.emit.mock.calls[0][0]).toBe('get-previous-messages')
     })
