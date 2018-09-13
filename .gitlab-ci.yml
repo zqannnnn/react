@@ -10,7 +10,7 @@ deploy:
   stage: deploy
   image: gitlab/dind:latest
   only:
-    - "deploy"
+    - "chat"
   environment: production
   services:
     - docker:dind
@@ -35,3 +35,4 @@ deploy:
     - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; ./bin/yarn install;"
     - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker-compose build; docker-compose up -d;"
     - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker exec bmp-app yarn sequelize db:migrate;"
+    - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; yarn test;"
