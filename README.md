@@ -37,7 +37,9 @@ to rebuild the containers:
 
 
 ```sh
-docker compose down
+docker-compose down
+rm -rf node_modules
+./bin/yarn install
 docker-compose build
 docker-compose up
 ```
