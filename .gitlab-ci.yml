@@ -28,7 +28,7 @@ deploy:
     - rm ./docker-compose.yml
     - mv ./production/docker-compose.yml ./docker-compose.yml    
   script:
-    - scp -r ./db ./webpack ./environments ./Dockerfile ./bin ./src ./frontend ./public root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
+    - scp -r ./tests ./db ./webpack ./environments ./Dockerfile ./bin ./src ./frontend ./public root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - scp -r ./docker-compose.yml ./package.json ./tslint.json ./package-lock.json ./tsconfig.json ./yarn.lock ./.sequelizerc root@${DEPLOYMENT_SERVER_IP}:/opt/projects/bmp
     - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; docker-compose down;"
     - ssh root@$DEPLOYMENT_SERVER_IP "cd /opt/projects/bmp; mkdir node_modules; chmod -R 777 node_modules; mkdir uploads; chmod -R 777 uploads;"
