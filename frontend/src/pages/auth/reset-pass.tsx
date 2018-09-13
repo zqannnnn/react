@@ -22,7 +22,7 @@ class ResetPassPage extends React.Component<ResetPassProps> {
   render() {
     const { processing } = this.props
     return (
-      <Row className="page">
+      <Row className="page auth-page">
         <div className="header">{i18n.t('Reset')}</div>
         <Col
           xs={{ span: 22, offset: 1 }}

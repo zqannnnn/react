@@ -66,7 +66,7 @@ class LoginForm extends React.Component<LoginFormProps> {
             {this.props.processing && <Icon type="loading" />}
           </Button>
           <Link to="/register" className="btn">
-            <Button size="large" className="login-form-button">
+            <Button size="large" className="button-left">
                 {i18n.t('Register')}
             </Button>
           </Link>

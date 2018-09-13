@@ -6,6 +6,7 @@ import { RootState } from '../../reducers'
 import { Row, Col } from 'antd'
 import i18n from 'i18next'
 import { LoginForm } from '../../components/form'
+import './login.scss'
 interface LoginProps extends RouteComponentProps<{}> {
   dispatch: Dispatch<RootState>
   processing: boolean
@@ -48,7 +49,7 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
         }}
       />
     ) : (
-      <Row className="page -page">
+      <Row className="page login-page auth-page edit-page">
         <div className="header">{i18n.t('Login')}</div>
         <Col
           xs={{ span: 22, offset: 1 }}

@@ -56,7 +56,7 @@ class Chats extends React.Component<ChatsProps, ChatsState> {
             }
         ];
         return (
-            <div className="page">
+            <div className="page chat-page">
                 <h2 className="header-center">{i18n.t('Chats History')}</h2>
                 <Spin spinning={this.state.loading}>
                     <Table

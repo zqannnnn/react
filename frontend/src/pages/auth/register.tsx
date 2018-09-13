@@ -52,8 +52,8 @@ class RegisterPage extends React.Component<RegisterProps, RegisterState> {
     const { processing } = this.props
     const { user, submitted } = this.state
     return (
-      <Row className="page">
-        <div className="header-profile header">{i18n.t('Register User')}</div>
+      <Row className="page edit-page auth-page">
+        <div className="header">{i18n.t('Register User')}</div>
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 18, offset: 3 }}
