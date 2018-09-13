@@ -1,3 +1,5 @@
+@import '../../scss/colors';
+
 #chat{
     position: fixed;
     bottom: 0;
@@ -20,7 +22,7 @@
         }
     }
     .new-msg {
-        background-color: #ff5e00;
+        background-color: $attention-color;
     }
     .ant-collapse-content-box {
         position: relative;
