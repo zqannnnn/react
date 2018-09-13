@@ -43,7 +43,7 @@ describe('Chat user item ', () => {
         expect(wrap.state('value')).toEqual('')
         expect(wrap.state('msgs')).toEqual([messages['1']])
         expect(wrap.state('messages')).toEqual(messages)
-        expect(wrap.find('.incoming').length).toBe(2);
+        expect(wrap.find('.incoming').length).toBe(1);
         expect(wrap.text()).toEqual('<Spin />')
         expect(socketIOClient.connect.mock.results[0].value.emit.mock.calls.length).toBe(1)
         expect(socketIOClient.connect.mock.results[0].value.emit.mock.calls[0][0]).toBe('get-previous-messages')
