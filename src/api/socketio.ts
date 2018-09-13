@@ -8,15 +8,15 @@ import { Message, User } from '../models/'
 const startSocket = async (server: any) => {
   const io = socket(server)
   const users: HashOfStringKeyHash = {}
-  io.on('connection', socket => {
-    socket.on('private', function(data) {
+  io.on('connection', sock => {
+    sock.on('private', data => {
       let from
       for (const key in users) {
-        if (users[key].socket == socket.id) from = key
+        if (users[key].socket === sock.id) from = key
       }
       let createdAt: any = ''
       let message
-      if (from != undefined) {
+      if (from !== undefined) {
         message = new Message({
           from,
           to: data.to,
@@ -25,52 +25,53 @@ const startSocket = async (server: any) => {
         message.save()
         createdAt = message.createdAt
       }
-      if (users[data.to] != undefined && message != undefined) {
+      if (message !== undefined) {
         const privateMsg = {
-          id: message.id,
           from,
-          to: data.to,
-          msg: data.msg,
           createdAt,
-          isNew: true
+          to: data.to,
+          isNew: true,
+          msg: data.msg,
+          id: message.id
         }
-        io.to(`${users[data.to].socket}`).emit('private', privateMsg)
-        io.to(`${socket.id}`).emit('private', privateMsg)
+        if (users[data.to] !== undefined && message !== undefined)
+          io.to(`${users[data.to].socket}`).emit('private', privateMsg)
+        io.to(`${sock.id}`).emit('private', privateMsg)
       }
     })
-    socket.on('get-user', function(data) {
+    sock.on('get-user', data => {
       User.findOne({ where: { id: data.userId } }).then(user => {
-        if (user != undefined) {
+        if (user !== undefined && user !== null) {
           const aInfo: StringKeyHash = {}
           aInfo.id = user.id
           aInfo.name = user.fullName()
           aInfo.ts = Date.now()
           const sendData = { user: aInfo, open: data.open }
-          io.to(`${socket.id}`).emit('get-user', sendData)
+          io.to(`${sock.id}`).emit('get-user', sendData)
         }
       })
     })
-    socket.on('set-messages-as-old', function(data) {
+    sock.on('set-messages-as-old', data => {
       let to
       for (const key in users) {
-        if (users[key].socket == socket.id) to = key
+        if (users[key].socket === sock.id) to = key
       }
-      if (to != undefined) {
+      if (to !== undefined) {
         const from = data.userId
         Message.findAll({
           where: { from, to, isNew: true }
         }).then(msgs => {
           const sendData = { messages: [] as string[] }
-          msgs.forEach(function(msg, index) {
+          msgs.forEach((msg, index) => {
             msg.isNew = false
             msg.save()
             sendData.messages.push(msg.id)
           })
-          io.to(`${socket.id}`).emit('old-messages', sendData)
+          io.to(`${sock.id}`).emit('old-messages', sendData)
         })
       }
     })
-    socket.on('get-unread-messages', (authInfo: AuthInfo) => {
+    sock.on('get-unread-messages', (authInfo: AuthInfo) => {
       if (authInfo != null) {
         const to = authInfo.id
         Message.findAll({
@@ -78,15 +79,15 @@ const startSocket = async (server: any) => {
           where: { to, isNew: true }
         }).then(msgs => {
           const privateMsgs: any[] = []
-          msgs.forEach(function(msg, index) {
+          msgs.forEach((msg, index) => {
             User.findOne({ where: { id: msg.from } }).then(user => {
               const privateMsg = {
+                to,
                 id: msg.id,
                 from: msg.from,
-                to,
                 msg: msg.message,
-                createdAt: msg.createdAt,
-                isNew: msg.isNew
+                isNew: msg.isNew,
+                createdAt: msg.createdAt
               }
               privateMsgs.push(privateMsg)
             })
@@ -95,12 +96,12 @@ const startSocket = async (server: any) => {
         })
       }
     })
-    socket.on('get-previous-messages', data => {
+    sock.on('get-previous-messages', data => {
       let from: string = ''
       for (const key in users) {
-        if (users[key].socket == socket.id) from = key
+        if (users[key].socket === sock.id) from = key
       }
-      if (from != '') {
+      if (from !== '') {
         let createdAt = data.createdAt
         let limit = 5
         if (createdAt === undefined) {
@@ -109,19 +110,18 @@ const startSocket = async (server: any) => {
         }
         const to = data.to
         Message.findAll({
+          limit,
           where: {
             from: [from, to],
             to: [from, to],
-            isNew: false,
             created_at: {
               lt: createdAt
             }
           },
-          order: [['created_at', 'DESC']],
-          limit
+          order: [['created_at', 'DESC']]
         }).then(msgs => {
           const privateMsgs: any[] = []
-          msgs.forEach(function(msg, index) {
+          msgs.forEach((msg, index) => {
             const privateMsg = {
               id: msg.id,
               from: msg.from,
@@ -136,16 +136,16 @@ const startSocket = async (server: any) => {
         })
       }
     })
-    socket.on('start-chat-session', (authInfo: AuthInfo) => {
+    sock.on('start-chat-session', (authInfo: AuthInfo) => {
       let keyForRemove = null
       for (const key in users) {
-        if (key == authInfo.id) {
+        if (key === authInfo.id) {
           const aInfo: StringKeyHash = {}
           aInfo.id = authInfo.id
           let name = users[key].name
-          if (name == 'undefined undefined') name = authInfo.name
+          if (name === 'undefined undefined') name = authInfo.name
           aInfo.name = name
-          aInfo.socket = socket.id
+          aInfo.socket = sock.id
           aInfo.ts = Date.now()
           keyForRemove = key
           users[authInfo.id] = aInfo
@@ -155,15 +155,15 @@ const startSocket = async (server: any) => {
         const aInfo: StringKeyHash = {}
         aInfo.id = authInfo.id
         aInfo.name = authInfo.name
-        aInfo.socket = socket.id
+        aInfo.socket = sock.id
         aInfo.ts = Date.now()
         users[authInfo.id] = aInfo
       }
-      io.to(`${socket.id}`).emit('session-started', {})
+      io.to(`${sock.id}`).emit('session-started', {})
     })
-    socket.on('disconnect', () => {
+    sock.on('disconnect', () => {
       for (const key in users) {
-        if (users[key].socket == socket.id) delete users[key]
+        if (users[key].socket === sock.id) delete users[key]
       }
     })
   })

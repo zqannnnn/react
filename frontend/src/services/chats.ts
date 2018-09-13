@@ -1,5 +1,4 @@
 import { authHeader } from '../helpers/auth'
-//import { Transaction, ListOptions, Comment } from '../models'
 export const chatService = {
     getAll,
 }
