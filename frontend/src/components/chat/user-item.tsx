@@ -79,6 +79,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         }
     }
     scrollBottom() {
+        //TODO in componentWillUnmount cancel this timeout
         const that = this    
         setTimeout(() => { 
             if ( that.chatBottom.current != null ) that.chatBottom.current.scrollIntoView({ behavior: "smooth" })            
