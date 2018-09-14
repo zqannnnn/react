@@ -13,7 +13,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { Image, Transaction, User } from './'
+import { Image, Transaction, User, Consignee } from './'
 @Table({
   tableName: 'goods',
   underscored: true
@@ -44,6 +44,13 @@ export class Goods extends Model<Goods> {
 
   @BelongsTo(() => User)
   public creator: User
+
+  @ForeignKey(() => Consignee)
+  @Column({ field: 'consignee_id' })
+  public consigneeId: string
+
+  @BelongsTo(() => Consignee)
+  public consignee: Consignee
 
   @Column public category: string
 

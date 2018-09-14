@@ -1,9 +1,10 @@
 import * as React from 'react'
-import { Form, Input, Button, InputNumber, Table, Popconfirm, Radio } from 'antd'
+import { Button, Table, Popconfirm, Radio } from 'antd'
 import { WrappedFormUtils } from 'antd/lib/form/Form'
 import { EditableCell, EditableFormRow, EditableContext, Record } from '.'
 import './table.scss'
 import i18n from 'i18next'
+import { RadioChangeEvent } from 'antd/lib/radio';
 
 const RadioGroup = Radio.Group
 
@@ -12,6 +13,7 @@ interface TableProps {
   handleSubmit: (values: Record) => void
   handleDelete: (id: string) => void
   handleDefault: (id: string) => void
+  onSelect: (data: Record) => void
   defaultConsigneeId?: string
   selectable?: boolean
 }
@@ -19,7 +21,7 @@ interface TableState {
   editingKey: string
   data: Array<Record>
   count: number
-  value: string
+  selectConsigneeId?: string
 }
 class EditableTable extends React.Component<TableProps, TableState> {
   constructor(props: TableProps) {
@@ -28,7 +30,7 @@ class EditableTable extends React.Component<TableProps, TableState> {
       editingKey: '',
       count: props.data ? props.data.length : 0,
       data: props.data,
-      value: ''
+      selectConsigneeId:  this.props.defaultConsigneeId
     }
   }
   columns = [
@@ -112,6 +114,7 @@ class EditableTable extends React.Component<TableProps, TableState> {
       render: (text: string, record: Record) => {
         if(record.id){
           if(record.id===this.props.defaultConsigneeId){
+
             return <div>Is default</div>
           }else{
             return <Popconfirm
@@ -131,10 +134,11 @@ class EditableTable extends React.Component<TableProps, TableState> {
 newCol =[ {
     title: 'select',
     dataIndex: 'select',
-    className:'select-col',
+    className: 'select-col',
+    editable: false,
     render: (text: string, record: Record) => {
       return record.id ? (
-        <Radio value={record.id}></Radio>
+        <Radio value={record.id} ></Radio>
       ) : null
     }
   },...this.columns]
@@ -146,11 +150,13 @@ newCol =[ {
     })
   }
 
-  onChange = (e: React.FormEvent<HTMLInputElement>) => {
-    const { value } = e.currentTarget
+  onChange = (e: RadioChangeEvent) => {
+    const { value } = e.target
     this.setState({
-      value: value
+      selectConsigneeId: value
     })
+    let consignee = this.state.data.filter(data => data.id === value)
+    this.props.onSelect(consignee[0])
   }
 
   isEditing = (record: Record) => {
@@ -223,7 +229,13 @@ newCol =[ {
         cell: EditableCell
       }
     }
-    const newColumns = this.columns.map(col => {
+    let selectable
+    if (this.props.selectable && this.columns && this.newCol) {
+      selectable = this.newCol
+    } else {
+      selectable = this.columns
+    }
+    const newColumns = selectable.map(col => {
       if (!col.editable) {
         return col
       }
@@ -262,7 +274,12 @@ newCol =[ {
         >
           add Address
         </Button>}
-        <RadioGroup name="radiogroup" className="radio">
+        <RadioGroup 
+          name="radiogroup" 
+          className="radio" 
+          onChange={this.onChange}
+          value={this.state.selectConsigneeId}
+        >
           <Table
             className="consignee-table"
             components={components}

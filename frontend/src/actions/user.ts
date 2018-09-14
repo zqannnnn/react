@@ -134,7 +134,6 @@ const deleteConsignee: ActionCreator<Thunk> = (consigneeId: string) => {
     consigneeService.delete(consigneeId).then(
       () => {
         dispatch(success())
-        dispatch(alertActionCreators.success('delete consignee successful'))
       },
 
       (error: string) => {

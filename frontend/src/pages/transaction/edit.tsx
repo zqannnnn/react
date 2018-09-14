@@ -149,6 +149,15 @@ class EditPage extends React.Component<TransProps, TransState> {
   }
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    const { transaction, transactionId, goodsId } = this.state
+    const { dispatch } = this.props
+    if (transaction.price) {
+      transaction.goodsId = goodsId
+      if (transactionId)
+        dispatch(transactionActionCreators.edit(transaction, transactionId))
+      else dispatch(transactionActionCreators.new(transaction))
+    }
+    window.scrollTo(0, 0)
     this.setState({ submitted: true })
     if (this.state.transaction.isMakerSeller) {
       if (
@@ -164,17 +173,6 @@ class EditPage extends React.Component<TransProps, TransState> {
         return
       }
     }
-    const { transaction, transactionId, goodsId } = this.state
-    const { dispatch } = this.props
-    if (transaction.price) {
-      transaction.goodsId = goodsId
-      if (transactionId)
-        dispatch(transactionActionCreators.edit(transaction, transactionId))
-      else dispatch(transactionActionCreators.new(transaction))
-    } else {
-      
-    }
-    window.scrollTo(0, 0)
   }
   openLightbox = (image: string) => {
     this.props.dispatch(lightboxActionCreators.open(image))

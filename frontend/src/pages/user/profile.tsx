@@ -66,7 +66,6 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
             if (!this.props.countries)
                 this.props.dispatch(countryActionCreators.getAll())
         }
-        this.setState({ selectable: false })
     }
 
     showPersonalModal = () => {
@@ -137,6 +136,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                 userSelf: userData.id === authInfo.id
             })
         }
+        this.setState({ selectable: false })
     }
 
     handleSelect = (value: string, name: string) => {
@@ -192,6 +192,10 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     handleDefaultConsignee = (id: string) => {
         const { dispatch } = this.props
         dispatch(userActionCreators.setDefaultConsignee(id))
+    }
+
+    onSelect = () => {
+        
     }
 
     render() {
@@ -274,6 +278,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
                                 handleDelete={this.handleDeleteConsignee}
                                 handleDefault={this.handleDefaultConsignee}
                                 defaultConsigneeId={this.state.user.defaultConsigneeId}
+                                onSelect={this.onSelect}
                             />}
                         </div>
                     </div>

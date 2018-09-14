@@ -56,6 +56,10 @@ body {
   background-color: #e9ecef;
 }
 
+.message{
+  word-wrap: break-word;
+}
+
 .banner {
   height: 200px;
   position: relative;
@@ -94,6 +98,15 @@ body {
 
 .filter .checkbox-wr {
   float: right;
+}
+
+.consignee-container {
+  border: 1px solid lightgray;
+  background-color: #eee;
+  overflow: auto;
+  width: 100%;
+  padding: 10px;
+  min-height: 70px;
 }
 
 .images-container {

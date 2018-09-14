@@ -37,8 +37,12 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
   render() {
     const { goods, authInfo, loading } = this.props
     let creator
+    let consignee
     if (goods) { 
       creator = goods.creator
+    }
+    if (goods) {
+      consignee = goods.consignee
     }
     let imagePaths: string[]
     if (goods && goods.images) {
@@ -256,22 +260,9 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                     </div>
                   </Col>
                   <Col
-                   xs={{ span: 20, offset: 2 }}
-                   sm={{ span: 20, offset: 2 }}
-                   md={{ span: 7, offset: 1 }}
-                    className="field"
-                  >
-                    <label>{i18n.t('Address')}:</label>
-                    <div className="message">
-                      {goods.address ? goods.address : 'N/A'}
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col
                     xs={{ span: 20, offset: 2 }}
                     sm={{ span: 20, offset: 2 }}
-                    md={{ span: 6, offset: 6 }}
+                    md={{ span: 7, offset: 1 }}
                     className="field"
                   >
                     <label>{i18n.t('Creator')}:</label>
@@ -291,6 +282,76 @@ class ViewPage extends React.Component<ViewProps, ViewState> {
                     </div>
                   </Col>
                 </Row>
+                {goods.consignee ? (
+                  <Row>
+                    <Col
+                      xs={{ span: 20, offset: 2 }}
+                      sm={{ span: 20, offset: 2 }}
+                      md={{ span: 12, offset: 6 }}
+                      className="field"
+                    >
+                      <label>{i18n.t('Consignee')}:</label>
+                      <div className="message consignee-container">
+                          <>
+                            {consignee ? (
+                              <div>
+                                <span>{i18n.t('Name')}:</span>
+                                {consignee.name}
+                              </div>
+                            ) : (
+                              'no taker'
+                            )}
+                          </>
+                          <>
+                            {consignee ? (
+                              <div>
+                                <span>{i18n.t('E-mail')}:</span>
+                                {consignee.email}
+                              </div>
+                            ) : (
+                              'no taker'
+                            )}
+                          </>
+                          <>
+                            {consignee ? (
+                              <div>
+                                <span>{i18n.t('Contact Number')}:</span>
+                                {consignee.phoneNum}
+                              </div>
+                            ) : (
+                              'no taker'
+                            )}
+                          </>
+                          <>
+                            {consignee ? (
+                              <div>
+                                <span>{i18n.t('Address')}:</span>
+                                {consignee.address}
+                              </div>
+                            ) : (
+                              'no taker'
+                            )}
+                          </>
+                      </div>
+                    </Col>
+                  </Row>
+                ) : (
+                  <Row>
+                    <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 6, offset: 6 }}
+                      className="field"
+                    >
+                      <label>{i18n.t('Address')}:</label>
+                      <div className="message">
+                        {goods.address ? goods.address : 'N/A'}
+                      </div>
+                    </Col>
+                  </Row>
+                )}
+                
+                
                 <Row>
                   <Col
                     xs={{ span: 20, offset: 2 }}
