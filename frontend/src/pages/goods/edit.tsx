@@ -25,10 +25,10 @@ import {
 } from 'antd'
 import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface'
 import i18n from 'i18next'
-
+import { consts } from "../../../../src/config/static"
 const Step = Steps.Step
 const { TextArea } = Input
-
+const Dragger = Upload.Dragger
 interface GoodsProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
   loading: boolean
@@ -45,6 +45,7 @@ interface GoodsState {
   current: number
   fileList: UploadFile[]
   certificateList: UploadFile[]
+  proofFiles:UploadFile[]
 }
 
 class EditPage extends React.Component<GoodsProps, GoodsState> {
@@ -58,7 +59,8 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       },
       current: 0,
       fileList: [],
-      certificateList: []
+      certificateList: [],
+      proofFiles:[]
     }
   }
   next() {
@@ -83,6 +85,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       this.props.dispatch(categoryActionCreators.getAll())
 
     goodsId && this.props.dispatch(goodsActionCreators.getById(goodsId))
+
   }
   componentWillReceiveProps(nextProps: GoodsProps) {
     const { goodsProp } = nextProps
@@ -95,8 +98,8 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
         }
       })
     }
-    if (goods && goods.images) {
-      let licenseList = goods.images.map(
+    if (goodsProp && goodsProp.images) {
+      let licenseList = goodsProp.images.map(
         (license, index): UploadFile => ({
           url: license.path,
           name: '',
@@ -107,8 +110,8 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       )
       this.setState({ fileList: licenseList })
     }
-    if (goods && goods.certificates) {
-      let licenseList = goods.certificates.map(
+    if (goodsProp && goodsProp.certificates) {
+      let licenseList = goodsProp.certificates.map(
         (license, index): UploadFile => ({
           url: license.path,
           name: '',
@@ -119,6 +122,18 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       )
       this.setState({ certificateList: licenseList })
     }
+    if (goodsProp && goodsProp.proof) {
+      let licenseList = goodsProp.proof.map(
+        (license, index): UploadFile => ({
+          url: license,
+          name: license.split('/')[3],
+          uid: index,
+          size: 200,
+          type: 'done'
+        })
+      )
+      this.setState({ proofFiles: licenseList })
+    }
   }
   handleCustomChange = (value: string|number, name: string) => {
     const { goods } = this.state
@@ -128,6 +143,23 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
         [name]: value
       }
     })
+  }
+  handleDraggerChange = (fileParam: UploadChangeParam) => {
+    let fileList = fileParam.fileList
+    fileList = fileList.map(file => {
+      if (file.response) {
+        file.url = file.response.path
+      }
+      return file
+    })
+    fileList = fileList.filter(file => {
+      if (file.response) {
+        return file.status === 'done'
+      }
+      return true
+    })
+
+    this.setState({ proofFiles:fileList })
   }
   handleInputChange = (
     e: React.FormEvent<HTMLInputElement> | React.FormEvent<HTMLTextAreaElement>
@@ -164,20 +196,27 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     this.setState({ submitted: true })
-    const { goods, goodsId, fileList, certificateList } = this.state
+    const { goods, goodsId, fileList, certificateList,proofFiles} = this.state
 
     const { dispatch } = this.props
     if (goods.category && goods.title && goods.quantity && goods.address) {
       let images: Image[] = []
       let certificates: Image[] = []
+      let proofs:string[] = []
+      let proofstatus = 0
       fileList.forEach((file: any) => images.push({ path: file.url }))
       certificateList.forEach((file: any) =>
         certificates.push({ path: file.url })
       )
+      proofFiles.forEach((file: any) =>
+      proofs.push(file.url )
+      )
       let newGoods = {
         ...goods,
         certificates: certificates,
-        images: images
+        images: images,
+        proof:proofs,
+        proofstatus
       }
       if (goodsId) dispatch(goodsActionCreators.edit(newGoods, goodsId))
       else dispatch(goodsActionCreators.new(newGoods))
@@ -224,15 +263,18 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       grainFedDays,
       trimmings,
       category,
-      address
+      address,
+      images,
+      certificates,
+      proof
     } = this.state.goods
-    let { submitted, fileList, certificateList } = this.state
-    let { processing, categories } = this.props
+    let { submitted, fileList, certificateList,proofFiles} = this.state
+    let { processing, categories} = this.props
     let currentCategory: Category =
       categories &&
       categories.filter((item: Category) => {
         return item.type === category
-      })[0]
+       })[0]
     switch (current) {
       case 0:
         return (
@@ -302,6 +344,26 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                     </div>
                   </Upload>
                 </div>
+              </div>
+              <label>{i18n.t('Proof')}</label>
+              <div className="upload-transactions-edit">
+                  <div className="clearfix">
+                    <Dragger
+                      action="/upload/file"
+                      name="file"
+                      multiple= {true}
+                      headers={authHeader()}
+                      fileList={proofFiles}
+                      onChange={this.handleDraggerChange}
+
+                    >
+                      <p className="ant-upload-drag-icon">
+                        <Icon type="inbox" />
+                      </p>
+                      <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                      <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p>
+                    </Dragger>,
+                  </div>
               </div>
             </Col>
           </Row>

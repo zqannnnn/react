@@ -1,12 +1,14 @@
 import { adminConsts } from '../constants'
 import { AdminAction } from '../actions'
-import { User, Transaction } from '../models'
+import { User, Transaction,Goods } from '../models'
 export type State = {
   loading?: boolean
   processing?: boolean
   unconfirmedCompanies?: User[]
   toFinishTransactions?: Transaction[]
   finishedTransactions?: Transaction[]
+  unconfirmedGoods?:Goods[]
+  confirmingGoods?:Goods
   confirmingCompany?: User
   error?: string
 }
@@ -22,6 +24,33 @@ export function admin(state: State = {}, action: AdminAction): State {
       }
     case adminConsts.GET_UNCONFIRMED_COMPANIES_FAILURE:
       return { error: action.error, loading: false }
+    
+    case adminConsts.GET_UNVERIFIED_GOODS_REQUEST:
+      return {loading:true}
+    case adminConsts.GET_UNVERIFIED_GOODS_SUCCESS:
+      return{
+        ...state,
+        loading:false,
+        unconfirmedGoods:action.UnconfirmedGoods
+      }
+    case adminConsts.GET_UNVERIFIED_GOODS_FAILURE:
+      return{ error:action.error,loading:false }
+
+    case adminConsts.GET_CONFIRMING_GOODS_REQUEST:
+      return {
+        ...state,
+        loading: true
+      }
+    case adminConsts.GET_CONFIRMING_GOODS_SUCCESS:
+    
+      return {
+        ...state,
+        loading: false,
+        confirmingGoods: action.confirmingGoods
+      }
+    case adminConsts.GET_CONFIRMING_GOODS_FAILURE:
+      return { error: action.error, loading: false }
+
     case adminConsts.GET_WAIT_FINISH_REQUEST:
       return {
         ...state,
@@ -51,7 +80,6 @@ export function admin(state: State = {}, action: AdminAction): State {
         loading: false,
         finishedTransactions: action.transactions
       }
-
     case adminConsts.GET_FINISHED_FAILURE:
       return {
         ...state,
@@ -73,6 +101,19 @@ export function admin(state: State = {}, action: AdminAction): State {
     case adminConsts.GET_CONFIRMING_COMPANY_FAILURE:
       return { error: action.error, loading: false }
 
+    case adminConsts.CONFIRM_GOODS_REQUEST:
+      return {
+        ...state,
+        processing: true
+      }
+    case adminConsts.CONFIRM_GOODS_SUCCESS:
+      return {
+        ...state,
+        processing: false
+      }
+    case adminConsts.CONFIRM_GOODS_REQUEST:
+      return { error: action.error, processing: false }
+
     case adminConsts.CONFIRM_COMPANY_REQUEST:
       return {
         ...state,
@@ -85,6 +126,17 @@ export function admin(state: State = {}, action: AdminAction): State {
       }
     case adminConsts.DISCONFIRM_COMPANY_REQUEST:
       return { error: action.error, processing: false }
+
+    case adminConsts.DISCONFIRM_GOODS_REQUEST:
+      return { ...state, processing: false }
+    case adminConsts.DISCONFIRM_GOODS_SUCCESS:
+      return {
+        ...state,
+        processing: true
+      }
+    case adminConsts.DISCONFIRM_GOODS_FAILURE:
+      return { error: action.error, processing: false }
+    
     case adminConsts.CONFIRM_COMPANY_REQUEST:
       return {
         ...state,
@@ -97,6 +149,7 @@ export function admin(state: State = {}, action: AdminAction): State {
       }
     case adminConsts.DISCONFIRM_COMPANY_FAILURE:
       return { error: action.error, processing: false }
+
     case adminConsts.FINISH_REQUEST:
       if (state.toFinishTransactions) {
         return {
@@ -104,7 +157,6 @@ export function admin(state: State = {}, action: AdminAction): State {
           processing: true
         }
       }
-
     case adminConsts.FINISH_SUCCESS:
       if (state.toFinishTransactions) {
         let items = state.toFinishTransactions.filter(

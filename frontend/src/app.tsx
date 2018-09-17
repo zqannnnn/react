@@ -5,7 +5,7 @@ import i18n from 'i18next'
 
 import { history } from './helpers/history'
 import { alertActionCreators, authActionCreators } from './actions'
-import { PrivateRoute, AdminRoute, NavBar, Lightbox, Chat } from './components'
+import { PrivateRoute, AdminRoute, NavBar, Lightbox, Chat, GoodsInfo } from './components'
 import {
   LoginPage,
   RegisterPage,
@@ -22,7 +22,7 @@ import {
   EditPage as GoodsEditPage,
   ViewPage as GoodsViewPage
 } from './pages/goods'
-import { ProfilePage, CompanyConfirmPage, MyInventoryPage } from './pages/user'
+import { ProfilePage, CompanyConfirmPage,GoodsConfirmPage, MyInventoryPage } from './pages/user'
 import { AdminPage, HomePage, AllListPage, MyListPage, MyChatsPage } from './pages'
 import { RootState, LightboxState, AuthState, AlertState } from './reducers'
 import { Layout, Alert, BackTop } from 'antd'
@@ -99,6 +99,10 @@ class App extends React.Component<AppProps, any> {
                   path="/goods/edit/:id"
                   component={GoodsEditPage}
                 />
+                <AdminRoute
+                  path="/goods/confirm/:id"
+                  component={GoodsConfirmPage}
+                />
                 <PrivateRoute path="/goods/:id" component={GoodsViewPage} />
                 <PrivateRoute path="/profile" component={ProfilePage} />
                 <PrivateRoute path="/user/:id" component={ProfilePage} />
@@ -107,7 +111,7 @@ class App extends React.Component<AppProps, any> {
                 <AdminRoute
                   path="/company/confirm/:id"
                   component={CompanyConfirmPage}
-                />
+                /> 
                 <Route path="/login" component={LoginPage} />
                 <Route path="/register" component={RegisterPage} />
                 <Route path="/lost/pass" component={LostPassPage} />

@@ -48,6 +48,7 @@ class UserForm extends React.Component<UserFormProps,State> {
       })
     }
   }
+  
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     this.props.form.validateFields((err, values: UserValuesProps) => {
@@ -68,10 +69,12 @@ class UserForm extends React.Component<UserFormProps,State> {
     }
   }
   handleCurrencySelect = (value: string) => {
-    const { user } = this.props
-    this.setState({
-      preferredCurrencyCode:value
-    })
+    const {currencies} = this.props
+    if(currencies){
+      this.setState({
+        preferredCurrencyCode:value
+      })
+    }
   }
   renderCountrySelect = () => {
     const { countries } = this.props

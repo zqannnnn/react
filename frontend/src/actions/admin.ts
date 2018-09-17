@@ -1,9 +1,9 @@
 import { adminConsts } from '../constants'
-import { userService, transService } from '../services'
+import { userService, transService ,goodsService} from '../services'
 import { alertActionCreators } from '.'
 import { history } from '../helpers/history'
 import * as auth from '../helpers/auth'
-import { User, Transaction, ListOptions } from '../models'
+import { User, Transaction, ListOptions,Goods} from '../models'
 import { Dispatch } from 'react-redux'
 import { ActionCreator } from 'redux'
 import { ThunkAction } from 'redux-thunk'
@@ -15,6 +15,8 @@ export type Action = {
   unconfirmedCompanies?: User[]
   confirmingCompany?: User
   transactions?: Array<Transaction>
+  UnconfirmedGoods?:Goods[]
+  confirmingGoods?:Goods
   total?: number
   id?: string
 }
@@ -47,6 +49,64 @@ function confirm(id: string) {
   }
   function failure(error: string) {
     return { type: adminConsts.CONFIRM_COMPANY_FAILURE, error }
+  }
+}
+function goodsConfirm(id: string) {
+  return (dispatch: (action: Action) => void) => {
+    dispatch(request())
+
+    goodsService.confirm(id).then(
+      () => {
+        dispatch(success())
+        dispatch(alertActionCreators.success('Operation succeed'))
+        setTimeout(function() {
+          history.replace('/admin')
+        }, 1000)
+      },
+      (error: string) => {
+        dispatch(failure(error))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
+  }
+
+  function request() {
+    return { type: adminConsts.CONFIRM_GOODS_REQUEST }
+  }
+  function success() {
+    return { type: adminConsts.CONFIRM_GOODS_SUCCESS }
+  }
+  function failure(error: string) {
+    return { type: adminConsts.CONFIRM_GOODS_FAILURE, error }
+  }
+}
+function goodsDisconfirm(id: string) {
+  return (dispatch: (action: Action) => void) => {
+    dispatch(request())
+
+    goodsService.disconfirm(id).then(
+      () => {
+        dispatch(success())
+        dispatch(alertActionCreators.success('Operation succeed'))
+        setTimeout(function() {
+          history.replace('/admin')
+        }, 1000)
+      },
+      (error: string) => {
+        dispatch(failure(error))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
+  }
+
+  function request() {
+    return { type: adminConsts.DISCONFIRM_GOODS_REQUEST }
+  }
+  function success() {
+    return { type: adminConsts.DISCONFIRM_GOODS_SUCCESS }
+  }
+  function failure(error: string) {
+    return { type: adminConsts.DISCONFIRM_GOODS_FAILURE, error }
   }
 }
 function finish(id: string) {
@@ -131,7 +191,34 @@ const listUnconfirmedCompanies: ActionCreator<
     return { type: adminConsts.GET_UNCONFIRMED_COMPANIES_FAILURE, error }
   }
 }
-const getConfirmingConpany: ActionCreator<
+const listUnconfirmedGoods: ActionCreator<
+  ThunkAction<void, RootState, void>
+> = () => {
+  return (dispatch: Dispatch<RootState>): void => {
+    dispatch(request())
+    goodsService
+      .listUnconfirmedProof()
+      .then(
+        (Goods: Array<Goods>) => dispatch(success(Goods)),
+        (error: string) => dispatch(failure(error))
+      )
+  }
+
+  function request(): Action {
+    return { type: adminConsts.GET_UNVERIFIED_GOODS_REQUEST }
+  }
+  function success(UnconfirmedGoods: User[]): Action {
+    UnconfirmedGoods.forEach(Goods => (Goods.itemType = 'Goods'))
+    return {
+      type:adminConsts.GET_UNVERIFIED_GOODS_SUCCESS,
+      UnconfirmedGoods
+    }
+  }
+  function failure(error: string): Action {
+    return { type: adminConsts.GET_UNVERIFIED_GOODS_FAILURE, error }
+  }
+}
+const getConfirmingCompany: ActionCreator<
   ThunkAction<void, RootState, void>
 > = (id: string) => {
   return (dispatch: Dispatch<RootState>): void => {
@@ -156,6 +243,32 @@ const getConfirmingConpany: ActionCreator<
   function failure(error: string): Action {
     return { type: adminConsts.GET_CONFIRMING_COMPANY_FAILURE, error }
   }
+}
+const getConfirmingGoods:ActionCreator<
+ThunkAction<void, RootState, void>
+> = (id: string) => {
+return (dispatch: Dispatch<RootState>): void => {
+  dispatch(request())
+  goodsService
+    .getById(id)
+    .then(
+      (goods: Goods) => dispatch(success(goods)),
+      (error: string) => dispatch(failure(error))
+    )
+}
+
+function request(): Action {
+  return { type: adminConsts.GET_CONFIRMING_GOODS_REQUEST }
+}
+function success(confirmingGoods: Goods): Action {
+  return {
+    type: adminConsts.GET_CONFIRMING_GOODS_SUCCESS,
+    confirmingGoods
+  }
+}
+function failure(error: string): Action {
+  return { type: adminConsts.GET_CONFIRMING_GOODS_FAILURE, error }
+}
 }
 const getWaitingTransactions: ActionCreator<Thunk> = (option: ListOptions) => {
   return (dispatch: Dispatch<RootState>): void => {
@@ -243,10 +356,14 @@ const getFinishedTransactions: ActionCreator<Thunk> = (option: ListOptions) => {
 
 export const actionCreators = {
   listUnconfirmedCompanies,
-  getConfirmingConpany,
+  getConfirmingCompany,
   getWaitingTransactions,
   getFinishedTransactions,
+  listUnconfirmedGoods,
+  getConfirmingGoods,
   confirm,
   disconfirm,
+  goodsConfirm,
+  goodsDisconfirm,
   finish
 }

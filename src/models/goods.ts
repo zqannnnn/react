@@ -97,9 +97,17 @@ export class Goods extends Model<Goods> {
 
   @Column public trimmings: number
 
+  @Column({
+    field: 'proof',
+    type: DataType.JSONB
+  })
+  public proof: object
+
   @Default(false)
   @Column
   public selling: boolean
+
+  @Column public proofstatus: Number
 
   @HasMany(() => Image, 'goods_id')
   public images: Image[]

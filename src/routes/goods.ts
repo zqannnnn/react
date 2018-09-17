@@ -95,6 +95,46 @@ router.post('/new', async (req: IRequest, res: express.Response) => {
     return res.status(500).send({ error: e.message })
   }
 })
+router.get(
+  '/unconfirmed/list',
+  async (req: IRequest, res: express.Response) => {
+    if (req.isAdmin) {
+      const users = await Goods.findAll({
+        include: [{ model: Image, attributes: ['path'] }],
+        where: { proofstatus: consts.PROOFSTATUS_UNCONFIRMED }
+      })
+      return res.send(users)
+    } else {
+      return res.status(500).send({ error: i18n.t('Permission denied.') })
+    }
+  }
+)
+router.get('/confirm/:id', async (req: IRequest, res: express.Response) => {
+  if (req.isAdmin) {
+    const goods = await Goods.find({ where: { id: req.params.id } })
+    if (!goods) {
+      return res.status(500).send({ error: i18n.t('Goods does not exist.') })
+    }
+    goods.proofstatus = consts.PROOFSTATUS_CONFIRMED
+    await goods.save()
+    return res.send({ success: true })
+  } else {
+    return res.status(500).send({ error: i18n.t('Permission denied.') })
+  }
+})
+router.get('/denie/:id', async (req: IRequest, res: express.Response) => {
+  if (req.isAdmin) {
+    const goods = await Goods.find({ where: { id: req.params.id } })
+    if (!goods) {
+      return res.status(500).send({ error: i18n.t('Goods does not exist.') })
+    }
+    goods.proofstatus = consts.PROOFSTATUS_DENIED
+    await goods.save()
+    return res.send({ success: true })
+  } else {
+    return res.status(500).send({ error: i18n.t('Permission denied.') })
+  }
+})
 router
   .route('/:goodsId')
   .get(async (req: express.Request, res: express.Response) => {

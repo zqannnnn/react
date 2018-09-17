@@ -24,6 +24,9 @@ class AdminPage extends React.Component<AdminProps> {
     this.props.dispatch(
       adminActionCreators.getWaitingTransactions({ type: 'waiting' })
     )
+    this.props.dispatch(
+      adminActionCreators.listUnconfirmedGoods()
+    )
   }
   render() {
     const { admin } = this.props
@@ -59,6 +62,14 @@ class AdminPage extends React.Component<AdminProps> {
                 <List
                   items={admin.unconfirmedCompanies}
                   title="Unconfirmed Companies"
+                />
+              )}
+            </div>
+            <div className="list-container">
+              {admin.unconfirmedGoods && (
+                <List
+                  items={admin.unconfirmedGoods}
+                  title="verificationProof"
                 />
               )}
             </div>

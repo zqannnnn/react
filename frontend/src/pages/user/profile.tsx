@@ -78,7 +78,7 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
             companyVisible: true
         })
     }
-    personalSubmit = (values: UserValuesProps, ) => {
+    personalSubmit = (values: UserValuesProps) => {
         const { user } = this.state
         const { dispatch, countries } = this.props
         let newUser = {

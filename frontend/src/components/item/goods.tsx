@@ -6,7 +6,7 @@ import { RootState } from '../../reducers'
 import { Goods } from '../../models'
 import { Col } from 'antd'
 import i18n from 'i18next'
-
+import { adminConsts } from '../../constants'
 interface GoodsItemProps {
   dispatch: Dispatch<RootState>
   goods: Goods
@@ -17,7 +17,7 @@ class GoodsItem extends React.Component<GoodsItemProps> {
     super(props)
   }
   render() {
-    const { goods } = this.props
+    const { goods,authInfo } = this.props
 
     return (
       goods && (
@@ -50,7 +50,7 @@ class GoodsItem extends React.Component<GoodsItemProps> {
             </Link>
             <div className="text-overflow" />
             <div className="content menu">
-              {!goods.selling && (
+              {!goods.selling && goods.proofstatus == adminConsts.PROOFSTATUS_CONFIRMED && (
                 <>
                   <Link
                     to={'/transaction/new/' + goods.id}
@@ -67,6 +67,27 @@ class GoodsItem extends React.Component<GoodsItemProps> {
                     className="control-btn"
                   >
                     {i18n.t('Redeem')}
+                    </Link>
+                </>
+              )}   
+              {!goods.selling && !goods.proofstatus && authInfo.isAdmin&& (
+                <>
+                  <Link
+                    to={'/goods/confirm/' + goods.id}
+                    className="control-btn"
+                  >
+                    {i18n.t('Read More')}
+                  </Link>
+                </>
+              )}
+              {!goods.selling && goods.proofstatus == adminConsts.PROOFSTATUS_DENIED && (
+                <>
+                {i18n.t('Verification failed. Please resubmit')}
+                  <Link
+                    to={'/goods/edit/' + goods.id}
+                    className="control-btn"
+                  >
+                    {i18n.t('edit')}
                   </Link>
                 </>
               )}

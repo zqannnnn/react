@@ -24,7 +24,7 @@ class ConfirmPage extends React.Component<ConfirmProps> {
   componentDidMount() {
     let companyId = this.props.match.params.id
     companyId &&
-      this.props.dispatch(adminActionCreators.getConfirmingConpany(companyId))
+      this.props.dispatch(adminActionCreators.getConfirmingCompany(companyId))
   }
   handleConfirm = (id: string) => {
     this.props.dispatch(adminActionCreators.confirm(id))
@@ -127,5 +127,5 @@ function mapStateToProps(state: RootState) {
     processing: admin.processing
   }
 }
-const connectedConfirmPage = connect(mapStateToProps)(ConfirmPage)
-export { connectedConfirmPage as CompanyConfirmPage }
+const connectedGoodsConfirmPage = connect(mapStateToProps)(ConfirmPage)
+export { connectedGoodsConfirmPage as CompanyConfirmPage }

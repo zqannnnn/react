@@ -1,5 +1,6 @@
 import { ListItem, Image, Transaction, Consignee } from '.'
 import { User } from './user';
+import { DataTypeJSONB } from 'sequelize';
 
 export class Goods implements ListItem {
   id?: string
@@ -22,6 +23,8 @@ export class Goods implements ListItem {
   fed?: string
   transaction?: Transaction
   selling?: boolean
+  proofstatus?:number
+  proof?:string[]
   grainFedDays?: number
   brand?: string
   factoryNum?: string
