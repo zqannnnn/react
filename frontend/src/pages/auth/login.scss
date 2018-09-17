@@ -1,6 +1,45 @@
-.login-page{
-
+.login-form{
+    background-color: white;
+    border-radius: 2px;
+    overflow: hidden;
+    min-height: 100px;
+    max-width: 460px;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 1px 5px 0 rgba(0, 0, 0, 0.12);
     .header{
-        margin-bottom: 50px
+      font-weight: bold;
+      padding: 30px 30px;
+      background-image: url(/asset/bg.jpg);
+      background-repeat: repeat-x;
+      color:#ffffff;
+      margin-bottom: 10px;
+      .header-register{
+        font-size: 20px;
+        padding-bottom: 20px;
+      }
+      .header-now{
+        font-size: 12px;
+      }
     }
-}
+    .form-item > div{
+      text-align: left !important;
+      padding: 0 10px;
+      font-weight: bold;
+      color: #363636;
+    }
+    .form-item {
+      .login-form-forgot{
+        color: #00AAAA;
+      }
+    }
+  }
+  .register-now{
+    color: #00AAAA !important;
+    font-weight: bold;
+  }
+  .anticon{
+    line-height: 0 !important;
+  }
+  .ant-form-item-required:before{
+    color: #00AAAA !important;
+  }

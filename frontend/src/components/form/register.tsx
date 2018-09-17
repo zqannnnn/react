@@ -75,7 +75,7 @@ class RegisterForm extends React.Component<
           span: 24
         },
         sm: {
-          span: 8
+          span: 24
         }
       },
       wrapperCol: {
@@ -83,7 +83,7 @@ class RegisterForm extends React.Component<
           span: 24
         },
         sm: {
-          span: 16
+          span: 24
         }
       }
     }
@@ -94,14 +94,18 @@ class RegisterForm extends React.Component<
           offset: 0
         },
         sm: {
-          span: 16,
-          offset: 8
+          span: 24,
+          offset: 0
         }
       }
     }
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
-        <FormItem {...formItemLayout} label={i18n.t('Email')}>
+        <div className="header">
+          <div className="header-register">{i18n.t('Register User')}</div>
+          <div className="header-now">{i18n.t('Register now and start making money from home!')}</div>
+        </div>
+        <FormItem {...formItemLayout} label={i18n.t('Email')} className="form-item">
           {getFieldDecorator('email', {
             rules: [
               {
@@ -113,9 +117,9 @@ class RegisterForm extends React.Component<
                 message: i18n.t('Please input your Email!')
               }
             ]
-          })(<Input />)}
+          })(<Input placeholder={i18n.t('please input your email...')}/>)}
         </FormItem>
-        <FormItem {...formItemLayout} label="First Name">
+        <FormItem {...formItemLayout} label="First Name" className="form-item">
           {getFieldDecorator('firstName', {
             rules: [
               {
@@ -123,9 +127,9 @@ class RegisterForm extends React.Component<
                 message: i18n.t('Please input your First Name!')
               }
             ]
-          })(<Input />)}
+          })(<Input placeholder={i18n.t('Please enter a name...')}/>)}
         </FormItem>
-        <FormItem {...formItemLayout} label="Last Name">
+        <FormItem {...formItemLayout} label="Last Name" className="form-item">
           {getFieldDecorator('lastName', {
             rules: [
               {
@@ -133,9 +137,9 @@ class RegisterForm extends React.Component<
                 message: i18n.t('Please input your Last Name!')
               }
             ]
-          })(<Input />)}
+          })(<Input placeholder={i18n.t('Please enter your last name...')}/>)}
         </FormItem>
-        <FormItem {...formItemLayout} label="Password">
+        <FormItem {...formItemLayout} label="Password" className="form-item">
           {getFieldDecorator('password', {
             rules: [
               {
@@ -146,9 +150,9 @@ class RegisterForm extends React.Component<
                 validator: this.validateToNextPassword
               }
             ]
-          })(<Input type="password" />)}
+          })(<Input type="password" placeholder={i18n.t('Please enter your password...')}/>)}
         </FormItem>
-        <FormItem {...formItemLayout} label="Confirm Password">
+        <FormItem {...formItemLayout} label="Confirm Password" className="form-item">
           {getFieldDecorator('confirm', {
             rules: [
               {
@@ -159,18 +163,15 @@ class RegisterForm extends React.Component<
                 validator: this.compareToFirstPassword
               }
             ]
-          })(<Input type="password" onBlur={this.handleConfirmBlur} />)}
+          })(<Input type="password" onBlur={this.handleConfirmBlur} placeholder={i18n.t('Please enter your password again...')}/>)}
         </FormItem>
-        <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit" className="button-left">
-            {i18n.t('Register')}
+        <FormItem {...tailFormItemLayout} className="form-item">
+          <Button type="primary" htmlType="submit" className="button-left btn-color">
+            <span>
+              {i18n.t('Register')}
+            </span>
+            <span className="register-now">&nbsp;{i18n.t('now!')}</span>
           </Button>
-          {this.props.processing && <Icon type="loading" />}
-          <Link to="/login" className="button-left">
-            <Button size="large">
-              {i18n.t('Back to login')}
-            </Button>
-          </Link>
         </FormItem>
       </Form>
     )

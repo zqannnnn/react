@@ -198,10 +198,18 @@ body {
 }
 .page{
   > .header {
-    padding: 15px;
     font-weight: bold;
     font-size: 25px;
-    text-align: center;
+    text-align: left;
+    background-image: url(/asset/bg.jpg);
+    background-repeat: no-repeat;
+    color:#ffffff;
+    height: 60px;
+    margin-bottom: 30px;
+    .header-item{
+      padding: 15px 10%;
+      line-height: 30px;
+    }
   }
   .header-center {
     font: 25px bold;
@@ -232,7 +240,17 @@ body {
     font-size: 14px;
   }
   .button-left{
-    margin-left:20px
+    padding: 0 10px;
+    width: 100%;
+    padding: 20px;
+    line-height: 1px;
+  }
+  .btn-color{
+    background-color: #363636;
+    border-color: #363636;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
   }
   .field{
     margin-top: 20px
@@ -290,13 +308,7 @@ body {
 .margin-bottom {
   margin-bottom: 15px;
 }
-.auth-page {
-  padding-top: 100px;
-}
-.float-lostPas {
-  float: right;
-  margin-top: 30px;
-}
+
 .confirm-title {
   font-size: 20px;
 }
@@ -315,9 +327,6 @@ body {
   border-radius: 10px;
   border: 1px solid #fff;
   background: #e9ecef;
-}
-.login-form-button {
-  margin-left: 10px;
 }
 
 .ant-form-item-control {

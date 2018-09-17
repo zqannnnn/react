@@ -20,7 +20,14 @@ class LoginForm extends React.Component<LoginFormProps> {
     const { getFieldDecorator } = this.props.form
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
-        <FormItem>
+        <div className="header">
+          <div className="header-register">{i18n.t('Login')}</div>
+          <div className="header-now">{i18n.t('Login now and start making money from home!')}</div>
+        </div>
+        <p className="form-item">
+          <div>{i18n.t('Email')}</div>
+        </p>
+        <FormItem className="form-item">
           {getFieldDecorator('email', {
             rules: [
               {
@@ -31,11 +38,14 @@ class LoginForm extends React.Component<LoginFormProps> {
           })(
             <Input
               prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder={i18n.t('Email')}
+              placeholder={i18n.t('please input your email...')}
             />
           )}
         </FormItem>
-        <FormItem>
+        <p className="form-item">
+          <div>{i18n.t('Password')}</div>
+        </p>
+        <FormItem className="form-item">
           {getFieldDecorator('password', {
             rules: [
               {
@@ -47,11 +57,11 @@ class LoginForm extends React.Component<LoginFormProps> {
             <Input
               prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
               type="password"
-              placeholder={i18n.t('Password')}
+              placeholder={i18n.t('Please input your password...')}
             />
           )}
         </FormItem>
-        <FormItem className="float-lostPas">
+        <FormItem className="form-item">
           <Link to="/lost/pass" className="login-form-forgot">
             {i18n.t('Forget password?')}
           </Link>
@@ -60,16 +70,12 @@ class LoginForm extends React.Component<LoginFormProps> {
             htmlType="submit"
             type="primary"
             size="large"
-            className="login-form-button"
+            className="button-left btn-color"
           >
-            {i18n.t('Log in')}
-            {this.props.processing && <Icon type="loading" />}
+            <span>{i18n.t('Login')}</span>
+            <span className="register-now">&nbsp;{i18n.t('now!')}</span>
+            <span>{this.props.processing && (<Icon type="loading" />)}</span>
           </Button>
-          <Link to="/register" className="btn">
-            <Button size="large" className="button-left">
-                {i18n.t('Register')}
-            </Button>
-          </Link>
         </FormItem>
       </Form>
     )

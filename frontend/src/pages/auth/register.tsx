@@ -53,12 +53,16 @@ class RegisterPage extends React.Component<RegisterProps, RegisterState> {
     const { user, submitted } = this.state
     return (
       <Row className="page edit-page auth-page">
-        <div className="header">{i18n.t('Register User')}</div>
+        <div className="header">
+          <div className="header-item">
+            {i18n.t('Register User')}
+          </div>
+        </div>
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 18, offset: 3 }}
           md={{ span: 14, offset: 5 }}
-          lg={{ span: 10, offset: 7 }}
+          lg={{ span: 10, offset: 9 }}
         >
           <RegisterForm
             handleSubmit={this.handleSubmit}
