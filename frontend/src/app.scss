@@ -58,10 +58,12 @@ body {
 
 .message{
   word-wrap: break-word;
+}
+
 #main {
-    > .ant-layout {
-        min-height: 100vh;
-    }
+  > .ant-layout {
+      min-height: 100vh;
+  }
 }
 
 .banner {
@@ -362,5 +364,4 @@ body {
 }
 .breakWord {
   word-wrap: break-word;
-}
 }
