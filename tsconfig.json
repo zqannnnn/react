@@ -14,5 +14,7 @@
     "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*", "frontend/**/*"],
-  "exclude": ["node_modules", "tests/**", "**/*.test.ts"]
+  //https://webpack.js.org/configuration/module/#rule-exclude
+  //https://stackoverflow.com/questions/44376589/webpack-exclude-a-specific-file
+  "exclude": ["node_modules", "tests/**", "**/*.test.ts", "**/*.test.tsx"]
 }

@@ -1,8 +1,8 @@
 //1532692062 chat
 import * as React from 'react'
 import { StringKeyHash } from '../../../../src/interfaces'
-//https://ant.design/components/input/
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button, Spin } from 'antd'
+const moment = require('moment')
 
 interface ItemProps {
     messages: StringKeyHash
@@ -14,6 +14,8 @@ interface ItemState {
     value: string
     messages: StringKeyHash
     msgs: StringKeyHash[]
+    loading: boolean
+    loadingTimer: any
 }
 class UserItem extends React.Component<ItemProps, ItemState> {
     private chatBottom: React.RefObject<HTMLDivElement>;
@@ -24,6 +26,8 @@ class UserItem extends React.Component<ItemProps, ItemState> {
             value: '',
             messages: {},
             msgs: [],
+            loading: false,
+            loadingTimer: undefined
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -66,6 +70,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
             }
             this.setState({ messages: orderededMessages })
             this.setState({ msgs: msgs })
+            this.unsetLoading()
             if ( isNewMessage ) {
                 //update all messages from user as read
                 const data = { userId: this.props.userKey}
@@ -74,6 +79,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
         }
     }
     scrollBottom() {
+        //TODO in componentWillUnmount cancel this timeout
         const that = this    
         setTimeout(() => { 
             if ( that.chatBottom.current != null ) that.chatBottom.current.scrollIntoView({ behavior: "smooth" })            
@@ -81,6 +87,7 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     }
     componentDidMount() {
         this.renderMsgs(this.props)
+        this.setLoading()
         const data = { from: this.props.ownerUserKey, to: this.props.userKey }
         this.props.socket.emit('get-previous-messages', data)                
     }
@@ -132,43 +139,64 @@ class UserItem extends React.Component<ItemProps, ItemState> {
     }
     listenScrollEvent(e:any) {
         if (e.target.scrollTop == 0) {
+            this.setLoading()
             const data = { from: this.props.ownerUserKey, to: this.props.userKey, createdAt: this.state.msgs[0].createdAt }
             this.props.socket.emit('get-previous-messages', data)                    
         }
     }    
+    setLoading() {
+        const that = this
+        this.setState({loading: true})
+        const timerId = setTimeout(() => {
+            that.unsetLoading()
+        }, 2000)        
+        this.setState({loadingTimer: timerId})
+    }
+    unsetLoading() {
+        if (this.state.loading) {
+            clearTimeout(this.state.loadingTimer)
+            this.setState({loading: false, loadingTimer: undefined})
+        }
+    }
     render() {
         const { TextArea } = Input
         const FormItem = Form.Item
         const that = this
         return (
             <div className='chat-container'>
-                <div className='chat-log' onScroll={this.listenScrollEvent.bind(this)} ref={this.msgsList} >
-                    {
-                        this.state.msgs.map(function(msg, index){
-                            if ( (msg.from == that.props.userKey) || (msg.to == that.props.userKey) ) {
-                                let cssClass = (msg.from == that.props.userKey) ? 'incoming' : 'outcoming'
-                                return (
-                                    <p ref={msg.id} key={msg.id} className={cssClass} >
-                                        {msg.msg}
-                                    </p>
-                                )
-                            }
-                        })            
-                    }
-                    <div ref={this.chatBottom}></div>
-                </div>
-                <div className='chat-input'>
-                    <Form onSubmit={this.handleSubmit} >
-                        <FormItem>
-                            <TextArea rows={2} value={this.state.value} onChange={this.handleChange} onKeyUp={this.handleKeyUp}/>
-                        </FormItem>
-                        <FormItem>
-                            <Button type="primary" htmlType="submit">
-                                Submit
-                            </Button>
-                        </FormItem>
-                    </Form>
-                </div>
+                <Spin spinning={this.state.loading}>
+                    <div className='chat-log' onScroll={this.listenScrollEvent.bind(this)} ref={this.msgsList} >
+                        {
+                            this.state.msgs.map(function(msg, index){
+                                if ( (msg.from == that.props.userKey) || (msg.to == that.props.userKey) ) {
+                                    let cssClass = (msg.from == that.props.userKey) ? 'incoming' : 'outcoming'
+                                    const d = new Date(msg.createdAt.replace(' ', 'T'))
+                                    return (
+                                        <div ref={msg.id} key={msg.id} className={cssClass} >
+                                            {moment(d).format('YYYY/MM/DD HH:mm')}
+                                            <div>
+                                                {msg.msg}
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            })            
+                        }
+                        <div ref={this.chatBottom}></div>
+                    </div>
+                    <div className='chat-input'>
+                        <Form onSubmit={this.handleSubmit} >
+                            <FormItem>
+                                <TextArea rows={2} value={this.state.value} onChange={this.handleChange} onKeyUp={this.handleKeyUp}/>
+                            </FormItem>
+                            <FormItem>
+                                <Button type="primary" htmlType="submit">
+                                    Submit
+                                </Button>
+                            </FormItem>
+                        </Form>
+                    </div>
+                </Spin>
             </div>
         )
     }

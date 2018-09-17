@@ -13,6 +13,7 @@ import {
   goodsRouter,
   passRouter,
   transactionRouter,
+  chatRouter,
   uploadRouter,
   userRouter,
   consigneeRouter,
@@ -91,6 +92,7 @@ export const router = (app: Application, passport: PassportStatic) => {
   app.use('/user', userRouter)
   app.use('/category', categoryRouter)
   app.use('/transaction', transactionRouter)
+  app.use('/chat', chatRouter)
   app.use('/upload', uploadRouter)
   app.use('/currency', currencyRouter)
   app.use('/goods', goodsRouter)

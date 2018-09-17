@@ -58,6 +58,10 @@ body {
 
 .message{
   word-wrap: break-word;
+#main {
+    > .ant-layout {
+        min-height: 100vh;
+    }
 }
 
 .banner {
@@ -96,6 +100,10 @@ body {
   height: 100%;
 }
 
+.footer{
+  text-align:center;
+  border-top: 1px solid #e1e1e1;
+}
 .filter .checkbox-wr {
   float: right;
 }
@@ -269,9 +277,7 @@ body {
 .steps-action {
   margin-top: 24px;
 }
-.login-page{
-  margin-top:100px;
-}
+
 .lost-title {
   width: 100%;
   margin: 0 auto;
@@ -282,8 +288,8 @@ body {
 .margin-bottom {
   margin-bottom: 15px;
 }
-.margin-lostPas {
-  margin-top: 100px;
+.auth-page {
+  padding-top: 100px;
 }
 .float-lostPas {
   float: right;

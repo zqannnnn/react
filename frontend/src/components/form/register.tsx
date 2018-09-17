@@ -6,6 +6,7 @@ import {
   ValidateCallback
 } from 'antd/lib/form'
 import i18n from 'i18next'
+import { Link } from 'react-router-dom'
 const FormItem = Form.Item
 export interface RegisterValuesProps {
   firstName: string
@@ -161,10 +162,15 @@ class RegisterForm extends React.Component<
           })(<Input type="password" onBlur={this.handleConfirmBlur} />)}
         </FormItem>
         <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" className="button-left">
             {i18n.t('Register')}
           </Button>
           {this.props.processing && <Icon type="loading" />}
+          <Link to="/login" className="button-left">
+            <Button size="large">
+              {i18n.t('Back to login')}
+            </Button>
+          </Link>
         </FormItem>
       </Form>
     )

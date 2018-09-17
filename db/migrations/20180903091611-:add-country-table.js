@@ -15,7 +15,7 @@ module.exports = {
     let countryDataFile = path.join(__dirname, '../../src/db_data/countries.json')
       let rawdata = fs.readFileSync(countryDataFile)
       let jsonData =  JSON.parse(rawdata.toString())
-      await queryInterface.addColumn('user', 'country',{type: Sequelize.STRING})
+      await queryInterface.addColumn('user', 'country_code',{type: Sequelize.STRING})
       await queryInterface.createTable(
         'country',
         {
@@ -30,7 +30,7 @@ module.exports = {
         }
        )
        
-       await queryInterface.addConstraint('user', ['country'], {
+       await queryInterface.addConstraint('user', ['country_code'], {
         type: 'foreign key',
         name: 'user_country_fk',
         references:{
@@ -54,7 +54,7 @@ module.exports = {
     */
     await queryInterface.sequelize.transaction(async function handleTransaction(t) {
       await queryInterface.removeConstraint('user','user_country_fk')
-      await queryInterface.removeColumn('user', 'country',{ transaction: t })
+      await queryInterface.removeColumn('user', 'country_code',{ transaction: t })
       await queryInterface.dropTable('country')
       
   })

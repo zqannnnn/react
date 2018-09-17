@@ -23,7 +23,7 @@ import {
   ViewPage as GoodsViewPage
 } from './pages/goods'
 import { ProfilePage, CompanyConfirmPage, MyInventoryPage } from './pages/user'
-import { AdminPage, HomePage, AllListPage, MyListPage } from './pages'
+import { AdminPage, HomePage, AllListPage, MyListPage, MyChatsPage } from './pages'
 import { RootState, LightboxState, AuthState, AlertState } from './reducers'
 import { Layout, Alert, BackTop } from 'antd'
 import './app.scss'
@@ -73,6 +73,7 @@ class App extends React.Component<AppProps, any> {
               )}
               <Switch>
                 <Route exact path="/" component={HomePage} />
+                <PrivateRoute path="/chats" component={MyChatsPage} />
                 <PrivateRoute path="/reset/pass" component={ResetPassPage} />
                 <PrivateRoute path="/transactions/my" component={MyListPage} />
                 <Route path="/transactions" component={AllListPage} />
@@ -117,7 +118,7 @@ class App extends React.Component<AppProps, any> {
             </Layout.Content>
             {/* //1532692062 chat */}
             <Chat auth={auth} ref={(Chat) => {window.Chat = Chat}} />   
-            <Layout.Footer style={{ textAlign: 'center' }}>
+            <Layout.Footer style={{ textAlign: 'center',borderTop: "1px solid #e1e1e1" }} className="footer">
               {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
             </Layout.Footer>
           </Layout>
