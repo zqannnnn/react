@@ -19,7 +19,7 @@ const pgPool = new pg.Pool(config);
 const app = express()
 webpackMiddleware(app)
 app.use(middleware.handle(i18n))
-// initDatabase()
+// initDatabase() 
 // Get the exchange rate API
 // import { getApi as currencyApi } from './api/currency'
 // currencyApi()

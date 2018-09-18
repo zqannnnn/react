@@ -6,7 +6,7 @@ import { Goods } from '../../models'
 import { RootState, AdminState } from '../../reducers'
 import { Icon, Row, Col } from 'antd'
 import i18n from 'i18next'
-
+import './goods-confirm.scss'
 interface ConfirmProps
   extends RouteComponentProps<{
       id: string
@@ -60,7 +60,7 @@ class GoodsConfirmPage extends React.Component<ConfirmProps> {
       imagePaths = []
     }
     return (
-      <Row className="page">
+      <Row className="goods-confirm-page page">
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 18, offset: 3 }}
@@ -71,22 +71,28 @@ class GoodsConfirmPage extends React.Component<ConfirmProps> {
           {loading ? (
             <Icon type="loading" />
           ) : comfirmingGoods? (
-            <div>
-              <div>
-                <div className="confirm-title">{i18n.t('Title')}:</div>
-                <div>{comfirmingGoods.title || 'null'}</div>
-              </div>
-              <div>
-              <div className="confirm-title">{i18n.t('Description')}:</div>
-              <div>{comfirmingGoods.desc || 'null'}</div>
-              <div className="confirm-title">{i18n.t('Address')}:</div>
-              <div>{comfirmingGoods.address || 'null'}</div>
 
-              <div className="confirm-title">{i18n.t('Quantity')}:</div>
-              <div>{comfirmingGoods.quantity || 'null'}</div>
-              <div className="confirm-title">{i18n.t('Category')}:</div>
-              <div>{comfirmingGoods.category || 'null'}</div>
-              <div className="confirm-title">{i18n.t('Goods View ')}:</div>
+              <div>
+                  <div className="goods-title">
+                    <div className="confirm-title">{i18n.t('Title')}:</div>
+                    <div>{comfirmingGoods.title || 'null'}</div>
+                  </div>
+                  <div className="goods-wr">
+                    <div className="confirm-title">{i18n.t('Description')}:</div>
+                    <div>{comfirmingGoods.desc || 'null'}</div>
+                  </div>
+                  <div className="goods-wr">
+                    <div className="confirm-title">{i18n.t('Address')}:</div>
+                    <div>{comfirmingGoods.address || 'null'}</div>
+                  </div>
+                  <div className="goods-wr">
+                      <div className="confirm-title">{i18n.t('Quantity')}:</div>
+                      <div>{comfirmingGoods.quantity || 'null'}KG</div>
+                  </div>
+                  <div className="goods-wr">
+                    <div className="confirm-title">{i18n.t('Category')}:</div>
+                    <div>{comfirmingGoods.category || 'null'}</div>
+              </div>
               <div><Link className="" to={'/goods/' + comfirmingGoods.id}>
                       {i18n.t('Read More')}
                     </Link></div>
@@ -104,10 +110,10 @@ class GoodsConfirmPage extends React.Component<ConfirmProps> {
                     </div>
                   ))}
                 </div>
-              </div>
+              
               <div className="confirm-title">
                   {i18n.t('Proof')}:
-                </div>
+              </div>
               <div>
                 {licensePaths.map((url, index) => (
                   this.renderFiles(url,index)

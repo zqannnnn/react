@@ -690,7 +690,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                 </Col>
               </Row>
               <Row>
-                <Col sm={20} md={8} lg={8} offset={2} className="footer">
+                <Col sm={20} md={8} lg={8} offset={2} className="footer footer-br">
                   <Button
                     type="primary"
                     htmlType="submit"

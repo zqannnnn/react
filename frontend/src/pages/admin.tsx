@@ -69,7 +69,7 @@ class AdminPage extends React.Component<AdminProps> {
               {admin.unconfirmedGoods && (
                 <List
                   items={admin.unconfirmedGoods}
-                  title="verificationProof"
+                  title="Verification Goods"
                 />
               )}
             </div>

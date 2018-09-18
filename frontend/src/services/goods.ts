@@ -35,7 +35,7 @@ function disconfirm(id: string) {
     headers: authHeader()
   }
 
-  return fetch('/goods/denie/' + id, requestOptions).then(handleResponse)
+  return fetch('/goods/denied/' + id, requestOptions).then(handleResponse)
 }
 function edit(goods: Goods, goodsactionId: string) {
   const requestOptions = {

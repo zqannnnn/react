@@ -23,7 +23,7 @@ function disconfirm(id: string) {
     headers: authHeader()
   }
 
-  return fetch('/user/denie/' + id, requestOptions).then(handleResponse)
+  return fetch('/user/denied/' + id, requestOptions).then(handleResponse)
 }
 
 function listUnconfirmedCompanies() {

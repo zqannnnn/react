@@ -81,13 +81,15 @@ class ProfilePage extends React.Component<ProfileProps, ProfileState> {
     personalSubmit = (values: UserValuesProps) => {
         const { user } = this.state
         const { dispatch, countries } = this.props
+        let newCountry = countries.find(item => item.code === values.countryCode)
         let newUser = {
             ...user,
             firstName: values.firstName,
             email: values.email,
             lastName: values.lastName,
             preferredCurrencyCode: values.preferredCurrencyCode,
-            countryCode: values.countryCode
+            countryCode: values.countryCode,
+            country:newCountry
         }
         dispatch(userActionCreators.update(newUser))
         this.setState({ user: newUser })

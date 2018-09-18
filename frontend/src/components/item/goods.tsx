@@ -60,7 +60,7 @@ class GoodsItem extends React.Component<GoodsItemProps> {
                   </Link>
                 </>
               )}
-              {!goods.selling && (
+              {!goods.selling && goods.proofstatus == adminConsts.PROOFSTATUS_CONFIRMED && (
                 <>
                   <Link
                     to={'/transaction/shipping/' + goods.id}
@@ -69,14 +69,20 @@ class GoodsItem extends React.Component<GoodsItemProps> {
                     {i18n.t('Redeem')}
                     </Link>
                 </>
-              )}   
+              )} 
+              {!goods.selling && goods.proofstatus == adminConsts.PROOFSTATUS_UNCONFIRMED && (
+                <>
+                {i18n.t(' goods has not been verified')}  
+                </>
+                
+              )}
               {!goods.selling && !goods.proofstatus && authInfo.isAdmin&& (
                 <>
                   <Link
                     to={'/goods/confirm/' + goods.id}
                     className="control-btn"
                   >
-                    {i18n.t('Read More')}
+                    {i18n.t('Confirm')}
                   </Link>
                 </>
               )}

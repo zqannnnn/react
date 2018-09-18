@@ -122,7 +122,7 @@ router.get('/confirm/:id', async (req: IRequest, res: express.Response) => {
     return res.status(500).send({ error: i18n.t('Permission denied.') })
   }
 })
-router.get('/denie/:id', async (req: IRequest, res: express.Response) => {
+router.get('/denied/:id', async (req: IRequest, res: express.Response) => {
   if (req.isAdmin) {
     const goods = await Goods.find({ where: { id: req.params.id } })
     if (!goods) {

@@ -35,7 +35,7 @@ module.exports = {
         name: 'user_country_fk',
         references:{
           table:"country",
-          field:"country_code"  
+          field:"code"  
         }
       })
       await queryInterface.bulkInsert('country',jsonData,{transaction:t})

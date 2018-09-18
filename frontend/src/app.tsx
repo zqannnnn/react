@@ -122,7 +122,7 @@ class App extends React.Component<AppProps, any> {
             </Layout.Content>
             {/* //1532692062 chat */}
             <Chat auth={auth} ref={(Chat) => {window.Chat = Chat}} />   
-            <Layout.Footer style={{ textAlign: 'center',borderTop: "1px solid #e1e1e1" }} className="footer">
+            <Layout.Footer className="footer">
               {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
             </Layout.Footer>
           </Layout>
