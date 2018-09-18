@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { lightboxActionCreators } from '../../actions'
-import { RootState, LightboxState } from '../../reducers'
+import { lightboxActionCreators } from '../actions'
+import { RootState, LightboxState } from '../reducers'
 import { Modal } from 'antd'
 interface LightboxProps {
   dispatch: Dispatch<RootState>

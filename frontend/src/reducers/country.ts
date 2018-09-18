@@ -6,10 +6,7 @@ export type State = {
   error?: string
   items?: Array<Country>
 }
-export function country(
-  state = { },
-  action: CountryAction
-): State {
+export function country(state = {}, action: CountryAction): State {
   switch (action.type) {
     case countryConsts.GET_REQUEST:
       return {

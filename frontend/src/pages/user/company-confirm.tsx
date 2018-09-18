@@ -65,8 +65,8 @@ class ConfirmPage extends React.Component<ConfirmProps> {
                 <div>{comfirmingCompany.companyName || 'null'}</div>
               </div>
               <div>
-              <div className="confirm-title">{i18n.t('Address')}:</div>
-              <div>{comfirmingCompany.companyAddress || 'null'}</div>
+                <div className="confirm-title">{i18n.t('Address')}:</div>
+                <div>{comfirmingCompany.companyAddress || 'null'}</div>
               </div>
               <div>
                 <div className="confirm-title">

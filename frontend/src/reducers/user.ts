@@ -28,9 +28,9 @@ export function user(state: State = {}, action: UserAction): State {
       if (user && user.consignees && action.consignee) {
         user.consignees.push(action.consignee)
       }
-      return { userData: user,processing: false, }
+      return { userData: user, processing: false }
     case userConsts.CREATE_CONSIGNEE_FAILURE:
-      return { error: action.error,processing: false, }
+      return { error: action.error, processing: false }
     case userConsts.EDIT_CONSIGNEE_REQUEST:
       return { ...state, processing: true }
     case userConsts.EDIT_CONSIGNEE_SUCCESS:
@@ -52,7 +52,7 @@ export function user(state: State = {}, action: UserAction): State {
       }
 
     case userConsts.EDIT_CONSIGNEE_FAILURE:
-      return { error: action.error,processing: false }
+      return { error: action.error, processing: false }
     case userConsts.DELETE_CONSIGNEE_REQUEST:
       return { ...state, processing: true }
     case userConsts.DELETE_CONSIGNEE_SUCCESS:
@@ -80,7 +80,7 @@ export function user(state: State = {}, action: UserAction): State {
           processing: false,
           userData: {
             ...user,
-            defaultConsigneeId:action.consigneeId
+            defaultConsigneeId: action.consigneeId
           }
         }
       } else {

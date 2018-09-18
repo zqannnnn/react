@@ -1,42 +1,42 @@
 [
-    {
-        "code": "EUR",
-        "rate": 1,
-        "description": "Euro"
-    },
-    {
-        "code": "CNY",
-        "rate": 7.526251,
-        "description": "Chinese Yuan"
-    },
-    {
-        "code": "USD",
-        "rate": 1.175224,
-        "description": "United States Dollar"
-    },
-    {
-        "code": "GBP",
-        "rate": 0.882041,
-        "description": "British Pound Sterling"
-    },
-    {
-        "code": "JPY",
-        "rate": 129.999781,
-        "description": "Japanese Yen"
-    },
-    {
-        "code": "KRW",
-        "rate": 1272.615115,
-        "description": "South Korean Won"
-    },
-    {
-        "code": "BTC",
-        "rate": 0.0001821,
-        "description": "BitCoin"
-    },
-    {
-        "code": "ETH",
-        "rate": 0.002496,
-        "description": "Ethereum"
-    }
+  {
+    "code": "EUR",
+    "rate": 1,
+    "description": "Euro"
+  },
+  {
+    "code": "CNY",
+    "rate": 7.526251,
+    "description": "Chinese Yuan"
+  },
+  {
+    "code": "USD",
+    "rate": 1.175224,
+    "description": "United States Dollar"
+  },
+  {
+    "code": "GBP",
+    "rate": 0.882041,
+    "description": "British Pound Sterling"
+  },
+  {
+    "code": "JPY",
+    "rate": 129.999781,
+    "description": "Japanese Yen"
+  },
+  {
+    "code": "KRW",
+    "rate": 1272.615115,
+    "description": "South Korean Won"
+  },
+  {
+    "code": "BTC",
+    "rate": 0.0001821,
+    "description": "BitCoin"
+  },
+  {
+    "code": "ETH",
+    "rate": 0.002496,
+    "description": "Ethereum"
+  }
 ]

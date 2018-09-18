@@ -97,7 +97,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
     const { options } = this.state
     let comment: Comment
     comment = {
-      content: currentComment,
+      content: currentComment
     }
     if (currentComment !== '') {
       this.setState({
@@ -181,7 +181,7 @@ class CommentArea extends React.Component<CommentAreaProps, CommentAreaState> {
             }
             prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
           />
-          
+
           <div className="release">
             <span>{i18n.t(' Press the Enter key to publish。')}</span>
           </div>

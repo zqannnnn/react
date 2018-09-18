@@ -1,5 +1,6 @@
 {
-  "Beef Trade Platform ©2018 Created by FusionICO": "Beef Trade Platform ©2018 Created by FusionICO",
+  "Beef Trade Platform ©2018 Created by FusionICO":
+    "Beef Trade Platform ©2018 Created by FusionICO",
   "Forget password?": "Forget password?",
   "Register": "Register",
   "Admin Page": "Admin Page",
@@ -63,7 +64,8 @@
   "Company Name": "Company Name",
   "Company Address": "Company Address",
   "Business License": "Business License",
-  "Please fulfill company information for adding transaction": "Please fulfill company information for adding transaction",
+  "Please fulfill company information for adding transaction":
+    "Please fulfill company information for adding transaction",
   "Home": "Home",
   "Lost Password": "Lost Password",
   "Reset": "Reset",
@@ -76,7 +78,8 @@
   "Log in": "Log in",
   "Reset Password": "Reset Password",
   "Back to login": "Back to login",
-  "Two passwords that you enter is inconsistent!": "Two passwords that you enter is inconsistent!",
+  "Two passwords that you enter is inconsistent!":
+    "Two passwords that you enter is inconsistent!",
   "The input is not valid Email!": "The input is not valid Email!",
   "Please input your Email!": "Please input your Email!",
   "Please input your First Name!": "Please input your First Name!",

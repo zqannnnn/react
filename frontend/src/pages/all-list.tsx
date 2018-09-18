@@ -87,12 +87,6 @@ class List extends React.Component<ListProps, ListStates> {
     // const { options } = this.state;
     return (
       <Row className="page">
-        {!this.state.searched && (
-          <div className="banner">
-            <div className="banner-bg" />
-            <div className="title">{i18n.t('All Transaction')}</div>
-          </div>
-        )}
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 20, offset: 2 }}

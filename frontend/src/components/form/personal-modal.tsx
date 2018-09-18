@@ -1,50 +1,46 @@
 import * as React from 'react'
-import { Form, Input, Modal,Select } from 'antd'
+import { Form, Input, Modal, Select } from 'antd'
 import { Dispatch } from 'redux'
 import { FormComponentProps } from 'antd/lib/form'
 import i18n from 'i18next'
-import { User, Currency,Country } from '../../models'
-import {
-  currencyActionCreators,
-} from '../../actions'
+import { User, Currency, Country } from '../../models'
+import { currencyActionCreators } from '../../actions'
 const FormItem = Form.Item
 export interface UserValuesProps {
   firstName: string
   email: string
   lastName: string
-  preferredCurrencyCode?:string
-  countryCode?:string
+  preferredCurrencyCode?: string
+  countryCode?: string
 }
-export interface State{
-  preferredCurrencyCode?:string
-  countryCode?:string
-
+export interface State {
+  preferredCurrencyCode?: string
+  countryCode?: string
 }
 interface UserFormProps extends FormComponentProps {
   handleSubmit: (values: UserValuesProps) => void
   handleCancel: () => void
   visible: boolean
   user: User
-  countries:Country[]
-  currencies:Currency[]
+  countries: Country[]
+  currencies: Currency[]
 }
-class UserForm extends React.Component<UserFormProps,State> {
+class UserForm extends React.Component<UserFormProps, State> {
   constructor(props: UserFormProps) {
     super(props)
-    this.state={
-      preferredCurrencyCode:'',
-      countryCode:'',
-      
+    this.state = {
+      preferredCurrencyCode: '',
+      countryCode: ''
     }
   }
   componentDidMount() {
     const { user } = this.props
     let preferredCurrencyCode = user.preferredCurrencyCode
     let countryCode = user.countryCode
-    if(user){
+    if (user) {
       this.setState({
-        preferredCurrencyCode:preferredCurrencyCode,
-        countryCode:countryCode,
+        preferredCurrencyCode: preferredCurrencyCode,
+        countryCode: countryCode
       })
     }
   }
@@ -59,18 +55,18 @@ class UserForm extends React.Component<UserFormProps,State> {
       }
     })
   }
-  handleCountrySelect = (value:string) => {
-    const {countries} = this.props
-    if(countries){
+  handleCountrySelect = (value: string) => {
+    const { countries } = this.props
+    if (countries) {
       this.setState({
-        countryCode:value
+        countryCode: value
       })
     }
   }
   handleCurrencySelect = (value: string) => {
     const { user } = this.props
     this.setState({
-      preferredCurrencyCode:value
+      preferredCurrencyCode: value
     })
   }
   renderCountrySelect = () => {
@@ -78,9 +74,7 @@ class UserForm extends React.Component<UserFormProps,State> {
     return (
       <Select
         value={this.state.countryCode}
-        onSelect={(value: string) =>
-          this.handleCountrySelect(value)
-        }
+        onSelect={(value: string) => this.handleCountrySelect(value)}
       >
         {countries &&
           countries.map((item, index) => (
@@ -96,9 +90,7 @@ class UserForm extends React.Component<UserFormProps,State> {
     return (
       <Select
         value={this.state.preferredCurrencyCode}
-        onSelect={(value: string) =>
-          this.handleCurrencySelect(value)
-        }
+        onSelect={(value: string) => this.handleCurrencySelect(value)}
       >
         {currencies &&
           currencies.map((item, index) => (
@@ -158,9 +150,7 @@ class UserForm extends React.Component<UserFormProps,State> {
           <FormItem label="Preferred Currency">
             {this.renderCurrencySelect()}
           </FormItem>
-          <FormItem label="Country">
-            {this.renderCountrySelect()}
-          </FormItem>
+          <FormItem label="Country">{this.renderCountrySelect()}</FormItem>
         </Form>
       </Modal>
     )

@@ -188,14 +188,18 @@ export function transaction(
           item => item.id === action.transactionId
         )[0]
         if (item.rowComments) {
-          let firstLevelReply = item.rowComments.filter(comment => comment.replyTo)
-          let Multistage = action.comments.filter(comment => comment.replyTo && comment.rootId !== comment.replyTo)
+          let firstLevelReply = item.rowComments.filter(
+            comment => comment.replyTo
+          )
+          let Multistage = action.comments.filter(
+            comment => comment.replyTo && comment.rootId !== comment.replyTo
+          )
           Multistage.forEach(replies => {
             firstLevelReply.forEach(firstLevel => {
               replies.userReplyTo = firstLevel.user
             })
           })
-          
+
           let items = state.items.map(item => {
             if (item.id === action.transactionId) {
               if (item.comments) {

@@ -31,9 +31,10 @@
   }
 }
 @media (min-width: 320px) and (max-width: 767px) {
-  .filter{
+  .filter {
     margin-bottom: 10px;
-    .select,.checkbox-wr {
+    .select,
+    .checkbox-wr {
       width: 100%;
     }
   }
@@ -56,13 +57,13 @@ body {
   background-color: #e9ecef;
 }
 
-.message{
+.message {
   word-wrap: break-word;
 }
 
 #main {
   > .ant-layout {
-      min-height: 100vh;
+    min-height: 100vh;
   }
 }
 
@@ -102,8 +103,8 @@ body {
   height: 100%;
 }
 
-.footer{
-  text-align:center;
+.footer {
+  text-align: center;
   border-top: 1px solid #e1e1e1;
 }
 .filter .checkbox-wr {
@@ -141,8 +142,8 @@ body {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-      0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+      0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     background: white;
   }
   img {
@@ -153,18 +154,17 @@ body {
   min-height: 30px;
 }
 
-
 .flex {
   display: flex;
 }
-.float-right{
+.float-right {
   float: right;
 }
 .space-between {
   display: flex;
   justify-content: space-between;
 }
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
 }
 .font-bold {
@@ -181,22 +181,16 @@ body {
   text-overflow: ellipsis;
 }
 
-
 .page-wr {
-  padding-top: 64px;
-  .top{
+  padding-top: 20px;
+  .top {
     margin-top: 30px;
   }
-  .title{
+  .title {
     font-size: 20px;
   }
 }
-@media (min-width: 0px) and (max-width: 768px) {
-  .page-wr {
-    padding: 0px;
-  }
-}
-.page{
+.page {
   > .header {
     font-weight: bold;
     font-size: 25px;
@@ -224,7 +218,7 @@ body {
   }
 }
 
-.edit-page{
+.edit-page {
   .label-right {
     line-height: 38px;
     font-size: 16px;
@@ -252,19 +246,19 @@ body {
     display: flex;
     justify-content: center;
   }
-  .field{
-    margin-top: 20px
+  .field {
+    margin-top: 20px;
   }
-  .footer{
-    margin-top: 30px
+  .footer {
+    margin-top: 30px;
   }
-} 
-.view-page{
-  label{
-    color:rgba(0, 0, 0, 0.9)
+}
+.view-page {
+  label {
+    color: rgba(0, 0, 0, 0.9);
   }
-  .field{
-    margin-top: 20px 
+  .field {
+    margin-top: 20px;
   }
 }
 .has-error .form-control {

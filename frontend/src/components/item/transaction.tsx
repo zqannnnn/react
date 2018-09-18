@@ -207,18 +207,22 @@ class Item extends React.Component<ItemProps> {
                 {i18n.t('Read More')}
               </Link>
 
-              {authInfo && taker && transaction.takerId && transaction.status === transactionConsts.STATUS_FINISHED &&(
-                <>
-                <span className="taker">{i18n.t('taker')}:
-                  <Link
-                    to={'/user/' + transaction.takerId}
-                    className="control-btn"
-                  >
-                    {taker.firstName} {taker.lastName}
-                  </Link>
-                </span>
-              </>
-              ) }
+              {authInfo &&
+                taker &&
+                transaction.takerId &&
+                transaction.status === transactionConsts.STATUS_FINISHED && (
+                  <>
+                    <span className="taker">
+                      {i18n.t('taker')}:
+                      <Link
+                        to={'/user/' + transaction.takerId}
+                        className="control-btn"
+                      >
+                        {taker.firstName} {taker.lastName}
+                      </Link>
+                    </span>
+                  </>
+                )}
               {authInfo &&
                 (authInfo.id == transaction.makerId || authInfo.isAdmin) &&
                 transaction.status === transactionConsts.STATUS_CREATED && (

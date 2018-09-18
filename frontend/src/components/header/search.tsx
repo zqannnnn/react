@@ -10,13 +10,11 @@ class Search extends React.Component {
 
   render() {
     return (
-      <div className="nav-search">
-        <Searchfor
-          placeholder="Search"
-          onSearch={this.handleSearch}
-          enterButton
-        />
-      </div>
+      <Searchfor
+        placeholder="Search products here..."
+        onSearch={this.handleSearch}
+        className="search"
+      />
     )
   }
 }

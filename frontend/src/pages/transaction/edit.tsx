@@ -26,7 +26,7 @@ import {
   Icon
 } from 'antd'
 import i18n from 'i18next'
-import{ GoodsInfo } from '../../components'
+import { GoodsInfo } from '../../components'
 
 const { TextArea } = Input
 
@@ -221,10 +221,7 @@ class EditPage extends React.Component<TransProps, TransState> {
             <div className="steps-content">
               {goods && (
                 <div className="field">
-                  <GoodsInfo
-                  goods={goods}
-                  openLightbox={this.openLightbox}
-                  />
+                  <GoodsInfo goods={goods} openLightbox={this.openLightbox} />
                   <Row>
                     <Col
                       xs={{ span: 20, offset: 2 }}
@@ -275,17 +272,8 @@ class EditPage extends React.Component<TransProps, TransState> {
                     </Col>
                   </Row>
                   <Row>
-                    <Col
-                      sm={20}
-                      md={8}
-                      lg={8}
-                      offset={2}
-                      className="footer"
-                    >
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                      >
+                    <Col sm={20} md={8} lg={8} offset={2} className="footer">
+                      <Button type="primary" htmlType="submit">
                         {i18n.t('Submit')}
                       </Button>
                       {processing && <Icon type="loading" />}

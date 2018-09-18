@@ -123,7 +123,6 @@ class UserForm extends React.Component<CompanyFormProps, ProfileState> {
             </div>
           </FormItem>
         </Form>
-        
       </Modal>
     )
   }
