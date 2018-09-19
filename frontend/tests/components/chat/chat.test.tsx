@@ -13,42 +13,42 @@ import * as socketIOClient from 'socket.io-client'
 //LINK TO SOCKET.IO MOCKING https://medium.freecodecamp.org/testing-socket-io-client-app-using-jest-and-react-testing-library-9cae93c070a3
 
 jest.mock('socket.io-client', () => {
-    return {
-        connect: jest.fn(() => {
-            return {
-                on: jest.fn()
-            }
-        })
-    }
+  return {
+    connect: jest.fn(() => {
+      return {
+        on: jest.fn()
+      }
+    })
+  }
 })
 
 beforeEach(() => {
-    socketIOClient.connect.mockClear()
+  socketIOClient.connect.mockClear()
 })
 
 describe('Render chat for', () => {
-    it('logged-out user', () => {
-        let state = {}
-        let action = { type: consts.LOGIN_REQUEST }
-        let newState = auth(state, action)
-        const wrap = shallow(
-            <Chat auth={newState} />
-        )
-        expect(wrap.text()).toEqual('')
-        expect(socketIOClient.connect.mock.calls.length).toBe(1)
-        expect(socketIOClient.connect.mock.results[0].value.on.mock.calls.length).toBe(1)
-    })
+  it('logged-out user', () => {
+    let state = {}
+    let action = { type: consts.LOGIN_REQUEST }
+    let newState = auth(state, action)
+    const wrap = shallow(<Chat auth={newState} />)
+    expect(wrap.text()).toEqual('')
+    expect(socketIOClient.connect.mock.calls.length).toBe(1)
+    expect(
+      socketIOClient.connect.mock.results[0].value.on.mock.calls.length
+    ).toBe(1)
+  })
 
-    it('logged-in user', () => {
-        let state = {}
-        let action = { type: consts.LOGIN_SUCCESS }
-        let newState = auth(state, action)
-        expect(newState).toEqual({ authInfo: undefined, loggedIn: true })
-        const wrap = shallow(
-            <Chat auth={newState} />
-        )
-        expect(wrap.text()).toEqual('')
-        expect(socketIOClient.connect.mock.calls.length).toBe(1)
-        expect(socketIOClient.connect.mock.results[0].value.on.mock.calls.length).toBe(1)
-    })
+  it('logged-in user', () => {
+    let state = {}
+    let action = { type: consts.LOGIN_SUCCESS }
+    let newState = auth(state, action)
+    expect(newState).toEqual({ authInfo: undefined, loggedIn: true })
+    const wrap = shallow(<Chat auth={newState} />)
+    expect(wrap.text()).toEqual('')
+    expect(socketIOClient.connect.mock.calls.length).toBe(1)
+    expect(
+      socketIOClient.connect.mock.results[0].value.on.mock.calls.length
+    ).toBe(1)
+  })
 })

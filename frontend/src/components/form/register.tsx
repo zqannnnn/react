@@ -103,9 +103,15 @@ class RegisterForm extends React.Component<
       <Form onSubmit={this.handleSubmit} className="login-form">
         <div className="header">
           <div className="header-register">{i18n.t('Register User')}</div>
-          <div className="header-now">{i18n.t('Register now and start making money from home!')}</div>
+          <div className="header-now">
+            {i18n.t('Register now and start making money from home!')}
+          </div>
         </div>
-        <FormItem {...formItemLayout} label={i18n.t('Email')} className="form-item">
+        <FormItem
+          {...formItemLayout}
+          label={i18n.t('Email')}
+          className="form-item"
+        >
           {getFieldDecorator('email', {
             rules: [
               {
@@ -117,7 +123,7 @@ class RegisterForm extends React.Component<
                 message: i18n.t('Please input your Email!')
               }
             ]
-          })(<Input placeholder={i18n.t('please input your email...')}/>)}
+          })(<Input placeholder={i18n.t('please input your email...')} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="First Name" className="form-item">
           {getFieldDecorator('firstName', {
@@ -127,7 +133,7 @@ class RegisterForm extends React.Component<
                 message: i18n.t('Please input your First Name!')
               }
             ]
-          })(<Input placeholder={i18n.t('Please enter a name...')}/>)}
+          })(<Input placeholder={i18n.t('Please enter a name...')} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="Last Name" className="form-item">
           {getFieldDecorator('lastName', {
@@ -137,7 +143,7 @@ class RegisterForm extends React.Component<
                 message: i18n.t('Please input your Last Name!')
               }
             ]
-          })(<Input placeholder={i18n.t('Please enter your last name...')}/>)}
+          })(<Input placeholder={i18n.t('Please enter your last name...')} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="Password" className="form-item">
           {getFieldDecorator('password', {
@@ -150,9 +156,18 @@ class RegisterForm extends React.Component<
                 validator: this.validateToNextPassword
               }
             ]
-          })(<Input type="password" placeholder={i18n.t('Please enter your password...')}/>)}
+          })(
+            <Input
+              type="password"
+              placeholder={i18n.t('Please enter your password...')}
+            />
+          )}
         </FormItem>
-        <FormItem {...formItemLayout} label="Confirm Password" className="form-item">
+        <FormItem
+          {...formItemLayout}
+          label="Confirm Password"
+          className="form-item"
+        >
           {getFieldDecorator('confirm', {
             rules: [
               {
@@ -163,13 +178,21 @@ class RegisterForm extends React.Component<
                 validator: this.compareToFirstPassword
               }
             ]
-          })(<Input type="password" onBlur={this.handleConfirmBlur} placeholder={i18n.t('Please enter your password again...')}/>)}
+          })(
+            <Input
+              type="password"
+              onBlur={this.handleConfirmBlur}
+              placeholder={i18n.t('Please enter your password again...')}
+            />
+          )}
         </FormItem>
         <FormItem {...tailFormItemLayout} className="form-item">
-          <Button type="primary" htmlType="submit" className="button-left btn-color">
-            <span>
-              {i18n.t('Register')}
-            </span>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="button-left btn-color"
+          >
+            <span>{i18n.t('Register')}</span>
             <span className="register-now">&nbsp;{i18n.t('now!')}</span>
           </Button>
         </FormItem>

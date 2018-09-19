@@ -22,7 +22,9 @@ class LoginForm extends React.Component<LoginFormProps> {
       <Form onSubmit={this.handleSubmit} className="login-form">
         <div className="header">
           <div className="header-register">{i18n.t('Login')}</div>
-          <div className="header-now">{i18n.t('Login now and start making money from home!')}</div>
+          <div className="header-now">
+            {i18n.t('Login now and start making money from home!')}
+          </div>
         </div>
         <p className="form-item">
           <div>{i18n.t('Email')}</div>
@@ -74,7 +76,7 @@ class LoginForm extends React.Component<LoginFormProps> {
           >
             <span>{i18n.t('Login')}</span>
             <span className="register-now">&nbsp;{i18n.t('now!')}</span>
-            <span>{this.props.processing && (<Icon type="loading" />)}</span>
+            <span>{this.props.processing && <Icon type="loading" />}</span>
           </Button>
         </FormItem>
       </Form>

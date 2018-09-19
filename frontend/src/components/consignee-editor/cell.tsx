@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Form, Input} from 'antd'
+import { Form, Input } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import { WrappedFormUtils } from 'antd/lib/form/Form'
 import { EditableContext } from '.'
@@ -51,30 +51,29 @@ class EditableCell extends React.Component<CellProps> {
             <td {...restProps}>
               {editing ? (
                 <FormItem style={{ margin: 0 }}>
-                  {dataIndex==='email'?
-                    getFieldDecorator(dataIndex, {
-                      rules: [
-                        {
-                          required: true,
-                          message: `Please Input ${title}!`
-                        },
-                        {
-                          type: 'email',
-                          message: i18n.t('The input is not valid!')
-                        }
-                      ],
-                      initialValue: record[dataIndex]
-                    })(this.getInput()):
-                    getFieldDecorator(dataIndex, {
-                      rules: [
-                        {
-                          required: true,
-                          message: `Please Input ${title}!`
-                        }
-                      ],
-                      initialValue: record[dataIndex]
-                    })(this.getInput())
-                  }
+                  {dataIndex === 'email'
+                    ? getFieldDecorator(dataIndex, {
+                        rules: [
+                          {
+                            required: true,
+                            message: `Please Input ${title}!`
+                          },
+                          {
+                            type: 'email',
+                            message: i18n.t('The input is not valid!')
+                          }
+                        ],
+                        initialValue: record[dataIndex]
+                      })(this.getInput())
+                    : getFieldDecorator(dataIndex, {
+                        rules: [
+                          {
+                            required: true,
+                            message: `Please Input ${title}!`
+                          }
+                        ],
+                        initialValue: record[dataIndex]
+                      })(this.getInput())}
                 </FormItem>
               ) : (
                 restProps.children

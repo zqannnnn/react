@@ -146,9 +146,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
                 </Link>
                 {comment.rootId !== comment.replyTo && (
                   <>
-                    <span className="comment-replyTo">
-                      {i18n.t(' reply ')}
-                    </span>
+                    <span className="comment-replyTo">{i18n.t(' reply ')}</span>
                     <Link to={'/user/' + comment.userId}>
                       <span className="user-id click">
                         {comment.userReplyTo && comment.userReplyTo.firstName}
@@ -168,9 +166,7 @@ class CommentItem extends React.Component<CommentProps, CommentState> {
                 </Link>
                 {comment.rootId !== comment.replyTo && (
                   <>
-                    <span className="comment-replyTo">
-                      {i18n.t(' reply ')}
-                    </span>
+                    <span className="comment-replyTo">{i18n.t(' reply ')}</span>
                     <Link to={'/user/' + comment.userId}>
                       <span className="user-id click">
                         {comment.userReplyTo && comment.userReplyTo.firstName}

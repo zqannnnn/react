@@ -31,7 +31,7 @@ export type RootState = {
   goods: GoodsState
   category: CategoryState
   currency: CurrencyState
-  country:  CountryState
+  country: CountryState
   lightbox: LightboxState
   admin: AdminState
 }

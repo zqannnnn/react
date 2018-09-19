@@ -75,7 +75,10 @@ function setDefaultConsignee(consigneeId: string) {
       'Content-Type': 'application/json'
     }
   }
-  return fetch('/user/set/default/consignee?id=' + consigneeId, requestOptions).then(handleResponse)
+  return fetch(
+    '/user/set/default/consignee?id=' + consigneeId,
+    requestOptions
+  ).then(handleResponse)
 }
 function handleResponse(response: Response) {
   if (!response.ok) {

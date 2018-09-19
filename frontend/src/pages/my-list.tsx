@@ -68,10 +68,7 @@ class List extends React.Component<ListProps, ListState> {
     const { transaction } = this.props
     return (
       <Row className="page">
-        <div className="banner">
-          <div className="banner-bg" />
-          <div className="title">{i18n.t('My Transaction')}</div>
-        </div>
+        <h2 className="header-center">{i18n.t('My Transactions')}</h2>
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 20, offset: 2 }}

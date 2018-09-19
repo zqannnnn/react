@@ -54,9 +54,7 @@ class RegisterPage extends React.Component<RegisterProps, RegisterState> {
     return (
       <Row className="page edit-page auth-page">
         <div className="header">
-          <div className="header-item">
-            {i18n.t('Register User')}
-          </div>
+          <div className="header-item">{i18n.t('Register User')}</div>
         </div>
         <Col
           xs={{ span: 22, offset: 1 }}
