@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { Form, Icon, Input, Button, Checkbox } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import i18n from 'i18next'
-
 const FormItem = Form.Item
 interface LoginFormProps extends FormComponentProps {
   handleSubmit: (values: any) => void
@@ -19,17 +18,18 @@ class LoginForm extends React.Component<LoginFormProps> {
   render() {
     const { getFieldDecorator } = this.props.form
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
+      <Form onSubmit={this.handleSubmit} className="login-form auth-form">
         <div className="header">
-          <div className="header-register">{i18n.t('Login')}</div>
-          <div className="header-now">
+          <div className="title">{i18n.t('Login')}</div>
+          <div className="tips">
             {i18n.t('Login now and start making money from home!')}
           </div>
         </div>
-        <p className="form-item">
-          <div>{i18n.t('Email')}</div>
-        </p>
-        <FormItem className="form-item">
+        <FormItem
+          label={i18n.t('Email')}
+          required={false}
+          className="form-item"
+        >
           {getFieldDecorator('email', {
             rules: [
               {
@@ -44,10 +44,11 @@ class LoginForm extends React.Component<LoginFormProps> {
             />
           )}
         </FormItem>
-        <p className="form-item">
-          <div>{i18n.t('Password')}</div>
-        </p>
-        <FormItem className="form-item">
+        <FormItem
+          label={i18n.t('Password')}
+          required={false}
+          className="form-item"
+        >
           {getFieldDecorator('password', {
             rules: [
               {
@@ -72,7 +73,7 @@ class LoginForm extends React.Component<LoginFormProps> {
             htmlType="submit"
             type="primary"
             size="large"
-            className="button-left btn-color"
+            className="submit-btn"
           >
             <span>{i18n.t('Login')}</span>
             <span className="register-now">&nbsp;{i18n.t('now!')}</span>

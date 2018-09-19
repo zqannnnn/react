@@ -94,9 +94,6 @@ body {
   text-align: center;
   border-top: 1px solid #e1e1e1;
 }
-.filter .checkbox-wr {
-  float: right;
-}
 
 .consignee-container {
   border: 1px solid lightgray;
@@ -220,18 +217,9 @@ body {
     font-size: 14px;
   }
   .button-left {
-    padding: 0 10px;
-    width: 100%;
-    padding: 20px;
-    line-height: 1px;
+    margin-left: 15px;
   }
-  .btn-color {
-    background-color: #363636;
-    border-color: #363636;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-  }
+
   .field {
     margin-top: 20px;
   }
@@ -247,6 +235,60 @@ body {
     margin-top: 20px;
   }
 }
+.auth-page {
+  .auth-form {
+    background-color: white;
+    margin: auto;
+    border-radius: 2px;
+    overflow: hidden;
+    padding-bottom: 10px;
+    min-height: 100px;
+    max-width: 450px;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+      0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    .header {
+      font-weight: bold;
+      padding: 30px 30px;
+      background-image: url(/asset/bg.jpg);
+      background-repeat: repeat-x;
+      color: #ffffff;
+      margin-bottom: 10px;
+      .title {
+        font-size: 20px;
+        padding-bottom: 20px;
+      }
+      header-now .tips {
+        font-size: 12px;
+      }
+    }
+    .form-item > div {
+      text-align: left !important;
+      padding: 0 10px;
+      font-weight: bold;
+      color: #363636;
+    }
+    .form-item {
+      .login-form-forgot {
+        color: #00aaaa;
+      }
+    }
+    .submit-btn {
+      background-color: #363636;
+      border-color: #363636;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+    .ant-form-item {
+      margin-bottom: 5px;
+    }
+  }
+  .form-wr {
+    margin: auto;
+  }
+}
+
 .has-error .form-control {
   border-color: #a94442;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);

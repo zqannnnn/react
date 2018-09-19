@@ -52,22 +52,17 @@ class RegisterPage extends React.Component<RegisterProps, RegisterState> {
     const { processing } = this.props
     const { user, submitted } = this.state
     return (
-      <Row className="page edit-page auth-page">
+      <div className="page auth-page">
         <div className="header">
           <div className="header-item">{i18n.t('Register User')}</div>
         </div>
-        <Col
-          xs={{ span: 22, offset: 1 }}
-          sm={{ span: 18, offset: 3 }}
-          md={{ span: 14, offset: 5 }}
-          lg={{ span: 10, offset: 9 }}
-        >
+        <div className="form-wr">
           <RegisterForm
             handleSubmit={this.handleSubmit}
             processing={processing}
           />
-        </Col>
-      </Row>
+        </div>
+      </div>
     )
   }
 }
