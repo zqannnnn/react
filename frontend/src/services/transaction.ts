@@ -99,10 +99,20 @@ function buy(id: string) {
 
 function renderQuery(options: ListOptions) {
   let query: string = ''
+  let str: string = ''
   for (const key in options) {
     if (options.hasOwnProperty(key)) {
       const element = options[key]
-      query += `${key}=${element}&`
+      if(Array.isArray(element)){
+        element.forEach(category => {
+          if (category) {
+            str += `${key}[]=${category}&`
+          }
+        })
+      } else {
+        str += `${key}=${element}&`
+      }
+      query += str
     }
   }
   return query

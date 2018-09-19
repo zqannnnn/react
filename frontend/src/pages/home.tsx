@@ -27,7 +27,8 @@ class HomePage extends React.Component<HomeProps, HomeState> {
       options: {
         type: 'all',
         page: 1,
-        pageSize: 6
+        pageSize: 6,
+        category: []
       }
     }
   }

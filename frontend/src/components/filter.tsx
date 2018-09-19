@@ -8,6 +8,8 @@ import { ListOptions } from '../models'
 import i18n from 'i18next'
 
 const Option = Select.Option
+const CheckboxGroup = Checkbox.Group
+const plainOptions = ['Beef', 'Veal', 'Sheep'];
 
 interface ItemProps {
   dispatch: Dispatch<RootState>
@@ -17,12 +19,13 @@ interface ItemProps {
 }
 interface ItemState {
   options: ListOptions
+  checkedList: string[]
 }
 
 class Filter extends React.Component<ItemProps, ItemState> {
   constructor(props: ItemProps) {
     super(props)
-    this.state = { options: {} }
+    this.state = { options: {}, checkedList: [] }
   }
   componentDidMount() {
     this.setState({ options: this.props.initOptions })
@@ -56,6 +59,12 @@ class Filter extends React.Component<ItemProps, ItemState> {
     this.setState({ options })
     this.props.onOptionsChange(options)
   }
+  processingCategory = (checkedList: string[]) => {
+    let options = this.state.options
+    options.category = checkedList
+    this.setState({ options, checkedList })
+    this.props.onOptionsChange(options)
+  }
   render() {
     const { currency } = this.props
     return (
@@ -74,6 +83,11 @@ class Filter extends React.Component<ItemProps, ItemState> {
               onChange={this.handleChangeType}
               className="margin-bottom"
             >
+              <CheckboxGroup 
+                options={plainOptions} 
+                value={this.state.checkedList} 
+                onChange={this.processingCategory} 
+              />
               <Checkbox
                 value={transactionConsts.TYPE_BUY}
                 className="margin-right"
