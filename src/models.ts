@@ -104,7 +104,7 @@ const insertInitialData = () => {
   }
 }
 const initDatabase = async () => {
-  await sequelize.sync({ force: true })
+  await sequelize.sync()
 
   User.findOne({ where: { email: 'admin@admin.com' } }).then((user: any) => {
     if (!user) {

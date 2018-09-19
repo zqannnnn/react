@@ -31,19 +31,6 @@
   }
 }
 @media (min-width: 320px) and (max-width: 767px) {
-  .filter {
-    margin-bottom: 10px;
-    .select,
-    .checkbox-wr {
-      width: 100%;
-    }
-  }
-  .filter .margin-bottom {
-    margin-bottom: 10px;
-  }
-  .filter .margin-right {
-    margin-right: 10px;
-  }
   .list-container .header .subtitle .des,
   .list-container .header .subtitle .link {
     font-size: 13px;
@@ -182,7 +169,6 @@ body {
 }
 
 .page-wr {
-  padding-top: 20px;
   .top {
     margin-top: 30px;
   }
@@ -197,10 +183,10 @@ body {
     text-align: left;
     background-image: url(/asset/bg.jpg);
     background-repeat: no-repeat;
-    color:#ffffff;
+    color: #ffffff;
     height: 60px;
     margin-bottom: 30px;
-    .header-item{
+    .header-item {
       padding: 15px 10%;
       line-height: 30px;
     }
@@ -233,13 +219,13 @@ body {
     padding: 5px;
     font-size: 14px;
   }
-  .button-left{
+  .button-left {
     padding: 0 10px;
     width: 100%;
     padding: 20px;
     line-height: 1px;
   }
-  .btn-color{
+  .btn-color {
     background-color: #363636;
     border-color: #363636;
     font-weight: bold;
@@ -350,10 +336,6 @@ body {
 }
 .ant-back-top {
   bottom: 20px;
-}
-.sorting-left {
-  margin-right: 8px;
-  float: left;
 }
 
 .ant-upload-list-item-info span {

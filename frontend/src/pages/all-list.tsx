@@ -87,6 +87,7 @@ class List extends React.Component<ListProps, ListStates> {
     // const { options } = this.state;
     return (
       <Row className="page">
+        <h2 className="header-center">{i18n.t('All transaction')}</h2>
         <Col
           xs={{ span: 22, offset: 1 }}
           sm={{ span: 20, offset: 2 }}

@@ -44,6 +44,7 @@ class HomePage extends React.Component<HomeProps, HomeState> {
     const { authInfo, transaction } = this.props
     return (
       <div className="page">
+        <h2 className="header-center">{i18n.t('Home')}</h2>
         <Row>
           <Col
             xs={{ span: 22, offset: 1 }}

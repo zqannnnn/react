@@ -43,6 +43,7 @@ class GoodsPage extends React.Component<GoodsProps, GoodsStates> {
     const { goods } = this.props
     return (
       <div className="page">
+        <h2 className="header-center">{i18n.t('Inventory')}</h2>
         <Row>
           <Col
             xs={{ span: 22, offset: 1 }}

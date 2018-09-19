@@ -6,7 +6,7 @@ import { Row, Col, Checkbox, Select } from 'antd'
 import { currencyActionCreators } from '../actions'
 import { ListOptions } from '../models'
 import i18n from 'i18next'
-
+import './filter.scss'
 const Option = Select.Option
 
 interface ItemProps {
@@ -18,7 +18,6 @@ interface ItemProps {
 interface ItemState {
   options: ListOptions
 }
-
 class Filter extends React.Component<ItemProps, ItemState> {
   constructor(props: ItemProps) {
     super(props)
@@ -64,7 +63,7 @@ class Filter extends React.Component<ItemProps, ItemState> {
           <Select
             defaultValue={i18n.t('New to old')}
             onChange={this.handleSelectSort}
-            className="sorting-left margin-bottom select"
+            className="sort item"
           >
             <Option value="new">{i18n.t('New to old')}</Option>
             <Option value="old">{i18n.t('Old to new')}</Option>
@@ -72,7 +71,7 @@ class Filter extends React.Component<ItemProps, ItemState> {
           <div className="checkbox-wr">
             <Checkbox.Group
               onChange={this.handleChangeType}
-              className="margin-bottom"
+              className="item"
             >
               <Checkbox
                 value={transactionConsts.TYPE_BUY}
@@ -88,7 +87,7 @@ class Filter extends React.Component<ItemProps, ItemState> {
             <Select
               value={currency.currentCurrency}
               onChange={this.handleSelectCurrency}
-              className="select"
+              className="item"
             >
               {currency.items
                 ? currency.items.map((item, index) => (

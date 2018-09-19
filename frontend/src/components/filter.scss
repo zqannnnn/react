@@ -1,0 +1,19 @@
+@media (min-width: 320px) and (max-width: 767px) {
+  .filter {
+    .item{
+      margin-bottom: 10px;
+      width: 100%;
+    }
+    .checkbox-wr{
+      width: 100%;
+    }
+  }
+}
+
+.filter {
+  padding: 15px 0;
+  .sort {
+    margin-right: 8px;
+    float: left;
+  }
+}
