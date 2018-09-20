@@ -53,13 +53,8 @@ class HomePage extends React.Component<HomeProps, HomeState> {
             md={{ span: 18, offset: 3 }}
             lg={{ span: 16, offset: 4 }}
           >
-            <Filter
-              initOptions={this.state.options}
-              onOptionsChange={this.onOptionsChange}
-            />
             <div className="list-container">
               <div className="header">
-                <div className="title">{i18n.t('Home')}</div>
                 <div className="subtitle">
                   <div className="des">
                     {i18n.t('People looking for buy or sell')}

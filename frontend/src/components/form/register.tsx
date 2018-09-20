@@ -151,7 +151,7 @@ class RegisterForm extends React.Component<
         <FormItem className="form-item">
           <Button type="primary" htmlType="submit" className="submit-btn">
             <span>{i18n.t('Register')}</span>
-            <span className="register-now">&nbsp;{i18n.t('now!')}</span>
+            <span className="register-now">&nbsp;{i18n.t('Now!')}</span>
           </Button>
         </FormItem>
       </Form>
