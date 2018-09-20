@@ -110,7 +110,7 @@ function renderQuery(options: ListOptions) {
           }
         })
       } else {
-        str += `${key}=${element}&`
+        str = `${key}=${element}&`
       }
       query += str
     }

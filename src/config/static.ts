@@ -17,7 +17,7 @@ export const consts = {
   TRANSACTION_TYPE_BUY: 'Buy',
   TRANSACTION_TYPE_SELL: 'Sell',
 
-  EXPIRE_IN: 60 * 60 * 24 * 7 // 7 days
+  TOKEN_EXPIRE_IN: 60 * 60 * 24 * 7 // 7 days
 }
 export const accessKey = 'db7b00b340d9275681a88e2398428a37'
 export const currencySymbols = ['CNY', 'EUR', 'USD', 'GBP', 'JPY', 'KRW', 'FRF']

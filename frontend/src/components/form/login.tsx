@@ -76,7 +76,7 @@ class LoginForm extends React.Component<LoginFormProps> {
             className="submit-btn"
           >
             <span>{i18n.t('Login')}</span>
-            <span className="register-now">&nbsp;{i18n.t('now!')}</span>
+            <span className="register-now">&nbsp;{i18n.t('Now!')}</span>
             <span>{this.props.processing && <Icon type="loading" />}</span>
           </Button>
         </FormItem>

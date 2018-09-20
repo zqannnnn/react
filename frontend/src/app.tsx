@@ -79,7 +79,6 @@ class App extends React.Component<AppProps, any> {
             <Nav />
             <MainMenu />
             {lightbox.visible ? <Lightbox /> : ''}
-            <Layout>
               <Layout.Content className="page-wr">
                 {alert.message && (
                   <Alert message={alert.message} type={alert.type} />
@@ -145,7 +144,6 @@ class App extends React.Component<AppProps, any> {
               >
                 {i18n.t('Beef Trade Platform ©2018 Created by FusionICO')}
               </Layout.Footer>
-            </Layout>
           </Layout>
         </Router>
       </>
