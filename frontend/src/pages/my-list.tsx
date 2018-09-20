@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { transactionActionCreators } from '../actions'
+import { transactionActionCreators, currencyActionCreators } from '../actions'
 import { RootState, TransactionState } from '../reducers'
 import { List as ListC } from '../components'
 import { Row, Col, Pagination } from 'antd'
 import { transactionConsts } from '../constants'
 import i18n from 'i18next'
-import { Filter } from '../components'
+import { Filter, Selector } from '../components'
 import { ListOptions } from '../models'
 
 interface ListProps {
@@ -63,32 +63,55 @@ class List extends React.Component<ListProps, ListState> {
 
   componentDidMount() {
     this.props.dispatch(transactionActionCreators.getAll(this.state.options))
+    this.props.dispatch(currencyActionCreators.getAll())
   }
   render() {
     const { transaction } = this.props
     return (
-      <Row className="page">
+      <div className="page">
         <h2 className="header-center">{i18n.t('My Transactions')}</h2>
-        <Col
-          xs={{ span: 22, offset: 1 }}
-          sm={{ span: 20, offset: 2 }}
-          md={{ span: 18, offset: 3 }}
-          lg={{ span: 16, offset: 4 }}
-        >
-          <Filter
-            initOptions={this.state.options}
-            onOptionsChange={this.onOptionsChange}
-          />
-          {transaction.items && <ListC items={transaction.items} />}
-          <Pagination
-            defaultCurrent={1}
-            defaultPageSize={9}
-            hideOnSinglePage={true}
-            total={transaction.total}
-            onChange={this.onPageChange}
-          />
-        </Col>
-      </Row>
+          <Row>
+            <Col
+              xs={{ span: 20, offset: 2 }}
+              sm={{ span: 20, offset: 2 }}
+              md={{ span: 4, offset: 2 }}
+            >
+              <div className="sidebar-container">
+                <Filter
+                  initOptions={this.state.options}
+                  onOptionsChange={this.onOptionsChange}
+                />
+              </div>
+            </Col>
+            <Col
+              xs={{ span: 20, offset: 2 }}
+              sm={{ span: 20, offset: 2 }}
+              md={{ span: 16, offset: 0 }}
+            >
+              <div className="list-container" style={{ marginLeft: 30 }}>
+                <div className="selector">
+                  <span className="selector-side"></span>
+                  <div className="selector-title">{i18n.t('Products Found')}</div>
+                  <div>
+                    <Selector 
+                      initOptions={this.state.options}
+                      onOptionsChange={this.onOptionsChange}
+                    />
+                  </div>
+                </div>
+                {transaction.items && <ListC items={transaction.items} />}
+                <Pagination
+                  defaultCurrent={1}
+                  defaultPageSize={9}
+                  hideOnSinglePage={true}
+                  total={transaction.total}
+                  onChange={this.onPageChange}
+                  className="pagination"
+                />
+              </div>
+            </Col>
+          </Row>
+      </div>
     )
   }
 }

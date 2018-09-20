@@ -1,0 +1,15 @@
+.selector{
+    padding-right: 5px;
+    .selector-side{
+      width: 6px;
+      height: 60px;
+      background-color: #e21657;
+      position: absolute;
+    }
+    .selector-item{
+      margin: 0 20px;
+      .item{
+        min-width: 220px;
+      }
+    }
+  }

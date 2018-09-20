@@ -5,7 +5,9 @@ const Searchfor = Input.Search
 
 class Search extends React.Component {
   handleSearch = (keyword: string) => {
-    history.replace(`/transactions?keyword=${keyword}`)
+    if (keyword !== '') {
+      history.replace(`/transactions?keyword=${keyword}`)
+    }
   }
 
   render() {

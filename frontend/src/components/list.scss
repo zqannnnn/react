@@ -1,5 +1,23 @@
+.sidebar-container {
+  margin-left: 40px;
+}
 .list-container {
   min-height: 120px;
+  .selector{
+    background-color: white;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    line-height: 60px;
+    .selector-title{
+      padding: 0 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #2c373a;
+      padding: 0 15px;
+    }
+  }
   .header .title {
     font-size: 18px;
     font-weight: bold;
@@ -20,7 +38,11 @@
   .header a {
     color: #818182;
   }
+  .pagination{
+    margin: 10px 0;
+  }
 }
+
 .block {
   margin-bottom: 10px !important;
   padding-right: 10px !important;

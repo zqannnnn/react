@@ -5,7 +5,7 @@ import { transactionActionCreators } from '../actions'
 import { RootState, TransactionState } from '../reducers'
 import { AuthInfo } from '../actions'
 import { transactionConsts } from '../constants'
-import { List as ListC, Filter } from '../components'
+import { List as ListC, Filter, Selector } from '../components'
 import { ListOptions } from '../models'
 import { Row, Col } from 'antd'
 import i18n from 'i18next'
@@ -46,33 +46,28 @@ class HomePage extends React.Component<HomeProps, HomeState> {
     return (
       <div className="page">
         <h2 className="header-center">{i18n.t('Home')}</h2>
-        <Row>
-          <Col
-            xs={{ span: 22, offset: 1 }}
-            sm={{ span: 20, offset: 2 }}
-            md={{ span: 18, offset: 3 }}
-            lg={{ span: 16, offset: 4 }}
-          >
-            <Filter
-              initOptions={this.state.options}
-              onOptionsChange={this.onOptionsChange}
-            />
-            <div className="list-container">
-              <div className="header">
-                <div className="title">{i18n.t('Home')}</div>
-                <div className="subtitle">
-                  <div className="des">
-                    {i18n.t('People looking for buy or sell')}
+          <Row>
+            <Col
+              xs={{ span: 20, offset: 2 }}
+              sm={{ span: 20, offset: 2 }}
+              md={{ span: 16, offset: 4 }}
+            >
+              <div className="list-container">
+                <div className="header">
+                  <div className="title">{i18n.t('Home')}</div>
+                  <div className="subtitle">
+                    <div className="des">
+                      {i18n.t('People looking for buy or sell')}
+                    </div>
+                    <Link className="link" to={'/transactions'}>
+                      {i18n.t('👁 view all transactions')}
+                    </Link>
                   </div>
-                  <Link className="link" to={'/transactions'}>
-                    {i18n.t('👁 view all transactions')}
-                  </Link>
                 </div>
+                {transaction.items && <ListC items={transaction.items} />}
               </div>
-              {transaction.items && <ListC items={transaction.items} />}
-            </div>
-          </Col>
-        </Row>
+            </Col>
+          </Row>
       </div>
     )
   }
