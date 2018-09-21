@@ -119,7 +119,7 @@ class List extends React.Component<ListProps, ListStates> {
                     />
                   </div>
                 </div>
-                {transaction.items && <ListC items={transaction.items} />}
+                {transaction.total !== 0 ? <>{transaction.items && <ListC items={transaction.items} />}</> : <div className="noData">{i18n.t('No products')}</div>}
                 <Pagination
                   defaultCurrent={1}
                   defaultPageSize={9}

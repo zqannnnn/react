@@ -40,6 +40,16 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   if (pageSize && typeof page !== 'undefined') {
     pageOption.offset = (page - 1) * pageSize
     pageOption.limit = pageSize
+
+    if (typeof category !== 'undefined') {
+      goodsOption.category = { $in: category }
+    }
+
+    if (buy && !sell) {
+      whereOption.isMakerSeller = true
+    } else if (sell && !buy) {
+      whereOption.isMakerSeller = false
+    }
   }
   if (typeof keyword !== 'undefined') {
     goodsOption.title = { $like: `%${keyword}%` }
@@ -128,7 +138,8 @@ router.post('/order/new', async (req: IRequest, res: express.Response) => {
       makerId: req.userId,
       goodsId: goods.id,
       price: req.body.price,
-      currencyCode: req.body.currencyCode
+      currencyCode: req.body.currencyCode,
+      isMakerSeller: req.body.isMakerSeller
     })
     await transaction.save()
     return res.send({ success: true })

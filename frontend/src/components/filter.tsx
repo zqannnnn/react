@@ -29,10 +29,10 @@ class Filter extends React.Component<ItemProps, ItemState> {
       newOptions.buy = true
       newOptions.sell = true
     } else if (values.length === 1) {
-      if (values[0] === transactionConsts.TYPE_BUY) {
+      if (values[0] === transactionConsts.TYPE_SELL) {
         newOptions.buy = true
         newOptions.sell = false
-      } else {
+      } else if ((values[0] === transactionConsts.TYPE_BUY)) {
         newOptions.buy = false
         newOptions.sell = true
       }
@@ -88,7 +88,10 @@ class Filter extends React.Component<ItemProps, ItemState> {
                 </Checkbox>
               </div>
               <div>
-                <Checkbox value={transactionConsts.TYPE_SELL} className="margin-right">
+                <Checkbox 
+                  value={transactionConsts.TYPE_SELL} 
+                  className="margin-right"
+                >
                   {i18n.t('For Sale')}
                 </Checkbox>
               </div>

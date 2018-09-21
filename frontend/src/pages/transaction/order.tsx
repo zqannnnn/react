@@ -122,9 +122,9 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     this.setState({ submitted: true })
-    let { goods, goodsId, transaction } = this.state
+    let { goods, transaction } = this.state
     const { dispatch } = this.props
-
+    
     if (goods.category && goods.title) {
       transaction.goods = goods
       dispatch(transactionActionCreators.newOrder(transaction))
