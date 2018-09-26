@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: async(queryInterface, Sequelize) => {
     /*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.
@@ -9,21 +9,15 @@ module.exports = {
       Example:
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
-    queryInterface
+    await queryInterface
    .sequelize
-   .transaction( function handleTransaction(t) {
-     return Promise.all([
-       queryInterface.addColumn('goods', 'proof', {type: Sequelize.DataType.JSONB}),
-       queryInterface.addColumn('goods', 'proofstatus', {type: Sequelize.Boolean})
-     ])
-      
-      
-
-
+   .transaction( async function handleTransaction(t) {
+      await queryInterface.addColumn('goods', 'proof', {type: Sequelize.DataTypes.JSONB})
+      await queryInterface.addColumn('goods', 'proofstatus', {type: Sequelize.INTEGER})
    })
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: async (queryInterface, Sequelize) => {
     /*
       Add reverting commands here.
       Return a promise to correctly handle asynchronicity.
@@ -31,15 +25,11 @@ module.exports = {
       Example:
       return queryInterface.dropTable('users');
     */
-    queryInterface
+    await queryInterface
    .sequelize
-   .transaction( function handleTransaction(t) {
-     return Promise.all([
-      queryInterface.removeColumn('goods', 'proof', {type: Sequelize.DataType.JSONB}),
-      queryInterface.removeColumn('goods', 'proofstatus', {type: Sequelize.Boolean})
-     ])
-      
-
+   .transaction( async function handleTransaction(t) {
+      await queryInterface.removeColumn('goods', 'proof')
+      await queryInterface.removeColumn('goods', 'proofstatus')
 
    })
   }
