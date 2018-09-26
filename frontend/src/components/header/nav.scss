@@ -1,0 +1,35 @@
+.nav {
+  background-color: #2c373b;
+  color: white;
+  height: 80px;
+  display: flex;
+  .body {
+    display: flex;
+    margin: auto 0px;
+    width: 80%;
+    margin-left: 10%;
+    justify-content: space-between;
+    .logo {
+      font-size: 20px;
+    }
+  }
+  .user-group {
+    display: flex;
+    line-height: 30px;
+    .icon-down {
+      margin-top: 8px;
+      margin-left: 5px;
+    }
+    .register-btn {
+      margin-left: 10px;
+      background-color: #1dbdf9;
+      border: 0;
+      color: white;
+    }
+    .login-btn {
+      background-color: #03d8b3;
+      border: 0;
+      color: white;
+    }
+  }
+}

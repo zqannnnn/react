@@ -4,7 +4,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form'
 import { EditableCell, EditableFormRow, EditableContext, Record } from '.'
 import './table.scss'
 import i18n from 'i18next'
-import { RadioChangeEvent } from 'antd/lib/radio';
+import { RadioChangeEvent } from 'antd/lib/radio'
 
 const RadioGroup = Radio.Group
 
@@ -30,38 +30,38 @@ class EditableTable extends React.Component<TableProps, TableState> {
       editingKey: '',
       count: props.data ? props.data.length : 0,
       data: props.data,
-      selectConsigneeId:  this.props.defaultConsigneeId
+      selectConsigneeId: this.props.defaultConsigneeId
     }
   }
   columns = [
     {
       title: 'name',
       dataIndex: 'name',
-      className:'name-col',
+      className: 'name-col',
       editable: true
     },
     {
       title: 'email',
       dataIndex: 'email',
-      className:'email-col',
+      className: 'email-col',
       editable: true
     },
     {
       title: 'phoneNum',
       dataIndex: 'phoneNum',
-      className:'phone-num-col',
+      className: 'phone-num-col',
       editable: true
     },
     {
       title: 'address',
       dataIndex: 'address',
-      className:'address-col',
+      className: 'address-col',
       editable: true
     },
     {
       title: 'operation',
       dataIndex: 'operation',
-      className:'operation-col',
+      className: 'operation-col',
       render: (text: string, record: Record) => {
         const editable = this.isEditing(record)
         return (
@@ -96,7 +96,7 @@ class EditableTable extends React.Component<TableProps, TableState> {
     {
       title: 'delete',
       dataIndex: 'delete',
-      className:'delete-col',
+      className: 'delete-col',
       render: (text: string, record: Record) => {
         return record.id ? (
           <Popconfirm
@@ -110,38 +110,40 @@ class EditableTable extends React.Component<TableProps, TableState> {
     },
     {
       title: 'set default',
-      className:'default-col',
+      className: 'default-col',
       render: (text: string, record: Record) => {
-        if(record.id){
-          if(record.id===this.props.defaultConsigneeId){
-
+        if (record.id) {
+          if (record.id === this.props.defaultConsigneeId) {
             return <div>Is default</div>
-          }else{
-            return <Popconfirm
-            title="Sure to set default?"
-            onConfirm={() => record.id && this.handleDefault(record.id)}
-          >
-            <a href="javascript:;">{i18n.t("Set default")}</a>
-          </Popconfirm>
+          } else {
+            return (
+              <Popconfirm
+                title="Sure to set default?"
+                onConfirm={() => record.id && this.handleDefault(record.id)}
+              >
+                <a href="javascript:;">{i18n.t('Set default')}</a>
+              </Popconfirm>
+            )
           }
-        }else{
+        } else {
           return null
         }
       }
     }
   ]
 
-newCol =[ {
-    title: 'select',
-    dataIndex: 'select',
-    className: 'select-col',
-    editable: false,
-    render: (text: string, record: Record) => {
-      return record.id ? (
-        <Radio value={record.id} ></Radio>
-      ) : null
-    }
-  },...this.columns]
+  newCol = [
+    {
+      title: 'select',
+      dataIndex: 'select',
+      className: 'select-col',
+      editable: false,
+      render: (text: string, record: Record) => {
+        return record.id ? <Radio value={record.id} /> : null
+      }
+    },
+    ...this.columns
+  ]
 
   componentWillReceiveProps(nextProps: TableProps) {
     this.setState({
@@ -207,7 +209,7 @@ newCol =[ {
   }
   handleAdd = () => {
     const { count, data } = this.state
-    if (this.state.editingKey==='') {
+    if (this.state.editingKey === '') {
       const newData: Record = {
         key: count.toString(),
         name: '',
@@ -250,33 +252,32 @@ newCol =[ {
       }
     })
     const { editingKey } = this.state
-    
+
     return (
       <>
-       { editingKey!==''?
-       <Popconfirm
-        title="Please save first"
-        onConfirm={this.handleAdd}
-      >
-        <Button
+        {editingKey !== '' ? (
+          <Popconfirm title="Please save first" onConfirm={this.handleAdd}>
+            <Button
+              className="addAddress"
+              type="primary"
+              style={{ marginBottom: 12 }}
+            >
+              add Address
+            </Button>
+          </Popconfirm>
+        ) : (
+          <Button
             className="addAddress"
+            onClick={this.handleAdd}
             type="primary"
             style={{ marginBottom: 12 }}
           >
             add Address
           </Button>
-      </Popconfirm>:
-        <Button
-          className="addAddress"
-          onClick={this.handleAdd}
-          type="primary"
-          style={{ marginBottom: 12}}
-        >
-          add Address
-        </Button>}
-        <RadioGroup 
-          name="radiogroup" 
-          className="radio" 
+        )}
+        <RadioGroup
+          name="radiogroup"
+          className="radio"
           onChange={this.onChange}
           value={this.state.selectConsigneeId}
         >

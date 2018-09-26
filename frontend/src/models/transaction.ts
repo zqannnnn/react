@@ -12,8 +12,8 @@ export class Transaction implements ListItem {
   makerId?: string
   goodsId?: string
   goods?: Goods
-  taker?:User
-  maker?:User
+  taker?: User
+  maker?: User
   isMakerSeller?: boolean
   comments?: Comment[]
   rowComments?: Comment[]

@@ -135,7 +135,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       this.setState({ proofFiles: licenseList })
     }
   }
-  handleCustomChange = (value: string|number, name: string) => {
+  handleCustomChange = (value: string | number, name: string) => {
     const { goods } = this.state
     this.setState({
       goods: {
@@ -173,7 +173,10 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       }
     })
   }
-  handleUploadChange = (fileParam: UploadChangeParam,type:'image'|'certificate') => {
+  handleUploadChange = (
+    fileParam: UploadChangeParam,
+    type: 'image' | 'certificate'
+  ) => {
     let fileList = fileParam.fileList
     fileList = fileList.map(file => {
       if (file.response) {
@@ -187,10 +190,8 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       }
       return true
     })
-    if(type==='image')
-      this.setState({ fileList })
-    else
-      this.setState({ certificateList: fileList })
+    if (type === 'image') this.setState({ fileList })
+    else this.setState({ certificateList: fileList })
   }
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -316,7 +317,9 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                     accept="image/*"
                     listType="picture-card"
                     fileList={fileList}
-                    onChange={(fileParam: UploadChangeParam)=>this.handleUploadChange(fileParam,'image')}
+                    onChange={(fileParam: UploadChangeParam) =>
+                      this.handleUploadChange(fileParam, 'image')
+                    }
                     onPreview={this.handlePreview}
                   >
                     <div>
@@ -335,7 +338,9 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                     accept="image/*"
                     listType="picture-card"
                     fileList={certificateList}
-                    onChange={(fileParam: UploadChangeParam)=>this.handleUploadChange(fileParam,'certificate')}
+                    onChange={(fileParam: UploadChangeParam) =>
+                      this.handleUploadChange(fileParam, 'certificate')
+                    }
                     onPreview={this.handlePreview}
                   >
                     <div>
@@ -681,20 +686,17 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                       onChange={this.handleInputChange}
                     />
                     {submitted &&
-                        !address && (
-                          <div className="invalid-feedback">
-                            {i18n.t('Address is required')}
-                          </div>
-                        )}
+                      !address && (
+                        <div className="invalid-feedback">
+                          {i18n.t('Address is required')}
+                        </div>
+                      )}
                   </div>
                 </Col>
               </Row>
               <Row>
-                <Col sm={20} md={8} lg={8} offset={2} className="footer footer-br">
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                  >
+                <Col sm={20} md={8} lg={8} offset={2} className="footer">
+                  <Button type="primary" htmlType="submit">
                     {i18n.t('Submit')}
                   </Button>
                   {processing && <Icon type="loading" />}

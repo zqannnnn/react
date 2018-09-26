@@ -5,7 +5,6 @@ import * as morgan from 'morgan'
 import * as passport from 'passport'
 import * as path from 'path'
 
-
 import { i18n, middleware } from './middleware/i18n'
 import { webpackMiddleware } from './middleware/webpack'
 import { initDatabase } from './models'
@@ -14,8 +13,8 @@ import { router } from './routes'
 import { config } from './config/db'
 const pg = require('pg')
 const pgSession = require('connect-pg-simple')(session)
-const pgPool = new pg.Pool(config);
- 
+const pgPool = new pg.Pool(config)
+
 const app = express()
 webpackMiddleware(app)
 app.use(middleware.handle(i18n))
@@ -34,15 +33,17 @@ app.use(bodyParser.json()) // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // required for passport
-app.use(session({
-  store: new pgSession({
-    pool : pgPool                // Connection pool
-  }),
-  secret:'fun coding',
-  resave: false,
-  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days
-  saveUninitialized: true
-}));
+app.use(
+  session({
+    store: new pgSession({
+      pool: pgPool // Connection pool
+    }),
+    secret: 'fun coding',
+    resave: false,
+    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days
+    saveUninitialized: true
+  })
+)
 app.use(passport.initialize())
 
 // routes

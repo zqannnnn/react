@@ -1,6 +1,5 @@
 import { ListItem, Image, Transaction, Consignee } from '.'
-import { User } from './user';
-import { DataTypeJSONB } from 'sequelize';
+import { User } from './user'
 
 export class Goods implements ListItem {
   id?: string
@@ -18,7 +17,7 @@ export class Goods implements ListItem {
   bone?: string
   title?: string
   desc?: string
-  creator?:User
+  creator?: User
   consignee?: Consignee
   fed?: string
   transaction?: Transaction

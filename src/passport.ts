@@ -2,14 +2,14 @@ import { PassportStatic } from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { User } from './models'
 export const UserFields = [
-        'id',
-        'userType',
-        'password',
-        'firstName',
-        'lastName',
-        'licenseStatus',
-        'preferredCurrencyCode'
-    ]
+  'id',
+  'userType',
+  'password',
+  'firstName',
+  'lastName',
+  'licenseStatus',
+  'preferredCurrencyCode'
+]
 
 export const passportConfig = (passport: PassportStatic) => {
   passport.use(

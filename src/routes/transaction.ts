@@ -16,6 +16,7 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   const pageSize = Number(req.query.pageSize)
   const keyword = req.query.keyword
   const sorting = req.query.sorting
+  const category = req.query.category
   const whereOption: {
     makerId?: string
     status?: number
@@ -23,7 +24,7 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
   } = {}
   const goodsOption: {
     title?: { $like: string }
-    category?: number
+    category?: { $in: string[] }
   } = {}
   const pageOption: {
     offset?: number
@@ -56,6 +57,9 @@ router.get('/list', async (req: IRequest, res: express.Response) => {
     orderOption = ['createdAt', 'DESC']
   } else if (sorting === 'old') {
     orderOption = ['createdAt', 'ASC']
+  }
+  if (typeof category !== 'undefined') {
+    goodsOption.category = { $in: category }
   }
   try {
     const result = await Transaction.findAndCount({
@@ -124,7 +128,8 @@ router.post('/order/new', async (req: IRequest, res: express.Response) => {
       makerId: req.userId,
       goodsId: goods.id,
       price: req.body.price,
-      currencyCode: req.body.currencyCode
+      currencyCode: req.body.currencyCode,
+      isMakerSeller: req.body.isMakerSeller
     })
     await transaction.save()
     return res.send({ success: true })

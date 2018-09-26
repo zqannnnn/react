@@ -1,7 +1,6 @@
 export interface Country {
-    code?: string
-    latitude?: string
-    longitude?: string
-    name?: string
-  }
-  
+  code?: string
+  latitude?: string
+  longitude?: string
+  name?: string
+}

@@ -49,17 +49,14 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
         }}
       />
     ) : (
-      <Row className="page login-page auth-page edit-page">
-        <div className="header">{i18n.t('Login')}</div>
-        <Col
-          xs={{ span: 22, offset: 1 }}
-          sm={{ span: 18, offset: 3 }}
-          md={{ span: 14, offset: 5 }}
-          lg={{ span: 10, offset: 7 }}
-        >
+      <div className="page login-page auth-page">
+        <div className="header">
+          <div className="header-item">{i18n.t('Login')}</div>
+        </div>
+        <div className="form-wr">
           <LoginForm handleSubmit={this.handleSubmit} processing={processing} />
-        </Col>
-      </Row>
+        </div>
+      </div>
     )
   }
 }

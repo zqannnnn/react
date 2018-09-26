@@ -7,4 +7,5 @@ export type ListOptions = {
   pageSize?: number
   keyword?: string
   sorting?: string
+  category?: string[]
 }

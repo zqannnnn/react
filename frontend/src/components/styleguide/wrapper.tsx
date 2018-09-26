@@ -29,7 +29,7 @@ const initialState: RootState = {
   admin: {},
   category: {},
   goods: {},
-  country:{},
+  country: {},
   currency: {
     currentCurrency: 'USD',
     loading: true,

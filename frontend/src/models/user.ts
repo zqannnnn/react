@@ -1,5 +1,5 @@
 import { Currency, Image, ListItem } from '.'
-import { Consignee,Country } from '.'
+import { Consignee, Country } from '.'
 
 export class User implements ListItem {
   id?: string
@@ -16,11 +16,11 @@ export class User implements ListItem {
   preferredCurrencyCode?: string
   preferredCurrency?: Currency
   companyName?: string
-  countryCode?:string
-  country?:Country
+  countryCode?: string
+  country?: Country
   companyAddress?: string
   businessLicenses?: Image[]
   licenseStatus?: number
   consignees?: Consignee[]
-  defaultConsigneeId?:string
+  defaultConsigneeId?: string
 }

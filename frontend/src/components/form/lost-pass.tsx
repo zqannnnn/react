@@ -19,8 +19,17 @@ class LostPassForm extends React.Component<LostPassFormProps> {
     const { getFieldDecorator } = this.props.form
     const { processing } = this.props
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <FormItem>
+      <Form onSubmit={this.handleSubmit} className="auth-form">
+        <div className="header">
+          <div className="title">{i18n.t('Reset Pass')}</div>
+          <div className="tips">
+            {i18n.t('Will send you a email to reset password')}
+          </div>
+        </div>
+        <div className="form-item">
+          <div>{i18n.t('Email')}</div>
+        </div>
+        <FormItem className="form-item">
           {getFieldDecorator('email', {
             rules: [
               {
@@ -31,25 +40,20 @@ class LostPassForm extends React.Component<LostPassFormProps> {
           })(
             <Input
               prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder={i18n.t('Email')}
+              placeholder={i18n.t('please input your email...')}
             />
           )}
         </FormItem>
-        <FormItem className="float-lostPas">
+        <FormItem className="form-item">
           <Button
             htmlType="submit"
             type="primary"
             size="large"
-            className="button-margin"
+            className="submit-btn"
           >
-            {i18n.t('Reset Password')}
+            {i18n.t('Submit')}
+            <span>{this.props.processing && <Icon type="loading" />}</span>
           </Button>
-          {processing && <Icon type="loading" />}
-          <Link to="/login" className="button-left">
-            <Button size="large">
-              {i18n.t('Back to login')}
-            </Button>
-          </Link>
         </FormItem>
       </Form>
     )

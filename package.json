@@ -7,6 +7,7 @@
     "license": "MIT",
     "scripts": {
         "lint": "tslint src/**/*.ts --fix --project tsconfig.json",
+        "format": "prettier  --write '{frontend,src}/**/*.{scss,ts,tsx,js,json}'",
         "run": "ts-node src/index",
         "watch": "nodemon -e js,ts,tsx -w src/ -x ts-node src/index",
         "test": "jest"
