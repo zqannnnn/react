@@ -1,11 +1,10 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
-import { transactionActionCreators } from '../actions'
+import { transactionActionCreators, currencyActionCreators } from '../actions'
 import { RootState, TransactionState } from '../reducers'
 import { AuthInfo } from '../actions'
-import { transactionConsts } from '../constants'
-import { List as ListC, Filter, Selector } from '../components'
+import { List as ListC } from '../components'
 import { ListOptions } from '../models'
 import { Row, Col } from 'antd'
 import i18n from 'i18next'
@@ -40,9 +39,10 @@ class HomePage extends React.Component<HomeProps, HomeState> {
   }
   componentDidMount() {
     this.props.dispatch(transactionActionCreators.getAll(this.state.options))
+    this.props.dispatch(currencyActionCreators.getAll())
   }
   render() {
-    const { authInfo, transaction } = this.props
+    const { transaction } = this.props
     return (
       <div className="page">
         <h2 className="header-center">{i18n.t('Home')}</h2>

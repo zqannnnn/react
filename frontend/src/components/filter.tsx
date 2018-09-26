@@ -9,22 +9,26 @@ const plainOptions = ['Beef', 'Veal', 'Sheep'];
 
 interface ItemProps {
   onOptionsChange: (option: ListOptions) => void
+  onPageChange: (current: number, defaultPageSize: number) => void
   initOptions: ListOptions
 }
 interface ItemState {
   options: ListOptions
   checkedList: string[]
+  current: number
+  defaultPageSize: number
 }
 class Filter extends React.Component<ItemProps, ItemState> {
   constructor(props: ItemProps) {
     super(props)
-    this.state = { options: {}, checkedList: [] }
+    this.state = { options: {}, checkedList: [], current: 1, defaultPageSize: 9 }
   }
   componentDidMount() {
     this.setState({ options: this.props.initOptions })
   }
   handleChangeType = (values: string[]) => {
     let newOptions = this.state.options
+    const { current, defaultPageSize } = this.state
     if (values.length === 2) {
       newOptions.buy = true
       newOptions.sell = true
@@ -42,12 +46,15 @@ class Filter extends React.Component<ItemProps, ItemState> {
     }
     this.setState({ options: newOptions })
     this.props.onOptionsChange(newOptions)
+    this.props.onPageChange(current, defaultPageSize)
   }
   processingCategory = (checkedList: string[]) => {
     let options = this.state.options
+    const { current, defaultPageSize } = this.state
     options.category = checkedList
     this.setState({ options, checkedList })
     this.props.onOptionsChange(options)
+    this.props.onPageChange(current, defaultPageSize)
   }
   render() {
     return (

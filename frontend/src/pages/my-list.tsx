@@ -80,6 +80,7 @@ class List extends React.Component<ListProps, ListState> {
                 <Filter
                   initOptions={this.state.options}
                   onOptionsChange={this.onOptionsChange}
+                  onPageChange={this.onPageChange}
                 />
               </div>
             </Col>
@@ -107,6 +108,7 @@ class List extends React.Component<ListProps, ListState> {
                   total={transaction.total}
                   onChange={this.onPageChange}
                   className="pagination"
+                  current={this.state.options.page}
                 />
               </div>
             </Col>
