@@ -13,7 +13,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { Image, Transaction, User } from './'
+import { Image, Transaction, User, Consignee } from './'
 @Table({
   tableName: 'goods',
   underscored: true
@@ -44,6 +44,13 @@ export class Goods extends Model<Goods> {
 
   @BelongsTo(() => User)
   public creator: User
+
+  @ForeignKey(() => Consignee)
+  @Column({ field: 'consignee_id' })
+  public consigneeId: string
+
+  @BelongsTo(() => Consignee)
+  public consignee: Consignee
 
   @Column public category: string
 
@@ -90,9 +97,17 @@ export class Goods extends Model<Goods> {
 
   @Column public trimmings: number
 
+  @Column({
+    field: 'proof',
+    type: DataType.JSONB
+  })
+  public proof: object
+
   @Default(false)
   @Column
   public selling: boolean
+
+  @Column public proofstatus: Number
 
   @HasMany(() => Image, 'goods_id')
   public images: Image[]

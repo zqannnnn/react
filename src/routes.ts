@@ -13,9 +13,11 @@ import {
   goodsRouter,
   passRouter,
   transactionRouter,
+  chatRouter,
   uploadRouter,
   userRouter,
-  consigneeRouter
+  consigneeRouter,
+  countryRouter
 } from './routes/index'
 
 // const handleSequelizeError = (res, error) => {
@@ -41,7 +43,7 @@ export const router = (app: Application, passport: PassportStatic) => {
       }
       const data: AuthInfo = {
         token: jwt.sign(user.get(), app.get('secretKey'), {
-          expiresIn: consts.EXPIRE_IN
+          expiresIn: consts.TOKEN_EXPIRE_IN
         }),
         id: user.id,
         name: user.fullName()
@@ -70,7 +72,7 @@ export const router = (app: Application, passport: PassportStatic) => {
               plain: true
             }),
             app.get('secretKey'),
-            { expiresIn: consts.EXPIRE_IN }
+            { expiresIn: consts.TOKEN_EXPIRE_IN }
           ),
           id: user.id,
           isAdmin: user.isAdmin,
@@ -90,8 +92,10 @@ export const router = (app: Application, passport: PassportStatic) => {
   app.use('/user', userRouter)
   app.use('/category', categoryRouter)
   app.use('/transaction', transactionRouter)
+  app.use('/chat', chatRouter)
   app.use('/upload', uploadRouter)
   app.use('/currency', currencyRouter)
   app.use('/goods', goodsRouter)
   app.use('/consignee', consigneeRouter)
+  app.use('/country', countryRouter)
 }

@@ -6,6 +6,7 @@ import { RootState } from '../../reducers'
 import { Row, Col } from 'antd'
 import i18n from 'i18next'
 import { LoginForm } from '../../components/form'
+import './login.scss'
 interface LoginProps extends RouteComponentProps<{}> {
   dispatch: Dispatch<RootState>
   processing: boolean
@@ -26,20 +27,18 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
       values: {
         email: '',
         password: ''
-      },
-      submitted: false
+      }
     }
   }
 
   handleSubmit = (value: any) => {
-    this.setState({ submitted: true })
     this.props.dispatch(authActionCreators.login(value.email, value.password))
   }
 
   render() {
     const { processing, loggedIn } = this.props
     const { email, password } = this.state.values
-    const Reasubmitted = this.state.submitted
+
     return loggedIn ? (
       <Redirect
         to={{
@@ -50,17 +49,14 @@ class LoginPage extends React.Component<LoginProps, LoginState> {
         }}
       />
     ) : (
-      <Row className="page margin-login">
-        <div className="header">{i18n.t('Login')}</div>
-        <Col
-          xs={{ span: 22, offset: 1 }}
-          sm={{ span: 18, offset: 3 }}
-          md={{ span: 14, offset: 5 }}
-          lg={{ span: 10, offset: 7 }}
-        >
+      <div className="page login-page auth-page">
+        <div className="header">
+          <div className="header-item">{i18n.t('Login')}</div>
+        </div>
+        <div className="form-wr">
           <LoginForm handleSubmit={this.handleSubmit} processing={processing} />
-        </Col>
-      </Row>
+        </div>
+      </div>
     )
   }
 }

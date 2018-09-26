@@ -50,7 +50,7 @@ function update(user: User) {
     dispatch(request(user))
 
     userService.update(user).then(
-      (user: User) => {
+      () => {
         dispatch(success(user))
         dispatch(alertActionCreators.success('Submit user succeed'))
       },
@@ -134,7 +134,6 @@ const deleteConsignee: ActionCreator<Thunk> = (consigneeId: string) => {
     consigneeService.delete(consigneeId).then(
       () => {
         dispatch(success())
-        dispatch(alertActionCreators.success('delete consignee successful'))
       },
 
       (error: string) => {
@@ -154,10 +153,37 @@ const deleteConsignee: ActionCreator<Thunk> = (consigneeId: string) => {
   }
 }
 
+const setDefaultConsignee: ActionCreator<Thunk> = (consigneeId: string) => {
+  return (dispatch: Dispatch<RootState>): void => {
+    dispatch(request())
+
+    userService.setDefaultConsignee(consigneeId).then(
+      () => {
+        dispatch(success())
+      },
+
+      (error: string) => {
+        dispatch(failure(error))
+        dispatch(alertActionCreators.error(error))
+      }
+    )
+  }
+  function request(): Action {
+    return { type: userConsts.SET_DEFAULT_CONSIGNEE_REQUEST }
+  }
+  function success(): Action {
+    return { type: userConsts.SET_DEFAULT_CONSIGNEE_SUCCESS, consigneeId }
+  }
+  function failure(error: string): Action {
+    return { type: userConsts.SET_DEFAULT_CONSIGNEE_FAILURE, error }
+  }
+}
+
 export const actionCreators = {
   getById,
   update,
   newConsignee,
   editConsignee,
-  deleteConsignee
+  deleteConsignee,
+  setDefaultConsignee
 }

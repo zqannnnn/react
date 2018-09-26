@@ -25,10 +25,10 @@ import {
 } from 'antd'
 import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface'
 import i18n from 'i18next'
-
+import { consts } from "../../../../src/config/static"
 const Step = Steps.Step
 const { TextArea } = Input
-
+const Dragger = Upload.Dragger
 interface GoodsProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch<RootState>
   loading: boolean
@@ -45,6 +45,7 @@ interface GoodsState {
   current: number
   fileList: UploadFile[]
   certificateList: UploadFile[]
+  proofFiles:UploadFile[]
 }
 
 class EditPage extends React.Component<GoodsProps, GoodsState> {
@@ -58,7 +59,8 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       },
       current: 0,
       fileList: [],
-      certificateList: []
+      certificateList: [],
+      proofFiles:[]
     }
   }
   next() {
@@ -83,6 +85,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       this.props.dispatch(categoryActionCreators.getAll())
 
     goodsId && this.props.dispatch(goodsActionCreators.getById(goodsId))
+
   }
   componentWillReceiveProps(nextProps: GoodsProps) {
     const { goodsProp } = nextProps
@@ -95,8 +98,8 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
         }
       })
     }
-    if (goods && goods.images) {
-      let licenseList = goods.images.map(
+    if (goodsProp && goodsProp.images) {
+      let licenseList = goodsProp.images.map(
         (license, index): UploadFile => ({
           url: license.path,
           name: '',
@@ -107,8 +110,8 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       )
       this.setState({ fileList: licenseList })
     }
-    if (goods && goods.certificates) {
-      let licenseList = goods.certificates.map(
+    if (goodsProp && goodsProp.certificates) {
+      let licenseList = goodsProp.certificates.map(
         (license, index): UploadFile => ({
           url: license.path,
           name: '',
@@ -119,8 +122,20 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       )
       this.setState({ certificateList: licenseList })
     }
+    if (goodsProp && goodsProp.proof) {
+      let licenseList = goodsProp.proof.map(
+        (license, index): UploadFile => ({
+          url: license,
+          name: license.split('/')[3],
+          uid: index,
+          size: 200,
+          type: 'done'
+        })
+      )
+      this.setState({ proofFiles: licenseList })
+    }
   }
-  handleSelectChange = (value: string, name: string) => {
+  handleCustomChange = (value: string | number, name: string) => {
     const { goods } = this.state
     this.setState({
       goods: {
@@ -128,6 +143,23 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
         [name]: value
       }
     })
+  }
+  handleDraggerChange = (fileParam: UploadChangeParam) => {
+    let fileList = fileParam.fileList
+    fileList = fileList.map(file => {
+      if (file.response) {
+        file.url = file.response.path
+      }
+      return file
+    })
+    fileList = fileList.filter(file => {
+      if (file.response) {
+        return file.status === 'done'
+      }
+      return true
+    })
+
+    this.setState({ proofFiles:fileList })
   }
   handleInputChange = (
     e: React.FormEvent<HTMLInputElement> | React.FormEvent<HTMLTextAreaElement>
@@ -141,7 +173,10 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       }
     })
   }
-  handleChange = (fileParam: UploadChangeParam) => {
+  handleUploadChange = (
+    fileParam: UploadChangeParam,
+    type: 'image' | 'certificate'
+  ) => {
     let fileList = fileParam.fileList
     fileList = fileList.map(file => {
       if (file.response) {
@@ -155,53 +190,34 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       }
       return true
     })
-
-    this.setState({ fileList })
-  }
-  certificateChange = (fileParam: UploadChangeParam) => {
-    let fileList = fileParam.fileList
-    fileList = fileList.map(file => {
-      if (file.response) {
-        file.url = file.response.path
-      }
-      return file
-    })
-    fileList = fileList.filter(file => {
-      if (file.response) {
-        return file.status === 'done'
-      }
-      return true
-    })
-
-    this.setState({ certificateList: fileList })
-  }
-  handleInputNumber = (value: string | number, name: string | number) => {
-    const { goods } = this.state
-    this.setState({
-      goods: {
-        ...goods,
-        [name]: value
-      }
-    })
+    if (type === 'image') this.setState({ fileList })
+    else this.setState({ certificateList: fileList })
   }
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     this.setState({ submitted: true })
-    const { goods, goodsId, fileList, certificateList } = this.state
+    const { goods, goodsId, fileList, certificateList,proofFiles} = this.state
 
     const { dispatch } = this.props
-    if (goods.category && goods.title && goods.quantity) {
+    if (goods.category && goods.title && goods.quantity && goods.address) {
       let images: Image[] = []
       let certificates: Image[] = []
+      let proofs:string[] = []
+      let proofstatus = 0
       fileList.forEach((file: any) => images.push({ path: file.url }))
       certificateList.forEach((file: any) =>
         certificates.push({ path: file.url })
       )
+      proofFiles.forEach((file: any) =>
+      proofs.push(file.url )
+      )
       let newGoods = {
         ...goods,
         certificates: certificates,
-        images: images
+        images: images,
+        proof:proofs,
+        proofstatus
       }
       if (goodsId) dispatch(goodsActionCreators.edit(newGoods, goodsId))
       else dispatch(goodsActionCreators.new(newGoods))
@@ -223,7 +239,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
     return (
       <Select
         value={String(selectValue)}
-        onSelect={(value: string) => this.handleSelectChange(value, field)}
+        onSelect={(value: string) => this.handleCustomChange(value, field)}
       >
         {optionItems.map((item, index) => (
           <Select.Option key={index} value={item}>
@@ -247,15 +263,19 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
       fed,
       grainFedDays,
       trimmings,
-      category
+      category,
+      address,
+      images,
+      certificates,
+      proof
     } = this.state.goods
-    let { submitted, fileList, certificateList } = this.state
-    let { processing, categories } = this.props
+    let { submitted, fileList, certificateList,proofFiles} = this.state
+    let { processing, categories} = this.props
     let currentCategory: Category =
       categories &&
       categories.filter((item: Category) => {
         return item.type === category
-      })[0]
+       })[0]
     switch (current) {
       case 0:
         return (
@@ -265,14 +285,14 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
               sm={{ span: 20, offset: 2 }}
               md={{ span: 9, offset: 2 }}
               lg={{ span: 9, offset: 2 }}
-              className="edits-input"
+              className="field"
             >
               <label>{i18n.t('Category')}</label>
               <Select
                 size="large"
                 value={category}
                 onSelect={(value: string) =>
-                  this.handleSelectChange(value, 'category')
+                  this.handleCustomChange(value, 'category')
                 }
               >
                 {goodsConsts.CATEGORY.map((item, index) => (
@@ -297,7 +317,9 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                     accept="image/*"
                     listType="picture-card"
                     fileList={fileList}
-                    onChange={this.handleChange}
+                    onChange={(fileParam: UploadChangeParam) =>
+                      this.handleUploadChange(fileParam, 'image')
+                    }
                     onPreview={this.handlePreview}
                   >
                     <div>
@@ -316,7 +338,9 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                     accept="image/*"
                     listType="picture-card"
                     fileList={certificateList}
-                    onChange={this.certificateChange}
+                    onChange={(fileParam: UploadChangeParam) =>
+                      this.handleUploadChange(fileParam, 'certificate')
+                    }
                     onPreview={this.handlePreview}
                   >
                     <div>
@@ -326,17 +350,37 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   </Upload>
                 </div>
               </div>
+              <label>{i18n.t('Proof')}</label>
+              <div className="upload-transactions-edit">
+                  <div className="clearfix">
+                    <Dragger
+                      action="/upload/file"
+                      name="file"
+                      multiple= {true}
+                      headers={authHeader()}
+                      fileList={proofFiles}
+                      onChange={this.handleDraggerChange}
+
+                    >
+                      <p className="ant-upload-drag-icon">
+                        <Icon type="inbox" />
+                      </p>
+                      <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                      <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p>
+                    </Dragger>,
+                  </div>
+              </div>
             </Col>
           </Row>
         )
       case 2:
         return (
           <>
-            <div className="edits-input">
+            <div className="field">
               <Row>
-                <Col span={20} offset={2} className="edits-input">
+                <Col span={20} offset={2} className="field">
                   <div className={submitted && !title ? ' has-error' : ''}>
-                    <label className="edits-input">{i18n.t('Title')}</label>
+                    <label className="field">{i18n.t('Title')}</label>
                     <Input
                       placeholder=""
                       type="text"
@@ -355,7 +399,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                 </Col>
               </Row>
               <Row>
-                <Col span={20} offset={2} className="edits-input">
+                <Col span={20} offset={2} className="field">
                   <label>{i18n.t('Description')}</label>
                   <TextArea
                     placeholder=""
@@ -372,7 +416,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Bone')}</label>
                   {currentCategory &&
@@ -383,7 +427,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Storage')}</label>
                   {currentCategory &&
@@ -399,7 +443,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Grade')}</label>
                   {currentCategory &&
@@ -413,7 +457,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Slaughter Specification')}</label>
                   {currentCategory &&
@@ -429,7 +473,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Marble Score')}</label>
                   {currentCategory &&
@@ -446,7 +490,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                       sm={{ span: 20, offset: 2 }}
                       md={{ span: 9, offset: 2 }}
                       lg={{ span: 9, offset: 2 }}
-                      className="edits-input"
+                      className="field"
                     >
                       <label>{i18n.t('Breed')}</label>
                       {this.renderSelect(
@@ -464,7 +508,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                       sm={{ span: 20, offset: 2 }}
                       md={{ span: 9, offset: 2 }}
                       lg={{ span: 9, offset: 2 }}
-                      className="edits-input"
+                      className="field"
                     >
                       <label>{i18n.t('Fed')}</label>
                       {this.renderSelect(currentCategory.details['Fed'], 'fed')}
@@ -477,7 +521,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
+                    className="field"
                   >
                     <label>{i18n.t('Grain fed days')}</label>
                     <div className="flex">
@@ -486,7 +530,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                         max={100000}
                         defaultValue={grainFedDays}
                         onChange={(value: number) =>
-                          this.handleInputNumber(value, 'grainFedDays')
+                          this.handleCustomChange(value, 'grainFedDays')
                         }
                       />
                       <div className="label-right">{i18n.t('Days')}</div>
@@ -500,7 +544,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Primal Cuts')}</label>
                   <Input
@@ -515,7 +559,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Trimmings')}</label>
                   <div className="flex">
@@ -524,7 +568,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                       max={100000}
                       defaultValue={trimmings}
                       onChange={(value: number) =>
-                        this.handleInputNumber(value, 'trimmings')
+                        this.handleCustomChange(value, 'trimmings')
                       }
                     />
                     <div className="label-right">CL</div>
@@ -537,7 +581,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Brand')}</label>
                   <Input
@@ -552,7 +596,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Factory Number')}</label>
                   <Input
@@ -569,7 +613,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Place Of Origin')}</label>
                   <Input
@@ -584,7 +628,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <label>{i18n.t('Delivery Term')}</label>
                   <Input
@@ -601,7 +645,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
                   <div className={submitted && !quantity ? 'has-error' : ''}>
                     <label>{i18n.t('Quantity')}</label>
@@ -612,7 +656,7 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                         min={1}
                         value={quantity}
                         onChange={(value: number) =>
-                          this.handleInputNumber(value, 'quantity')
+                          this.handleCustomChange(value, 'quantity')
                         }
                       />
                       <div className="label-right">KG</div>
@@ -627,16 +671,36 @@ class EditPage extends React.Component<GoodsProps, GoodsState> {
                 </Col>
               </Row>
               <Row>
-                <Col sm={20} md={8} lg={8} offset={2} className="edits-input">
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    className="button-margin"
-                  >
+                <Col
+                  xs={{ span: 20, offset: 2 }}
+                  sm={{ span: 20, offset: 2 }}
+                  md={{ span: 9, offset: 2 }}
+                  lg={{ span: 9, offset: 2 }}
+                  className="field"
+                >
+                  <div className={submitted && !address ? 'has-error' : ''}>
+                    <label>{i18n.t('Address')}</label>
+                    <TextArea
+                      name="address"
+                      value={address}
+                      onChange={this.handleInputChange}
+                    />
+                    {submitted &&
+                      !address && (
+                        <div className="invalid-feedback">
+                          {i18n.t('Address is required')}
+                        </div>
+                      )}
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm={20} md={8} lg={8} offset={2} className="footer">
+                  <Button type="primary" htmlType="submit">
                     {i18n.t('Submit')}
                   </Button>
                   {processing && <Icon type="loading" />}
-                  <Button>
+                  <Button className="button-left">
                     <Link to="/">{i18n.t('Cancel')}</Link>
                   </Button>
                 </Col>

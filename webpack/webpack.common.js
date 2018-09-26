@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 const base = path.join(__dirname, '../frontend/src')
 const dist = path.join(__dirname, '../public')
 
@@ -23,5 +24,8 @@ module.exports = {
         loader: 'awesome-typescript-loader'
       }
     ]
-  }
+  },
+  plugins:[
+    new webpack.EnvironmentPlugin(['NODE_ENV'])
+  ]
 }

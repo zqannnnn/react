@@ -59,7 +59,7 @@ const edit: ActionCreator<Thunk> = (goods: Goods, goodsId: string) => {
         dispatch(success())
         dispatch(alertActionCreators.success('Edit goods successful'))
         setTimeout(function() {
-          history.replace('/')
+          history.replace('/inventory')
         }, 1000)
       },
       (error: string) => {

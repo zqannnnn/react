@@ -24,7 +24,7 @@ class ConfirmPage extends React.Component<ConfirmProps> {
   componentDidMount() {
     let companyId = this.props.match.params.id
     companyId &&
-      this.props.dispatch(adminActionCreators.getConfirmingConpany(companyId))
+      this.props.dispatch(adminActionCreators.getConfirmingCompany(companyId))
   }
   handleConfirm = (id: string) => {
     this.props.dispatch(adminActionCreators.confirm(id))
@@ -65,8 +65,8 @@ class ConfirmPage extends React.Component<ConfirmProps> {
                 <div>{comfirmingCompany.companyName || 'null'}</div>
               </div>
               <div>
-              <div className="confirm-title">{i18n.t('Address')}:</div>
-              <div>{comfirmingCompany.companyAddress || 'null'}</div>
+                <div className="confirm-title">{i18n.t('Address')}:</div>
+                <div>{comfirmingCompany.companyAddress || 'null'}</div>
               </div>
               <div>
                 <div className="confirm-title">
@@ -97,7 +97,7 @@ class ConfirmPage extends React.Component<ConfirmProps> {
                   />
                 </div>
                 {processing && <Icon type="loading" />}
-                <div className="confirm-btn-right">
+                <div className="float-right">
                   <Icon
                     type="check"
                     style={{
@@ -127,5 +127,5 @@ function mapStateToProps(state: RootState) {
     processing: admin.processing
   }
 }
-const connectedConfirmPage = connect(mapStateToProps)(ConfirmPage)
-export { connectedConfirmPage as CompanyConfirmPage }
+const connectedGoodsConfirmPage = connect(mapStateToProps)(ConfirmPage)
+export { connectedGoodsConfirmPage as CompanyConfirmPage }

@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import { accessKey, symbols } from '../config/static'
+import { accessKey, currencySymbols } from '../config/static'
 import { Currency } from '../models/'
 const add = async (data: IObject, symbol: IObject) => {
   for (const code in data) {
@@ -24,7 +24,7 @@ const fetchRate = async (dataList: any, dataSymbolsList: any) => {
     'http://data.fixer.io/api/latest?access_key=' +
       accessKey +
       '&base=EUR&symbols=' +
-      symbols.join(',')
+      currencySymbols.join(',')
   )
     .then(res => res.json())
     .then(data => {

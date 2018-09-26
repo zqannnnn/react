@@ -1,11 +1,10 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
-import { transactionActionCreators } from '../actions'
+import { transactionActionCreators, currencyActionCreators } from '../actions'
 import { RootState, TransactionState } from '../reducers'
 import { AuthInfo } from '../actions'
-import { transactionConsts } from '../constants'
-import { List as ListC, Filter } from '../components'
+import { List as ListC } from '../components'
 import { ListOptions } from '../models'
 import { Row, Col } from 'antd'
 import i18n from 'i18next'
@@ -27,7 +26,8 @@ class HomePage extends React.Component<HomeProps, HomeState> {
       options: {
         type: 'all',
         page: 1,
-        pageSize: 6
+        pageSize: 6,
+        category: []
       }
     }
   }
@@ -39,42 +39,35 @@ class HomePage extends React.Component<HomeProps, HomeState> {
   }
   componentDidMount() {
     this.props.dispatch(transactionActionCreators.getAll(this.state.options))
+    this.props.dispatch(currencyActionCreators.getAll())
   }
   render() {
-    const { authInfo, transaction } = this.props
+    const { transaction } = this.props
     return (
       <div className="page">
-        <div className="banner">
-          <div className="banner-bg" />
-          <div className="title">{i18n.t('All Transaction')}</div>
-        </div>
-        <Row>
-          <Col
-            xs={{ span: 22, offset: 1 }}
-            sm={{ span: 20, offset: 2 }}
-            md={{ span: 18, offset: 3 }}
-            lg={{ span: 16, offset: 4 }}
-          >
-            <Filter
-              initOptions={this.state.options}
-              onOptionsChange={this.onOptionsChange}
-            />
-            <div className="list-container">
-              <div className="header">
-                <div className="title">{i18n.t('Home')}</div>
-                <div className="subtitle">
-                  <div className="des">
-                    {i18n.t('People looking for buy or sell')}
+        <h2 className="header-center">{i18n.t('Home')}</h2>
+          <Row>
+            <Col
+              xs={{ span: 20, offset: 2 }}
+              sm={{ span: 20, offset: 2 }}
+              md={{ span: 16, offset: 4 }}
+            >
+              <div className="list-container">
+                <div className="header">
+                  <div className="title">{i18n.t('Home')}</div>
+                  <div className="subtitle">
+                    <div className="des">
+                      {i18n.t('People looking for buy or sell')}
+                    </div>
+                    <Link className="link" to={'/transactions'}>
+                      {i18n.t('👁 view all transactions')}
+                    </Link>
                   </div>
-                  <Link className="link" to={'/transactions'}>
-                    {i18n.t('👁 view all transactions')}
-                  </Link>
                 </div>
+                {transaction.items && <ListC items={transaction.items} />}
               </div>
-              {transaction.items && <ListC items={transaction.items} />}
-            </div>
-          </Col>
-        </Row>
+            </Col>
+          </Row>
       </div>
     )
   }

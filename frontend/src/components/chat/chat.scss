@@ -1,51 +1,63 @@
-#chat{
-    position: fixed;
+@import '../../scss/colors';
+
+#chat {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 400px;
+  max-height: 100vh;
+  z-index: 1;
+  @media only screen and (max-width: 400px) {
+    width: 100%;
+  }
+  .ant-collapse-header {
+    display: flex;
+    flex-direction: column;
+    label div {
+      float: right;
+      width: 36px;
+    }
+    i {
+      cursor: pointer;
+    }
+  }
+  .new-msg {
+    background-color: $attention-color;
+  }
+  .ant-collapse-content-box {
+    position: relative;
     bottom: 0;
-    right: 0;
-    width: 300px;
-    .ant-collapse-header {
-        display: flex;
-        flex-direction: column;
-        label div {
-            float: right;
-            width: 36px;            
+  }
+  .chat-container {
+    display: flex;
+    flex-direction: column;
+    .chat-log {
+      height: auto;
+      max-height: 50vh;
+      overflow: scroll;
+      margin-bottom: 10px;
+      > div {
+        border-radius: 4px;
+        padding: 4px;
+        margin-top: 5px;
+        &.incoming {
+          background-color: #f3cd87;
         }
-        svg {
-            float: right;
-            right: 14px;
-            position: relative;
-            top: 4px;            
+        &.outcoming {
+          background-color: #e8e0e0;
+          &::before {
+            content: 'You: ';
+          }
         }
+      }
     }
-    .new-msg {
-        background-color: #ff5e00;
+    .chat-input {
+      textarea {
+        float: left;
+      }
+      input {
+        float: right;
+      }
     }
-    .chat-container {
-        display: flex;
-        flex-direction: column;
-        .chat-log {
-            height: auto;
-            p {
-                border-radius: 4px;
-                padding: 4px;
-                &.incoming {
-                    background-color: #f3cd87;
-                }
-                &.outcoming {
-                    background-color: #e8e0e0;
-                    &::before { 
-                        content: "You: ";
-                    }
-                }
-            }
-        }
-        .chat-input {
-            textarea {
-                float: left;
-            }
-            input {
-                float: right;
-            }
-        }
-    }
+  }
 }

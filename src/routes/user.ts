@@ -6,7 +6,7 @@ import { consts } from '../config/static'
 import { app } from '../index'
 import { authMiddleware, loginCheckMiddleware } from '../middleware/auth'
 import { IRequest } from '../middleware/auth'
-import { Image, User, Consignee } from '../models'
+import { Image, User, Consignee, Country } from '../models/'
 import { UserFields } from '../passport'
 const router = express.Router()
 router.use(authMiddleware)
@@ -35,7 +35,7 @@ router.post('/new', async (req, res) => {
         preferredCurrencyCode: user.preferredCurrencyCode
       },
       app.get('secretKey'),
-      { expiresIn: consts.EXPIRE_IN }
+      { expiresIn: consts.TOKEN_EXPIRE_IN }
     )
     const data: AuthInfo = {
       token,
@@ -111,7 +111,7 @@ router.get('/confirm/:id', async (req: IRequest, res: express.Response) => {
     return res.status(500).send({ error: i18n.t('Permission denied.') })
   }
 })
-router.get('/denie/:id', async (req: IRequest, res: express.Response) => {
+router.get('/denied/:id', async (req: IRequest, res: express.Response) => {
   if (req.isAdmin) {
     const user = await User.find({ where: { id: req.params.id } })
     if (!user) {
@@ -124,13 +124,33 @@ router.get('/denie/:id', async (req: IRequest, res: express.Response) => {
     return res.status(500).send({ error: i18n.t('Permission denied.') })
   }
 })
+router.put(
+  '/set/default/consignee',
+  async (req: IRequest, res: express.Response) => {
+    try {
+      const user = await User.find({ where: { id: req.userId } })
+      if (!user) {
+        return res.status(500).send({ error: i18n.t('Permission denied.') })
+      }
+      user.defaultConsigneeId = req.query.id
+      await user.save()
+      return res.send({ success: true })
+    } catch (e) {
+      return res.status(500).send({ error: e.message })
+    }
+  }
+)
 router
   .route('/:userId')
   .get(async (req: IRequest, res: express.Response) => {
     const user = await User.find({
       where: { id: req.params.userId },
       attributes: { exclude: ['password'] },
-      include: [{ model: Image, attributes: ['path'] }, { model: Consignee }]
+      include: [
+        { model: Image, attributes: ['path'] },
+        { model: Consignee },
+        { model: Country }
+      ]
     })
     if (!user) {
       return res.status(500).send({ error: i18n.t('User does not exist.') })
@@ -152,7 +172,7 @@ router
       Object.keys(req.body).forEach(
         (key: string) => (user[key] = req.body[key])
       )
-      user.save()
+      await user.save()
       await Image.destroy({ where: { userId: req.params.userId } })
       if (req.body.businessLicenses) {
         req.body.businessLicenses.forEach((image: { path: string }) => {
@@ -163,7 +183,7 @@ router
           imageDb.save()
         })
       }
-      return res.send(user)
+      return res.send({ success: true })
     } catch (e) {
       return res.status(500).send({ error: e.message })
     }

@@ -13,7 +13,7 @@ export const transService = {
   createComment,
   createReply,
   listComment,
-  listReplys
+  listReplies
 }
 function _new(transaction: Transaction) {
   const requestOptions = {
@@ -100,25 +100,24 @@ function buy(id: string) {
 function renderQuery(options: ListOptions) {
   let query: string = ''
   for (const key in options) {
+    let str: string = ''
     if (options.hasOwnProperty(key)) {
       const element = options[key]
-      query += `${key}=${element}&`
+      if(Array.isArray(element)){
+        element.forEach(category => {
+          if (category) {
+            str += `${key}[]=${category}&`
+          }
+        })
+      } else {
+        str = `${key}=${element}&`
+      }
+      query += str
     }
   }
   return query
 }
 function getAll(options: ListOptions) {
-  const requestOptions = {
-    method: 'GET',
-    headers: authHeader()
-  }
-  let query = renderQuery(options)
-  return fetch('/transaction/list?' + query, requestOptions).then(
-    handleResponse
-  )
-}
-
-function getwaitting(options: ListOptions) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -174,7 +173,7 @@ function listComment(id: string, options?: ListOptions) {
   ).then(handleResponse)
 }
 
-function listReplys(id: string, transactionId: string, options?: ListOptions) {
+function listReplies(id: string, transactionId: string, options?: ListOptions) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()

@@ -80,31 +80,13 @@ class ResetPassForm extends React.Component<
   render() {
     const { getFieldDecorator } = this.props.form
 
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 }
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 }
-      }
-    }
-    const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0
-        },
-        sm: {
-          span: 16,
-          offset: 8
-        }
-      }
-    }
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <FormItem {...formItemLayout} label={i18n.t('Password')}>
+      <Form onSubmit={this.handleSubmit} className="auth-form">
+        <div className="header">
+          <div className="title">{i18n.t('Reset Pass')}</div>
+          <div className="tips">{i18n.t('reset your password')}</div>
+        </div>
+        <FormItem className="form-item" label={i18n.t('Password')}>
           {getFieldDecorator('password', {
             rules: [
               {
@@ -117,7 +99,7 @@ class ResetPassForm extends React.Component<
             ]
           })(<Input type="password" />)}
         </FormItem>
-        <FormItem {...formItemLayout} label={i18n.t('Confirm Password')}>
+        <FormItem className="form-item" label={i18n.t('Confirm Password')}>
           {getFieldDecorator('confirm', {
             rules: [
               {
@@ -130,8 +112,8 @@ class ResetPassForm extends React.Component<
             ]
           })(<Input type="password" onBlur={this.handleConfirmBlur} />)}
         </FormItem>
-        <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit">
+        <FormItem className="form-item">
+          <Button type="primary" htmlType="submit" className="submit-btn">
             {i18n.t('Reset')}
           </Button>
           {this.props.processing && <Icon type="loading" />}

@@ -6,7 +6,8 @@ export interface Comment {
   replyTo?: string
   transactionId?: string
   userId?: string
-  replys?: Comment[]
+  userReplyTo?: User
+  replies?: Comment[]
   createdAt?: string
   levelOnTheTree?: number
   user?: User

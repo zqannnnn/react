@@ -5,18 +5,18 @@ const Searchfor = Input.Search
 
 class Search extends React.Component {
   handleSearch = (keyword: string) => {
-    history.replace(`/transactions?keyword=${keyword}`)
+    if (keyword !== '') {
+      history.replace(`/transactions?keyword=${keyword}`)
+    }
   }
 
   render() {
     return (
-      <div className="nav-search">
-        <Searchfor
-          placeholder="Search"
-          onSearch={this.handleSearch}
-          enterButton
-        />
-      </div>
+      <Searchfor
+        placeholder="Search products here..."
+        onSearch={this.handleSearch}
+        className="search"
+      />
     )
   }
 }

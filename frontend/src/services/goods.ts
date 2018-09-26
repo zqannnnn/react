@@ -5,7 +5,10 @@ export const goodsService = {
   new: _new,
   edit,
   getById,
-  getAll
+  getAll,
+  listUnconfirmedProof,
+  confirm,
+  disconfirm
 }
 function _new(goods: Goods) {
   const requestOptions = {
@@ -17,6 +20,22 @@ function _new(goods: Goods) {
     body: JSON.stringify(goods)
   }
   return fetch('/goods/new', requestOptions).then(handleResponse)
+}
+function confirm(id: string) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  return fetch('/goods/confirm/' + id, requestOptions).then(handleResponse)
+}
+
+function disconfirm(id: string) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch('/goods/denied/' + id, requestOptions).then(handleResponse)
 }
 function edit(goods: Goods, goodsactionId: string) {
   const requestOptions = {
@@ -63,4 +82,12 @@ function handleResponse(response: Response) {
   }
 
   return response.json()
+}
+function listUnconfirmedProof() {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch('/goods/unconfirmed/list', requestOptions).then(handleResponse)
 }

@@ -14,9 +14,6 @@ class List extends React.Component<ListProps> {
   constructor(props: ListProps) {
     super(props)
   }
-  componentWillReceiveProps(nextProps: ListProps) {
-    this.setState({ items: nextProps.items })
-  }
   renderItem = (item: ListItem, i: number) => {
     switch (item.itemType) {
       case 'Transaction':

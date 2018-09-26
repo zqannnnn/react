@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Link, Redirect } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import { ResetPassForm } from '../../components/form'
 import { authActionCreators } from '../../actions'
@@ -23,20 +22,17 @@ class ResetPassPage extends React.Component<ResetPassProps> {
   render() {
     const { processing } = this.props
     return (
-      <Row className="page">
-        <div className="header">{i18n.t('Reset')}</div>
-        <Col
-          xs={{ span: 22, offset: 1 }}
-          sm={{ span: 18, offset: 3 }}
-          md={{ span: 14, offset: 5 }}
-          lg={{ span: 10, offset: 7 }}
-        >
+      <div className="page auth-page">
+        <div className="header">
+          <div className="header-item">{i18n.t('Reset Password')}</div>
+        </div>
+        <div className="form-wr">
           <ResetPassForm
             handleSubmit={this.handleSubmit}
             processing={processing}
           />
-        </Col>
-      </Row>
+        </div>
+      </div>
     )
   }
 }

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { Form, Icon, Input, Button, Checkbox } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import i18n from 'i18next'
-
 const FormItem = Form.Item
 interface LoginFormProps extends FormComponentProps {
   handleSubmit: (values: any) => void
@@ -19,8 +18,18 @@ class LoginForm extends React.Component<LoginFormProps> {
   render() {
     const { getFieldDecorator } = this.props.form
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
-        <FormItem>
+      <Form onSubmit={this.handleSubmit} className="login-form auth-form">
+        <div className="header">
+          <div className="title">{i18n.t('Login')}</div>
+          <div className="tips">
+            {i18n.t('Login now and start making money from home!')}
+          </div>
+        </div>
+        <FormItem
+          label={i18n.t('Email')}
+          required={false}
+          className="form-item"
+        >
           {getFieldDecorator('email', {
             rules: [
               {
@@ -31,11 +40,15 @@ class LoginForm extends React.Component<LoginFormProps> {
           })(
             <Input
               prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder={i18n.t('Email')}
+              placeholder={i18n.t('please input your email...')}
             />
           )}
         </FormItem>
-        <FormItem>
+        <FormItem
+          label={i18n.t('Password')}
+          required={false}
+          className="form-item"
+        >
           {getFieldDecorator('password', {
             rules: [
               {
@@ -47,11 +60,11 @@ class LoginForm extends React.Component<LoginFormProps> {
             <Input
               prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
               type="password"
-              placeholder={i18n.t('Password')}
+              placeholder={i18n.t('Please input your password...')}
             />
           )}
         </FormItem>
-        <FormItem className="float-lostPas">
+        <FormItem className="form-item">
           <Link to="/lost/pass" className="login-form-forgot">
             {i18n.t('Forget password?')}
           </Link>
@@ -60,15 +73,11 @@ class LoginForm extends React.Component<LoginFormProps> {
             htmlType="submit"
             type="primary"
             size="large"
-            className="login-form-button"
+            className="submit-btn"
           >
-            {i18n.t('Log in')}
-            {this.props.processing && <Icon type="loading" />}
-          </Button>
-          <Button size="large" className="login-form-button">
-            <Link to="/register" className="btn">
-              {i18n.t('Register')}
-            </Link>
+            <span>{i18n.t('Login')}</span>
+            <span className="register-now">&nbsp;{i18n.t('Now!')}</span>
+            <span>{this.props.processing && <Icon type="loading" />}</span>
           </Button>
         </FormItem>
       </Form>

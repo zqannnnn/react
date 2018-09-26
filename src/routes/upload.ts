@@ -6,7 +6,7 @@ import { makeRandomString } from '../util'
 const router = express.Router()
 router.use(authMiddleware)
 router.use(loginCheckMiddleware)
-const upload = multer({ dest: 'uploads/' })
+const upload = multer({ dest: 'uploads' })
 
 function makeRandomName(originalname: string) {
   let name = makeRandomString(8)
@@ -20,11 +20,25 @@ router.post(
   upload.single('file'),
   async (req: express.Request, res: express.Response) => {
     const fileName = makeRandomName(req.file.originalname)
-    fs.rename(req.file.path, 'uploads/' + fileName, err => {
+    fs.rename(req.file.path, 'uploads/images/' + fileName, err => {
       if (err) {
         return res.status(500).send({ error: err })
       } else {
-        return res.send({ path: '/static/' + fileName })
+        return res.send({ path: '/static/images/' + fileName })
+      }
+    })
+  }
+)
+router.post(
+  '/file',
+  upload.single('file'),
+  async (req: express.Request, res: express.Response) => {
+    const fileName = req.file.originalname
+    fs.rename(req.file.path, 'uploads/file/' + fileName, err => {
+      if (err) {
+        return res.status(500).send({ error: err })
+      } else {
+        return res.send({ path: '/static/file/' + fileName })
       }
     })
   }

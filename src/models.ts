@@ -2,7 +2,6 @@ import * as path from 'path'
 import * as fs from 'fs'
 import { Sequelize } from 'sequelize-typescript'
 import { config } from './config/db'
-import { beefOptions, consts, sheepOptions, vealOptions } from './config/static'
 import {
   Category,
   Currency,
@@ -10,8 +9,10 @@ import {
   Image,
   Transaction,
   User,
+  Message,
   Consignee,
-  Comment
+  Comment,
+  Country
 } from './models/'
 
 const sequelize = new Sequelize(config)
@@ -22,21 +23,11 @@ sequelize.addModels([
   Category,
   Image,
   Currency,
+  Message,
   Consignee,
-  Comment
+  Comment,
+  Country
 ])
-
-const initDatabase = async () => {
-  await sequelize.sync({force:true})
-
-  User.findOne({ where: { email: 'admin@admin.com' } }).then(user => {
-    if (!user) {
-      insertInitialData()
-      // const currencyApi = require('./api/currency')
-      // currencyApi.getApi()
-    }
-  })
-}
 
 //1532692062 chat test users
 const addUserIfNoExists = (userObj: any) => {
@@ -56,55 +47,81 @@ const addCurrencyIfNoExists = (currencyObj: any) => {
     }
   })
 }
+const addCountryIfNoExists = (countryObj: any) => {
+  Country.findOne({ where: { code: countryObj.code } }).then((country: any) => {
+    if (!country) {
+      const newCountry = new Country(countryObj)
+      newCountry.save()
+    }
+  })
+}
+const addCategoryIfNoExists = (categoryObj: any) => {
+  Category.findOne({ where: { type: categoryObj.type } }).then(
+    (category: any) => {
+      if (!category) {
+        const newCategory = new Category(categoryObj)
+        newCategory.save()
+      }
+    }
+  )
+}
 
 const insertInitialData = () => {
-   //1532692062 chat test users
+  //1532692062 chat test users
   let usersDataFile = path.join(__dirname, './db_data/users.json')
   if (fs.existsSync(usersDataFile)) {
     let rawdata = fs.readFileSync(usersDataFile)
     let users = JSON.parse(rawdata.toString())
     for (var i = 0; i < users.length; i++) {
       addUserIfNoExists(users[i])
-    }  
+    }
   }
-  
+
   let currenciesDataFile = path.join(__dirname, './db_data/currencies.json')
   if (fs.existsSync(currenciesDataFile)) {
     let rawdata = fs.readFileSync(currenciesDataFile)
     let currencies = JSON.parse(rawdata.toString())
     for (var i = 0; i < currencies.length; i++) {
       addCurrencyIfNoExists(currencies[i])
-    }  
+    }
   }
-  
+  let countriesDataFile = path.join(__dirname, './db_data/countries.json')
+  if (fs.existsSync(countriesDataFile)) {
+    let rawdata = fs.readFileSync(countriesDataFile)
+    let countries = JSON.parse(rawdata.toString())
+    for (var i = 0; i < countries.length; i++) {
+      addCountryIfNoExists(countries[i])
+    }
+  }
 
-  Category.findOne({ where: { type: 'Beef' } }).then(categoryBeef => {
-    if (!categoryBeef) {
-      categoryBeef = new Category({
-        type: 'Beef',
-        details: beefOptions
-      })
-      categoryBeef.save()
+  let categoriesDataFile = path.join(__dirname, './db_data/categories.json')
+  if (fs.existsSync(categoriesDataFile)) {
+    let rawdata = fs.readFileSync(categoriesDataFile)
+    let categories = JSON.parse(rawdata.toString())
+    for (var i = 0; i < categories.length; i++) {
+      addCategoryIfNoExists(categories[i])
     }
-  })
-  Category.findOne({ where: { type: 'Veal' } }).then(categoryVeal => {
-    if (!categoryVeal) {
-      categoryVeal = new Category({
-        type: 'Veal',
-        details: vealOptions
-      })
-      categoryVeal.save()
-    }
-  })
-  Category.findOne({ where: { type: 'Sheep' } }).then(categorySheep => {
-    if (!categorySheep) {
-      categorySheep = new Category({
-        type: 'Sheep',
-        details: sheepOptions
-      })
-      categorySheep.save()
+  }
+}
+const initDatabase = async () => {
+  await sequelize.sync()
+
+  User.findOne({ where: { email: 'admin@admin.com' } }).then((user: any) => {
+    if (!user) {
+      insertInitialData()
+      // const currencyApi = require('./api/currency')
+      // currencyApi.getApi()
     }
   })
 }
-
-export { User, Transaction, Goods, Category, Image, initDatabase ,Consignee}
+export {
+  User,
+  Transaction,
+  Goods,
+  Category,
+  Image,
+  initDatabase,
+  Consignee,
+  Country,
+  Message
+}

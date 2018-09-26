@@ -122,9 +122,9 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     this.setState({ submitted: true })
-    let { goods, goodsId, transaction } = this.state
+    let { goods, transaction } = this.state
     const { dispatch } = this.props
-
+    
     if (goods.category && goods.title) {
       transaction.goods = goods
       dispatch(transactionActionCreators.newOrder(transaction))
@@ -185,7 +185,7 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
               sm={{ span: 20, offset: 2 }}
               md={{ span: 9, offset: 2 }}
               lg={{ span: 9, offset: 2 }}
-              className="edits-input"
+              className="field"
             >
               <label>{i18n.t('Category')}</label>
               <Select
@@ -207,345 +207,336 @@ class OrderEditPage extends React.Component<OrderEditProps, OrderEditState> {
       case 1:
         return (
           <>
-            <div className="edits-input">
-              <Row>
-                <Col span={20} offset={2} className="edits-input">
-                  <div className={submitted && !title ? ' has-error' : ''}>
-                    <label className="edits-input">{i18n.t('Title')}</label>
-                    <Input
-                      placeholder=""
-                      type="text"
-                      name="title"
-                      value={title}
-                      onChange={this.handleInputChange}
-                      size="large"
-                    />
-                    {submitted &&
-                      !title && (
-                        <div className="invalid-feedback">
-                          {i18n.t('Title is required')}
-                        </div>
-                      )}
-                  </div>
-                </Col>
-              </Row>
-              <Row>
-                <Col span={20} offset={2} className="edits-input">
-                  <label>{i18n.t('Description')}</label>
-                  <TextArea
+            <Row>
+              <Col span={20} offset={2} className="field">
+                <div className={submitted && !title ? ' has-error' : ''}>
+                  <label>{i18n.t('Title')}</label>
+                  <Input
                     placeholder=""
-                    name="desc"
-                    rows={4}
-                    value={desc}
+                    type="text"
+                    name="title"
+                    value={title}
                     onChange={this.handleInputChange}
+                    size="large"
                   />
-                </Col>
-              </Row>
-              <Row>
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 9, offset: 2 }}
-                  lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
-                >
-                  <label>{i18n.t('Bone')}</label>
-                  {currentCategory &&
-                    this.renderSelect(currentCategory.details['Bone'], 'bone')}
-                </Col>
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 9, offset: 2 }}
-                  lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
-                >
-                  <label>{i18n.t('Storage')}</label>
-                  {currentCategory &&
-                    this.renderSelect(
-                      currentCategory.details['Storage'],
-                      'storage'
+                  {submitted &&
+                    !title && (
+                      <div className="invalid-feedback">
+                        {i18n.t('Title is required')}
+                      </div>
                     )}
-                </Col>
-              </Row>
-              <Row>
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 9, offset: 2 }}
-                  lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
-                >
-                  <label>{i18n.t('Grade')}</label>
-                  {currentCategory &&
-                    this.renderSelect(
-                      currentCategory.details['Grade'],
-                      'grade'
-                    )}
-                </Col>
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 9, offset: 2 }}
-                  lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
-                >
-                  <label>{i18n.t('Slaughter Specification')}</label>
-                  {currentCategory &&
-                    this.renderSelect(
-                      currentCategory.details['Slaughter Specification'],
-                      'slaughterSpec'
-                    )}
-                </Col>
-              </Row>
-              <Row>
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 9, offset: 2 }}
-                  lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
-                >
-                  <label>{i18n.t('Marble Score')}</label>
-                  {currentCategory &&
-                    this.renderSelect(
-                      currentCategory.details['Marble Score'],
-                      'marbleScore'
-                    )}
-                </Col>
-
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={20} offset={2} className="field">
+                <label>{i18n.t('Description')}</label>
+                <TextArea
+                  placeholder=""
+                  name="desc"
+                  rows={4}
+                  value={desc}
+                  onChange={this.handleInputChange}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 9, offset: 2 }}
+                lg={{ span: 9, offset: 2 }}
+                className="field"
+              >
+                <label>{i18n.t('Bone')}</label>
                 {currentCategory &&
-                  currentCategory.type != 'Sheep' && (
-                    <Col
-                      xs={{ span: 20, offset: 2 }}
-                      sm={{ span: 20, offset: 2 }}
-                      md={{ span: 9, offset: 2 }}
-                      lg={{ span: 9, offset: 2 }}
-                      className="edits-input"
-                    >
-                      <label>{i18n.t('Breed')}</label>
-                      {this.renderSelect(
-                        currentCategory.details['Breed'],
-                        'breed'
-                      )}
-                    </Col>
-                  )}
-              </Row>
-              <Row>
+                  this.renderSelect(currentCategory.details['Bone'], 'bone')}
+              </Col>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 9, offset: 2 }}
+                lg={{ span: 9, offset: 2 }}
+                className="field"
+              >
+                <label>{i18n.t('Storage')}</label>
                 {currentCategory &&
-                  currentCategory.type == 'Beef' && (
-                    <Col
-                      xs={{ span: 20, offset: 2 }}
-                      sm={{ span: 20, offset: 2 }}
-                      md={{ span: 9, offset: 2 }}
-                      lg={{ span: 9, offset: 2 }}
-                      className="edits-input"
-                    >
-                      <label>{i18n.t('Fed')}</label>
-                      {this.renderSelect(currentCategory.details['Fed'], 'fed')}
-                    </Col>
+                  this.renderSelect(
+                    currentCategory.details['Storage'],
+                    'storage'
                   )}
+              </Col>
+            </Row>
+            <Row>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 9, offset: 2 }}
+                lg={{ span: 9, offset: 2 }}
+                className="field"
+              >
+                <label>{i18n.t('Grade')}</label>
+                {currentCategory &&
+                  this.renderSelect(currentCategory.details['Grade'], 'grade')}
+              </Col>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 9, offset: 2 }}
+                lg={{ span: 9, offset: 2 }}
+                className="field"
+              >
+                <label>{i18n.t('Slaughter Specification')}</label>
+                {currentCategory &&
+                  this.renderSelect(
+                    currentCategory.details['Slaughter Specification'],
+                    'slaughterSpec'
+                  )}
+              </Col>
+            </Row>
+            <Row>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 9, offset: 2 }}
+                lg={{ span: 9, offset: 2 }}
+                className="field"
+              >
+                <label>{i18n.t('Marble Score')}</label>
+                {currentCategory &&
+                  this.renderSelect(
+                    currentCategory.details['Marble Score'],
+                    'marbleScore'
+                  )}
+              </Col>
 
-                {fed == 'Grain fed' && (
+              {currentCategory &&
+                currentCategory.type != 'Sheep' && (
                   <Col
                     xs={{ span: 20, offset: 2 }}
                     sm={{ span: 20, offset: 2 }}
                     md={{ span: 9, offset: 2 }}
                     lg={{ span: 9, offset: 2 }}
-                    className="edits-input"
+                    className="field"
                   >
-                    <label>{i18n.t('Grain fed days')}</label>
-                    <div className="flex">
-                      <InputNumber
-                        min={0}
-                        max={100000}
-                        defaultValue={grainFedDays}
-                        onChange={(value: number) =>
-                          this.handleInputNumber(value, 'grainFedDays')
-                        }
-                      />
-                      <div className="label-right">{i18n.t('Days')}</div>
-                    </div>
+                    <label>{i18n.t('Breed')}</label>
+                    {this.renderSelect(
+                      currentCategory.details['Breed'],
+                      'breed'
+                    )}
                   </Col>
                 )}
-              </Row>
-              <Row>
+            </Row>
+            <Row>
+              {currentCategory &&
+                currentCategory.type == 'Beef' && (
+                  <Col
+                    xs={{ span: 20, offset: 2 }}
+                    sm={{ span: 20, offset: 2 }}
+                    md={{ span: 9, offset: 2 }}
+                    lg={{ span: 9, offset: 2 }}
+                    className="field"
+                  >
+                    <label>{i18n.t('Fed')}</label>
+                    {this.renderSelect(currentCategory.details['Fed'], 'fed')}
+                  </Col>
+                )}
+
+              {fed == 'Grain fed' && (
                 <Col
                   xs={{ span: 20, offset: 2 }}
                   sm={{ span: 20, offset: 2 }}
                   md={{ span: 9, offset: 2 }}
                   lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
+                  className="field"
                 >
-                  <label>{i18n.t('Primal Cuts')}</label>
-                  <Input
-                    type="text"
-                    name="primalCuts"
-                    value={primalCuts}
-                    onChange={this.handleInputChange}
-                  />
-                </Col>
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 9, offset: 2 }}
-                  lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
-                >
-                  <label>{i18n.t('Trimmings')}</label>
+                  <label>{i18n.t('Grain fed days')}</label>
                   <div className="flex">
                     <InputNumber
                       min={0}
                       max={100000}
-                      defaultValue={trimmings}
+                      defaultValue={grainFedDays}
                       onChange={(value: number) =>
-                        this.handleInputNumber(value, 'trimmings')
+                        this.handleInputNumber(value, 'grainFedDays')
                       }
                     />
-                    <div className="label-right">CL</div>
+                    <div className="label-right">{i18n.t('Days')}</div>
                   </div>
                 </Col>
-              </Row>
-              <Row>
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 9, offset: 2 }}
-                  lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
-                >
-                  <label>{i18n.t('Brand')}</label>
-                  <Input
-                    type="text"
-                    name="brand"
-                    value={brand}
-                    onChange={this.handleInputChange}
+              )}
+            </Row>
+            <Row>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 9, offset: 2 }}
+                lg={{ span: 9, offset: 2 }}
+                className="field"
+              >
+                <label>{i18n.t('Primal Cuts')}</label>
+                <Input
+                  type="text"
+                  name="primalCuts"
+                  value={primalCuts}
+                  onChange={this.handleInputChange}
+                />
+              </Col>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 9, offset: 2 }}
+                lg={{ span: 9, offset: 2 }}
+                className="field"
+              >
+                <label>{i18n.t('Trimmings')}</label>
+                <div className="flex">
+                  <InputNumber
+                    min={0}
+                    max={100000}
+                    defaultValue={trimmings}
+                    onChange={(value: number) =>
+                      this.handleInputNumber(value, 'trimmings')
+                    }
                   />
-                </Col>
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 9, offset: 2 }}
-                  lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
-                >
-                  <label>{i18n.t('Factory Number')}</label>
-                  <Input
-                    type="text"
-                    name="factoryNum"
-                    value={factoryNum}
-                    onChange={this.handleInputChange}
+                  <div className="label-right">CL</div>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 9, offset: 2 }}
+                lg={{ span: 9, offset: 2 }}
+                className="field"
+              >
+                <label>{i18n.t('Brand')}</label>
+                <Input
+                  type="text"
+                  name="brand"
+                  value={brand}
+                  onChange={this.handleInputChange}
+                />
+              </Col>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 9, offset: 2 }}
+                lg={{ span: 9, offset: 2 }}
+                className="field"
+              >
+                <label>{i18n.t('Factory Number')}</label>
+                <Input
+                  type="text"
+                  name="factoryNum"
+                  value={factoryNum}
+                  onChange={this.handleInputChange}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 9, offset: 2 }}
+                lg={{ span: 9, offset: 2 }}
+                className="field"
+              >
+                <label>{i18n.t('Place Of Origin')}</label>
+                <Input
+                  type="text"
+                  name="placeOfOrigin"
+                  value={placeOfOrigin}
+                  onChange={this.handleInputChange}
+                />
+              </Col>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 9, offset: 2 }}
+                lg={{ span: 9, offset: 2 }}
+                className="field"
+              >
+                <label>{i18n.t('Delivery Term')}</label>
+                <Input
+                  type="text"
+                  name="deliveryTerm"
+                  value={deliveryTerm}
+                  onChange={this.handleInputChange}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 9, offset: 2 }}
+                lg={{ span: 9, offset: 2 }}
+                className="field"
+              >
+                <label>{i18n.t('Quantity')}</label>
+                <div className="flex">
+                  <InputNumber
+                    max={999999}
+                    defaultValue={1}
+                    min={1}
+                    value={quantity}
+                    onChange={(value: number) =>
+                      this.handleInputNumber(value, 'quantity')
+                    }
                   />
-                </Col>
-              </Row>
-              <Row>
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 9, offset: 2 }}
-                  lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
-                >
-                  <label>{i18n.t('Place Of Origin')}</label>
-                  <Input
-                    type="text"
-                    name="placeOfOrigin"
-                    value={placeOfOrigin}
-                    onChange={this.handleInputChange}
-                  />
-                </Col>
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 9, offset: 2 }}
-                  lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
-                >
-                  <label>{i18n.t('Delivery Term')}</label>
-                  <Input
-                    type="text"
-                    name="deliveryTerm"
-                    value={deliveryTerm}
-                    onChange={this.handleInputChange}
-                  />
-                </Col>
-              </Row>
-              <Row>
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 9, offset: 2 }}
-                  lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
-                >
-                  <label>{i18n.t('Quantity')}</label>
+                  <div className="label-right">KG</div>
+                </div>
+              </Col>
+              <Col
+                xs={{ span: 20, offset: 2 }}
+                sm={{ span: 20, offset: 2 }}
+                md={{ span: 9, offset: 2 }}
+                lg={{ span: 9, offset: 2 }}
+                className="field"
+                offset={2}
+              >
+                <label>{i18n.t('Price')}</label>
+                {currencies && (
                   <div className="flex">
                     <InputNumber
-                      max={999999}
-                      defaultValue={1}
-                      min={1}
-                      value={quantity}
+                      min={0}
+                      max={99999}
+                      defaultValue={0}
+                      value={price}
                       onChange={(value: number) =>
-                        this.handleInputNumber(value, 'quantity')
+                        this.handleInputPrice(value, 'price')
                       }
                     />
-                    <div className="label-right">KG</div>
+                    <Select
+                      className="label-right"
+                      value={currencyCode}
+                      onSelect={(value: string) =>
+                        this.handlePriceChange(value, 'currencyCode')
+                      }
+                    >
+                      {currencies.map((item, index) => (
+                        <Select.Option key={index} value={item.code}>
+                          {item.code}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                    <div className="label-right">/KG</div>
                   </div>
-                </Col>
-                <Col
-                  xs={{ span: 20, offset: 2 }}
-                  sm={{ span: 20, offset: 2 }}
-                  md={{ span: 9, offset: 2 }}
-                  lg={{ span: 9, offset: 2 }}
-                  className="edits-input"
-                  offset={2}
-                >
-                  <label>{i18n.t('Price')}</label>
-                  {currencies && (
-                    <div className="flex">
-                      <InputNumber
-                        min={0}
-                        max={99999}
-                        defaultValue={0}
-                        value={price}
-                        onChange={(value: number) =>
-                          this.handleInputPrice(value, 'price')
-                        }
-                      />
-                      <Select
-                        className="label-right"
-                        value={currencyCode}
-                        onSelect={(value: string) =>
-                          this.handlePriceChange(value, 'currencyCode')
-                        }
-                      >
-                        {currencies.map((item, index) => (
-                          <Select.Option key={index} value={item.code}>
-                            {item.code}
-                          </Select.Option>
-                        ))}
-                      </Select>
-                      <div className="label-right">/KG</div>
-                    </div>
-                  )}
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={20} md={8} lg={8} offset={2} className="edits-input">
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    className="button-margin"
-                  >
-                    {i18n.t('Submit')}
-                  </Button>
-                  {processing && <Icon type="loading" />}
-                  <Button>
-                    <Link to="/">{i18n.t('Cancel')}</Link>
-                  </Button>
-                </Col>
-              </Row>
-            </div>
+                )}
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={20} md={8} lg={8} offset={2} className="footer">
+                <Button type="primary" htmlType="submit">
+                  {i18n.t('Submit')}
+                </Button>
+                {processing && <Icon type="loading" />}
+                <Button className="button-left">
+                  <Link to="/">{i18n.t('Cancel')}</Link>
+                </Button>
+              </Col>
+            </Row>
           </>
         )
       default:

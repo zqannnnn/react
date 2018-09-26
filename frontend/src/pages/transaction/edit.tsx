@@ -26,7 +26,7 @@ import {
   Icon
 } from 'antd'
 import i18n from 'i18next'
-import{ GoodsInfo } from '../../components'
+import { GoodsInfo } from '../../components'
 
 const { TextArea } = Input
 
@@ -149,6 +149,15 @@ class EditPage extends React.Component<TransProps, TransState> {
   }
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    const { transaction, transactionId, goodsId } = this.state
+    const { dispatch } = this.props
+    if (transaction.price) {
+      transaction.goodsId = goodsId
+      if (transactionId)
+        dispatch(transactionActionCreators.edit(transaction, transactionId))
+      else dispatch(transactionActionCreators.new(transaction))
+    }
+    window.scrollTo(0, 0)
     this.setState({ submitted: true })
     if (this.state.transaction.isMakerSeller) {
       if (
@@ -157,24 +166,13 @@ class EditPage extends React.Component<TransProps, TransState> {
       ) {
         this.props.dispatch(
           alertActionCreators.error(
-            'You are not allowed to add new Offer, please fullfill company info first.'
+            'You are not allowed to add new Offer, please finish company info first.'
           )
         )
         window.scrollTo(0, 0)
         return
       }
     }
-    const { transaction, transactionId, goodsId } = this.state
-    const { dispatch } = this.props
-    if (transaction.price) {
-      transaction.goodsId = goodsId
-      if (transactionId)
-        dispatch(transactionActionCreators.edit(transaction, transactionId))
-      else dispatch(transactionActionCreators.new(transaction))
-    } else {
-      
-    }
-    window.scrollTo(0, 0)
   }
   openLightbox = (image: string) => {
     this.props.dispatch(lightboxActionCreators.open(image))
@@ -222,18 +220,15 @@ class EditPage extends React.Component<TransProps, TransState> {
           <form name="form" onSubmit={this.handleSubmit}>
             <div className="steps-content">
               {goods && (
-                <div className="edits-input">
-                  <GoodsInfo
-                  goods={goods}
-                  openLightbox={this.openLightbox}
-                  />
+                <div className="field">
+                  <GoodsInfo goods={goods} openLightbox={this.openLightbox} />
                   <Row>
                     <Col
                       xs={{ span: 20, offset: 2 }}
                       sm={{ span: 20, offset: 2 }}
                       md={{ span: 9, offset: 2 }}
                       lg={{ span: 9, offset: 2 }}
-                      className="edits-input"
+                      className="field"
                       offset={2}
                     >
                       <label>{i18n.t('Price')}</label>
@@ -277,22 +272,12 @@ class EditPage extends React.Component<TransProps, TransState> {
                     </Col>
                   </Row>
                   <Row>
-                    <Col
-                      sm={20}
-                      md={8}
-                      lg={8}
-                      offset={2}
-                      className="edits-input"
-                    >
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        className="button-margin"
-                      >
+                    <Col sm={20} md={8} lg={8} offset={2} className="footer">
+                      <Button type="primary" htmlType="submit">
                         {i18n.t('Submit')}
                       </Button>
                       {processing && <Icon type="loading" />}
-                      <Button>
+                      <Button className="button-left">
                         <Link to="/">{i18n.t('Cancel')}</Link>
                       </Button>
                     </Col>

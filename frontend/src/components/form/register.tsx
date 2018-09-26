@@ -6,6 +6,7 @@ import {
   ValidateCallback
 } from 'antd/lib/form'
 import i18n from 'i18next'
+import { Link } from 'react-router-dom'
 const FormItem = Form.Item
 export interface RegisterValuesProps {
   firstName: string
@@ -68,39 +69,15 @@ class RegisterForm extends React.Component<
   }
   render() {
     const { getFieldDecorator } = this.props.form
-    const formItemLayout = {
-      labelCol: {
-        xs: {
-          span: 24
-        },
-        sm: {
-          span: 8
-        }
-      },
-      wrapperCol: {
-        xs: {
-          span: 24
-        },
-        sm: {
-          span: 16
-        }
-      }
-    }
-    const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0
-        },
-        sm: {
-          span: 16,
-          offset: 8
-        }
-      }
-    }
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
-        <FormItem {...formItemLayout} label={i18n.t('Email')}>
+      <Form onSubmit={this.handleSubmit} className="register-form auth-form">
+        <div className="header">
+          <div className="title">{i18n.t('Register User')}</div>
+          <div className="tips">
+            {i18n.t('Register now and start making money from home!')}
+          </div>
+        </div>
+        <FormItem label={i18n.t('Email')} className="form-item">
           {getFieldDecorator('email', {
             rules: [
               {
@@ -112,9 +89,9 @@ class RegisterForm extends React.Component<
                 message: i18n.t('Please input your Email!')
               }
             ]
-          })(<Input />)}
+          })(<Input placeholder={i18n.t('please input your email...')} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="First Name">
+        <FormItem label="First Name" className="form-item">
           {getFieldDecorator('firstName', {
             rules: [
               {
@@ -122,9 +99,9 @@ class RegisterForm extends React.Component<
                 message: i18n.t('Please input your First Name!')
               }
             ]
-          })(<Input />)}
+          })(<Input placeholder={i18n.t('Please enter a name...')} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="Last Name">
+        <FormItem label="Last Name" className="form-item">
           {getFieldDecorator('lastName', {
             rules: [
               {
@@ -132,9 +109,9 @@ class RegisterForm extends React.Component<
                 message: i18n.t('Please input your Last Name!')
               }
             ]
-          })(<Input />)}
+          })(<Input placeholder={i18n.t('Please enter your last name...')} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="Password">
+        <FormItem label="Password" className="form-item">
           {getFieldDecorator('password', {
             rules: [
               {
@@ -145,9 +122,14 @@ class RegisterForm extends React.Component<
                 validator: this.validateToNextPassword
               }
             ]
-          })(<Input type="password" />)}
+          })(
+            <Input
+              type="password"
+              placeholder={i18n.t('Please enter your password...')}
+            />
+          )}
         </FormItem>
-        <FormItem {...formItemLayout} label="Confirm Password">
+        <FormItem label="Confirm Password" className="form-item">
           {getFieldDecorator('confirm', {
             rules: [
               {
@@ -158,13 +140,19 @@ class RegisterForm extends React.Component<
                 validator: this.compareToFirstPassword
               }
             ]
-          })(<Input type="password" onBlur={this.handleConfirmBlur} />)}
+          })(
+            <Input
+              type="password"
+              onBlur={this.handleConfirmBlur}
+              placeholder={i18n.t('Please enter your password again...')}
+            />
+          )}
         </FormItem>
-        <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit">
-            {i18n.t('Register')}
+        <FormItem className="form-item">
+          <Button type="primary" htmlType="submit" className="submit-btn">
+            <span>{i18n.t('Register')}</span>
+            <span className="register-now">&nbsp;{i18n.t('Now!')}</span>
           </Button>
-          {this.props.processing && <Icon type="loading" />}
         </FormItem>
       </Form>
     )
